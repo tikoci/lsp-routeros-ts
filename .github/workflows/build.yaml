@@ -23,19 +23,71 @@ jobs:
         run: npm run compile
 
       - name: Package VSIX
-        run: npm run vsix:package
+        run: |
+          npm run vsix:package
+          mv lsp-routeros-ts-*.vsix lsp-routeros-ts.vsix
 
-      - name: Package standalone "bun exe"
+      - name: Package standalone "bun exe" for the native platform of CI
         run: npm run bun:exe
+
+      - name: Package cross-platform version of standalone LSP server
+        run: |
+          for i in bun-linux-x64 bun-linux-arm64 bun-windows-x64 bun-windows-arm64 bun-darwin-x64 bun-darwin-arm64 bun-linux-x64-musl bun-linux-arm64-musl; do
+            outname="${i#bun-}"
+            bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server-$outname --target $i
+          done
+          chmod +x ./lsp-routeros-server*
 
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-ts.vsix
-          path: 'lsp-routeros-ts*.vsix'
+          path: lsp-routeros-ts.vsix
 
-      - name: Upload lsp-routeros-server "bun exe" artifact
+      - name: Upload lsp-routeros-server artifact for bun-linux-x64
         uses: actions/upload-artifact@v4
         with:
-          name: lsp-routeros-server
-          path: lsp-routeros-server
+          name: lsp-routeros-server-linux-x64
+          path: lsp-routeros-server-linux-x64
+
+      - name: Upload lsp-routeros-server artifact for bun-linux-arm64
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsp-routeros-server-linux-arm64
+          path: lsp-routeros-server-linux-arm64
+
+      - name: Upload lsp-routeros-server artifact for bun-windows-x64
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsp-routeros-server-windows-x64
+          path: lsp-routeros-server-windows-x64
+
+      - name: Upload lsp-routeros-server artifact for bun-windows-arm64
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsp-routeros-server-windows-arm64
+          path: lsp-routeros-server-windows-arm64
+
+      - name: Upload lsp-routeros-server artifact for bun-darwin-x64
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsp-routeros-server-darwin-x64
+          path: lsp-routeros-server-darwin-x64
+
+      - name: Upload lsp-routeros-server artifact for bun-darwin-arm64
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsp-routeros-server-darwin-arm64
+          path: lsp-routeros-server-darwin-arm64
+
+      - name: Upload lsp-routeros-server artifact for bun-linux-x64-musl
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsp-routeros-server-linux-x64-musl
+          path: lsp-routeros-server-linux-x64-musl
+
+      - name: Upload lsp-routeros-server artifact for bun-linux-arm64-musl
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsp-routeros-server-linux-arm64-musl
+          path: lsp-routeros-server-linux-arm64-musl
