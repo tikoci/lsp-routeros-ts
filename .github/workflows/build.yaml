@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
 
       - name: Install `bun`
         uses: oven-sh/setup-bun@v2
@@ -108,7 +108,7 @@ jobs:
           name: v${{ steps.pkgver.outputs.version }}
           tag_name: v${{ steps.pkgver.outputs.version }}
           draft: false
-          prerelease: false
+          prerelease: true
           files: |
             lsp-routeros-ts.vsix
             lsp-routeros-server-linux-x64
