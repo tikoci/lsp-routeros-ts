@@ -1,6 +1,6 @@
 # RouterOS LSP Server
 
-![Router-OS-LSP-as-VSIX-loaded-in-VSCode](https://i.ibb.co/1t1y3kLL/Router-OS-LSP-as-VSIX-loaded-in-VSCode.png)
+![LSP running VSCode GIF](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDl4NXg5ZXB0YWd2Z2s5b2t0Z2t6enN6Y3NmbTRsZ2o5dWM3MTJqMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Rm4TUg15fUuUhHVvSx/giphy.gif)
 
 ## Installing
 
@@ -34,9 +34,10 @@ If you want to remove the VSIX, use:
 code --uninstall-extension tikoci.lsp-routeros-ts
 ```
 
-Setting should be available by hitting the "gear" icon after locating the "RouterOS LSP" in Extensions section in VSCode.
-
 ### NeoVim (`nvim`)
+
+![LSP running in NeoVim](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDJiOHV6ZDZsamN6bDJxN21zb3hjZ3I2cm5hNDJzbGpqeWtydXAxMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/reM309KJpRbotDSkL5/giphy.gif)
+
 
 > **NOTE**  Only limited tested has been done using `nvim` – likely many things could be done for
 > a text-mode LSP client like `nvim` (NeoVim).  For example, no testing has been done using common LSP "managers" plugins. 
@@ -67,7 +68,8 @@ The RouterOS LSP **requires** a REST API connection to RouterOS device, so the *
 > /user add name=lsp password=changeme group=lsp
 > ```
 
-### LSP `workspace/configuration`
+### LSP `workspace/configuration` Options
+
 
 The supported settings are defined in `./server/server.ts`:
 ```typescript
@@ -78,7 +80,7 @@ interface LspSettings {
     password: string;             // ""
 }
 ```
-with metadata for the settings stored in `./package.json` under "contributes".
+_Metadata for the settings stored in `./package.json` under "contributes"._
 
 On the router, either the "http" or "https" service must be enabled, and accessible to any editor using the LSP server.
 
@@ -97,6 +99,10 @@ Assuming the extension with RouterOS LSP is installed, configuration can be done
 5. Close settings window. Settings should be picked up automatically.  If not, restart VSCode.
 
 ![img](https://i.ibb.co/6JfjhwKT/Screenshot-2025-06-09-at-10-30-05-AM.png)
+
+> In VSCode, Setting should also be available by hitting the ⚙️ "gear" icon after locating the "RouterOS LSP" in "Extensions" section in VSCode.
+> ![Router-OS-LSP-as-VSIX-loaded-in-VSCode](https://i.ibb.co/1t1y3kLL/Router-OS-LSP-as-VSIX-loaded-in-VSCode.png)
+
 
 #### NeoVim
 
