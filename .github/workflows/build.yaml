@@ -35,7 +35,7 @@ jobs:
 
       - name: Package cross-platform version of standalone LSP server
         run: |
-          for i in bun-linux-x64 bun-linux-arm64 bun-windows-x64 bun-windows-arm64 bun-darwin-x64 bun-darwin-arm64 bun-linux-x64-musl bun-linux-arm64-musl; do
+          for i in bun-linux-x64 bun-linux-arm64 bun-windows-x64 bun-darwin-x64 bun-darwin-arm64 bun-linux-x64-musl bun-linux-arm64-musl; do
             outname="${i#bun-}"
             bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server-$outname --target $i
           done
@@ -65,11 +65,12 @@ jobs:
           name: lsp-routeros-server-windows-x64
           path: lsp-routeros-server-windows-x64
 
-      - name: Upload lsp-routeros-server artifact for bun-windows-arm64
-        uses: actions/upload-artifact@v4
-        with:
-          name: lsp-routeros-server-windows-arm64
-          path: lsp-routeros-server-windows-arm64
+      # disable - "bun-windows-arm64" target is failing, think it needs newer (or older) `bun` - requires investigation (and not easily testable)
+      #- name: Upload lsp-routeros-server artifact for bun-windows-arm64
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: lsp-routeros-server-windows-arm64
+      #    path: lsp-routeros-server-windows-arm64
 
       - name: Upload lsp-routeros-server artifact for bun-darwin-x64
         uses: actions/upload-artifact@v4

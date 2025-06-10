@@ -9,8 +9,9 @@ client/node_modules
 server/out
 server/node_modules
 
-server/*.bun-build
+**/.*bun-build
 *.vsix
-lsp-routeros-server
+lsp-routeros-*
+
 
 test.rsc

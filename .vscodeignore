@@ -3,4 +3,7 @@
 test.rsc
 icon.svg
 **/*.map
-**/*.bun-build
+**/.*bun-build
+lsp-routeros*
+**/tsconfig.tsbuildinfo
+.github/*
