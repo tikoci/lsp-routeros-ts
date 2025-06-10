@@ -205,7 +205,7 @@ operation of the LSP itself.
 .
 ├── .github
 │   └── workflows
-│   │   └── build.yaml      // build script use in GitHub Actions CI
+│       └── build.yaml      // build script use in GitHub Actions CI
 ├── .vscode
 │   ├── launch.json         // Tells VS Code how to launch our extension
 │   └── tasks.json          // Tells VS Code how to build our extension
@@ -217,16 +217,53 @@ operation of the LSP itself.
 ├── README.md
 ├── client
 │   ├── language-configuration.json   // define basics of RouterOS to VSCode
-│   ├── package.json        // extension client node dependancies
-│   ├── src
-│   │   └── extension.ts    // "shim" between VSCode and LSP server
+│   ├── package.json        // extension client node dependencies
+│   └── src
+│       └── extension.ts    // "shim" between VSCode and LSP server
 ├── package.json            // both Makefile and manifest & stores config schema
 ├── server
-│   ├── package.json        // LSP server node dependancies
+│   ├── package.json        // LSP server node dependencies
 │   └── src
 │       └── server.ts       // LSP server code
 └── nvim-routeros-lsp-init.lua    // `init.lua` code to add LSP to `nvim`
 ```
+
+As a result of various build processes, the following "artifacts" are produced as "outputs":
+```
+.
+├── client
+│   └── out
+|       ├── extension.js      // compiled TypeScript from `.ts` 
+│       └── extension.js.map  // used by debugger/errors to map line# between `js` and `ts`
+├── server
+│   └── out
+|       ├── server.js         // compiled `.ts` - can use to start LSP using `node ./server/out/server.js`
+│       └── server.map.js     // used by debugger/errors to map line# between `js` and `ts`
+├── lsp-routeros-server                   // always same platform as build system (used for development/locally)
+├── lsp-routeros-server-darwin-x64        // macOS "Intel" - static binary of `server.ts`
+├── lsp-routeros-server-darwin-arm64      // macOS "Silicon" - static binary of `server.ts` 
+├── lsp-routeros-server-linux-x64         // Linux - static binary of `server.ts`
+├── lsp-routeros-server-linux-arm64       // Linux (aarch64) - static binary of `server.ts`
+├── lsp-routeros-server-linux-x64-musl    // Alpine - static binary of `server.ts`
+├── lsp-routeros-server-linux-arm64-musl  // Alpine (aarch64) - static binary of `server.ts`
+├── lsp-routeros-server-windows-x64.exe   // Windows - static binary of `server.ts`
+├── lsp-routeros-server-windows-arm64.exe // Windows for ARM - static binary of `server.ts`
+└── lsp-routeros-ts-0.1.0.vsix            // Packaged and downloadable version of VSCode LSP extension
+
+```
+
+#### `npm run` Scripts
+
+Some "helper scripts" for developers can be run use `npm run <scriptname>`, 
+and maintained in the `package.json` in root directory.  The common "user facing" `<scriptname>` being:
+  *   `compile`: run TypeScript compiler ("tsc -b") for server and client
+  *   `vsix:package`: "npm run postinstall && rm -f *.vsix && vsce package",
+  *   `vsix:install`: install the VSIX file locally for `tikoci.lsp-routeros-ts`
+  *   `vsix:remove`: removes the VSIX file locally for `tikoci.lsp-routeros-ts`
+  *   `bun:exe`: builds `lsp-routeros-server` for local OS/platform
+  *   `nvim:install`: for local development use to install (or re-install) into NeoVim (`nvim`)
+
+> The `npm run` scripts are mainly for local development.  The GitHub Action CI generally directly invokes tools.  For example, to cross-compile for various platforms, `build.yaml` will just call `bun --compiler` directly and NOT use `bun:exe`.
 
 #### ID Fields
 
@@ -254,6 +291,7 @@ In many places some "id" field is used, to clarify naming:
 * Build process needs review, specifically a "clean" target. Ideally a Makefile wrap/replace the currently "npm run" scheme in `package.json` scripts section - which has way too many complex one-liners.
 * Once tested more, it could be [Published to VSCode Marketplace][publish] to make it easier to load.
 * Icon `png` should be "built" using `svg`- currently manual process
+* Automate "version bump" on build
 
 ---
 [debug]: https://code.visualstudio.com/api/language-extensions/language-server-extension-guide#debugging-both-client-and-server
