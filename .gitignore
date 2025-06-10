@@ -1,0 +1,16 @@
+out
+node_modules
+.vscode-test
+tsconfig.tsbuildinfo
+
+client/out
+client/node_modules
+
+server/out
+server/node_modules
+
+server/*.bun-build
+*.vsix
+lsp-routeros-server
+
+test.rsc

@@ -1,0 +1,6 @@
+**/*.ts
+**/tsconfig.json
+test.rsc
+icon.svg
+**/*.map
+**/*.bun-build

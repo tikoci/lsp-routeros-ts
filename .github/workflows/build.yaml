@@ -1,0 +1,41 @@
+name: Build and Upload Artifacts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm compile
+
+      - name: Package VSIX
+        run: npm run vsix:package
+
+      - name: Package standalone "bun exe"
+        run: npm run bun:exe
+
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsp-routeros-ts.vsix
+          path: 'lsp-routeros-ts*.vsix'
+
+      - name: Upload lsp-routeros-server "bun exe" artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsp-routeros-server
+          path: lsp-routeros-server

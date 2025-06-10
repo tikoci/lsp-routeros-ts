@@ -1,0 +1,83 @@
+{
+  "name": "lsp-routeros-ts",
+  "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
+  "author": "AmmØ",
+  "license": "MIT",
+  "version": "0.1.0",
+  "publisher": "TIKOCI",
+  "categories": [],
+  "displayName": "RouterOS LSP",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tikoci/lsp-routeros-ts.git"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "main": "./client/out/extension",
+  "contributes": {
+    "languages": [
+      {
+        "id": "routeroslsp",
+        "extensions": [
+          ".rsc"
+        ],
+        "aliases": [
+          "RouterOS",
+          "rsc"
+        ],
+        "configuration": "./client/language-configuration.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "RouterOS LSP",
+      "properties": {
+        "routeroslsp.maxNumberOfProblems": {
+          "scope": "resource",
+          "type": "number",
+          "default": 100,
+          "description": "Controls the maximum number of problems produced by the server."
+        },
+        "routeroslsp.baseUrl": {
+          "scope": "resource",
+          "type": "string",
+          "default": "http://192.168.88.1",
+          "description": "Set the host and protocol to connect to RouterOS.  e.g.: 'https://192.168.88.1'"
+        },
+        "routeroslsp.username": {
+          "scope": "resource",
+          "type": "string",
+          "default": "lsp",
+          "description": "Username to use when LSP connects to a real RouterOS device"
+        },
+        "routeroslsp.password": {
+          "scope": "resource",
+          "type": "string",
+          "default": "riga",
+          "description": "Password to use when LSP connects to a real RouterOS device"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+    "vsix:package": "npm run postinstall && rm *.vsix && vsce package",
+    "vsix:install": "npm run vsix:remove; npm run vsix:package && code --install-extension lsp-routeros-ts-*.vsix",
+    "vsix:remove": "code --uninstall-extension tikoci.lsp-routeros-ts",
+    "bun:exe": "rm -rf *.bun-build && bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server && chmod +x ./lsp-routeros-server && mkdir -p ~/.bin && cp ./lsp-routeros-server ~/.bin",
+    "nvim:install": "npm run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/node": "^20.5.7",
+    "@vscode/vsce": "^3.5.0",
+    "axios": "^1.9.0",
+    "bun": "^1.2.15",
+    "typescript": "^5.2.2"
+  }
+}
