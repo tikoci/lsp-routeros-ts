@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
 
       - name: Install `bun`
         uses: oven-sh/setup-bun@v2
@@ -97,31 +97,26 @@ jobs:
           name: lsp-routeros-server-linux-arm64-musl
           path: lsp-routeros-server-linux-arm64-musl
 
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
+      - name: Get package version
+        id: pkgver
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ github.run_number }}
-          name: Release v${{ github.run_number }}
-          body: |
-            Automated release from CI.
+          name: v${{ steps.pkgver.outputs.version }}
+          tag_name: v${{ steps.pkgver.outputs.version }}
+          draft: false
+          prerelease: false
           files: |
-            artifacts/lsp-routeros-ts.vsix
-            artifacts/lsp-routeros-server-linux-x64
-            artifacts/lsp-routeros-server-linux-arm64
-            artifacts/lsp-routeros-server-windows-x64.exe
-            artifacts/lsp-routeros-server-darwin-x64
-            artifacts/lsp-routeros-server-darwin-arm64
-            artifacts/lsp-routeros-server-linux-x64-musl
-            artifacts/lsp-routeros-server-linux-arm64-musl
+            lsp-routeros-ts.vsix
+            lsp-routeros-server-linux-x64
+            lsp-routeros-server-linux-arm64
+            lsp-routeros-server-windows-x64.exe
+            lsp-routeros-server-darwin-x64
+            lsp-routeros-server-darwin-arm64
+            lsp-routeros-server-linux-x64-musl
+            lsp-routeros-server-linux-arm64-musl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
