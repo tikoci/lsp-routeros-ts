@@ -45,7 +45,7 @@ jobs:
           echo "special case for windows build since it uses .exe"
           bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server-windows-x64 --target bun-windows-x64
           chmod +x ./lsp-routeros-server-windows-x64.exe
-          zip ./lsp-routeros-server-$outname.zip ./lsp-routeros-server-windows-x64.exe
+          zip ./lsp-routeros-server-windows-x64.zip ./lsp-routeros-server-windows-x64.exe
  
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
