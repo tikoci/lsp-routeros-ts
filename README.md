@@ -43,13 +43,13 @@ A Lua file is provided with the need script to load the RouterOS LSP, [`nvim-rou
 The code needs to be load from `init.lua` used on `nvim` startup.  Since there are many schemes possible, exactly where `init.lua` lives your steps may vary.  The following was tested on Mac with homebrew-installed `nvim`.
 
 1. Create or edit the `init.lua`, typically located in `~/config/nvim/init.lua`.  Consult `nvim` docs for locating your `init.lua`.
-1. Download and copy `lsp-routeros-server` from GitHub to `~/.bin`.  If you want use use a different path, that will have to be changed in `nvim-routeros-lsp-init.lua`
+1. Download and copy a `lsp-routeros-server-*` for your platform from GitHub to `~/.bin`.  If you want use use a different path, that will have to be changed in `nvim-routeros-lsp-init.lua`
 2. Add the following line to the `init.lua`:
    ```
    dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')
    ```
 3. Copy [`nvim-routeros-lsp-init.lua`](https://github.com/tikoci/lsp-routeros-ts/nvim-routeros-lsp-init.lua) to the local `~/config/nvim` with the same name - which be called by the `dofile()` in `init.lua`.  Adjust any paths as needed
-4. Adjust settings at top in your copy of `nvim-routeros-lsp-init.lua`.  See "Configuration" section below for more details – critically the RouterOS information must be correct for the LSP to work
+4. Adjust settings at top in your copy of `nvim-routeros-lsp-init.lua`.  See "Configuration" section below for more details – critically the RouterOS information must be correct for the LSP to work & the platform **must** be included in 
 5. Launch `nvim` with `*.rsc` file and the LSP should load.  If it loads a message will appear at bottom of `nvim`
 
 > To trigger completions, the default in `nvim` is <kbd>Ctrl</kbd> + <kbd>Z</kbd> followed by <kbd>Ctrl</kbd> + <kbd>O</kbd> (omni-complete) **while** in `vi` INSERT mode (<kbd>Ctrl</kbd> + <kbd>i</kbd> or <kbd>a</kbd>).  Again, your configuration may vary.
@@ -68,7 +68,7 @@ The RouterOS LSP **requires** a REST API connection to RouterOS device, so the *
 ### LSP `workspace/configuration`
 
 The supported settings are defined in `./server/server.ts`:
-```
+```typescript
 interface LspSettings {
     maxNumberOfProblems: number;  // 100
     baseUrl: string;              // "http://192.168.88.1"
@@ -94,8 +94,8 @@ Assuming the extension with RouterOS LSP is installed, configuration can be done
 
 #### NeoVim
 
-The following section must be **edited** with **correct** RouterOS host and login details, both http:// and https:// are supported by changing the `baseUrl`:
-```
+The following section in `nvim-routeros-lsp-init.lua` (_i.e. in ~/.bin/nvim) must be **edited** with **correct** RouterOS host and login details, both http:// and https:// are supported by changing the `baseUrl`:
+```lua
 local settings = {
   routeroslsp = {
     maxNumberOfProblems = 100,
@@ -106,16 +106,15 @@ local settings = {
 }
 ```
 
-
+Also the **platform** must be included in `lspexe` variable.  The "default" Lua uses just `lsp-routeros-server`  – which is what a local build will produce – but if using a packaged or downloaded LSP binary, this needs to include the right platform.  For example, using macOS on Apple Silcon the name of the executable LSP is `lsp-routeros-server-darwin-arm64`, the top line in `nvim-routeros-lsp-init.lua` becomes
+```lua
+local lspexec =  { os.getenv("HOME") .. "/.bin/lsp-routeros-server-darwin-arm64", "--stdio" }
+```
+Additionally `lspexec` must use the correct path.  But be careful since`lspexec` is 2 element "array", so the `--stdio` argument is the 2nd element, while the 1st `..` concatenates the user home directory (`os.getenv("HOME")`) with the default path to LSP binary — it has to be an array and `--stdio` must be provided for LSP to function.
 
 ### Other LSP clients
 
-Other clients should work, however configuration may vary substantially.  
-
-The project supports "compiled" version TypeScript, which isa "real" executable.  So you can just copy the generated `lsp-routeros-server` to an appropriate path for your editor, and configure LSP client to use that instead of `node ...`. The executable version has NO dependencies on `node` being installed.  
-
-> It likely mostly clients (including `nvim`) will add a `--stdio` to the command to the LSP API's UNIX stdin/stdout scheme.  And there is a `--socket` – which allow a remote connection the LSP (which then have a remote connection to RouterOS) – but that has not been tested
-
+Other clients should work, if the support `workspace/configuration` ("configuration capacity").  However configuration may vary substantially, but configuration variable shown above in `LspConfig` must be provided somehow to the LSP client editor.  
 
 ## Implementation and Development
 
