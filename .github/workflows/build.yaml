@@ -101,20 +101,15 @@ jobs:
         id: pkgver
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
-      - name: Set up Node.js 18 for release step
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
       - name: Create GitHub Release
         id: create_release
-        uses: softprops/action-gh-release@v2
+        uses: ncipollo/release-action@v1
         with:
           name: v${{ steps.pkgver.outputs.version }}
-          tag_name: v${{ steps.pkgver.outputs.version }}
+          tag: v${{ steps.pkgver.outputs.version }}
           draft: false
           prerelease: true
-          files: |
+          artifacts: |
             lsp-routeros-ts.vsix
             lsp-routeros-server-linux-x64
             lsp-routeros-server-linux-arm64
