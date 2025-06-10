@@ -39,63 +39,64 @@ jobs:
           for i in bun-linux-x64 bun-linux-arm64 bun-windows-x64 bun-darwin-x64 bun-darwin-arm64 bun-linux-x64-musl bun-linux-arm64-musl; do
             outname="${i#bun-}"
             bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server-$outname --target $i
+            chmod +x ./lsp-routeros-server-$outname
+            zip ./lsp-routeros-server-$outname.zip ./lsp-routeros-server-$outname
           done
-          chmod +x ./lsp-routeros-server*
 
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-ts.vsix
-          path: lsp-routeros-ts.vsix
+          path: lsp-routeros-ts.vsix.zip
 
       - name: Upload lsp-routeros-server artifact for bun-linux-x64
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-server-linux-x64
-          path: lsp-routeros-server-linux-x64
+          path: lsp-routeros-server-linux-x64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-linux-arm64
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-server-linux-arm64
-          path: lsp-routeros-server-linux-arm64
+          path: lsp-routeros-server-linux-arm64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-windows-x64
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-server-windows-x64.exe
-          path: lsp-routeros-server-windows-x64.exe
+          path: lsp-routeros-server-windows-x64.exe.zip
 
       # disable - "bun-windows-arm64" target is failing, think it needs newer (or older) `bun` - requires investigation (and not easily testable)
       #- name: Upload lsp-routeros-server artifact for bun-windows-arm64
       #  uses: actions/upload-artifact@v4
       #  with:
       #    name: lsp-routeros-server-windows-arm64
-      #    path: lsp-routeros-server-windows-arm64
+      #    path: lsp-routeros-server-windows-arm64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-darwin-x64
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-server-darwin-x64
-          path: lsp-routeros-server-darwin-x64
+          path: lsp-routeros-server-darwin-x64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-darwin-arm64
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-server-darwin-arm64
-          path: lsp-routeros-server-darwin-arm64
+          path: lsp-routeros-server-darwin-arm64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-linux-x64-musl
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-server-linux-x64-musl
-          path: lsp-routeros-server-linux-x64-musl
+          path: lsp-routeros-server-linux-x64-musl.zip
 
       - name: Upload lsp-routeros-server artifact for bun-linux-arm64-musl
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-server-linux-arm64-musl
-          path: lsp-routeros-server-linux-arm64-musl
+          path: lsp-routeros-server-linux-arm64-musl.zip
 
       - name: Get package version
         id: pkgver
@@ -109,14 +110,24 @@ jobs:
           tag: v${{ steps.pkgver.outputs.version }}
           draft: false
           prerelease: true
+          allowUpdates: true
+          updateOnlyUnreleased: true
+          body: |
+            ** LSP Server for RouterOS (v${{steps.pkgver.outputs.version}}) **
+            For VSCode, download `lsp-routeros-ts.vsix` and install use `code --install-extension lsp-routeros-ts.vsix` from your download directory.
+            For Neovim or other LSP clients, download the specific `lsp-routeros-server-*` for your OS/platform, and copy to `~/.bin` (or another directory).
+            > `darwin-` in name is for macOS, with `-arm64` is Apple Silcon while `-x64` is for Intel-based Mac platforms.
+            > `-musl` in name is for Alpine Linux or some other specialized Linux distros. 
+
+            See [README](https://github.com/tikoci/lsp-routeros-ts/README.md) for more details.
           artifacts: |
-            lsp-routeros-ts.vsix
-            lsp-routeros-server-linux-x64
-            lsp-routeros-server-linux-arm64
-            lsp-routeros-server-windows-x64.exe
-            lsp-routeros-server-darwin-x64
-            lsp-routeros-server-darwin-arm64
-            lsp-routeros-server-linux-x64-musl
-            lsp-routeros-server-linux-arm64-musl
+            lsp-routeros-ts.vsix.zip
+            lsp-routeros-server-linux-x64.zip
+            lsp-routeros-server-linux-arm64.zip
+            lsp-routeros-server-windows-x64.exe.zip
+            lsp-routeros-server-darwin-x64.zip
+            lsp-routeros-server-darwin-arm64.zip
+            lsp-routeros-server-linux-x64-musl.zip
+            lsp-routeros-server-linux-arm64-musl.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
