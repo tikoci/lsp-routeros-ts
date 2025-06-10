@@ -122,6 +122,18 @@ jobs:
             For VSCode, download `lsp-routeros-ts.vsix` and install use `code --install-extension lsp-routeros-ts.vsix` from your download directory.
             
             For Neovim or other LSP clients, download the specific `lsp-routeros-server-*` for your OS/platform, and copy to `~/.bin` (or another directory).
+
+            > _Windows is untested..._
+            >
+            > While built by GitHub, the standalone LSP binary `.exe` has not been tested.  In general, WSL may be a better choice on Windows.
+
+            > _No code signing..._
+            > 
+            > Currently none of the compiled standalone LSP servers are "signed" (but planned in future).
+            > Both Mac and Windows, depending on version, may complain.  On macOS, the issue can be fixed using:
+            > ```
+            > xattr -d com.apple.quarantine ~/.bin/lsp-routeros-server-darwin-x64
+            > ```
             
             > _Download file names..._
             >

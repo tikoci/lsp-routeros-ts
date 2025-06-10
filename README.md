@@ -112,6 +112,14 @@ local lspexec =  { os.getenv("HOME") .. "/.bin/lsp-routeros-server-darwin-arm64"
 ```
 Additionally `lspexec` must use the correct path.  But be careful since`lspexec` is 2 element "array", so the `--stdio` argument is the 2nd element, while the 1st `..` concatenates the user home directory (`os.getenv("HOME")`) with the default path to LSP binary — it has to be an array and `--stdio` must be provided for LSP to function.
 
+> On macOS, any downloaded file may be flagged and thus not start with a message that it has been "blocked".
+> This is because it lacks code signing, as it was built using GitHub.  
+> To allow the standalone LSP to run, its "quarantine" flag must removed using:
+> ```
+> xattr -d com.apple.quarantine ~/.bin/lsp-routeros-server-darwin-x64
+> ```
+> _adjust path as needed_
+
 ### Other LSP clients
 
 Other clients should work, if the support `workspace/configuration` ("configuration capacity").  However configuration may vary substantially, but configuration variable shown above in `LspConfig` must be provided somehow to the LSP client editor.  
