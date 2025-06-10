@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install `bun`
         uses: oven-sh/setup-bun@v2
@@ -100,6 +100,11 @@ jobs:
       - name: Get package version
         id: pkgver
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Set up Node.js 18 for release step
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
       - name: Create GitHub Release
         id: create_release
