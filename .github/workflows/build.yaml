@@ -20,7 +20,7 @@ jobs:
         run: npm install
 
       - name: Build project
-        run: npm compile
+        run: npm run compile
 
       - name: Package VSIX
         run: npm run vsix:package
