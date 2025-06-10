@@ -24,7 +24,7 @@ The language extension here is not yet published.  Instead a `VSIX` file is prov
 
 To install use the following command, adjust download path and file as needed:
 ```
-code --install-extension ~/Downloads/lsp-routeros-ts-*.vsix
+code --install-extension ~/Downloads/lsp-routeros-ts.vsix
 ```
 
 #### Remove VSIX
