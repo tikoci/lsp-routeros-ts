@@ -16,6 +16,9 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Install `bun`
+        uses: oven-sh/setup-bun@v2
+      
       - name: Install dependencies
         run: npm install
 
