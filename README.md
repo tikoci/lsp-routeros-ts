@@ -80,6 +80,8 @@ interface LspSettings {
 ```
 with metadata for the settings stored in `./package.json` under "contributes".
 
+On the router, either the "http" or "https" service must be enabled, and accessible to any editor using the LSP server.
+
 > If you use "https://" (TLS), the certification chain must be valid from the LSP client. So self-signed certificates on REST API may not work out-of-box.
 > This is no "allow unsafe certificates" option, so you'll need to add the router's certificate (and/or it's CAs) to the local "keychain" ("keystore" etc).
 
