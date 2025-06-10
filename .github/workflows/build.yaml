@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-ts.vsix
-          path: lsp-routeros-ts.vsix.zip
+          path: lsp-routeros-ts.vsix
 
       - name: Upload lsp-routeros-server artifact for bun-linux-x64
         uses: actions/upload-artifact@v4
@@ -69,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-server-windows-x64.exe
-          path: lsp-routeros-server-windows-x64.exe.zip
+          path: lsp-routeros-server-windows-x64.zip
 
       # disable - "bun-windows-arm64" target is failing, think it needs newer (or older) `bun` - requires investigation (and not easily testable)
       #- name: Upload lsp-routeros-server artifact for bun-windows-arm64
@@ -117,18 +117,23 @@ jobs:
           allowUpdates: true
           updateOnlyUnreleased: true
           body: |
-            ** LSP Server for RouterOS (v${{steps.pkgver.outputs.version}}) **
+            *LSP Server for RouterOS (v${{steps.pkgver.outputs.version}})*
+            
             For VSCode, download `lsp-routeros-ts.vsix` and install use `code --install-extension lsp-routeros-ts.vsix` from your download directory.
+            
             For Neovim or other LSP clients, download the specific `lsp-routeros-server-*` for your OS/platform, and copy to `~/.bin` (or another directory).
+            
+            > _Download file names..._
+            >
             > `darwin-` in name is for macOS, with `-arm64` is Apple Silcon while `-x64` is for Intel-based Mac platforms.
             > `-musl` in name is for Alpine Linux or some other specialized Linux distros. 
 
             See [README](https://github.com/tikoci/lsp-routeros-ts/README.md) for more details.
           artifacts: |
-            lsp-routeros-ts.vsix.zip
+            lsp-routeros-ts.vsix
             lsp-routeros-server-linux-x64.zip
             lsp-routeros-server-linux-arm64.zip
-            lsp-routeros-server-windows-x64.exe.zip
+            lsp-routeros-server-windows-x64.zip
             lsp-routeros-server-darwin-x64.zip
             lsp-routeros-server-darwin-arm64.zip
             lsp-routeros-server-linux-x64-musl.zip
