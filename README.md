@@ -1,5 +1,7 @@
 # RouterOS LSP Server
 
+![Router-OS-LSP-as-VSIX-loaded-in-VSCode](https://i.ibb.co/1t1y3kLL/Router-OS-LSP-as-VSIX-loaded-in-VSCode.png)
+
 ## Installing
 
 The RouterOS LSP can be installed into most LSP clients.  Specifically the following LSP capacities are supported:
@@ -39,7 +41,7 @@ Setting should be available by hitting the "gear" icon after locating the "Route
 > **NOTE**  Only limited tested has been done using `nvim` – likely many things could be done for
 > a text-mode LSP client like `nvim` (NeoVim).  For example, no testing has been done using common LSP "managers" plugins. 
 
-A Lua file is provided with the need script to load the RouterOS LSP, [`nvim-routeros-lsp-init.lua`](https://github.com/tikoci/lsp-routeros-ts/nvim-routeros-lsp-init.lua).  This uses the low-level built-in LSP for configuration, but in reality only the "settings" Lua code likely needs to be changed (unless bugs ;).
+A Lua file is provided with the need script to load the RouterOS LSP, [`nvim-routeros-lsp-init.lua`](https://github.com/tikoci/lsp-routeros-ts/blob/main/nvim-routeros-lsp-init.lua).  This uses the low-level built-in LSP for configuration, but in reality only the "settings" Lua code likely needs to be changed (unless bugs ;).
 The code needs to be load from `init.lua` used on `nvim` startup.  Since there are many schemes possible, exactly where `init.lua` lives your steps may vary.  The following was tested on Mac with homebrew-installed `nvim`.
 
 1. Create or edit the `init.lua`, typically located in `~/config/nvim/init.lua`.  Consult `nvim` docs for locating your `init.lua`.
@@ -57,7 +59,7 @@ The code needs to be load from `init.lua` used on `nvim` startup.  Since there a
 
 ## Configuration
 
-The RouterOS LSP **requires** a REST API connection to RouterOS device, so the **host and credentials need to be provided**.
+The RouterOS LSP **requires** a REST API connection to RouterOS device, so the **host and credentials need to be provided**.  
 
 > The LSP does not need "write" or "sensitive" policies – so no need to use credentials for "full" user in the configuration.  Instead, a new RouterOS user can be used to limit the needed permissions.  To create one, use:
 > ```
@@ -78,6 +80,8 @@ interface LspSettings {
 ```
 with metadata for the settings stored in `./package.json` under "contributes".
 
+> If you use "https://" (TLS), the certification chain must be valid from the LSP client. So self-signed certificates on REST API may not work out-of-box.
+> This is no "allow unsafe certificates" option, so you'll need to add the router's certificate (and/or it's CAs) to the local "keychain" ("keystore" etc).
 
 The specific mechanism to set them varies by LSP client, but all use LSP's `workspace/configuration` API.
 
@@ -122,7 +126,7 @@ Additionally `lspexec` must use the correct path.  But be careful since`lspexec`
 
 ### Other LSP clients
 
-Other clients should work, if the support `workspace/configuration` ("configuration capacity").  However configuration may vary substantially, but configuration variable shown above in `LspConfig` must be provided somehow to the LSP client editor.  
+Other clients should work, if the LSP client supports the `workspace/configuration` ("configuration capacity") API.  LSP configuration may vary substantially between editors – but configuration variables shown above in `LspSettings` **must** be provided somehow to the LSP client editor.  
 
 ## Implementation and Development
 
@@ -131,7 +135,7 @@ While this allows first-class support for Visual Studio Code ("VSCode"), the LSP
 
 To provide "AST-like" data to the LSP, HTTP REST calls to a running RouterOS device to retrieve data from `/console/inspect`, specifically `request=highlight` and `request=completion` operations.  _See "Configuration" above on how to provide RouterOS connection details._  Using `/console/inspect` via REST means the LSP is always matched to a specific version's AST, so newer command and attributes will automatically be available simply by upgrading the connected RouterOS to newer (or older) version.  But this also means **without a running RouterOS device, the LSP will not work.**  
 
-> A virtual machine can be used with the "free" version of RouterOS's "CHR" can be used in configuration's `baseUrl`.  This approach avoids storing any "real" router's password in the LSP configuration.  For Mac, UTM can be used as the host, and tikoci's "mikropkl" has ready-to-use images can bring up RouterOS CHR in a few steps, see [tikoci/mikropkl](https://github.com/tikoci/mikropkl) for details. 
+> A virtual machine can be used with the "free" version of RouterOS's "CHR" as the `baseUrl`.  This approach avoids storing any "real" router's password in the LSP configuration.  For Mac, UTM can be used as the host, and tikoci's "mikropkl" has ready-to-use images can bring up RouterOS CHR in a few steps, see [tikoci/mikropkl](https://github.com/tikoci/mikropkl) for details. 
 
 ### Building LSP
 
@@ -230,3 +234,12 @@ Additionally see Microsoft's [debugging instructions][debug] for using VSCode "E
 [publish]: https://code.visualstudio.com/api/working-with-extensions/publishing-extension
 [vsix]: https://code.visualstudio.com/api/working-with-extensions/publishing-extension#packaging-extensions
 
+
+
+> #### Disclaimers
+> **Not affiliated, associated, authorized, endorsed by, or in any way officially connected with MikroTik, Apple, nor UTM from Turing Software, LLC.**
+> **Any trademarks and/or copyrights remain the property of their respective holders** unless specifically noted otherwise.
+> Use of a term in this document should not be regarded as affecting the validity of any trademark or service mark. Naming of particular products or brands should not be seen as endorsements.
+> MikroTik is a trademark of Mikrotikls SIA.
+> Apple and macOS are trademarks of Apple Inc., registered in the U.S. and other countries and regions. UNIX is a registered trademark of The Open Group. 
+> **No liability can be accepted.** No representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability, or completeness of any information is offered.  Use the concepts, code, examples, and other content at your own risk. There may be errors and inaccuracies, that may of course be damaging to your system. Although this is highly unlikely, you should proceed with caution. The author(s) do not accept any responsibility for any damage incurred. 
