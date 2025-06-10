@@ -6,7 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -62,8 +63,8 @@ jobs:
       - name: Upload lsp-routeros-server artifact for bun-windows-x64
         uses: actions/upload-artifact@v4
         with:
-          name: lsp-routeros-server-windows-x64
-          path: lsp-routeros-server-windows-x64
+          name: lsp-routeros-server-windows-x64.exe
+          path: lsp-routeros-server-windows-x64.exe
 
       # disable - "bun-windows-arm64" target is failing, think it needs newer (or older) `bun` - requires investigation (and not easily testable)
       #- name: Upload lsp-routeros-server artifact for bun-windows-arm64
@@ -95,3 +96,32 @@ jobs:
         with:
           name: lsp-routeros-server-linux-arm64-musl
           path: lsp-routeros-server-linux-arm64-musl
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Release v${{ github.run_number }}
+          body: |
+            Automated release from CI.
+          files: |
+            artifacts/lsp-routeros-ts.vsix
+            artifacts/lsp-routeros-server-linux-x64
+            artifacts/lsp-routeros-server-linux-arm64
+            artifacts/lsp-routeros-server-windows-x64.exe
+            artifacts/lsp-routeros-server-darwin-x64
+            artifacts/lsp-routeros-server-darwin-arm64
+            artifacts/lsp-routeros-server-linux-x64-musl
+            artifacts/lsp-routeros-server-linux-arm64-musl
