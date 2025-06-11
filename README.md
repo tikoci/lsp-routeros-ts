@@ -9,6 +9,7 @@ The RouterOS LSP can be installed into most LSP clients.  Specifically the follo
   * semantic tokens (colorization)
   * diagnostics ("Problems" in VSCode terms)
   * configuration (connection to RouterOS used by LSP)
+  * hover (WIP, currently for debugging found tokens)
 
 > `workspace/configuration` ("configuration capacity") is **required** to be supported by an LSP Client – since that is how RouterOS connection information is obtained.  Both `nvim` and VSCode support it.
 
@@ -26,6 +27,7 @@ To install use the following command, adjust download path and file as needed:
 ```
 code --install-extension ~/Downloads/lsp-routeros-ts.vsix
 ```
+_Adjusted path and filename as needed for the OS/platform_
 
 #### Remove VSIX
 
