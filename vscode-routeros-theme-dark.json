@@ -3,59 +3,79 @@
   "type": "dark",
   "semanticHighlighting": true,
   "semanticTokenColors": {
-    "none": "#ffffff",
+    "none": {
+      "foreground": "#ffffff"
+    },
     "dir": {
-      "foreground": "#4ec9b0",
-      "fontStyle": "bold"
+      "foreground": "#079B9B"
     },
     "cmd": {
-      "foreground": "#569cd6",
+      "foreground": "#9B009B",
       "fontStyle": "bold"
     },
-    "arg": "#dcdcaa",
-    "varname-local": "#9cdcfe",
-    "variable-parameter": {
-      "foreground": "#c586c0",
-      "fontStyle": "italic"
+    "arg": {
+      "foreground": "#009C00"
     },
-    "variable-local": "#9cdcfe",
-    "syntax-val": "#b5cea8",
-    "varname": "#ce9178",
-    "syntax-meta": "#d7ba7d",
-    "escaped": "#d16969",
+    "varname-local": {
+      "foreground": "#079B9B"
+    },
+    "variable-parameter": {
+      "foreground": "#079B9B"
+    },
+    "variable-local": {
+      "foreground": "#079B9B"
+    },
+    "syntax-val": {
+      "foreground": "#ffffff"
+    },
+    "varname": {
+      "foreground": "#079B9B"
+    },
+    "syntax-meta": {
+      "foreground": "#9B9C00",
+      "fontStyle": "bold"
+    },
+    "escaped": {
+      "foreground": "#07009B"
+    },
     "variable-global": {
-      "foreground": "#c586c0",
-      "fontStyle": "underline"
+      "foreground": "#079B9B",
+      "fontStyle": "bold"
     },
     "comment": {
-      "foreground": "#6a9955",
+      "foreground": "#D0CFCC",
       "fontStyle": "italic"
     },
     "obj-inactive": {
-      "foreground": "#808080",
+      "foreground": "#9B0100",
       "fontStyle": "italic"
     },
     "syntax-obsolete": {
-      "foreground": "#ff8800",
+      "foreground": "#9B0100",
       "fontStyle": "strikethrough"
     },
     "variable-undefined": {
-      "foreground": "#ff0000",
-      "fontStyle": "underline"
+      "foreground": "#9B0100",
+      "fontStyle": "strikethrough"
     },
     "ambiguous": {
-      "foreground": "#ff00ff",
-      "fontStyle": "italic underline"
+      "foreground": "#9B0100",
+      "fontStyle": "underline"
     },
-    "syntax-old": "#ffcc00",
+    "syntax-old": {
+      "foreground": "#9B0100"
+    },
     "error": {
-      "foreground": "#ff0000",
-      "fontStyle": "bold underline"
+      "foreground": "#9B0100",
+      "fontStyle": ["underline", "bold"]
     },
-    "varname-global": "#c586c0",
+    "varname-global": {
+      "foreground": "#079B9B",
+      "fontStyle": "bold"
+    },
     "syntax-noterm": {
-      "foreground": "#ff0000",
-      "fontStyle": "italic"
+      "foreground": "#07009B",
+      "fontStyle": "strikethrough"
     }
   }
 }

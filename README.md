@@ -1,4 +1,4 @@
-# RouterOS LSP Server
+# RouterOS LSP
 
 ![LSP running VSCode GIF](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDl4NXg5ZXB0YWd2Z2s5b2t0Z2t6enN6Y3NmbTRsZ2o5dWM3MTJqMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Rm4TUg15fUuUhHVvSx/giphy.gif)
 
@@ -78,8 +78,8 @@ The supported settings are defined in `./server/server.ts`:
 interface LspSettings {
     maxNumberOfProblems: number;  // 100
     baseUrl: string;              // "http://192.168.88.1"
-    username: string;             // "admin"
-    password: string;             // ""
+    username: string;             // "lsp"
+    password: string;             // "changeme"
 }
 ```
 _Metadata for the settings stored in `./package.json` under "contributes"._
@@ -380,13 +380,107 @@ This is likely the best guide to the "missing features" in this LSP, and clues o
 
 See https://github.com/microsoft/vscode-extension-sample, for example "[Code Actions](https://github.com/microsoft/vscode-extension-samples/blob/main/lsp-user-input-sample/server/src/sampleServer.ts)" 
 
-#### `vscode-languageserver` Tips and Tricks
+#### Impementation "Tips and Tricks"
+
+Some various notes that are not obvious from docs or specific to RouterOS
 
 ##### Position vs Offset
 
 The `vscode-languageserver` library provides a "position" generally, which is line and char position.  But for programatic use the "index" into a array with code is often more useful, this is called "offset" in the library.  The "offset" is more useful with /console/inspect. To handle this, the `TextDocument` object support an `offsetAt()` and `positionAt()` to enable conversion from the two forms. 
 
+##### `/console/inspect request=syntax`
 
+Not currently used — but be useful.  It's not used since it requires "tricks" to get useful information for completions and other things.
+For example, to get useful data, stuff like a <kbd>space</kbd> or <kbd>=</kbd> may need to be added to `input=` — even though it does not exist in loaded script/config.
+
+For now, just documenting how `/console/inspect` with `request=syntax` works in various cases:
+
+###### "TEXT" in output could provide a "description" to some LSP data for a "dir"
+```
+> /console/inspect request=syntax input="/ip/route add" 
+Columns: TYPE, SYMBOL, SYMBOL-TYPE, NESTED, NONORM, TEXT
+TYPE    SYMBOL   SYMBOL-TYPE  NESTED  NONORM  TEXT                                                                    
+syntax           collection        0  yes                                                                             
+syntax  ..       explanation       1  no      go up to ip                                                             
+syntax  add      explanation       1  no      Create a new item                                                       
+syntax  check    explanation       1  no                                                                              
+syntax  comment  explanation       1  no      Set static route comment                                                
+syntax  disable  explanation       1  no      Disable route                                                           
+syntax  edit     explanation       1  no                                                                              
+syntax  enable   explanation       1  no      Enable route                                                            
+syntax  export   explanation       1  no      Print or save an export script that can be used to restore configuration
+syntax  find     explanation       1  no      Find items by value                                                     
+syntax  get      explanation       1  no      Gets value of item's property                                           
+syntax  print    explanation       1  no      Print values of item properties                                         
+syntax  remove   explanation       1  no      Remove route                                                            
+syntax  reset    explanation       1  no                                                                              
+syntax  set      explanation       1  no      Change item properties                                                  
+syntax  unset    explanation       1  no         
+```
+
+###### Adding a fake <kbd>space</kbd> to `input` gets "arg"'s for a "cmd"
+```
+> /console/inspect request=syntax input="/ip/route add "
+Columns: TYPE, SYMBOL, SYMBOL-TYPE, NESTED, NONORM, TEXT
+TYPE    SYMBOL               SYMBOL-TYPE  N  NON  TEXT                                                                                                            
+syntax                       collection   0  yes                                                                                                                  
+syntax  blackhole            explanation  1  no                                                                                                                   
+syntax  check-gateway        explanation  1  no   Whether all nexthops of this route are checking reachability of gateway by sending arp requests every 10 seconds
+syntax  comment              explanation  1  no   Short description of the item                                                                                   
+syntax  copy-from            explanation  1  no   Item number                                                                                                     
+syntax  disabled             explanation  1  no   Defines whether item is ignored or used                                                                         
+syntax  distance             explanation  1  no   Administrative distance of the route                                                                            
+syntax  dst-address          explanation  1  no   Destination address                                                                                             
+syntax  gateway              explanation  1  no                                                                                                                   
+syntax  pref-src             explanation  1  no                                                                                                                   
+syntax  routing-table        explanation  1  no                                                                                                                   
+syntax  scope                explanation  1  no                                                                                                                   
+syntax  suppress-hw-offload  explanation  1  no                                                                                                                   
+syntax  target-scope         explanation  1  no                                                                                                                   
+syntax  vrf-interface        explanation  1  no                 
+```
+
+###### Adding a fake <kbd>=</kbd> to `input` gets some "defination"
+```
+> /console/inspect request=syntax input="/ip/route add check-gateway="
+Columns: TYPE, SYMBOL, SYMBOL-TYPE, NESTED, NONORM, TEXT
+TYPE    SYMBOL        SYMBOL-TYPE  NESTED  NONORM  TEXT             
+syntax  CheckGateway  definition        0  no                       
+syntax                definition        1  no      arp | none | ping
+```
+The issue here being the TEXT is not always well-formed – why `request=completion` is used to retrieve value like above.
+Like for num types there is a expression that shows the _range_ allowed:
+```
+> /console/inspect request=syntax input="/ip/service set port="
+Columns: TYPE, SYMBOL, SYMBOL-TYPE, NESTED, NONORM, TEXT
+TYPE    SYMBOL  SYMBOL-TYPE  NESTED  NONORM  TEXT                        
+syntax  Port    definition        0  no      Num                         
+syntax  Num     definition        1  no      1..65535    (integer number)
+```
+
+Point being the format of TEXT varies a good bit – and require parsing to make it actionable in LSP - without any documentation on `/console/inspect`
+
+## Releases Notes
+
+### Known Issues in "latest" 
+* More REST calls are made than strickly needed, more caching of results is needed to improve responsiveness 
+* NeoVim Lua example config does not yet show mapping "semantic tokens" to colors & generally still pretty "raw".
+* Completions should use icon for the "kind" (i.e. dir, arg, cmd tokens should use different icon in completion dropdown)
+
+## Changelog
+
+### 0.3.1
+> Ignoring previous 0.1.x versions & skipping 0.2.x since even minor ver is resered for published builds
+
+#### Fixes
+* Logging improved to better trace calls.  Previously random and too verbose. Perhaps slower (TBD) since overall more log entires just less fluff per log.
+* Always refresh sementic tokens when document changes.  Previously is was done indirectly and at wrong time.
+
+#### Changes
+* Default colors now mostly follow MikroTik CLI colors for syntax
+* Semantic tokens use MikroTik "highlights" names to allow one-to-one color matching between RouterOS syntax and editor.  Previously map to "standard" semantic tokens, which was lossy.
+* Add "color theme" to map _MikroTik highlights_ to specific colors for VSCode - which customizable by user using in other LSP client (just manually) 
+* Show "informational" message on REST API failure (and log too) - although still fatal to LSP operation
 
 ## Potential Future Features
 
@@ -398,15 +492,20 @@ The `vscode-languageserver` library provides a "position" generally, which is li
     * show short highlights (c = cmd, d = dir, G = global, L = local, a = attr, ! = error, ? = obj-inactive)
   * Run on router (via REST or SSH configurable)
   * New script from selection (opens new code window with selection)
+* "Open from Router" - since we have connection, should be able load either /system/script|schedule or file using existing REST API (or various on-XXXX "event scripts")
 * Detect scopes for code folding (and internal use) 
-* Refactor
-  * rename on global variables (easier since should not be dups)
-  * rename on local variables (harder since need scoping info)
+* Support "Signatures" (i.e. like "/ip/route add dst-address=1.1.1.1" _within_ larger text, and perhaps show completions for base part "/ip/route add" etc)
+* Support Rename...
+  * on global variables (easier since should not be dups)
+  * on local variables (harder since need scoping info)
 
 ### VSCode Features
   * Notebook support
 
 ## Open Issues
+
+> More raw notes.  **Needs further review.**
+
 * This `README` is full of typos and other grammar malfeasance. 
 * Error handling for RouterOS connection should be more "visible" - currently errors _should_ be in _some_ LSP client log – but something like a wrong password or invalid protocol should not be "hidden".
 * While "configuration capacity" is mandatory, the checks for it are not.

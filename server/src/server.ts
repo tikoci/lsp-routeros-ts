@@ -37,16 +37,20 @@ import axios = require('axios');
 
 // Create a connection for the server
 const connection = createConnection(ProposedFeatures.all);
+connection.console.log(`createConnection() called`);
+
 
 // Create a simple text document manager
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
+connection.console.log(`TextDocuments 'documents' loaded.  Got: #keys ${documents.keys.length}`);
+
 
 // Only keep settings for open documents
 documents.onDidClose((e: { document: { uri: any; }; }) => {
     documentSettings.delete(e.document.uri);
 });
 
-// Store capabilities of the server
+// Initialize capabilities of the server
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
@@ -63,7 +67,7 @@ interface LspSettings {
 // The global settings, used when the `workspace/configuration` request is not supported by the client.
 // Please note that this is not the case when using this server with the client provided in this example
 // but could happen with other clients.
-const defaultSettings: LspSettings = { maxNumberOfProblems: 101, baseUrl: 'http://192.168.88.1', username: 'admin', password: '' };
+const defaultSettings: LspSettings = { maxNumberOfProblems: 100, baseUrl: 'http://192.168.88.1', username: 'lsp', password: 'changeme' };
 let globalSettings: LspSettings = defaultSettings;
 
 // Cache the settings of all open documents
@@ -74,7 +78,9 @@ const documentSettings = new Map<string, Thenable<LspSettings>>();
 connection.onInitialize((params: InitializeParams) => {
     // Check client capabilities
     const capabilities = params.capabilities;
+    connection.console.log(`connection.onInitialize() CLIENT capabilities: ${JSON.stringify(capabilities, null, 2)}`);
 
+    // TODO: should REQUIRE configuration capacity, and fail GRACEFULLY if not
 
     // Does the client support the `workspace/configuration` request?
     // If not, we fall back using global settings.
@@ -123,24 +129,33 @@ connection.onInitialize((params: InitializeParams) => {
         };
     }
 
+    connection.console.log(`connection.onInitialize() SERVER capabilities:  ${JSON.stringify(result, null, 2)}`);
+
     // Return capabilities to the client
     return result;
 });
 
 // After initialization, the server is ready to handle requests
 connection.onInitialized(() => {
+    connection.console.log(`connection.onInitialized() fired.`);
+
+    // TODO: should register config cap include an undefined?
     if (hasConfigurationCapability) {
         // Register for all configuration changes
         connection.client.register(DidChangeConfigurationNotification.type, undefined);
     }
     if (hasWorkspaceFolderCapability) {
         connection.workspace.onDidChangeWorkspaceFolders((_event: any) => {
-            connection.console.log('Workspace folder change event received.');
+            connection.console.log(`onDidChangeWorkspaceFolders() fired but unhandled. Got: ${_event}`);
         });
     }
+    connection.languages.semanticTokens.refresh();
 });
 
+// TODO: this should be cleaned up....
 connection.onDidChangeConfiguration((change: any) => {
+    // TODO: use propery type for 'change' not any
+    connection.console.log(`onDidChangeConfiguration() fired with change: ${JSON.stringify(change, null, 2)}`);
     if (hasConfigurationCapability) {
         // Reset all cached document settings
         documentSettings.clear();
@@ -149,19 +164,24 @@ connection.onDidChangeConfiguration((change: any) => {
             (change.settings.routeroslsp || defaultSettings)
         );
     }
+    // TODO: not sure why this is here
     connection.languages.diagnostics.refresh();
+    connection.languages.semanticTokens.refresh();
 });
 
 
 connection.onDidChangeWatchedFiles(_change => {
     // Monitored files have change in VSCode
-    connection.console.log('We received a file change event');
+    connection.console.log(`onDidChangeWatchedFiles() fired but undhandled. Got: ${_change}`);
 });
 
 // This handler provides the initial list of completion items
 connection.onCompletion(async (textDocumentPosition: TextDocumentPositionParams) => {
+    connection.console.log(`connection.onCompletion() fired.  Got: ${JSON.stringify(textDocumentPosition, null, 2)}`);
+
     const document = documents.get(textDocumentPosition.textDocument.uri);
     if (!document) {
+        connection.console.info(`connection.onCompletion() does not have a document, returning no completion.`)
         return [];
     }
     const settings = await getDocumentSettings(document.uri);
@@ -178,7 +198,8 @@ connection.onCompletion(async (textDocumentPosition: TextDocumentPositionParams)
         if (item.show === 'true') {
             completions.push({
                 label: item.completion,
-                kind: CompletionItemKind.Text,
+                // TODO: should map 'kind' to proper tokenType - harder than it might seem since it's propspective
+                //kind: CompletionItemKind.Text,
                 data: index,
                 insertText: item.completion,
                 insertTextFormat: InsertTextFormat.PlainText,
@@ -188,6 +209,7 @@ connection.onCompletion(async (textDocumentPosition: TextDocumentPositionParams)
         }
     })
 
+    connection.console.log(`connection.onCompletion() fired.  Got: ${JSON.stringify(completions, null, 2)}`);
     return completions;
 });
 
@@ -203,25 +225,34 @@ connection.onCompletionResolve(
             item.detail = 'JavaScript details';
             item.documentation = 'JavaScript documentation';
         }*/
-        connection.console.log(`Completion item resolved: #${item.data} ${item.label} `);
+        connection.console.log(`onCompletionResolve() fired but unhandled. Got: data #${item.data} label '${item.label}' kind '${item.kind}' detail '${item.detail}' `);
         return item;
     }
 );
 
 connection.languages.semanticTokens.on(async (params: SemanticTokensParams): Promise<SemanticTokens> => {
     const document = documents.get(params.textDocument.uri);
-    if (!document) return { data: [] };
+    if (!document) {
+        connection.console.info(`semanticTokens.on() does not have a document, returning no tokens.`)
+        return { data: [] };
+    }
+    const settings = await getDocumentSettings(params.textDocument.uri);
+
 
     const builder = new SemanticTokensBuilder();
+    const highlights = await fetchInspect("highlight", document.getText(), settings)
+    if (!highlights || highlights.length === 0) {
+        connection.console.error(`validateTextDocument() no highlights found: ${document.uri}`);
+    }
 
-    const tokens = await lastTokens
+    const tokens: any[] = highlights[0].highlight.split(",");
+
     const ranges = groupRanges(tokens)
-    connection.console.log(` starting tokenizer with ${ranges}`)
+    connection.console.log(`semanticTokens.on() fired, processing.  Got: #tokens ${tokens.length} #ranges ${ranges.length}`)
     ranges.forEach((range) => {
         if (range[0] !== "none") {
             const pos = document.positionAt(range[1])
             builder.push(pos.line, pos.character, (range[2] - range[1]) + 1, tokenTypes.indexOf(range[0]), 0);
-            connection.console.log(`semantic: ${range[0]} ${pos.line}:${pos.character} ${(range[2] - range[1]) + 1}`);
         }
     })
     /*
@@ -237,6 +268,8 @@ connection.languages.semanticTokens.on(async (params: SemanticTokensParams): Pro
 
 // Diagnostic provider
 connection.languages.diagnostics.on(async (params) => {
+    connection.console.log(`diagnostics.on() called for uri: ${params.textDocument.uri}`);
+
     const document = documents.get(params.textDocument.uri);
     if (document !== undefined) {
         return {
@@ -246,6 +279,8 @@ connection.languages.diagnostics.on(async (params) => {
     } else {
         // We don't know the document. We can either try to read it from disk
         // or we don't report problems for it.
+        connection.console.info(`diagnostics.on() got no document.`);
+        // TODO: likely should report warning or error, instead of empty - there should be a document, i think...
         return {
             kind: DocumentDiagnosticReportKind.Full,
             items: []
@@ -255,19 +290,23 @@ connection.languages.diagnostics.on(async (params) => {
 
 
 connection.onHover(async (params: TextDocumentPositionParams): Promise<Hover | null> => {
+    
     const pos = params.position;
     const doc = documents.get(params.textDocument.uri);
     const settings = await getDocumentSettings(params.textDocument.uri);
-    if (!doc) return null;
-
+    if (!doc) {
+        connection.console.info(`connection.onHover() does not have a document, returning no hover.`)
+        return null;
+    }
+    
     // TODO: consolate into ranges
     const highlights = await fetchInspect("highlight", doc.getText(), settings)
     const tokens = highlights[0].highlight.split(",")
     const offset = doc.offsetAt(pos)
     const groupRange = findGroupRange(tokens, offset)
     const hoverInfo = `### <kbd>${tokens[offset]}</kbd>\n\`offset ${offset} line ${pos.line} char ${pos.character} grp ${groupRange}\``
-    connection.languages.semanticTokens.refresh();
-
+    
+    connection.console.log(`connection.onHover(): offset ${offset} line ${pos.line} char ${pos.character} grp ${groupRange}`);
     return {
         contents: {
             kind: 'markdown',
@@ -283,6 +322,8 @@ connection.onHover(async (params: TextDocumentPositionParams): Promise<Hover | n
 // HELPERS
 
 async function fetchInspect(request: string, text: any, settings: LspSettings): Promise<any> {
+    connection.console.log(`--> /console/inspect ${request.toUpperCase()} started`);
+
     try {
         const response = await axios.post(
             `${settings.baseUrl}/rest/console/inspect`,
@@ -292,8 +333,8 @@ async function fetchInspect(request: string, text: any, settings: LspSettings): 
             },
             {
                 auth: {
-                    username: settings.username || 'admin',
-                    password: settings.password || ''
+                    username: settings.username || 'lsp',
+                    password: settings.password || 'changeme'
                 },
                 headers: {
                     'Content-Type': 'application/json',
@@ -302,22 +343,32 @@ async function fetchInspect(request: string, text: any, settings: LspSettings): 
         );
 
         const resp: any = response.data;
+        connection.console.log(`<-- /console/inspect ${request.toUpperCase()} got: #data ${resp.length}`);
+
         return resp;
 
     } catch (error: any) {
         // TODO: not sure how to handle these errors - they'd be fatal...
+        let errorText: string;
         if (error) {
-            console.error('Axios error:', error.message);
+            errorText = `<-> /console/inspect ${request.toUpperCase()} got: ${error.message}`
+            connection.console.error(errorText);
+            lspAlert(errorText)
             if (error.response) {
-                console.error('Response body:', error.response.data);
+                errorText = `<-> /console/inspect ${request.toUpperCase()} got: ${error.response.data}`
+                connection.console.error(errorText);
+                lspAlert(errorText)
             }
         } else {
-            console.error('Unexpected error:', error);
+            errorText = `<-> /console/inspect ${request.toUpperCase()} got: ${JSON.stringify(error, null, 2)}`;
+            connection.console.error(errorText);
+            lspAlert(errorText)
         }
     }
 }
 
 function getDocumentSettings(resource: string): Thenable<LspSettings> {
+    connection.console.log(`getDocumentSettings() called for uri: ${resource}`);
     if (!hasConfigurationCapability) {
         return Promise.resolve(globalSettings);
     }
@@ -333,13 +384,13 @@ function getDocumentSettings(resource: string): Thenable<LspSettings> {
 }
 
 
-async function logLsp(message: string): Promise<void> {
+async function lspAlert(message: string): Promise<void> {
     connection.window.showInformationMessage(message);
 }
 
-let lastTokens: any[] = []
-
 async function validateTextDocument(textDocument: TextDocument): Promise<Diagnostic[]> {
+    connection.console.log(`validateTextDocument() with uri: ${textDocument.uri}`);
+
     // Get the settings for this document
     const settings = await getDocumentSettings(textDocument.uri);
 
@@ -347,14 +398,14 @@ async function validateTextDocument(textDocument: TextDocument): Promise<Diagnos
 
     const diagnostics: Diagnostic[] = [];
 
-    connection.languages.semanticTokens.refresh();
     const highlights = await fetchInspect("highlight", text, settings)
     if (!highlights || highlights.length === 0) {
-        connection.console.error(`No highlights found for document: ${textDocument.uri}`);
+        connection.console.error(`validateTextDocument() no highlights found: ${textDocument.uri}`);
+        // TODO: should inject some error actually, not "nothing"...
         return diagnostics; // No highlights, no diagnostics
     }
-    lastTokens = highlights[0].highlight.split(",")
-    const tokens: any[] = lastTokens;
+
+    const tokens: any[] = highlights[0].highlight.split(",");
 
     // Get highlights from router
     let lastToken: any = null;
@@ -411,7 +462,10 @@ async function validateTextDocument(textDocument: TextDocument): Promise<Diagnos
     const limitedDiagnostics = diagnostics.slice(0, maxProblems);
 
     // Send the computed diagnostics to VSCode
+    // TODO: why is commented out, could be left over or might be needed...
     //connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: limitedDiagnostics });
+
+    connection.console.log(`validateTextDocument() completed.  Result: #errors ${limitedDiagnostics.length}`);
     return limitedDiagnostics
 }
 
@@ -431,7 +485,11 @@ function findGroupRange(arr: string[], index: number): number[] {
         end++;
     }
     // Return [index, index] if no group found
-    return start === end ? [index, index] : [start, end];
+    const result = start === end ? [index, index] : [start, end];
+
+    connection.console.log(`findGroupRange() finished. Got: index ${index}  #groups ${result.length}}`);
+    
+    return result
 }
 
 function groupRanges(arr: string[]): [string, number, number][] {
@@ -452,12 +510,19 @@ function groupRanges(arr: string[]): [string, number, number][] {
         i = end + 1; // Move to the next distinct value
     }
 
+    connection.console.log(`findGroupRange() finished. Got: #groups ${result.length}}`);
     return result;
 }
 
-// "Main" - did something change?
+// MAIN if open or change, do something
 documents.onDidChangeContent(async (change) => {
-    validateTextDocument(change.document);
+    await validateTextDocument(change.document);
+    connection.languages.semanticTokens.refresh();
+});
+
+documents.onDidOpen(async (change) => {
+    await validateTextDocument(change.document);
+    connection.languages.semanticTokens.refresh();
 });
 
 
