@@ -3,7 +3,7 @@
   "description": "Language Server Protocol (LSP) Server for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "publisher": "TIKOCI",
   "engines": {
     "node": "*"

@@ -3,7 +3,7 @@
   "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "publisher": "TIKOCI",
   "categories": [],
   "displayName": "RouterOS LSP",
@@ -17,6 +17,118 @@
   },
   "main": "./client/out/extension",
   "contributes": {
+    "semanticTokenTypes": [
+      {
+        "id": "none",
+        "description": "Uncategorized or neutral token"
+      },
+      {
+        "id": "dir",
+        "superType": "struct",
+        "description": "Directory or path component"
+      },
+      {
+        "id": "cmd",
+        "superType": "method",
+        "description": "Command keyword or instruction"
+      },
+      {
+        "id": "arg",
+        "superType": "parameter",
+        "description": "Argument to a command or function"
+      },
+      {
+        "id": "varname-local",
+        "superType": "variable",
+        "description": "Local variable name"
+      },
+      {
+        "id": "variable-parameter",
+        "superType": "typeParameter",
+        "description": "Parameter variable"
+      },
+      {
+        "id": "variable-local",
+        "superType": "variable",
+        "description": "Locally scoped variable"
+      },
+      {
+        "id": "syntax-val",
+        "superType": "property",
+        "description": "Syntax value or literal"
+      },
+      {
+        "id": "varname",
+        "superType": "variable",
+        "description": "Generic variable name"
+      },
+      {
+        "id": "syntax-meta",
+        "superType": "operator",
+        "description": "Meta-syntax construct"
+      },
+      {
+        "id": "escaped",
+        "superType": "macro",
+        "description": "Escaped character or sequence"
+      },
+      {
+        "id": "variable-global",
+        "superType": "variable",
+        "description": "Globally scoped variable"
+      },
+      {
+        "id": "comment",
+        "superType": "comment",
+        "description": "Comment or annotation"
+      },
+      {
+        "id": "obj-inactive",
+        "superType": "modifier",
+        "description": "Inactive or disabled object"
+      },
+      {
+        "id": "syntax-obsolete",
+        "superType": "modifier",
+        "description": "Obsolete or deprecated syntax"
+      },
+      {
+        "id": "variable-undefined",
+        "superType": "modifier",
+        "description": "Undefined variable reference"
+      },
+      {
+        "id": "ambiguous",
+        "superType": "modifier",
+        "description": "Ambiguous or unclear token"
+      },
+      {
+        "id": "syntax-old",
+        "superType": "modifier",
+        "description": "Old or legacy syntax"
+      },
+      {
+        "id": "error",
+        "superType": "modifier",
+        "description": "Syntax or semantic error"
+      },
+      {
+        "id": "varname-global",
+        "superType": "variable",
+        "description": "Global variable name"
+      },
+      {
+        "id": "syntax-noterm",
+        "description": "Missing or unterminated syntax element"
+      }
+    ],
+    "themes": [
+      {
+        "label": "RouterOS LSP Default",
+        "uiTheme": "vs-dark",
+        "path": "./vscode-routeros-theme-dark.json"
+      }
+    ],
     "languages": [
       {
         "id": "routeroslsp",

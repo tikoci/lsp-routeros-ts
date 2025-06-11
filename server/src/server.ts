@@ -22,7 +22,12 @@ import {
     TextDocumentIdentifier,
     SemanticTokensParams,
     SemanticTokens,
-    SemanticTokensBuilder
+    SemanticTokensBuilder,
+    Hover,
+    HoverParams,
+    WorkspaceSymbolParams,
+    WorkspaceSymbol,
+    HandlerResult
 } from "vscode-languageserver/node";
 
 import { TextDocument } from "vscode-languageserver-textdocument";
@@ -70,6 +75,7 @@ connection.onInitialize((params: InitializeParams) => {
     // Check client capabilities
     const capabilities = params.capabilities;
 
+
     // Does the client support the `workspace/configuration` request?
     // If not, we fall back using global settings.
     hasConfigurationCapability = !!(
@@ -103,7 +109,8 @@ connection.onInitialize((params: InitializeParams) => {
             diagnosticProvider: {
                 interFileDependencies: false,
                 workspaceDiagnostics: false
-            }
+            },
+            hoverProvider: true
         },
     };
 
@@ -207,12 +214,23 @@ connection.languages.semanticTokens.on(async (params: SemanticTokensParams): Pro
 
     const builder = new SemanticTokensBuilder();
 
-    // Example: hardcoded one token at line 1, character 1, length 5
     const tokens = await lastTokens
+    const ranges = groupRanges(tokens)
+    connection.console.log(` starting tokenizer with ${ranges}`)
+    ranges.forEach((range) => {
+        if (range[0] !== "none") {
+            const pos = document.positionAt(range[1])
+            builder.push(pos.line, pos.character, (range[2] - range[1]) + 1, tokenTypes.indexOf(range[0]), 0);
+            connection.console.log(`semantic: ${range[0]} ${pos.line}:${pos.character} ${(range[2] - range[1]) + 1}`);
+        }
+    })
+    /*
+    // Example: hardcoded one token at line 1, character 1, length 5
     tokens.forEach((token: any, index: any) => {
         const pos = document.positionAt(index);
         builder.push(pos.line, pos.character, 1, encodeTokenType(token), 0);
     })
+    */
 
     return builder.build();
 });
@@ -235,12 +253,38 @@ connection.languages.diagnostics.on(async (params) => {
     }
 });
 
+
+connection.onHover(async (params: TextDocumentPositionParams): Promise<Hover | null> => {
+    const pos = params.position;
+    const doc = documents.get(params.textDocument.uri);
+    const settings = await getDocumentSettings(params.textDocument.uri);
+    if (!doc) return null;
+
+    // TODO: consolate into ranges
+    const highlights = await fetchInspect("highlight", doc.getText(), settings)
+    const tokens = highlights[0].highlight.split(",")
+    const offset = doc.offsetAt(pos)
+    const groupRange = findGroupRange(tokens, offset)
+    const hoverInfo = `### <kbd>${tokens[offset]}</kbd>\n\`offset ${offset} line ${pos.line} char ${pos.character} grp ${groupRange}\``
+    connection.languages.semanticTokens.refresh();
+
+    return {
+        contents: {
+            kind: 'markdown',
+            value: hoverInfo,
+        },
+        range: {
+            start: doc.positionAt(groupRange[0]),
+            end: doc.positionAt(groupRange[1] + 1)
+        }
+    };
+});
+
 // HELPERS
 
 async function fetchInspect(request: string, text: any, settings: LspSettings): Promise<any> {
     try {
         const response = await axios.post(
-            //"http://192.168.74.144/rest/console/inspect", 
             `${settings.baseUrl}/rest/console/inspect`,
             {
                 request: request,
@@ -310,7 +354,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<Diagnos
         return diagnostics; // No highlights, no diagnostics
     }
     lastTokens = highlights[0].highlight.split(",")
-    const tokens : any[] = lastTokens;
+    const tokens: any[] = lastTokens;
 
     // Get highlights from router
     let lastToken: any = null;
@@ -329,7 +373,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<Diagnos
                     severity: DiagnosticSeverity.Error,
                     range: {
                         start: lastTokenPosition,
-                        end: textDocument.positionAt(tokens.length - 1)
+                        end: textDocument.positionAt(tokens.length)
                     },
                     message: token,
                     source: 'routeroslsp'
@@ -372,42 +416,43 @@ async function validateTextDocument(textDocument: TextDocument): Promise<Diagnos
 }
 
 const badTokenTypes = ['variable-undefined', 'error', 'obj-inactive', 'syntax-obsolete', 'syntax-old', 'ambiguous'];
-const tokenTypes = ['string', 'number', 'namespace', 'class', 'parameter', 'variable', 'operator', 'macro', 'function', 'comment', 'namespace'] // namespace, type, parameter, variable, property, macro, function, method, enum, interface, keyword, string, number, boolean, null, object]
-function encodeTokenType(type: string): number {
-    switch (type) {
-        case "none":
-            return 0; // string
-        case "dir":
-            return 2; // namespace
-        case "cmd":
-            return 3; // class
-        case "arg":
-            return 4; // parameter
-        case "varname-local":
-        case "variable-parameter":
-        case "variable-local":
-        case "syntax-val":
-        case "varname":
-            return 5; // variable
-        case "syntax-meta":
-            return 6; // operator
-        case "escaped":
-            return 7; // macro
-        case "variable-global":
-            return 8; // function
-        case "comment":
-            return 9; // comment
-        case "obj-inactive":
-        case "syntax-obsolete":
-        case "variable-undefined":
-        case "ambiguous":
-        case "syntax-old":
-        case "error":
-        case "varname-global":
-        case "syntax-noterm":
-        default:
-            return 10;
+const tokenTypes = ["none", "dir", "cmd", "arg", "varname-local", "variable-parameter", "variable-local", "syntax-val", "varname", "syntax-meta", "escaped", "variable-global", "comment", "obj-inactive", "syntax-obsolete", "variable-undefined", "ambiguous", "syntax-old", "error", "varname-global", "syntax-noterm"]
+
+function findGroupRange(arr: string[], index: number): number[] {
+    const value = arr[index];
+    let start = index;
+    let end = index;
+    // Expand to the left
+    while (start > 0 && arr[start - 1] === value) {
+        start--;
     }
+    // Expand to the right
+    while (end < arr.length - 1 && arr[end + 1] === value) {
+        end++;
+    }
+    // Return [index, index] if no group found
+    return start === end ? [index, index] : [start, end];
+}
+
+function groupRanges(arr: string[]): [string, number, number][] {
+    const result: [string, number, number][] = [];
+    let i = 0;
+
+    while (i < arr.length) {
+        const value = arr[i];
+        let start = i;
+        let end = i;
+
+        // Scan ahead while the value stays the same
+        while (end + 1 < arr.length && arr[end + 1] === value) {
+            end++;
+        }
+
+        result.push([value, start, end]);
+        i = end + 1; // Move to the next distinct value
+    }
+
+    return result;
 }
 
 // "Main" - did something change?

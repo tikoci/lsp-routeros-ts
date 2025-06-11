@@ -274,6 +274,136 @@ In many places some "id" field is used, to clarify naming:
 * `routeroslsp` is used when `-` is cannot be used for name, like configuration ("settings") and also the "server" `package.json` to ensure alignment with configurationn.
 
 
+### Understanding LSP Protocols
+There are few dozen APIs that make up an LSP Server.  The ones implemented by RouterOS LSP are listed at top of page.  For a richer experience (i.e. more "help" from LSP in editor), additional protocls _could_ be implemented.  This section attempts to catalog from LSP protocol to implementation to "real features".
+
+#### LSP Specification
+
+The [official LSP specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#languageFeatures) is what really defines possible language features:
+
+
+* Go to Declaration
+* Go to Definition
+* Go to Type Definition
+* Go to Implementation
+* Find References
+* Prepare Call Hierarchy
+* Call Hierarchy Incoming Calls
+* Call Hierarchy Outgoing Calls
+* Prepare Type Hierarchy
+* Type Hierarchy Super Types
+* Type Hierarchy Sub Types
+* Document Highlight
+* Document Link
+* Document Link Resolve
+* Hover
+* Code Lens
+* Code Lens Refresh
+* Folding Range
+* Selection Range
+* Document Symbols
+* Semantic Tokens
+* Inline Value
+* Inline Value Refresh
+* Inlay Hint
+* Inlay Hint Resolve
+* Inlay Hint Refresh
+* Moniker
+* Completion Proposals
+* Completion Item Resolve
+* Publish Diagnostics
+* Pull Diagnostics
+* Signature Help
+* Code Action
+* Code Action Resolve
+* Document Color
+* Color Presentation
+* Formatting
+* Range Formatting
+* On type Formatting
+* Rename
+* Prepare Rename
+* Linked Editing Range
+
+The spec is pretty abstract, since LSP servers support a few transports, so
+_how_ to implement them depends on the library your using – but does give the "full menu" of LSP language features.
+
+#### Microsoft's `vscode-languageserver`
+
+The RouterOS LSP implementation uses Microsoft's `vscode-languageserver` Node library, and the documentation describes many of the LSP protocols and using with the library.  The following tables comes from the [VSCode docs on Language Extensions](https://code.visualstudio.com/api/language-extensions/programmatic-language-features#language-features-listing), which gives a sense of the possibilities:
+
+| VS Code API | LSP method |
+| --- | --- |
+| [`createDiagnosticCollection`](https://code.visualstudio.com/api/references/vscode-api#languages.createDiagnosticCollection) | [PublishDiagnostics](https://microsoft.github.io/language-server-protocol/specification#textDocument_publishDiagnostics) |
+| [`registerCompletionItemProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider) | [Completion](https://microsoft.github.io/language-server-protocol/specification#textDocument_completion) & [Completion Resolve](https://microsoft.github.io/language-server-protocol/specification#completionItem_resolve) |
+| [`registerHoverProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerHoverProvider) | [Hover](https://microsoft.github.io/language-server-protocol/specification#textDocument_hover) |
+| [`registerSignatureHelpProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerSignatureHelpProvider) | [SignatureHelp](https://microsoft.github.io/language-server-protocol/specification#textDocument_signatureHelp) |
+| [`registerDefinitionProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerDefinitionProvider) | [Definition](https://microsoft.github.io/language-server-protocol/specification#textDocument_definition) |
+| [`registerTypeDefinitionProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerTypeDefinitionProvider) | [TypeDefinition](https://microsoft.github.io/language-server-protocol/specification#textDocument_typeDefinition) |
+| [`registerImplementationProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerImplementationProvider) | [Implementation](https://microsoft.github.io/language-server-protocol/specification#textDocument_implementation) |
+| [`registerReferenceProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerReferenceProvider) | [References](https://microsoft.github.io/language-server-protocol/specification#textDocument_references) |
+| [`registerDocumentHighlightProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerDocumentHighlightProvider) | [DocumentHighlight](https://microsoft.github.io/language-server-protocol/specification#textDocument_documentHighlight) |
+| [`registerDocumentSymbolProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerDocumentSymbolProvider) | [DocumentSymbol](https://microsoft.github.io/language-server-protocol/specification#textDocument_documentSymbol) |
+| [`registerCodeActionsProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerCodeActionsProvider) | [CodeAction](https://microsoft.github.io/language-server-protocol/specification#textDocument_codeAction) |
+| [`registerCodeLensProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerCodeLensProvider) | [CodeLens](https://microsoft.github.io/language-server-protocol/specification#textDocument_codeLens) & [CodeLens Resolve](https://microsoft.github.io/language-server-protocol/specification#codeLens_resolve) |
+| [`registerDocumentLinkProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerDocumentLinkProvider) | [DocumentLink](https://microsoft.github.io/language-server-protocol/specification#textDocument_documentLink) & [DocumentLink Resolve](https://microsoft.github.io/language-server-protocol/specification#documentLink_resolve) |
+| [`registerColorProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerColorProvider) | [DocumentColor](https://microsoft.github.io/language-server-protocol/specification#textDocument_documentColor) & [Color Presentation](https://microsoft.github.io/language-server-protocol/specification#textDocument_colorPresentation) |
+| [`registerDocumentFormattingEditProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerDocumentFormattingEditProvider) | [Formatting](https://microsoft.github.io/language-server-protocol/specification#textDocument_formatting) |
+| [`registerDocumentRangeFormattingEditProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerDocumentRangeFormattingEditProvider) | [RangeFormatting](https://microsoft.github.io/language-server-protocol/specification#textDocument_rangeFormatting) |
+| [`registerOnTypeFormattingEditProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerOnTypeFormattingEditProvider) | [OnTypeFormatting](https://microsoft.github.io/language-server-protocol/specification#textDocument_onTypeFormatting) |
+| [`registerRenameProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerRenameProvider) | [Rename](https://microsoft.github.io/language-server-protocol/specification#textDocument_rename) & [Prepare Rename](https://microsoft.github.io/language-server-protocol/specification#textDocument_prepareRename) |
+| [`registerFoldingRangeProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerFoldingRangeProvider) | [FoldingRange](https://microsoft.github.io/language-server-protocol/specification#textDocument_foldingRange)
+
+ |
+
+This is likely the best guide to the "missing features" in this LSP, and clues on how implement them for RouterOS.
+
+
+#### langserver.org
+ https://langserver.org tracks supported protocols against LSPs, with an LSP "declaring" their support ("Implemented", "WIP", "Not implemented", "Not applicable"). Classifying RouterOS LSP in this scheme:
+  * ✅ **Implemented** - Code completion	- _could be improved but functional_
+  * 💡 **WIP*** - Hover - _more for debugging highlight "syntax" codes, not implemented, *yet_
+  * 🚫 **Not implemented** - Jump to def - _somewhat possible but need complex multi-step process and still be lossy and error prone_
+  * ❓ **WIP** - Workspace symbols	- _semantic tokens supported, unsure if same_
+  * 🚫 **Not implemented** - Find references - _similar to "Jump to def"_	
+  * ✅ **Implemented** - Diagnostics	- _could be improved, but do flag the first error found_
+
+  > #### langserver.org also tracks "Additional capabilities" like:
+  > * **Automatic dependency management** - `Not applicable` - _Language servers that support this feature are able to resolve / install a project's 3rd-party dependencies without the need for a user to manually intervene._
+  > * **No arbitrary code execution** - `Implemented` - _Language servers that support this feature don't execute arbitrary code (some language servers do this when running build scripts, analyzing the project, etc.)._
+  > * **Tree View Protocol** - `Not implemented` - _Language servers that support this feature are able to render tree views. See this link for more information._
+  > * **Decoration Protocol** - `Not implemented` - _Language servers that support this feature are able to provide text to be displayed as "non-editable" text in the text editor. See this link for more information._
+
+#### Microsoft Sample LSP Code
+
+See https://github.com/microsoft/vscode-extension-sample, for example "[Code Actions](https://github.com/microsoft/vscode-extension-samples/blob/main/lsp-user-input-sample/server/src/sampleServer.ts)" 
+
+#### `vscode-languageserver` Tips and Tricks
+
+##### Position vs Offset
+
+The `vscode-languageserver` library provides a "position" generally, which is line and char position.  But for programatic use the "index" into a array with code is often more useful, this is called "offset" in the library.  The "offset" is more useful with /console/inspect. To handle this, the `TextDocument` object support an `offsetAt()` and `positionAt()` to enable conversion from the two forms. 
+
+
+
+## Potential Future Features
+
+### LSP Features
+* "Select and..." - context actions on a selection
+  * Test
+    * show full completion for selection
+    * show offset and position
+    * show short highlights (c = cmd, d = dir, G = global, L = local, a = attr, ! = error, ? = obj-inactive)
+  * Run on router (via REST or SSH configurable)
+  * New script from selection (opens new code window with selection)
+* Detect scopes for code folding (and internal use) 
+* Refactor
+  * rename on global variables (easier since should not be dups)
+  * rename on local variables (harder since need scoping info)
+
+### VSCode Features
+  * Notebook support
+
 ## Open Issues
 * This `README` is full of typos and other grammar malfeasance. 
 * Error handling for RouterOS connection should be more "visible" - currently errors _should_ be in _some_ LSP client log – but something like a wrong password or invalid protocol should not be "hidden".
@@ -292,6 +422,8 @@ In many places some "id" field is used, to clarify naming:
 * Once tested more, it could be [Published to VSCode Marketplace][publish] to make it easier to load.
 * Icon `png` should be "built" using `svg`- currently manual process
 * Automate "version bump" on build
+* Review/update language defination, see https://github.com/microsoft/vscode-extension-samples/tree/main/language-configuration-sample
+* Better logging vs tracing
 
 ---
 [debug]: https://code.visualstudio.com/api/language-extensions/language-server-extension-guide#debugging-both-client-and-server

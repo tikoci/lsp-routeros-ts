@@ -15,7 +15,7 @@ vim.highlight.priorities.semantic_tokens = 120
 
 if vim.fn.executable(lspexec[1]) ~= 1 then
   print("RouterOS LSP executable not found: " .. lspexec[1])
-  return`
+  return
 end
 
 

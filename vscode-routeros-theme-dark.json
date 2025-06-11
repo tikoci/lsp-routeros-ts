@@ -1,0 +1,61 @@
+{
+  "name": "RouterOS LSP Default Dark",
+  "type": "dark",
+  "semanticHighlighting": true,
+  "semanticTokenColors": {
+    "none": "#ffffff",
+    "dir": {
+      "foreground": "#4ec9b0",
+      "fontStyle": "bold"
+    },
+    "cmd": {
+      "foreground": "#569cd6",
+      "fontStyle": "bold"
+    },
+    "arg": "#dcdcaa",
+    "varname-local": "#9cdcfe",
+    "variable-parameter": {
+      "foreground": "#c586c0",
+      "fontStyle": "italic"
+    },
+    "variable-local": "#9cdcfe",
+    "syntax-val": "#b5cea8",
+    "varname": "#ce9178",
+    "syntax-meta": "#d7ba7d",
+    "escaped": "#d16969",
+    "variable-global": {
+      "foreground": "#c586c0",
+      "fontStyle": "underline"
+    },
+    "comment": {
+      "foreground": "#6a9955",
+      "fontStyle": "italic"
+    },
+    "obj-inactive": {
+      "foreground": "#808080",
+      "fontStyle": "italic"
+    },
+    "syntax-obsolete": {
+      "foreground": "#ff8800",
+      "fontStyle": "strikethrough"
+    },
+    "variable-undefined": {
+      "foreground": "#ff0000",
+      "fontStyle": "underline"
+    },
+    "ambiguous": {
+      "foreground": "#ff00ff",
+      "fontStyle": "italic underline"
+    },
+    "syntax-old": "#ffcc00",
+    "error": {
+      "foreground": "#ff0000",
+      "fontStyle": "bold underline"
+    },
+    "varname-global": "#c586c0",
+    "syntax-noterm": {
+      "foreground": "#ff0000",
+      "fontStyle": "italic"
+    }
+  }
+}
