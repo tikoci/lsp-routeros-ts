@@ -481,6 +481,7 @@ Point being the format of TEXT varies a good bit – and requires parsing to mak
 * In some case, the LSP may not trigger syntax coloring automatically after installing.  
   * _Workaround:_ If colors are missing, selecting the "RouterOS LSP" as the "Color Theme" may help.  To bring up the Theme selector use 
 <kbd>⌘**K**</kbd> then <kbd>⌘**T**</kbd>, then pick RouterOS LSP from list (light or dark).
+* Blue color used for "escaped" types "\12\3A\BC" is too dark
 
 ### Changelog
 
