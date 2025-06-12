@@ -127,7 +127,7 @@ local routeroslsp = {
       -- fire it first time on load as well
       vim.lsp.semantic_tokens.start(bufnr, client.id)
       vim.lsp.completion.enable(true, client.id, bufnr, {                                                                                                                            
-        autotrigger = settings.hotlock,                                                                                                                                                          
+        autotrigger = settings.routeroslsp.hotlock,                                                                                                                                                          
         convert = function(item)                                                                                                                                                     
           return { abbr = item.label:gsub('%b()', '') }                                                                                                                              
         end,                                                                                                                                                                         
