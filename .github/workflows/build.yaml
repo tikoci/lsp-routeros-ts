@@ -127,9 +127,9 @@ jobs:
             
             > [!NOTE]
             >
-            > "Known Issues" and "Changelog" can be found in [`CHANGES.md`](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGES.md).
+            > "Known Issues" and "Changelog" can be found in [CHANGES.md](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGES.md).
             >
-            > See [README](https://github.com/tikoci/lsp-routeros-ts/README.md) for more details about installation and usage.
+            > See [README.md](https://github.com/tikoci/lsp-routeros-ts/README.md) for more details about installation and usage.
             >
 
             For *VSCode*, download `lsp-routeros-ts.vsix` and install use `code --install-extension lsp-routeros-ts.vsix` from your download directory.
