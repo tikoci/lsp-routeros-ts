@@ -13,5 +13,4 @@ server/node_modules
 *.vsix
 lsp-routeros-*
 
-tests
-test.rsc
+./*.rsc
