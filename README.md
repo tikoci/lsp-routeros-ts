@@ -4,7 +4,7 @@
 
 ## Install and Configuration
 
-The RouterOS LSP can be installed into most LSP clients.  Specifically the following LSP capacities are supported:
+The RouterOS LSP can be installed into most LSP clients.  Specifically, the following LSP capacities are supported:
   * completion ("tab completion")
   * semantic tokens (colorization)
   * diagnostics ("Problems" in VSCode terms)
@@ -15,16 +15,16 @@ The "trigger" to load the RouterOS LSP is a file ending in `.rsc`.  In most clie
 
 ### Enabling RouterOS REST API 
 
-**For all LSP clients, the REST API must be allowed in RouterOS** and firewall must allow it from computer running the editor to router.  
+**For all LSP clients, the REST API must be allowed in RouterOS** and the firewall must allow traffic from the computer running the editor to the router.  
 
 By default on RouterOS, unsecured HTTP access is enabled.  To enable HTTPS, if not already enabled, use:
 ```
 /certificate/enable-ssl-certificate 
 /ip/service enable www-ssl
 ```
-_RouterOS LSP defaults to plain HTTP, so LSP configuration will also have be changed from http:// to https://_ when configuring an editor.
+_RouterOS LSP defaults to plain HTTP, so LSP configuration needs to change from http:// to https://_ when configuring an editor._
 
-Also, while possible to use your own credentials in the RouterOS LSP settings, using a different account with lower permissions is recommend.  The LSP default configuration assume a user named "lsp", which can be created using:
+Using a different RouterOS account with lower permissions is recommended.  The LSP default configuration assumes a user named "lsp", that can be created using:
 ```
 /user/group add name=list policy=read,api,rest-api
 /user add name=lsp password=changeme group=lsp
@@ -37,7 +37,7 @@ Specific steps to install for common LSP clients:
 
 #### Visual Studio Code (VSCode)
 
-The language extension here is not yet published.  Instead a `VSIX` file is provided for download via https://github.com/tikoci/lsp-routeros-ts/releases. This will locally install the LSP and VSCode extension to use it.  The VSCode UI does allow for adding the `lsp-routeros-ts-*.vsix`, but the CLI is shown for brevity: 
+The RouterOS LSP "language extension" has not yet been published.  Instead, a `VSIX` file is provided for download via https://github.com/tikoci/lsp-routeros-ts/releases. This will locally install the LSP and VSCode extension needed for RouterOS LSP support.  The VSCode UI does allow for adding the `lsp-routeros-ts-*.vsix`, but the CLI is shown for brevity: 
 
 ##### Installing the VSIX
 
@@ -46,7 +46,7 @@ To download the latest VSIX from Terminal, use:
 wget -N https://github.com/tikoci/lsp-routeros-ts/releases/latest/download/lsp-routeros-ts.vsix
 ```
 
-After downloading the VSIX, to install use the following command, adjust download path and file as needed:
+After downloading the VSIX, to install use the following command, adjusting the download path and file as needed:
 ```
 code --install-extension lsp-routeros-ts.vsix
 ```
@@ -59,26 +59,29 @@ Configuration is required, specifically **RouterOS credentials must be configure
 Launch VSCode, if not already running. LSP configuration can be done by "Open User Settings":
 1. Use <kbd>Ctrl</kbd> + <kbd>,</kbd> (on Mac, <kbd>⌘</kbd> + <kbd>,</kbd>) to show settings
 2. Select "Extensions" from left
-3. Locate "RouterOS LSP" section in list of extensions
-4. Adjust the "Base URL" with IP address and protocol needed (_without_ trailing slash or path), and provide username and password with at least `policy=read,api,rest-api` access to RouterOS
-5. Close settings window. Settings should be picked up automatically.  If not, restart VSCode.
+3. Locate "RouterOS LSP" section in the list of extensions
+4. Adjust the "Base URL" with the IP address and protocol needed (_without_ trailing slash or path), and provide username and password with at least `policy=read,api,rest-api` access to RouterOS
+5. Close the Settings window. Settings should be picked up automatically.
 
 ![img](https://i.ibb.co/6JfjhwKT/Screenshot-2025-06-09-at-10-30-05-AM.png)
 
+In VSCode, settings are also available by hitting the ⚙️ "gear" icon after locating the "RouterOS LSP" in the "Extensions" section in VSCode.
+> ![Router-OS-LSP-as-VSIX-loaded-in-VSCode](https://i.ibb.co/1t1y3kLL/Router-OS-LSP-as-VSIX-loaded-in-VSCode.png)
+
 ##### Customizing Colors in VSCode
 
-RouterOS LSP provides "semantic tokens" which are used for "colorization", and a VSCode Color Theme is included.  
+RouterOS LSP provides "semantic tokens" which are used for "colorization" and uses custom "syntax types" to match RouterOS names and style.  By default, the LSP uses RouterOS's color scheme – so syntax _should_ match RouterOS CLI colors.  RouterOS LSP includes a VSCode "Color Theme" that can be used for further color customization if desired.  
 
-In VSCode, Setting should also be available by hitting the ⚙️ "gear" icon after locating the "RouterOS LSP" in "Extensions" section in VSCode.
-> ![Router-OS-LSP-as-VSIX-loaded-in-VSCode](https://i.ibb.co/1t1y3kLL/Router-OS-LSP-as-VSIX-loaded-in-VSCode.png)
+> If colors are not shown, or incorrectly match RouterOS CLI, then the  "Color Theme" can be explicitly selected using <kbd>⌘</kbd><kbd>K</kbd> then <kbd>⌘</kbd><kbd>T</kbd>, and picking "RouterOS LSP Default" under the dark or light section.   
+
 
 
 ##### Troubleshooting VSCode and RouterOS LSP
 
 RouterOS LSP logs most operations, perhaps too many.  If there are problems, logs may offer clues and be needed to provide any fix.
 
-In VSCode, they go to "Output" view.  To bring up "Output" view, use <kbd>Shift</kbd> + <kbd>⌘</kbd> + <kbd>U</kbd> then
-select "RouterOS LSP" from dropdown at top to display the logs. 
+In VSCode, logs go to the "Output" view.  To bring up the "Output" view, use <kbd>Shift</kbd> + <kbd>⌘</kbd> + <kbd>U</kbd> then
+select "RouterOS LSP" from the dropdown at top to show the logs. 
 
 
 
@@ -94,18 +97,18 @@ code --uninstall-extension tikoci.lsp-routeros-ts
 ![LSP running in NeoVim](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDJiOHV6ZDZsamN6bDJxN21zb3hjZ3I2cm5hNDJzbGpqeWtydXAxMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/reM309KJpRbotDSkL5/giphy.gif)
 
 
-> **NOTE**  Only limited tested has been done using `nvim` – likely many things could be done for
+> **NOTE**  Only limited testing has been done using `nvim` – likely many things could be done for
 > a text-mode LSP client like `nvim` (NeoVim).  For example, no testing has been done using common LSP "managers" plugins. 
 
-A Lua file is provided with the need script to load the RouterOS LSP, [`nvim-routeros-lsp-init.lua`](https://github.com/tikoci/lsp-routeros-ts/blob/main/nvim-routeros-lsp-init.lua).  This uses the low-level built-in LSP for configuration, but in reality only the "settings" Lua code likely needs to be changed (unless bugs ;).
-The code needs to be load from `init.lua` used on `nvim` startup.  Since there are many schemes possible, exactly where `init.lua` lives your steps may vary.  The following was tested on Mac with homebrew-installed `nvim`.
+A Lua file is provided with the needed code to load the RouterOS LSP, [`nvim-routeros-lsp-init.lua`](https://github.com/tikoci/lsp-routeros-ts/blob/main/nvim-routeros-lsp-init.lua).  This uses the low-level built-in LSP for configuration, but in reality only the "settings" Lua code likely needs to be changed (unless bugs ;).
+The code is loaded from `init.lua`, which is used by `nvim` on startup.  Since there are many schemes possible, exactly where `init.lua` lives your steps may vary.  The following was tested on Mac with homebrew-installed `nvim`.
 
 1. Create or edit the `init.lua`, typically located in `~/config/nvim/init.lua`.  Consult `nvim` docs for locating your `init.lua`.
-1. Download and copy a `lsp-routeros-server-*` for your platform from GitHub to `~/.bin`.  If you want use use a different path, that will have to be changed in `nvim-routeros-lsp-init.lua`
+1. Download and copy a `lsp-routeros-server-*` for your platform from GitHub to `~/.bin`.  If a different path is used, that will have to be changed in `nvim-routeros-lsp-init.lua`
 2. Add the following line to the `init.lua`:
-   ```
-   dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')
-   ```
+ ```
+ dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')
+ ```
 3. Copy [`nvim-routeros-lsp-init.lua`](https://github.com/tikoci/lsp-routeros-ts/nvim-routeros-lsp-init.lua) to the local `~/config/nvim` with the same name - which be called by the `dofile()` in `init.lua`.  Adjust any paths as needed
 4. Adjust settings at top in your copy of `nvim-routeros-lsp-init.lua`.  See "NeoVim Example Configuration" section below for more details – critically the RouterOS information must be correct for the LSP to work & the platform **must** be included in 
 5. Launch `nvim` with `*.rsc` file and the LSP should load.  If it loads a message will appear at bottom of `nvim`
@@ -125,50 +128,50 @@ The code needs to be load from `init.lua` used on `nvim` startup.  Since there a
 The following section in example `nvim-routeros-lsp-init.lua` (_i.e. in ~/.bin/nvim) must be **edited** with **correct** RouterOS host and login details, both http:// and https:// are supported by changing the `baseUrl`:
 ```lua
 local settings = {
-  routeroslsp = {
-    maxNumberOfProblems = 100,
-    baseUrl = "http://192.168.88.1",
-    username = "lsp",
-    password = "changeme",
-  }
+ routeroslsp = {
+ maxNumberOfProblems = 100,
+ baseUrl = "http://192.168.88.1",
+ username = "lsp",
+ password = "changeme",
+ }
 }
 ```
 
-> In same file, the **platform** must be included in `local lspexe =...` variable.  The "default" uses just `lsp-routeros-server`  – which is what a local build will produce – but if using a packaged or downloaded LSP binary, this needs to include the right platform.  For example, using macOS on Apple Silcon the name of the executable LSP is `lsp-routeros-server-darwin-arm64`, the top line in `nvim-routeros-lsp-init.lua` becomes
+> In same file, the **platform** must be included in `local lspexe =...` variable.  The "default" uses just `lsp-routeros-server` – which is what a local build will produce – but if using a packaged or downloaded LSP binary, this needs to include the right platform.  For example, using macOS on Apple Silicon the name of the executable LSP is `lsp-routeros-server-darwin-arm64`, the top line in `nvim-routeros-lsp-init.lua` becomes
 > ```lua
 > local lspexec =  { os.getenv("HOME") .. "/.bin/lsp-routeros-server-darwin-arm64", "--stdio" }
 > ```
-> Additionally `lspexec` must use the correct path — so be careful since `lspexec` is 2 element "array", with `--stdio` argument being the _2nd_ element, while the 1st uses `..` concatenates the user home directory (`os.getenv("HOME")`) with the default path to LSP binary.  But `lspexe`  has to be an array and `--stdio` must be provided for LSP to function.
+> Additionally `lspexec` must use the correct path — so be careful since `lspexec` is a **2** element "array", with `--stdio` argument being the _2nd_ element, while the 1st uses `..` concatenates the user home directory (`os.getenv("HOME")`) with the default path to LSP binary.  But `lspexe` must be an array and `--stdio` must be provided for LSP to function.
 
 
 #### Other LSP clients
 
-Other clients should work, if the LSP client supports the "configuration capacity" API.  LSP configuration may vary substantially between editors – but configuration variables shown above in `LspSettings` **must** be provided somehow to the LSP client editor.  
+Other LSP clients ("editors") should work, if the LSP client supports the "configuration capacity" API.  LSP configuration may vary substantially between editors – but configuration variables shown above in `LspSettings` **must** be provided somehow to the LSP client editor.  
 
-> The LSP spec's `workspace/configuration` ("configuration capability") is **required** for all LSP clients – since that is how RouterOS connection information is obtained.  Without it, the LSP will use default configuration (see below) and not be configurable by user (since defaults are compiled in code).  Both `nvim` and VSCode support `workspace/configuration`, most other editors with LSP do too.
+> The LSP spec's `workspace/configuration` ("configuration capability") is **required** for all LSP clients – since that is how RouterOS connection information is obtained.  Without it, the LSP will use the default configuration and be unconfigurable by the user (since defaults are compiled in code).  Both `nvim` and VSCode support `workspace/configuration`, most other editors with LSP do too.
 
 
 ### Security Considerations
 
-RouterOS LSP does not need "write" or "sensitive" policies – so no need to use credentials for "full" user in the configuration.  Instead, a new RouterOS user can be used to limit the needed permissions.  To create one, use:
+RouterOS LSP  does not use "write" or "sensitive" policies.  As such, it is highly recommended to avoid using "full" users in the configuration.  Instead, a new RouterOS user can be used to limit the needed permissions.  To create one, use:
 ```
 /user/group add name=list policy=read,api,rest-api
 /user add name=lsp password=changeme group=lsp
 ```
-_The defaults/example configuration uses the the above – change as needed._
+_The defaults/example configuration uses the above – change as needed._
 
-On the router, either the "www" or "www-ssl" service must be enabled, and accessible to any editor using the LSP server.  Firewall configurtion may need be adjusted, but beyond scope to describe here. 
+On the router, either the "www" or "www-ssl" service must be enabled, and accessible to any editor using the LSP server.  Firewall configuration may need to be adjusted, but beyond the scope here. 
 
-When using "https://" (TLS), the certification chain must be valid from the LSP client editor. So self-signed certificates on REST API may not work out-of-box.
+When using "https://" (TLS), the certificate chain must be valid from the LSP client editor. So self-signed certificates on REST API may not work out-of-box.
 > Also the LSP has **no** "allow unsafe certificates" option, so the router TLS certificate (and/or it's CAs and intermediates) must be installed via OS into the system's "keychain" (certificate store).
 
 
 ## Implementation and Development
 
 The code uses Microsoft's node/TypeScript NPM library [vscode-languageserver-node](https://github.com/microsoft/vscode-languageserver-node), with some implementation coming from Microsoft's VSCode [`lsp-*` extension examples][sample].
-While this allows first-class support for Visual Studio Code ("VSCode"), the LSP server does work with other editors with only requirement that `node` be installed.
+While this allows first-class support for Visual Studio Code ("VSCode"), the LSP server also work with other editors - either via `node` or using TypeScript compiled by `bun build --compile` into a standalone executable.
 
-To provide "AST-like" data to the LSP, HTTP REST calls to a running RouterOS device to retrieve data from `/console/inspect`, specifically `request=highlight` and `request=completion` operations.  Using `/console/inspect` via REST means the LSP is always matched to a specific RouterOS version's AST — so newer command and attributes will automatically be available simply by upgrading the connected RouterOS to newer (or older) version.  But this also means **without a running RouterOS device, the LSP will not work.**  
+To provide "AST-like" data to the LSP, HTTP/S REST calls to a running RouterOS device to retrieve data from `/console/inspect`, specifically `request=highlight` and `request=completion` operations.  Using `/console/inspect` via REST means the LSP is always matched to a specific RouterOS version's AST — so newer commands and attributes will automatically be available simply by upgrading the connected RouterOS.  But this also means **without a running RouterOS device, the LSP will cannot function.**  
 
 > A virtual machine can be used with the "free" version of RouterOS's "CHR" as the `baseUrl`.  This approach avoids storing any "real" router's password in the LSP configuration.  For Mac, UTM can be used as the host, and tikoci's "mikropkl" has ready-to-use images can bring up RouterOS CHR in a few steps, see [tikoci/mikropkl](https://github.com/tikoci/mikropkl) for details. 
 
@@ -180,7 +183,7 @@ The LSP can be built using just `node` and `npm` (which can be installed using y
 2. Run `npm install` 
 3. Run `npm compile`
 
-At the point, the LSP server will be generated as `./server/out/server.js`, which can be invoked using `node` to start the server.
+After which the LSP server will be generated as `./server/out/server.js`, and can be invoked using `node` to start the server.
 
 ### Packaging LSP
 
@@ -196,12 +199,12 @@ The file can be installed using `code --install-extension lsp-routeros-ts-*.vsix
 
 
 #### Standalone LSP Server (using `bun build --compile`)
-To create a single file executable, `npm run bun:exe` can be used.  This will compile the TypeScript and dependencies into a executable (for current platform/OS).  Additionally, it install it to `~/.bin/lsp-routeros-server`, which matches the example `nvim` configuration file in `nvim-routeros-lsp-init.lua`. `lsp-routeros-server` support a option to control which LSP protocol to listen on:
+To create a single file executable, `npm run bun:exe` can be used.  This will compile the TypeScript and dependencies into an executable (for current platform/OS).  Additionally, it installs to `~/.bin/lsp-routeros-server`, which matches the example `nvim` configuration file in `nvim-routeros-lsp-init.lua`. `lsp-routeros-server` also support options to control which LSP protocol to listen on:
   * `--node-ipc` - use by VSCode for streaming JSON
   * `--stdio` - user by `nvim` and most LSP clients that exec() it and use stdin and stdout for LSP messages
   * `--socket=<port>` - similar to `--stdio` but listens on TCP socket specified in the option
 
-> `--socket` is untested, but potentially useful to create a future LSP container for use as RouterOS `/container` - so the LSP Server live on the same "server" router "hosting" the `/console/inspect` API and thus syntax always be in-sync.  This is not supported today.
+> `--socket` is untested.  In the future, this _could_ enable the LSP to live in a RouterOS `/container` - so the LSP Server be the same as router with `/console/inspect` API, allowing syntax to always be in-sync.  
 
 
 #### VSCode Marketplace
@@ -210,7 +213,7 @@ _Still in "Alpha" — so not published in Microsoft Extensions catalog currently
 
 ### Developing the LSP using VSCode
 
-To modify the project, it recommended to VSCode since there is debugging and other support for LSP development.
+To modify the project, VSCode is recommended since it has good debugging tools and other support for LSP development.
 
 1. Change to the project's code directory, and run `code .` to start VSCode:
 2. Build the extension (both client and server) with <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> (or <kbd>Control</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>)
@@ -218,7 +221,7 @@ To modify the project, it recommended to VSCode since there is debugging and oth
 4. Edits made to your `server.ts` will be rebuilt immediately but you'll need to "Launch Client" again (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>F5</kbd>) from the primary VSCode window to see the impact of your changes.
 5. Modify code as desired.  And feel free to submit any pull request to [GitHub](https://github.com/tikoci/lsp-routeros-ts).
 
-Additionally see Microsoft's [debugging instructions][debug] for using VSCode "Extension Development Host" support.
+Additionally, see Microsoft's [debugging instructions][debug] for using VSCode "Extension Development Host" support.
 
 
 ### LSP `workspace/configuration` Options
@@ -226,10 +229,10 @@ Additionally see Microsoft's [debugging instructions][debug] for using VSCode "E
 The supported settings are defined in `./server/server.ts`:
 ```typescript
 interface LspSettings {
-    maxNumberOfProblems: number;  // 100
-    baseUrl: string;              // "http://192.168.88.1"
-    username: string;             // "lsp"
-    password: string;             // "changeme"
+ maxNumberOfProblems: number;  // 100
+ baseUrl: string;              // "http://192.168.88.1"
+ username: string;             // "lsp"
+ password: string;             // "changeme"
 }
 ```
 _Metadata for the settings stored in `./package.json` under "contributes"._
@@ -305,7 +308,7 @@ and maintained in the `package.json` in root directory.  The common "user facing
   *   `nvim:install`: for local development use to install (or re-install) into NeoVim (`nvim`)
   *   `npm:bump`: bumps "patch" version of meta `package.json` and both client and server `package.json`s
 
-> The `npm run` scripts are mainly for local development.  The GitHub Action CI generally directly invokes tools.  For example, to cross-compile for various platforms, `build.yaml` will just call `bun --compiler` directly and NOT use `bun:exe`.
+> The `npm run` scripts are mainly for local development.  The GitHub Action CI generally directly invokes tools.  For example, to cross-compile for various platforms, `build.yaml` will just call `bun --compiler` directly and NOT use `npm run bun:exe`.
 
 #### ID Fields
 
@@ -317,7 +320,7 @@ In many places some "id" field is used, to clarify naming:
 
 
 ### Understanding LSP Protocols
-There are few dozen APIs that make up an LSP Server.  The ones implemented by RouterOS LSP are listed at top of page.  For a richer experience (i.e. more "help" from LSP in editor), additional protocols _could_ be implemented.  This section attempts to catalog from LSP protocol to implementation to "real features".
+There are a few dozen APIs that make up an LSP Server.  The ones implemented by RouterOS LSP are listed at top of page.  For a richer experience (i.e. more "help" from LSP in editor), additional protocols _could_ be implemented.  This section attempts to catalog from LSP protocol to implementation to "real features".
 
 #### LSP Specification
 
@@ -368,11 +371,11 @@ The [official LSP specification](https://microsoft.github.io/language-server-pro
 * Linked Editing Range
 
 The spec is pretty abstract, since LSP servers support a few transports, so
-_how_ to implement them depends on the library your using – but above gives the "full menu" of LSP language features.
+_how_ to implement them depends on the library – but the list above gives the "full menu" of LSP language features.
 
 #### Microsoft's `vscode-languageserver`
 
-The RouterOS LSP implementation uses Microsoft's `vscode-languageserver` Node library, and the documentation describes many of the LSP protocols and using with the library.  The following tables comes from the [VSCode docs on Language Extensions](https://code.visualstudio.com/api/language-extensions/programmatic-language-features#language-features-listing), which gives a sense of the possibilities:
+The RouterOS LSP implementation uses Microsoft's `vscode-languageserver` Node library, and the documentation describes many of the LSP protocols and using with the library.  The following tables is from the [VSCode docs on Language Extensions](https://code.visualstudio.com/api/language-extensions/programmatic-language-features#language-features-listing), which gives a sense of the possibilities:
 
 | VS Code API | LSP method |
 | --- | --- |
@@ -399,18 +402,18 @@ The RouterOS LSP implementation uses Microsoft's `vscode-languageserver` Node li
 
 #### langserver.org
  https://langserver.org tracks supported protocols against LSPs, with an LSP "declaring" their support ("Implemented", "WIP", "Not implemented", "Not applicable"). Classifying RouterOS LSP in this scheme:
-  * ✅ **Implemented** - Code completion	- _could be improved but functional_
-  * 💡 **WIP*** - Hover - _only showing highlight "syntax" codes but does "something"_
+  * ✅ **Implemented** - Code completion - _could be improved but functional_
+  * 💡 **WIP*** - Hover - _only shows highlight "syntax" codes but does "something"_
   * 🚫 **Not implemented** - Jump to def - _somewhat possible but need complex multi-step process and still be lossy and error prone_
-  * ❓ **WIP** - Workspace symbols	- _semantic tokens supported, unsure if same_
-  * 🚫 **Not implemented** - Find references - _similar to "Jump to def"_	
-  * ✅ **Implemented** - Diagnostics	- _could be improved, but do flag the first error found_
+  * ❓ **WIP** - Workspace symbols - _semantic tokens supported, unsure if same_
+  * 🚫 **Not implemented** - Find references - _similar to "Jump to def"_ 
+  * ✅ **Implemented** - Diagnostics - _could be improved, but do flag the first error found_
 
-  > #### langserver.org also tracks "Additional capabilities" like:
-  > * **Automatic dependency management** - `Not applicable` - _Language servers that support this feature are able to resolve / install a project's 3rd-party dependencies without the need for a user to manually intervene._
-  > * **No arbitrary code execution** - `Implemented` - _Language servers that support this feature don't execute arbitrary code (some language servers do this when running build scripts, analyzing the project, etc.)._
-  > * **Tree View Protocol** - `Not implemented` - _Language servers that support this feature are able to render tree views. See this link for more information._
-  > * **Decoration Protocol** - `Not implemented` - _Language servers that support this feature are able to provide text to be displayed as "non-editable" text in the text editor. See this link for more information._
+ > #### langserver.org also tracks "Additional capabilities" like:
+ > * **Automatic dependency management** - `Not applicable` - _Language servers that support this feature are able to resolve / install a project's 3rd-party dependencies without the need for a user to manually intervene._
+ > * **No arbitrary code execution** - `Implemented` - _Language servers that support this feature don't execute arbitrary code (some language servers do this when running build scripts, analyzing the project, etc.)._
+ > * **Tree View Protocol** - `Not implemented` - _Language servers that support this feature are able to render tree views. See this link for more information._
+ > * **Decoration Protocol** - `Not implemented` - _Language servers that support this feature are able to provide text to be displayed as "non-editable" text in the text editor. See this link for more information._
 
 #### Microsoft Sample LSP Code
 
@@ -422,7 +425,7 @@ Some various notes that are not obvious from docs or specific to RouterOS
 
 ##### Position vs Offset
 
-The `vscode-languageserver` library provides a "position" generally, which is line and char position.  But for programmatic use the "index" into a array with code is often more useful, this is called "offset" in the library.  The "offset" is more useful with /console/inspect. To handle this, the `TextDocument` object support an `offsetAt()` and `positionAt()` to enable conversion from the two forms. 
+The `vscode-languageserver` library provides a "position" generally, which is line and char position.  But for programmatic use the "index" into an array with code is often more useful, this is called "offset" in the library.  The "offset" is more useful with /console/inspect. To handle this, the `TextDocument` object supports an `offsetAt()` and `positionAt()` to enable conversion from the two forms. 
 
 ##### `/console/inspect request=syntax`
 
@@ -485,7 +488,7 @@ syntax  CheckGateway  definition        0  no
 syntax                definition        1  no      arp | none | ping
 ```
 The issue here being the TEXT is not always well-formed – why `request=completion` is used to retrieve value like above.
-Like for num types there is a expression that shows the _range_ allowed:
+Like for num types there is an expression that shows the _range_ allowed:
 ```
 > /console/inspect request=syntax input="/ip/service set port="
 Columns: TYPE, SYMBOL, SYMBOL-TYPE, NESTED, NONORM, TEXT
@@ -527,13 +530,13 @@ Point being the format of TEXT varies a good bit – and requires parsing to mak
 
 ##### Changes
 * Default colors now mostly follow MikroTik CLI colors for syntax
-* Semantic tokens use MikroTik "highlights" names to allow one-to-one color matching between RouterOS syntax and editor.  Previously map to "standard" semantic tokens, which was lossy.
-* Add "color theme" to map _MikroTik highlights_ to specific colors for VSCode - which customizable by user using in other LSP client (just manually) 
+* Semantic tokens use MikroTik "highlights" names to allow one-to-one color matching between RouterOS syntax and editor.  Previously mapped to "standard" semantic tokens, which was lossy.
+* Add "color theme" to map _MikroTik highlights_ to specific colors for VSCode - which is customizable by the user.  
 * Show "informational" message on REST API failure (and log too) - although still fatal to LSP operation
 
 ##### Fixes
-* Logging improved to better trace calls.  Previously random and too verbose. Perhaps slower (TBD) since overall more log entires just less fluff per log.
-* Always refresh semantic tokens when document changes.  Previously is was done indirectly and at wrong time.
+* Logging improved to better trace calls.  Previously random and too verbose. Perhaps slower (TBD) – since overall more log entires – just less fluff per log.
+* Always refresh semantic tokens when a document changes.  Previously, was done indirectly and at wrong time.
 
 
 > Ignoring previous 0.1.x versions & skipping 0.2.x since even minor ver is reserved for published builds
@@ -551,7 +554,7 @@ Point being the format of TEXT varies a good bit – and requires parsing to mak
 * Detect scopes for code folding (and internal use) 
 * Support "Signatures" (i.e. like "/ip/route add dst-address=1.1.1.1" _within_ larger text, and perhaps show completions for base part "/ip/route add" etc)
 * Support Rename...
-  * on global variables (easier since should not be dups)
+  * on global variables (easier since their should not be dups)
   * on local variables (harder since need scoping info)
 * New script from selection (opens new code window with selection)
 * Only `*.rsc` files will trigger LSP by default.  Additional "language detection" is possible to cover cases where file is not a `.rsc` but contain tell-tail clues that it is RouterOS script or config.  For example, the `#` with software-id etc. in `:export` files is possible to detect but not implemented today.
