@@ -21,13 +21,24 @@ Specific steps to install for common LSP clients:
 
 The language extension here is not yet published.  Instead a `VSIX` file is provided for download via https://github.com/tikoci/lsp-routeros-ts/releases. This will locally install the LSP and VSCode extension to use it.  The VSCode UI does allow for adding the `lsp-routeros-ts-*.vsix`, but the CLI is shown for brevity: 
 
+#### Download VSIX from GitHub
+
+
+```
+wget -N https://github.com/tikoci/lsp-routeros-ts/releases/latest/download/lsp-routeros-ts.vsix
+```
+
 #### Install VSIX
 
 To install use the following command, adjust download path and file as needed:
 ```
 code --install-extension ~/Downloads/lsp-routeros-ts.vsix
 ```
-_Adjusted path and filename as needed for the OS/platform_
+_Adjust path and filename as needed for the OS/platform_
+
+After installing, launch VSCode.  The RouterOS credidentials must be configured in VSCode settings.
+To access settings in VSCode, use <kbd>⌘**,**</kbd>, then search for "RouterOS LSP".
+"baseUrl", "username", and "password" must set to a RouterOS device with REST API enabled.   See "configuration" below for details
 
 #### Remove VSIX
 
@@ -467,6 +478,9 @@ Point being the format of TEXT varies a good bit – and requires parsing to mak
 * More REST calls are made than strictly needed, more caching of results is needed to improve responsiveness
 * Windows and NeoVim untested, and Window ARM64 build does not compile
 * In VSCode, "Hover" on Code and "Problems" tab present more debug information than nice text
+* In some case, the LSP may not trigger syntax coloring automatically after installing.  
+  * _Workaround:_ If colors are missing, selecting the "RouterOS LSP" as the "Color Theme" may help.  To bring up the Theme selector use 
+<kbd>⌘**K**</kbd> then <kbd>⌘**T**</kbd>, then pick RouterOS LSP from list (light or dark).
 
 ### Changelog
 
