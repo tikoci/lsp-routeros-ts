@@ -143,7 +143,7 @@ Additionally `lspexec` must use the correct path.  But be careful since`lspexec`
 > ```
 > xattr -d com.apple.quarantine ~/.bin/lsp-routeros-server-darwin-x64
 > ```
-> _adjust path as needed_
+> _Adjust path as needed_
 
 ### Other LSP clients
 
@@ -340,7 +340,7 @@ The [official LSP specification](https://microsoft.github.io/language-server-pro
 * Linked Editing Range
 
 The spec is pretty abstract, since LSP servers support a few transports, so
-_how_ to implement them depends on the library your using – but does give the "full menu" of LSP language features.
+_how_ to implement them depends on the library your using – but above gives the "full menu" of LSP language features.
 
 #### Microsoft's `vscode-languageserver`
 
@@ -368,15 +368,11 @@ The RouterOS LSP implementation uses Microsoft's `vscode-languageserver` Node li
 | [`registerRenameProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerRenameProvider) | [Rename](https://microsoft.github.io/language-server-protocol/specification#textDocument_rename) & [Prepare Rename](https://microsoft.github.io/language-server-protocol/specification#textDocument_prepareRename) |
 | [`registerFoldingRangeProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerFoldingRangeProvider) | [FoldingRange](https://microsoft.github.io/language-server-protocol/specification#textDocument_foldingRange)
 
- |
-
-This is likely the best guide to the "missing features" in this LSP, and clues on how implement them for RouterOS.
-
 
 #### langserver.org
  https://langserver.org tracks supported protocols against LSPs, with an LSP "declaring" their support ("Implemented", "WIP", "Not implemented", "Not applicable"). Classifying RouterOS LSP in this scheme:
   * ✅ **Implemented** - Code completion	- _could be improved but functional_
-  * 💡 **WIP*** - Hover - _more for debugging highlight "syntax" codes, not implemented, *yet_
+  * 💡 **WIP*** - Hover - _only showing highlight "syntax" codes but does "something"_
   * 🚫 **Not implemented** - Jump to def - _somewhat possible but need complex multi-step process and still be lossy and error prone_
   * ❓ **WIP** - Workspace symbols	- _semantic tokens supported, unsure if same_
   * 🚫 **Not implemented** - Find references - _similar to "Jump to def"_	
@@ -392,7 +388,7 @@ This is likely the best guide to the "missing features" in this LSP, and clues o
 
 See https://github.com/microsoft/vscode-extension-sample, for example "[Code Actions](https://github.com/microsoft/vscode-extension-samples/blob/main/lsp-user-input-sample/server/src/sampleServer.ts)" 
 
-#### implementation "Tips and Tricks"
+#### Implementation "Tips and Tricks"
 
 Some various notes that are not obvious from docs or specific to RouterOS
 
