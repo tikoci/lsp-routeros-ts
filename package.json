@@ -197,11 +197,21 @@
     "nvim:install": "npm run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua"
   },
   "devDependencies": {
+    "axios": "^1.9.0",
+    "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
     "@types/axios": "^0.9.36",
     "@types/node": "^20.5.7",
     "@vscode/vsce": "^3.5.0",
-    "axios": "^1.9.0",
-    "bun": "^1.2.15",
-    "typescript": "^5.2.2"
+    "bun": "^1.2.15"
+  },
+  "peerDependenciesMeta": {
+    "@vscode/vsce": {
+      "optional": true
+    },
+    "bun": {
+      "optional": true
+    }
   }
 }

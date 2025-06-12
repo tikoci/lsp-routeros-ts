@@ -128,9 +128,9 @@ local routeroslsp = {
       vim.lsp.semantic_tokens.start(bufnr, client.id)
       vim.lsp.completion.enable(true, client.id, bufnr, {                                                                                                                            
         autotrigger = settings.hotlock,                                                                                                                                                          
-        -- convert = function(item)                                                                                                                                                     
-        --  return { abbr = item.label:gsub('%b()', '') }                                                                                                                              
-        -- end,                                                                                                                                                                         
+        convert = function(item)                                                                                                                                                     
+          return { abbr = item.label:gsub('%b()', '') }                                                                                                                              
+        end,                                                                                                                                                                         
       })                 
     end
     print("RouterOS LSP attached via: ", lspexec)
