@@ -53,6 +53,12 @@ jobs:
           name: lsp-routeros-ts.vsix
           path: lsp-routeros-ts.vsix
 
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nvim-routeros-lsp-init.lua
+          path: nvim-routeros-lsp-init.lua
+
       - name: Upload lsp-routeros-server artifact for bun-linux-x64
         uses: actions/upload-artifact@v4
         with:
@@ -123,18 +129,6 @@ jobs:
             
             For Neovim or other LSP clients, download the specific `lsp-routeros-server-*` for your OS/platform, and copy to `~/.bin` (or another directory).
 
-            > _Windows is untested..._
-            >
-            > While built by GitHub, the standalone LSP binary `.exe` has not been tested.  In general, WSL may be a better choice on Windows.
-
-            > _No code signing..._
-            > 
-            > Currently none of the compiled standalone LSP servers are "signed" (but planned in future).
-            > Both Mac and Windows, depending on version, may complain.  On macOS, the issue can be fixed using:
-            > ```
-            > xattr -d com.apple.quarantine ~/.bin/lsp-routeros-server-darwin-x64
-            > ```
-            
             > _Download file names..._
             >
             > `darwin-` in name is for macOS, with `-arm64` is Apple Silcon while `-x64` is for Intel-based Mac platforms.
@@ -143,6 +137,7 @@ jobs:
             See [README](https://github.com/tikoci/lsp-routeros-ts/README.md) for more details.
           artifacts: |
             lsp-routeros-ts.vsix
+            nvim-routeros-lsp-init.lua
             lsp-routeros-server-linux-x64.zip
             lsp-routeros-server-linux-arm64.zip
             lsp-routeros-server-windows-x64.zip

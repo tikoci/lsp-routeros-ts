@@ -11,6 +11,8 @@ local settings = {
     baseUrl = "http://192.168.74.1",
     username = "lsp",
     password = "changeme",
+    -- enables autocompletion
+    hotlock = true,
     -- unused on neovim
     maxNumberOfProblems = 100
   }
@@ -121,8 +123,14 @@ local routeroslsp = {
       })
       -- fire it first time on load as well
       vim.lsp.semantic_tokens.start(bufnr, client.id)
+      vim.lsp.completion.enable(true, client.id, bufnr, {                                                                                                                            
+        autotrigger = settings.hotlock,                                                                                                                                                          
+        -- convert = function(item)                                                                                                                                                     
+        --  return { abbr = item.label:gsub('%b()', '') }                                                                                                                              
+        -- end,                                                                                                                                                                         
+      })                 
     end
-    print("RouterOS LSP attached to", client.name)
+    print("RouterOS LSP attached via: ", lspexec)
   end,
   handlers = {
     ["workspace/configuration"] = config_handler

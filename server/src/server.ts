@@ -66,12 +66,13 @@ interface LspSettings {
     baseUrl: string; // Base URL for the RouterOS API
     username: string;
     password: string;
+    hotlock: boolean;
 }
 
 // The global settings, used when the `workspace/configuration` request is not supported by the client.
 // Please note that this is not the case when using this server with the client provided in this example
 // but could happen with other clients.
-const defaultSettings: LspSettings = { maxNumberOfProblems: 100, baseUrl: 'http://192.168.88.1', username: 'lsp', password: 'changeme' };
+const defaultSettings: LspSettings = { maxNumberOfProblems: 100, baseUrl: 'http://192.168.88.1', username: 'lsp', password: 'changeme', hotlock: true };
 let globalSettings: LspSettings = defaultSettings;
 
 // Cache the settings of all open documents
@@ -343,16 +344,16 @@ async function fetchInspect(request: string, text: any, settings: LspSettings): 
         if (error) {
             errorText = `<-> /console/inspect ${request.toUpperCase()} got: ${error.message}`
             connection.console.error(errorText);
-            lspAlert(errorText)
+                connection.window.showErrorMessage(errorText)
             if (error.response) {
                 errorText = `<-> /console/inspect ${request.toUpperCase()} got: ${error.response.data}`
                 connection.console.error(errorText);
-                lspAlert(errorText)
+                    connection.window.showErrorMessage(errorText)
             }
         } else {
             errorText = `<-> /console/inspect ${request.toUpperCase()} got: ${JSON.stringify(error, null, 2)}`;
             connection.console.error(errorText);
-            lspAlert(errorText)
+            connection.window.showErrorMessage(errorText)
         }
     }
 }
@@ -374,9 +375,6 @@ function getDocumentSettings(resource: string): Thenable<LspSettings> {
 }
 
 
-async function lspAlert(message: string): Promise<void> {
-    connection.window.showInformationMessage(message);
-}
 
 async function validateTextDocument(textDocument: TextDocument): Promise<Diagnostic[]> {
     connection.console.log(`validateTextDocument() with uri: ${textDocument.uri}`);
