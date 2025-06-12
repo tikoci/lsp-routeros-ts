@@ -124,9 +124,14 @@
     ],
     "themes": [
       {
-        "label": "RouterOS LSP Default",
+        "label": "RouterOS LSP Default Dark",
         "uiTheme": "vs-dark",
-        "path": "./vscode-routeros-theme-dark.json"
+        "path": "./vscode-routeroslsp-theme.json"
+      },
+      {
+        "label": "RouterOS LSP Default Light",
+        "uiTheme": "vs",
+        "path": "./vscode-routeroslsp-theme.json"
       }
     ],
     "languages": [
@@ -167,7 +172,7 @@
         "routeroslsp.password": {
           "scope": "resource",
           "type": "string",
-          "default": "riga",
+          "default": "changeme",
           "description": "Password to use when LSP connects to a real RouterOS device"
         }
       }
