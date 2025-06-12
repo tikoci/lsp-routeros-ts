@@ -550,12 +550,13 @@ Point being the format of TEXT varies a good bit – and requires parsing to mak
     * show offset and position
     * show short highlights (c = cmd, d = dir, G = global, L = local, a = attr, ! = error, ? = obj-inactive)
 * "Open from Router" - since we have connection, should be able load either /system/script|schedule or file using existing REST API (or various on-XXXX "event scripts")
+* Detect RouterOS _data_ types like "ip" and "num" (parse "none" via regex & mark as new semantic tokens for colorizer)
 * Run on router (via REST or SSH configurable)
 * Detect scopes for code folding (and internal use) 
 * Support "Signatures" (i.e. like "/ip/route add dst-address=1.1.1.1" _within_ larger text, and perhaps show completions for base part "/ip/route add" etc)
 * Support Rename...
-  * on global variables (easier since their should not be dups)
-  * on local variables (harder since need scoping info)
+  * on global variables (easier since they should be, well, global names)
+  * on local variables (harder since need scoping info, and while one level, not all {} are scopes)
 * New script from selection (opens new code window with selection)
 * Only `*.rsc` files will trigger LSP by default.  Additional "language detection" is possible to cover cases where file is not a `.rsc` but contain tell-tail clues that it is RouterOS script or config.  For example, the `#` with software-id etc. in `:export` files is possible to detect but not implemented today.
 * Links to documentation in various LSP responses

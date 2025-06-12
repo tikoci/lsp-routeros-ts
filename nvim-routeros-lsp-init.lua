@@ -49,29 +49,30 @@ local function set_semantic_colors()
     -- prioritize LSP colors
     vim.highlight.priorities.semantic_tokens = 120
     -- color mapping
-    local set = vim.api.nvim_set_hl
     local ns = 0  -- global namespace
-    set(ns, "@lsp.type.none", { fg = "#ffffff" })
-    set(ns, "@lsp.type.dir", { fg = "#079B9B" })
-    set(ns, "@lsp.type.cmd", { fg = "#9B009B", bold = true })
-    set(ns, "@lsp.type.arg", { fg = "#009C00" })
-    set(ns, "@lsp.type.varname-local", { fg = "#079B9B" })
-    set(ns, "@lsp.type.variable-parameter", { fg = "#079B9B" })
-    set(ns, "@lsp.type.variable-local", { fg = "#079B9B" })
-    set(ns, "@lsp.type.syntax-val", { fg = "#ffffff" })
-    set(ns, "@lsp.type.varname", { fg = "#079B9B" })
-    set(ns, "@lsp.type.syntax-meta", { fg = "#9B9C00", bold = true })
-    set(ns, "@lsp.type.escaped", { fg = "#07009B" })
-    set(ns, "@lsp.type.variable-global", { fg = "#079B9B", bold = true })
-    set(ns, "@lsp.type.comment", { fg = "#D0CFCC", italic = true })
-    set(ns, "@lsp.type.obj-inactive", { fg = "#9B0100", italic = true })
-    set(ns, "@lsp.type.syntax-obsolete", { fg = "#9B0100", strikethrough = true })
-    set(ns, "@lsp.type.variable-undefined", { fg = "#9B0100", strikethrough = true })
-    set(ns, "@lsp.type.ambiguous", { fg = "#9B0100", underline = true })
-    set(ns, "@lsp.type.syntax-old", { fg = "#9B0100" })
-    set(ns, "@lsp.type.error", { fg = "#9B0100", underline = true, bold = true })
-    set(ns, "@lsp.type.varname-global", { fg = "#079B9B", bold = true })
-    set(ns, "@lsp.type.syntax-noterm", { fg = "#07009B", strikethrough = true })
+    -- TODO: support background color for errors
+    vim.api.nvim_set_hl(ns, "@lsp.type.none", { fg = "#ffffff", ctermfg = 15 })           -- white
+    vim.api.nvim_set_hl(ns, "@lsp.type.dir", { fg = "#079B9B", ctermfg = 37 })            -- aqua cyan
+    vim.api.nvim_set_hl(ns, "@lsp.type.cmd", { fg = "#9B009B", bold = true, ctermfg = 164 }) -- magenta
+    vim.api.nvim_set_hl(ns, "@lsp.type.arg", { fg = "#009C00", ctermfg = 34 })            -- green
+    vim.api.nvim_set_hl(ns, "@lsp.type.varname-local", { fg = "#079B9B", ctermfg = 37 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.variable-parameter", { fg = "#079B9B", ctermfg = 37 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.variable-local", { fg = "#079B9B", ctermfg = 37 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.syntax-val", { fg = "#ffffff", ctermfg = 15 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.varname", { fg = "#079B9B", ctermfg = 37 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.syntax-meta", { fg = "#9B9C00", bold = true, ctermfg = 100 }) -- olive-ish
+    vim.api.nvim_set_hl(ns, "@lsp.type.escaped", { fg = "#07009B", ctermfg = 18 })         -- dark blue
+    vim.api.nvim_set_hl(ns, "@lsp.type.variable-global", { fg = "#079B9B", bold = true, ctermfg = 37 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.comment", { fg = "#D0CFCC", italic = true, ctermfg = 252 }) -- light grey
+    vim.api.nvim_set_hl(ns, "@lsp.type.obj-inactive", { fg = "#9B0100", italic = true, ctermfg = 124 }) -- red
+    vim.api.nvim_set_hl(ns, "@lsp.type.syntax-obsolete", { fg = "#9B0100", strikethrough = true, ctermfg = 124 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.variable-undefined", { fg = "#9B0100", strikethrough = true, ctermfg = 124 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.ambiguous", { fg = "#9B0100", underline = true, ctermfg = 124 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.syntax-old", { fg = "#9B0100", ctermfg = 124 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.error", { fg = "#9B0100", underline = true, bold = true, ctermfg = 124 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.varname-global", { fg = "#079B9B", bold = true, ctermfg = 37 })
+    vim.api.nvim_set_hl(ns, "@lsp.type.syntax-noterm", { fg = "#07009B", strikethrough = true, ctermfg = 18 })
+
 end
 
 
@@ -115,7 +116,7 @@ local routeroslsp = {
         group = augroup,
         buffer = bufnr,
         callback = function()
-          vim.lsp.semantic_tokens.refresh()
+          vim.lsp.semantic_tokens.force_refresh()
         end,
       })
       -- fire it first time on load as well
@@ -132,12 +133,9 @@ local routeroslsp = {
 -- EVENT HANDLERS --
 
 -- Register on BufEnter
--- TODO: Probably should review this, since there is an LspStart etc
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   pattern = "*.rsc",
   callback = function()
-    vim.lsp.start_client(routeroslsp)
-    -- vim.lsp.start(routeroslsp)
-    -- set_semantic_colors()
+    vim.lsp.start(routeroslsp)
   end
 })
