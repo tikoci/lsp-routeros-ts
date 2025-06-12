@@ -81,7 +81,7 @@ local routeroslsp = {
   name = "routeroslsp",
   cmd = lspexec,
   root_dir = vim.fn.getcwd(),
-  filetypes = { "rsc" }, -- use the filetype, not pattern
+  filetypes = { "rsc" },
   capabilities = vim.tbl_deep_extend('force', 
     vim.lsp.protocol.make_client_capabilities(),
     {
@@ -103,16 +103,31 @@ local routeroslsp = {
       }
     }
   ),
+  on_init = function(client, results)
+      vim.lsp.buf_attach_client(0, client.id)
+      set_semantic_colors()
+  end,
   on_attach = function(client, bufnr)
-    if client.server_capabilities.semanticTokensProvider then
+    local caps = client.server_capabilities
+    if caps.semanticTokensProvider and caps.semanticTokensProvider.full then
+      local augroup = vim.api.nvim_create_augroup("SemanticTokens", {})
+      vim.api.nvim_create_autocmd("TextChanged", {
+        group = augroup,
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.semantic_tokens.refresh()
+        end,
+      })
+      -- fire it first time on load as well
       vim.lsp.semantic_tokens.start(bufnr, client.id)
     end
     print("RouterOS LSP attached to", client.name)
   end,
   handlers = {
     ["workspace/configuration"] = config_handler
-  }
+  },
 }
+
 
 -- EVENT HANDLERS --
 
@@ -121,7 +136,8 @@ local routeroslsp = {
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   pattern = "*.rsc",
   callback = function()
-    vim.lsp.start(routeroslsp)
-    set_semantic_colors()
+    vim.lsp.start_client(routeroslsp)
+    -- vim.lsp.start(routeroslsp)
+    -- set_semantic_colors()
   end
 })
