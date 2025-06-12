@@ -10,7 +10,10 @@
     * Selecting "RouterOS LSP Default" as the "Color Theme" may help.  To bring up the Theme selector use 
 <kbd>⌘**K**</kbd> then <kbd>⌘**T**</kbd>, then pick RouterOS LSP from list (light or dark).
 * Blue color used for "escaped" types "\12\3A\BC" is too dark
-* Autocompletion ("hotlock") is not supported on VSCode, and on NeoVim "triggers" should be configurable
+* Autocompletion ("hotlock")...
+  * Currently not supported on VSCode
+  * "Triggers" should be LSP configuration options
+  * NeoVim 0.11+ is required for autocomplete
 
 ### Changelog
 

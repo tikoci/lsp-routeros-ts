@@ -4,6 +4,9 @@
 
 local lspexec =  { os.getenv("HOME") .. "/.bin/lsp-routeros-server", "--stdio" }
 
+-- alternatively, you can use the GH repo and `node` directly (after "npm install" and "npm run compile")
+-- lspexec =  { "node", "/app/lsp-routeros-ts/server/out/server.js", "--stdio" }    
+
 -- ** RouterOS information MUST be valid **
 local settings = {
   routeroslsp = {
