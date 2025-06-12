@@ -270,14 +270,14 @@ and maintained in the `package.json` in root directory.  The common "user facing
 #### ID Fields
 
 In many places some "id" field is used, to clarify naming:
-* `lsp-routeros-ts` is generally used to refer to the entire project, the `-ts` refers that the LSP is implemented in _T_ype_S_cript – as it possible to implement the LSP in other languages
+* `lsp-routeros-ts` is generally used to refer to the entire project, the `-ts` refers that the LSP is implemented in **T**ype**S**cript – as it possible to implement the LSP in other languages
 * `lsp-routeros-server-*` refers to just the actual LSP **server** code or build products
 * `vscode-lsp-routeros` refers to the VSCode-specific "language extension" that "binds" the LSP server with VSCode extension ecosystem, but largely "proxies" VSCode requests into the LSP server code.
-* `routeroslsp` is used when `-` is cannot be used for name, like configuration ("settings") and also the "server" `package.json` to ensure alignment with configurationn.
+* `routeroslsp` is used when `-` is cannot be used for name, like configuration ("settings") and also the "server" `package.json` to ensure alignment with configuration.
 
 
 ### Understanding LSP Protocols
-There are few dozen APIs that make up an LSP Server.  The ones implemented by RouterOS LSP are listed at top of page.  For a richer experience (i.e. more "help" from LSP in editor), additional protocls _could_ be implemented.  This section attempts to catalog from LSP protocol to implementation to "real features".
+There are few dozen APIs that make up an LSP Server.  The ones implemented by RouterOS LSP are listed at top of page.  For a richer experience (i.e. more "help" from LSP in editor), additional protocols _could_ be implemented.  This section attempts to catalog from LSP protocol to implementation to "real features".
 
 #### LSP Specification
 
@@ -380,13 +380,13 @@ This is likely the best guide to the "missing features" in this LSP, and clues o
 
 See https://github.com/microsoft/vscode-extension-sample, for example "[Code Actions](https://github.com/microsoft/vscode-extension-samples/blob/main/lsp-user-input-sample/server/src/sampleServer.ts)" 
 
-#### Impementation "Tips and Tricks"
+#### implementation "Tips and Tricks"
 
 Some various notes that are not obvious from docs or specific to RouterOS
 
 ##### Position vs Offset
 
-The `vscode-languageserver` library provides a "position" generally, which is line and char position.  But for programatic use the "index" into a array with code is often more useful, this is called "offset" in the library.  The "offset" is more useful with /console/inspect. To handle this, the `TextDocument` object support an `offsetAt()` and `positionAt()` to enable conversion from the two forms. 
+The `vscode-languageserver` library provides a "position" generally, which is line and char position.  But for programmatic use the "index" into a array with code is often more useful, this is called "offset" in the library.  The "offset" is more useful with /console/inspect. To handle this, the `TextDocument` object support an `offsetAt()` and `positionAt()` to enable conversion from the two forms. 
 
 ##### `/console/inspect request=syntax`
 
@@ -440,7 +440,7 @@ syntax  target-scope         explanation  1  no
 syntax  vrf-interface        explanation  1  no                 
 ```
 
-###### Adding a fake <kbd>=</kbd> to `input` gets some "defination"
+###### Adding a fake <kbd>=</kbd> to `input` gets some "definition"
 ```
 > /console/inspect request=syntax input="/ip/route add check-gateway="
 Columns: TYPE, SYMBOL, SYMBOL-TYPE, NESTED, NONORM, TEXT
@@ -458,29 +458,45 @@ syntax  Port    definition        0  no      Num
 syntax  Num     definition        1  no      1..65535    (integer number)
 ```
 
-Point being the format of TEXT varies a good bit – and require parsing to make it actionable in LSP - without any documentation on `/console/inspect`
+Point being the format of TEXT varies a good bit – and requires parsing to make it actionable in LSP - and all without any documentation on `/console/inspect`.
 
 ## Releases Notes
 
 ### Known Issues in "latest" 
-* More REST calls are made than strickly needed, more caching of results is needed to improve responsiveness 
-* NeoVim Lua example config does not yet show mapping "semantic tokens" to colors & generally still pretty "raw".
-* Completions should use icon for the "kind" (i.e. dir, arg, cmd tokens should use different icon in completion dropdown)
+* More REST calls are made than strictly needed, more caching of results is needed to improve responsiveness
+* Windows and NeoVim untested, and Window ARM64 build does not compile
+* In VSCode, "Hover" on Code and "Problems" tab present more debug information than nice text
 
-## Changelog
+### Changelog
 
-### 0.3.1
-> Ignoring previous 0.1.x versions & skipping 0.2.x since even minor ver is resered for published builds
+#### 0.3.2
 
-#### Fixes
-* Logging improved to better trace calls.  Previously random and too verbose. Perhaps slower (TBD) since overall more log entires just less fluff per log.
-* Always refresh sementic tokens when document changes.  Previously is was done indirectly and at wrong time.
+##### Changes
+* Updated NeoVim example `init.lua` configuration to use semantic tokens and other cleanup
+* Logging cleanup to avoid JSON where possible
+* Improvements to performance (see fixes) 
 
-#### Changes
+##### Fixes
+* Use implementation to handle "textDocument/semanticTokens/full" to reduce syntax coloring delay and avoid .refresh() everywhere
+* Reduced _some_ extraneous REST requests to improve responsiveness, more work to do
+* Rename "RouterOS LSP Server" to just "RouterOS LSP" for consistency
+* Using "Text" as kind in completions
+
+
+#### 0.3.1
+
+##### Changes
 * Default colors now mostly follow MikroTik CLI colors for syntax
 * Semantic tokens use MikroTik "highlights" names to allow one-to-one color matching between RouterOS syntax and editor.  Previously map to "standard" semantic tokens, which was lossy.
 * Add "color theme" to map _MikroTik highlights_ to specific colors for VSCode - which customizable by user using in other LSP client (just manually) 
 * Show "informational" message on REST API failure (and log too) - although still fatal to LSP operation
+
+##### Fixes
+* Logging improved to better trace calls.  Previously random and too verbose. Perhaps slower (TBD) since overall more log entires just less fluff per log.
+* Always refresh semantic tokens when document changes.  Previously is was done indirectly and at wrong time.
+
+
+> Ignoring previous 0.1.x versions & skipping 0.2.x since even minor ver is reserved for published builds
 
 ## Potential Future Features
 
@@ -490,41 +506,29 @@ Point being the format of TEXT varies a good bit – and require parsing to make
     * show full completion for selection
     * show offset and position
     * show short highlights (c = cmd, d = dir, G = global, L = local, a = attr, ! = error, ? = obj-inactive)
-  * Run on router (via REST or SSH configurable)
-  * New script from selection (opens new code window with selection)
 * "Open from Router" - since we have connection, should be able load either /system/script|schedule or file using existing REST API (or various on-XXXX "event scripts")
+* Run on router (via REST or SSH configurable)
 * Detect scopes for code folding (and internal use) 
 * Support "Signatures" (i.e. like "/ip/route add dst-address=1.1.1.1" _within_ larger text, and perhaps show completions for base part "/ip/route add" etc)
 * Support Rename...
   * on global variables (easier since should not be dups)
   * on local variables (harder since need scoping info)
+* New script from selection (opens new code window with selection)
+* Only `*.rsc` files will trigger LSP by default.  Additional "language detection" is possible to cover cases where file is not a `.rsc` but contain tell-tail clues that it is RouterOS script or config.  For example, the `#` with software-id etc. in `:export` files is possible to detect but not implemented today.
+* Links to documentation in various LSP responses
 
 ### VSCode Features
+  * Some "emulation" of hotlock in VSCode
   * Notebook support
 
-## Open Issues
-
-> More raw notes.  **Needs further review.**
-
-* This `README` is full of typos and other grammar malfeasance. 
-* Error handling for RouterOS connection should be more "visible" - currently errors _should_ be in _some_ LSP client log – but something like a wrong password or invalid protocol should not be "hidden".
-* While "configuration capacity" is mandatory, the checks for it are not.
-* Some of the completion could be improved or changed:
-  * `request=syntax` could be checked to provide descriptions in completion dropdowns
-  * more type mapping for completions (e.g. all completion are plain text today) which allows more accurate icons/text in dropdown
-* Only `*.rsc` files will trigger LSP by default.  Additional "language detection" is possible to cover cases where file is not a `.rsc` but contain tell-tail clues that it is RouterOS script or config.  For example, the `#` with software-id etc. in `:export` files is possible to detect but not implemented today.
-* While "semantic tokens" are generated from RouterOS "highlight" today, there is more work to "use" them.  Including providing better mapping between RouterOS syntax types and LSP API's default syntax types. And, further work to more accurately colorize text to match RouterOS CLI colors.  But if one is familiar with their editor, custom color may be possible by providing mappings from tokens to colors/style.
-* RouterOS docs are not currently "indexed" to commands in any regularized way – so while adding documentation links to LSP would be nice, currently it require manual mapping of commands to help pages.
-* There may more useful LSP capacities, only the ones that directly mapped to RouterOS /console/inspect "highlight" and "completion" are implemented today.  Similarly more heuristics could be used to add additional data for existing capacities since they are pretty one-to-one to RouterOS info - while some "combo" of lookups or partial `input=` might yet more data.  For example, an non-existent interface is NOT an error – however completion does know what is valid and could compare to create a "warning" about it.
-* RouterOS CLI support, it be good of there was a way to "emulate" hotlock in VSCode using the LSP.
-* More direct support using a local CHR as the connection, to avoid needing to use a physical router.  
-* More direct support running the LSP in a RouterOS container using the "socket" LSP mode.
-* Build process needs review, specifically a "clean" target. Ideally a Makefile wrap/replace the currently "npm run" scheme in `package.json` scripts section - which has way too many complex one-liners.
-* Once tested more, it could be [Published to VSCode Marketplace][publish] to make it easier to load.
+### Code and Packaging Improvements
+* [Publish to VSCode Marketplace][publish] to make it easier to load.
 * Icon `png` should be "built" using `svg`- currently manual process
 * Automate "version bump" on build
-* Review/update language defination, see https://github.com/microsoft/vscode-extension-samples/tree/main/language-configuration-sample
-* Better logging vs tracing
+
+
+
+
 
 ---
 [debug]: https://code.visualstudio.com/api/language-extensions/language-server-extension-guide#debugging-both-client-and-server

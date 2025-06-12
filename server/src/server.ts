@@ -27,7 +27,11 @@ import {
     HoverParams,
     WorkspaceSymbolParams,
     WorkspaceSymbol,
-    HandlerResult
+    HandlerResult,
+    DidChangeConfigurationRegistrationOptions,
+    DidChangeConfigurationParams,
+    WorkspaceFoldersChangeEvent,
+    CompletionParams
 } from "vscode-languageserver/node";
 
 import { TextDocument } from "vscode-languageserver-textdocument";
@@ -42,7 +46,7 @@ connection.console.log(`createConnection() called`);
 
 // Create a simple text document manager
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
-connection.console.log(`TextDocuments 'documents' loaded.  Got: #keys ${documents.keys.length}`);
+connection.console.log(`TextDocuments 'documents' loaded: #keys ${documents.keys.length}`);
 
 
 // Only keep settings for open documents
@@ -99,7 +103,7 @@ connection.onInitialize((params: InitializeParams) => {
     // Set the capabilities of the server
     const result: InitializeResult = {
         capabilities: {
-            textDocumentSync: TextDocumentSyncKind.Incremental,
+            textDocumentSync: TextDocumentSyncKind.Full,
             semanticTokensProvider: {
                 legend: {
                     tokenTypes: tokenTypes,
@@ -107,6 +111,7 @@ connection.onInitialize((params: InitializeParams) => {
                 },
                 full: { delta: false },
                 range: false,
+                documentSelector: [{ language: 'routeros' }, { language: 'rsc' }, { scheme: "file", pattern: '**∕*.rsc' }, { language: "routeroslsp" }]
             },
             completionProvider: {
                 resolveProvider: true,
@@ -142,20 +147,19 @@ connection.onInitialized(() => {
     // TODO: should register config cap include an undefined?
     if (hasConfigurationCapability) {
         // Register for all configuration changes
-        connection.client.register(DidChangeConfigurationNotification.type, undefined);
+        connection.client.register(DidChangeConfigurationNotification.type, { section: "routeroslsp" });
     }
     if (hasWorkspaceFolderCapability) {
-        connection.workspace.onDidChangeWorkspaceFolders((_event: any) => {
-            connection.console.log(`onDidChangeWorkspaceFolders() fired but unhandled. Got: ${_event}`);
+        connection.workspace.onDidChangeWorkspaceFolders((_event: WorkspaceFoldersChangeEvent) => {
+            connection.console.log(`onDidChangeWorkspaceFolders() fired but unhandled for: ${_event}`);
         });
     }
-    connection.languages.semanticTokens.refresh();
 });
 
 // TODO: this should be cleaned up....
-connection.onDidChangeConfiguration((change: any) => {
-    // TODO: use propery type for 'change' not any
-    connection.console.log(`onDidChangeConfiguration() fired with change: ${JSON.stringify(change, null, 2)}`);
+connection.onDidChangeConfiguration((change: DidChangeConfigurationParams) => {
+    // TODO: use property type for 'change' not any
+    connection.console.log(`onDidChangeConfiguration() fired with change: ${JSON.stringify(change.settings?.routeroslsp)}`);
     if (hasConfigurationCapability) {
         // Reset all cached document settings
         documentSettings.clear();
@@ -164,22 +168,13 @@ connection.onDidChangeConfiguration((change: any) => {
             (change.settings.routeroslsp || defaultSettings)
         );
     }
-    // TODO: not sure why this is here
-    connection.languages.diagnostics.refresh();
-    connection.languages.semanticTokens.refresh();
-});
-
-
-connection.onDidChangeWatchedFiles(_change => {
-    // Monitored files have change in VSCode
-    connection.console.log(`onDidChangeWatchedFiles() fired but undhandled. Got: ${_change}`);
 });
 
 // This handler provides the initial list of completion items
-connection.onCompletion(async (textDocumentPosition: TextDocumentPositionParams) => {
-    connection.console.log(`connection.onCompletion() fired.  Got: ${JSON.stringify(textDocumentPosition, null, 2)}`);
+connection.onCompletion(async (params: CompletionParams) => {
+    connection.console.log(`connection.onCompletion() fired for '${params.context?.triggerCharacter}' (kind ${params.context?.triggerKind}) at line ${params.position.line} char ${params.position.character} uri ${params.textDocument.uri}`);
 
-    const document = documents.get(textDocumentPosition.textDocument.uri);
+    const document = documents.get(params.textDocument.uri);
     if (!document) {
         connection.console.info(`connection.onCompletion() does not have a document, returning no completion.`)
         return [];
@@ -187,7 +182,7 @@ connection.onCompletion(async (textDocumentPosition: TextDocumentPositionParams)
     const settings = await getDocumentSettings(document.uri);
 
     const text = document.getText();
-    const position = textDocumentPosition.position;
+    const position = params.position;
     const offset = document.offsetAt(position);
 
     const completions: CompletionItem[] = [];
@@ -198,8 +193,8 @@ connection.onCompletion(async (textDocumentPosition: TextDocumentPositionParams)
         if (item.show === 'true') {
             completions.push({
                 label: item.completion,
-                // TODO: should map 'kind' to proper tokenType - harder than it might seem since it's propspective
-                //kind: CompletionItemKind.Text,
+                // TODO: should map 'kind' to proper tokenType - harder than it might seem since it's prospective
+                kind: CompletionItemKind.Text,
                 data: index,
                 insertText: item.completion,
                 insertTextFormat: InsertTextFormat.PlainText,
@@ -209,7 +204,7 @@ connection.onCompletion(async (textDocumentPosition: TextDocumentPositionParams)
         }
     })
 
-    connection.console.log(`connection.onCompletion() fired.  Got: ${JSON.stringify(completions, null, 2)}`);
+    connection.console.log(`connection.onCompletion() finished: #completions ${completions.length}`);
     return completions;
 });
 
@@ -230,8 +225,11 @@ connection.onCompletionResolve(
     }
 );
 
-connection.languages.semanticTokens.on(async (params: SemanticTokensParams): Promise<SemanticTokens> => {
-    const document = documents.get(params.textDocument.uri);
+
+connection.onRequest("textDocument/semanticTokens/full", async (params) => {
+  // Implement your logic to provide semantic tokens for the given document here.
+  // You should return the semantic tokens as a response.
+ const document = documents.get(params.textDocument.uri);
     if (!document) {
         connection.console.info(`semanticTokens.on() does not have a document, returning no tokens.`)
         return { data: [] };
@@ -242,26 +240,19 @@ connection.languages.semanticTokens.on(async (params: SemanticTokensParams): Pro
     const builder = new SemanticTokensBuilder();
     const highlights = await fetchInspect("highlight", document.getText(), settings)
     if (!highlights || highlights.length === 0) {
-        connection.console.error(`validateTextDocument() no highlights found: ${document.uri}`);
+        connection.console.error(`semanticTokens.on() no highlights found: ${document.uri}`);
     }
 
     const tokens: any[] = highlights[0].highlight.split(",");
 
     const ranges = groupRanges(tokens)
-    connection.console.log(`semanticTokens.on() fired, processing.  Got: #tokens ${tokens.length} #ranges ${ranges.length}`)
+    connection.console.log(`semanticTokens.on() processing: #tokens ${tokens.length} #ranges ${ranges.length}`)
     ranges.forEach((range) => {
         if (range[0] !== "none") {
             const pos = document.positionAt(range[1])
             builder.push(pos.line, pos.character, (range[2] - range[1]) + 1, tokenTypes.indexOf(range[0]), 0);
         }
     })
-    /*
-    // Example: hardcoded one token at line 1, character 1, length 5
-    tokens.forEach((token: any, index: any) => {
-        const pos = document.positionAt(index);
-        builder.push(pos.line, pos.character, 1, encodeTokenType(token), 0);
-    })
-    */
 
     return builder.build();
 });
@@ -299,7 +290,6 @@ connection.onHover(async (params: TextDocumentPositionParams): Promise<Hover | n
         return null;
     }
     
-    // TODO: consolate into ranges
     const highlights = await fetchInspect("highlight", doc.getText(), settings)
     const tokens = highlights[0].highlight.split(",")
     const offset = doc.offsetAt(pos)
@@ -449,14 +439,6 @@ async function validateTextDocument(textDocument: TextDocument): Promise<Diagnos
         lastTokenPosition = textDocument.positionAt(index + 1);
     })
 
-
-    // Simple syntax checking - look for common issues
-    const lines = text.split('\n');
-
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-    }
-
     // Limit the number of problems reported
     const maxProblems = settings.maxNumberOfProblems || 1000;
     const limitedDiagnostics = diagnostics.slice(0, maxProblems);
@@ -487,7 +469,7 @@ function findGroupRange(arr: string[], index: number): number[] {
     // Return [index, index] if no group found
     const result = start === end ? [index, index] : [start, end];
 
-    connection.console.log(`findGroupRange() finished. Got: index ${index}  #groups ${result.length}}`);
+    connection.console.log(`findGroupRange() finished for index ${index} with #groups ${result.length}`);
     
     return result
 }
@@ -510,21 +492,26 @@ function groupRanges(arr: string[]): [string, number, number][] {
         i = end + 1; // Move to the next distinct value
     }
 
-    connection.console.log(`findGroupRange() finished. Got: #groups ${result.length}}`);
+    connection.console.log(`findGroupRange() finished with #groups ${result.length}}`);
     return result;
 }
 
 // MAIN if open or change, do something
 documents.onDidChangeContent(async (change) => {
-    await validateTextDocument(change.document);
-    connection.languages.semanticTokens.refresh();
+    connection.console.log(`documents.onDidChangeContent() fired for ${change.document.uri}`);
 });
 
 documents.onDidOpen(async (change) => {
-    await validateTextDocument(change.document);
-    connection.languages.semanticTokens.refresh();
+    connection.console.log(`documents.onDidOpen() fired for ${change.document.uri} - noop`);
 });
 
+connection.onDidChangeWatchedFiles(async (change: any) =>{
+    connection.console.log(`connection.onDidChangeWatchedFiles() fired for ${change.document.uri}`);
+})
+
+connection.onDidChangeTextDocument(async (change: any) =>{
+    connection.console.log(`connection.onDidChangeTextDocument() fired for ${change.document.uri}`);
+})
 
 
 // Make the text document manager listen on the connection
