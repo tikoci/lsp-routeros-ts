@@ -186,7 +186,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "npm:bump": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd ..",
+    "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd ..",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
     "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",

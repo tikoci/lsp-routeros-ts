@@ -312,7 +312,7 @@ and maintained in the `package.json` in root directory.  The common "user facing
   *   `vsix:remove`: removes the VSIX file locally for `tikoci.lsp-routeros-ts`
   *   `bun:exe`: builds `lsp-routeros-server` for local OS/platform
   *   `nvim:install`: for local development use to install (or re-install) into NeoVim (`nvim`)
-  *   `npm:bump`: bumps "patch" version of meta `package.json` and both client and server `package.json`s
+  *   `bump:patch`: bumps "patch" version of meta `package.json` and both client and server `package.json`s
 
 > The `npm run` scripts are mainly for local development.  The GitHub Action CI generally directly invokes tools.  For example, to cross-compile for various platforms, `build.yaml` will just call `bun --compiler` directly and NOT use `npm run bun:exe`.
 
