@@ -123,18 +123,20 @@ jobs:
           allowUpdates: true
           updateOnlyUnreleased: true
           body: |
-            *LSP Server for RouterOS (v${{steps.pkgver.outputs.version}})*
+            **LSP Server for RouterOS** (v${{steps.pkgver.outputs.version}})
             
-            For VSCode, download `lsp-routeros-ts.vsix` and install use `code --install-extension lsp-routeros-ts.vsix` from your download directory.
-            
-            For Neovim or other LSP clients, download the specific `lsp-routeros-server-*` for your OS/platform, and copy to `~/.bin` (or another directory).
+            > "Known Issues" and "Changelog" can be found in [`CHANGES.md`](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGES.md).
 
-            > _Download file names..._
-            >
+            For *VSCode*, download `lsp-routeros-ts.vsix` and install use `code --install-extension lsp-routeros-ts.vsix` from your download directory.
+            
+            For *NeoVim or other LSP clients*, download the specific `lsp-routeros-server-*` for your OS/platform, and copy to `~/.bin` (or another directory).
+            A sample configuration file for NeoVim (`nvim`) , `nvim-routeros-lsp-init.lua`, is provided for download.
+
+            > _Note about download file names..._
             > `darwin-` in name is for macOS, with `-arm64` is Apple Silcon while `-x64` is for Intel-based Mac platforms.
             > `-musl` in name is for Alpine Linux or some other specialized Linux distros. 
 
-            See [README](https://github.com/tikoci/lsp-routeros-ts/README.md) for more details.
+            See [README](https://github.com/tikoci/lsp-routeros-ts/README.md) for more details about installation and usage.
           artifacts: |
             lsp-routeros-ts.vsix
             nvim-routeros-lsp-init.lua
