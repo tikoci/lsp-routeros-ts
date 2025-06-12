@@ -125,7 +125,12 @@ jobs:
           body: |
             **LSP Server for RouterOS** (v${{steps.pkgver.outputs.version}})
             
+            > [!NOTE]
+            >
             > "Known Issues" and "Changelog" can be found in [`CHANGES.md`](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGES.md).
+            >
+            > See [README](https://github.com/tikoci/lsp-routeros-ts/README.md) for more details about installation and usage.
+            >
 
             For *VSCode*, download `lsp-routeros-ts.vsix` and install use `code --install-extension lsp-routeros-ts.vsix` from your download directory.
             
@@ -136,7 +141,6 @@ jobs:
             > `darwin-` in name is for macOS, with `-arm64` is Apple Silcon while `-x64` is for Intel-based Mac platforms.
             > `-musl` in name is for Alpine Linux or some other specialized Linux distros. 
 
-            See [README](https://github.com/tikoci/lsp-routeros-ts/README.md) for more details about installation and usage.
           artifacts: |
             lsp-routeros-ts.vsix
             nvim-routeros-lsp-init.lua
