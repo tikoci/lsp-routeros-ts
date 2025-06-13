@@ -5,9 +5,15 @@
   "license": "MIT",
   "version": "0.3.3",
   "publisher": "TIKOCI",
-  "categories": [],
+  "categories": ["Programming Languages", "Themes", "Formatters", "Testing"],
   "displayName": "RouterOS LSP",
   "icon": "icon.png",
+  "keywords": ["routeros", "mikrotik", "lsp", "rsc", "tikoci", "neovim", "langserver"],
+  "preview": true,
+  "pricing": "Free",
+  "sponsor": {
+    "url": "https://coff.ee/amm0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/tikoci/lsp-routeros-ts.git"
