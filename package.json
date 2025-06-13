@@ -18,10 +18,16 @@
     "type": "git",
     "url": "https://github.com/tikoci/lsp-routeros-ts.git"
   },
+  "bugs": {
+    "url": "https://github.com/tikoci/lsp-routeros-ts/issues"
+  },
+  "qna": "https://github.com/orgs/tikoci/discussions/categories/q-a",
+  "homepage": "https://github.com/tikoci/lsp-routeros-ts/blob/main/README.md",
   "engines": {
     "vscode": "^1.75.0"
   },
   "main": "./client/out/extension",
+  "funding": ["https://coff.ee/amm0"],
   "contributes": {
     "semanticTokenTypes": [
       {
