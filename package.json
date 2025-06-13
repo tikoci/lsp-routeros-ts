@@ -3,12 +3,25 @@
   "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "publisher": "TIKOCI",
-  "categories": ["Programming Languages", "Themes", "Formatters", "Testing"],
+  "categories": [
+    "Programming Languages",
+    "Themes",
+    "Formatters",
+    "Testing"
+  ],
   "displayName": "RouterOS LSP",
   "icon": "icon.png",
-  "keywords": ["routeros", "mikrotik", "lsp", "rsc", "tikoci", "neovim", "langserver"],
+  "keywords": [
+    "routeros",
+    "mikrotik",
+    "lsp",
+    "rsc",
+    "tikoci",
+    "neovim",
+    "langserver"
+  ],
   "preview": true,
   "pricing": "Free",
   "sponsor": {
@@ -27,7 +40,9 @@
     "vscode": "^1.75.0"
   },
   "main": "./client/out/extension",
-  "funding": ["https://coff.ee/amm0"],
+  "funding": [
+    "https://coff.ee/amm0"
+  ],
   "contributes": {
     "semanticTokenTypes": [
       {
