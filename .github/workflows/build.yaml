@@ -15,11 +15,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Install `bun`
         uses: oven-sh/setup-bun@v2
-      
+
       - name: Install dependencies
         run: npm install
 
@@ -34,6 +34,7 @@ jobs:
             *.map
             ./out/*
             ./**/out/*
+            **/*.bun-build
 
       - name: Package VSIX
         run: |
@@ -55,14 +56,14 @@ jobs:
           bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server-windows-x64 --target bun-windows-x64
           chmod +x ./lsp-routeros-server-windows-x64.exe
           zip ./lsp-routeros-server-windows-x64.zip ./lsp-routeros-server-windows-x64.exe
- 
+
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
         with:
           name: lsp-routeros-ts.vsix
           path: lsp-routeros-ts.vsix
 
-      - name: Upload VSIX artifact
+      - name: Upload NeoVim Lua script artifact
         uses: actions/upload-artifact@v4
         with:
           name: nvim-routeros-lsp-init.lua
@@ -133,7 +134,7 @@ jobs:
           updateOnlyUnreleased: true
           body: |
             **LSP Server for RouterOS** (v${{steps.pkgver.outputs.version}})
-            
+
             > [!NOTE]
             >
             > "Known Issues" and "Changelog" can be found in [CHANGES.md](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGES.md).
@@ -142,13 +143,13 @@ jobs:
             >
 
             For *VSCode*, download `lsp-routeros-ts.vsix` and install use `code --install-extension lsp-routeros-ts.vsix` from your download directory.
-            
+
             For *NeoVim or other LSP clients*, download the specific `lsp-routeros-server-*` for your OS/platform, and copy to `~/.bin` (or another directory).
             A sample configuration file for NeoVim (`nvim`) , `nvim-routeros-lsp-init.lua`, is provided for download.
 
             > _Note about download file names..._
             > `darwin-` in name is for macOS, with `-arm64` is Apple Silcon while `-x64` is for Intel-based Mac platforms.
-            > `-musl` in name is for Alpine Linux or some other specialized Linux distros. 
+            > `-musl` in name is for Alpine Linux or some other specialized Linux distros.
 
           artifacts: |
             lsp-routeros-ts.vsix
@@ -165,5 +166,6 @@ jobs:
 
       - name: Publish to VSCode Marketplace
         run: npm run vsix:publish
+
       - name: Publish to Open-VSX too
         run: npm run ovix:publish
