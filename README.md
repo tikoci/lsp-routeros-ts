@@ -174,7 +174,7 @@ When using "https://" (TLS), the certificate chain must be valid from the LSP cl
 
 ## Implementation and Development
 
-The code uses Microsoft's node/TypeScript NPM library [vscode-languageserver-node](https://github.com/microsoft/vscode-languageserver-node), with some implementation coming from Microsoft's VSCode [`lsp-*` extension examples][sample].
+The code uses Microsoft's node/TypeScript bun library [vscode-languageserver-node](https://github.com/microsoft/vscode-languageserver-node), with some implementation coming from Microsoft's VSCode [`lsp-*` extension examples][sample].
 While this allows first-class support for Visual Studio Code ("VSCode"), the LSP server also work with other editors - either via `node` or using TypeScript compiled by `bun build --compile` into a standalone executable.
 
 To provide "AST-like" data to the LSP, HTTP/S REST calls to a running RouterOS device to retrieve data from `/console/inspect`, specifically `request=highlight` and `request=completion` operations.  Using `/console/inspect` via REST means the LSP is always matched to a specific RouterOS version's AST — so newer commands and attributes will automatically be available simply by upgrading the connected RouterOS.  But this also means **without a running RouterOS device, the LSP will cannot function.**  
@@ -183,11 +183,13 @@ To provide "AST-like" data to the LSP, HTTP/S REST calls to a running RouterOS d
 
 ### Building LSP
 
-The LSP can be built using just `node` and `npm` (which can be installed using your OS's package manager).
+> All TypeScript packaging is done using `bun`.  It is recommended to install `bun` using your OS package manager or from https://bun.sh.  Although `bun` can still be used for local development, since no specific `bun` syntax is used.
+
+The LSP can be built using just `bun`.
 
 1. Clone this repo, and `cd` to the root directory of the repo
-2. Run `npm install` 
-3. Run `npm compile`
+2. Run `bun install` 
+3. Run `bun compile`
 
 After which the LSP server will be generated as `./server/out/server.js`, and can be invoked using `node` to start the server.
 
@@ -199,13 +201,13 @@ The project supports a few packaging methods, mainly one for VSCode and a standa
 The RouterOS LSP can be built to a `.vsix` file for Visual Studio Code use.  A `vsix` file can be manually install the LSP and associated VSCode language extension.
 To built the `lsp-routeros-ts-x.y.z.vsix` file from repo root directory, use:
 ```
-npm run vsix:package
+bun run vsix:package
 ```
-The file can be installed using `code --install-extension lsp-routeros-ts-*.vsix`.  Alternatively `npm run vsix:install` which will _both build and install_ the RouterOS LSP.  To remove the LSP/extension use `npm run vsix:remove`.
+The file can be installed using `code --install-extension lsp-routeros-ts-*.vsix`.  Alternatively `bun run vsix:install` which will _both build and install_ the RouterOS LSP.  To remove the LSP/extension use `bun run vsix:remove`.
 
 
 #### Standalone LSP Server (using `bun build --compile`)
-To create a single file executable, `npm run bun:exe` can be used.  This will compile the TypeScript and dependencies into an executable (for current platform/OS).  Additionally, it installs to `~/.bin/lsp-routeros-server`, which matches the example `nvim` configuration file in `nvim-routeros-lsp-init.lua`. `lsp-routeros-server` also support options to control which LSP protocol to listen on:
+To create a single file executable, `bun run bun:exe` can be used.  This will compile the TypeScript and dependencies into an executable (for current platform/OS).  Additionally, it installs to `~/.bin/lsp-routeros-server`, which matches the example `nvim` configuration file in `nvim-routeros-lsp-init.lua`. `lsp-routeros-server` also support options to control which LSP protocol to listen on:
   * `--node-ipc` - use by VSCode for streaming JSON
   * `--stdio` - user by `nvim` and most LSP clients that exec() it and use stdin and stdout for LSP messages
   * `--socket=<port>` - similar to `--stdio` but listens on TCP socket specified in the option
@@ -288,7 +290,8 @@ As a result of various build processes, the following "artifacts" are produced a
 │       └── extension.js.map  // used by debugger/errors to map line# between `js` and `ts`
 ├── server
 │   └── out
-|       ├── server.js         // compiled `.ts` - can use to start LSP using `node ./server/out/server.js`
+|       ├── server.js         // compiled `.ts` - can use to start LSP using 
+node ./server/out/server.js`
 │       └── server.map.js     // used by debugger/errors to map line# between `js` and `ts`
 ├── lsp-routeros-server                   // always same platform as build system (used for development/locally)
 ├── lsp-routeros-server-darwin-x64        // macOS "Intel" - static binary of `server.ts`
@@ -303,19 +306,18 @@ As a result of various build processes, the following "artifacts" are produced a
 
 ```
 
-#### `npm run` Scripts
+#### `bun run` Scripts
 
-Some "helper scripts" for developers can be run use `npm run <scriptname>`, 
+Some "helper scripts" for developers can be run use `bun run <scriptname>`, 
 and maintained in the `package.json` in root directory.  The common "user facing" `<scriptname>` being:
   *   `compile`: run TypeScript compiler ("tsc -b") for server and client
-  *   `vsix:package`: "npm run postinstall && rm -f *.vsix && vsce package",
+  *   `vsix:package`: "bun run postinstall && rm -f *.vsix && vsce package",
   *   `vsix:install`: install the VSIX file locally for `tikoci.lsp-routeros-ts`
   *   `vsix:remove`: removes the VSIX file locally for `tikoci.lsp-routeros-ts`
   *   `bun:exe`: builds `lsp-routeros-server` for local OS/platform
   *   `nvim:install`: for local development use to install (or re-install) into NeoVim (`nvim`)
-  *   `bump:patch`: bumps "patch" version of meta `package.json` and both client and server `package.json`s
 
-> The `npm run` scripts are mainly for local development.  The GitHub Action CI generally directly invokes tools.  For example, to cross-compile for various platforms, `build.yaml` will just call `bun --compiler` directly and NOT use `npm run bun:exe`.
+> The `bun run` scripts are mainly for local development.  The GitHub Action CI generally directly invokes tools.  For example, to cross-compile for various platforms, `build.yaml` will just call `bun --compiler` directly and NOT use `bun run bun:exe`.
 
 #### ID Fields
 

@@ -230,7 +230,7 @@
     "compile:client": "bun build client/src/extension.ts --outdir ./client/out --external vscode --format=cjs --target=node --sourcemap",
     "compile:server": "bun build server/src/server.ts --outdir ./server/out --format=cjs --target=node --sourcemap",
     "compile:exe": "bun run bun:exe",
-    "vsix:package": "rm -f *.vsix && bun run compile && vsce package --no-dependencies --pre-release",
+    "vsix:package": "rm -f *.vsix && bun run compile && npx @vscode/vsce package --no-dependencies --pre-release",
     "bun:exe": "rm -rf *.bun-build && bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server && chmod +x ./lsp-routeros-server && mkdir -p ~/.bin && cp ./lsp-routeros-server ~/.bin",
     "vsix:install": "bun run vsix:remove; bun run vsix:package && code --install-extension lsp-routeros-ts-*.vsix",
     "vsix:remove": "code --uninstall-extension tikoci.lsp-routeros-ts",
@@ -250,19 +250,7 @@
   "peerDependencies": {
     "@types/axios": "^0.9.36",
     "@types/node": "^20.5.7",
-    "@vscode/vsce": "^3.5.0",
-    "bun": "^1.2.15"
-  },
-  "peerDependenciesMeta": {
-    "@vscode/vsce": {
-      "optional": true
-    },
-    "bun": {
-      "optional": true
-    },
-    "peerDependencies": {
-      "typescript": "^5"
-    }
+    "typescript": "^5"
   },
   "private": false
 }
