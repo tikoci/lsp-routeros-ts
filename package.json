@@ -159,6 +159,7 @@
     "languages": [
       {
         "id": "routeros",
+        "icon": { "light": "icon.png",  "dark": "icon.png" },
         "extensions": [
           ".rsc"
         ],
@@ -221,21 +222,21 @@
   },
   "scripts": {
     "clean": "rm -rf ./server/out/* && rm -rf ./client/out/* && rm -f lsp-routeros-server* && rm -f *.vsix",
-    "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-    "compile": "npm run compile:client && npm run compile:server",
+    "postinstall": "cd client && bun install && cd ../server && bun install && cd ..",
+    "compile": "bun run compile:client && bun run compile:server",
     "compile:client": "bun build client/src/extension.ts --outdir ./client/out --external vscode --format=cjs --target=node --sourcemap",
     "compile:server": "bun build server/src/server.ts --outdir ./server/out --format=cjs --target=node --sourcemap",
-    "compile:exe": "npm run bun:exe",
-    "vsix:package": "rm -f *.vsix && npm run compile && vsce package --no-dependencies --pre-release",
+    "compile:exe": "bun run bun:exe",
+    "vsix:package": "rm -f *.vsix && bun run compile && vsce package --no-dependencies --pre-release",
     "bun:exe": "rm -rf *.bun-build && bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server && chmod +x ./lsp-routeros-server && mkdir -p ~/.bin && cp ./lsp-routeros-server ~/.bin",
-    "vsix:install": "npm run vsix:remove; npm run vsix:package && code --install-extension lsp-routeros-ts-*.vsix",
+    "vsix:install": "bun run vsix:remove; bun run vsix:package && code --install-extension lsp-routeros-ts-*.vsix",
     "vsix:remove": "code --uninstall-extension tikoci.lsp-routeros-ts",
-    "nvim:install": "npm run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua",
-    "watch": "npm run compile:server && npm run watch:client",
+    "nvim:install": "bun run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua",
+    "watch": "bun run compile:server && bun run watch:client",
     "watch:client": "bun build client/src/extension.ts --outfile=client/out/extension.js --external vscode --format=cjs --target=node --sourcemap --watch",
     "watch:server": "bun build server/src/server.ts --outfile=server/out/server.js --format=cjs --target=node --sourcemap --watch",
     "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd ..",
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "bun run compile",
     "ovsx:publish": "npx ovsx publish lsp-routeros-ts-*.vsix -p $OVSX_PAT",
     "vsix:publish": "npx @vscode/vsce publish --no-dependencies --pre-release -p $VSCE_PAT"
   },
@@ -260,5 +261,5 @@
       "typescript": "^5"
     }
   },
-  "private": true
+  "private": false
 }
