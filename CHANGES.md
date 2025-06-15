@@ -33,10 +33,10 @@
 
 * Add diagnostic trace setting for protocol message debugging (default is off)
 * Apply "semantic token" colors for RouterOS code at startup, _based_ on include RouterOS theme.  This allows using _any_ theme to get proper colors. 
-* Radical reduction of file size of extension 200**M** to 200**K** (see below)
+* Radical reduction of file size of extension 200+**M** to 200+**K** (see below)
 
 ##### Fixes
-* Use `esbuild` to package extension's TypeScript, previous builds include node_modules which are more than necessary - may use bun in future for constancy
+* Use `bun` to package extension's TypeScript, previous builds include node_modules which are more than necessary - may use bun in future for constancy
 * Cache `/console/inspect` highlights if document has not changed.  Helps for hover but more work to optimize calls to REST API.
 * Code formatting cleanup
 
