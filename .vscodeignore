@@ -1,6 +1,8 @@
 **/*.ts
 **/tsconfig.json
-test.rsc
+test*
+tests
+**/tests
 icon.svg
 **/*.map
 **/.*bun-build
@@ -16,3 +18,5 @@ server/src/**
 .gitignore
 webpack.config.js
 .eslintrc.json
+bun.lock
+**/bun.lock

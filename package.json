@@ -220,25 +220,28 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "clean": "rm -rf ./server/out/* && rm -rf ./client/out/* && rm lsp-routeros-server* && rm *.vsix",
     "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
     "compile": "npm run compile:client && npm run compile:server",
-    "compile:client": "esbuild client/src/extension.ts --bundle --outfile=client/out/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
-    "compile:server": "esbuild server/src/server.ts --bundle --outfile=server/out/server.js --format=cjs --platform=node --sourcemap",
-    "watch": "npm run watch:server && npm run watch:client",
-    "watch:client": "esbuild client/src/extension.ts --bundle --outfile=client/out/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
-    "watch:server": "esbuild server/src/server.ts --bundle --outfile=server/out/server.js --format=cjs --platform=node --sourcemap --watch",
-    "package": "npm run compile && vsce package --no-dependencies",
-    "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd ..",
-    "vsix:install": "npm run vsix:remove; npm run package && code --install-extension lsp-routeros-ts-*.vsix",
-    "vsix:remove": "code --uninstall-extension tikoci.lsp-routeros-ts",
+    "compile:client": "bun build client/src/extension.ts --outdir ./client/out --external vscode --format=cjs --target=node --sourcemap",
+    "compile:server": "bun build server/src/server.ts --outdir ./server/out --format=cjs --target=node --sourcemap",
+    "compile:exe": "npm run bun:exe",
+    "vsix:package": "rm *.vsix && npm run compile && vsce package --no-dependencies --pre-release",
     "bun:exe": "rm -rf *.bun-build && bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server && chmod +x ./lsp-routeros-server && mkdir -p ~/.bin && cp ./lsp-routeros-server ~/.bin",
-    "nvim:install": "npm run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua"
+    "vsix:install": "npm run vsix:remove; npm run vsix:package && code --install-extension lsp-routeros-ts-*.vsix",
+    "vsix:remove": "code --uninstall-extension tikoci.lsp-routeros-ts",
+    "nvim:install": "npm run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua",
+    "watch": "npm run compile:server && npm run watch:client",
+    "watch:client": "bun build client/src/extension.ts --outfile=client/out/extension.js --external vscode --format=cjs --target=node --sourcemap --watch",
+    "watch:server": "bun build server/src/server.ts --outfile=server/out/server.js --format=cjs --target=node --sourcemap --watch",
+    "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd ..",
+    "vscode:prepublish": "npm run compile",
+    "ovsx:publish": "npx ovsx publish lsp-routeros-ts-*.vsix -p $OVSX_PAT",
+    "vsix:publish": "npx @vscode/vsce publish --no-dependencies --pre-release -p $VSCE_PAT"
   },
   "devDependencies": {
-    "axios": "^1.9.0",
-    "esbuild": "^0.25.5",
-    "typescript": "^5.2.2"
+    "@types/bun": "^1.2.16",
+    "axios": "^1.9.0"
   },
   "peerDependencies": {
     "@types/axios": "^0.9.36",
@@ -252,6 +255,10 @@
     },
     "bun": {
       "optional": true
+    },
+    "peerDependencies": {
+      "typescript": "^5"
     }
-  }
+  },
+  "private": true
 }

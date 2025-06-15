@@ -22,10 +22,6 @@
       "presentation": {
         "panel": "dedicated",
         "reveal": "never"
-      },
-      "problemMatcher": [{
-        "base": "$eslint-compact",
-        "applyTo": "allDocuments"
-      }]
+      }
     }]
 }

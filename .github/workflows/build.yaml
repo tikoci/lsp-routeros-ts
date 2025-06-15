@@ -26,13 +26,22 @@ jobs:
       - name: Build project
         run: npm run compile
 
+      - name: Upload JavaScript .map files for symbols
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-lsp-routeros-ts-maps
+          path: |
+            *.map
+            ./out/*
+            ./**/out/*
+
       - name: Package VSIX
         run: |
           npm run vsix:package
           mv lsp-routeros-ts-*.vsix lsp-routeros-ts.vsix
 
       - name: Package standalone "bun exe" for the native platform of CI
-        run: npm run bun:exe
+        run: npm run compile:exe
 
       - name: Package cross-platform version of standalone LSP server
         run: |
@@ -153,3 +162,8 @@ jobs:
             lsp-routeros-server-linux-arm64-musl.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to VSCode Marketplace
+        run: npm run vsix:publish
+      - name: Publish to Open-VSX too
+        run: npm run ovix:publish

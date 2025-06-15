@@ -14,3 +14,8 @@ server/node_modules
 lsp-routeros-*
 
 ./*.rsc
+
+**/*.map
+*.map
+
+tests
