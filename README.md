@@ -1,3 +1,4 @@
+
 # RouterOS LSP
 
 ![LSP running VSCode GIF](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDl4NXg5ZXB0YWd2Z2s5b2t0Z2t6enN6Y3NmbTRsZ2o5dWM3MTJqMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Rm4TUg15fUuUhHVvSx/giphy.gif)
@@ -153,7 +154,7 @@ local settings = {
 
 Other LSP clients ("editors") should work, if the LSP client supports the "configuration capacity" API.  LSP configuration may vary substantially between editors – but configuration variables shown above in `LspSettings` **must** be provided somehow to the LSP client editor.  
 
-> The LSP spec's `workspace/configuration` ("configuration capability") is **required** for all LSP clients – since that is how RouterOS connection information is obtained.  Without it, the LSP will use the default configuration and be unconfigurable by the user (since defaults are compiled in code).  Both `nvim` and VSCode support `workspace/configuration`, most other editors with LSP do too.
+> The LSP spec's `workspace/configuration` ("configuration capability") is **required** for all LSP clients – since that is how RouterOS connection information is obtained.  Without it, the LSP will use the default configuration and be un-configurable by the user (since defaults are compiled in code).  Both `nvim` and VSCode support `workspace/configuration`, most other editors with LSP do too.
 
 
 ### Security Considerations
