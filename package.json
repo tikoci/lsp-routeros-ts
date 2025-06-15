@@ -3,7 +3,7 @@
   "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.3.4",
+  "version": "0.3.6",
   "publisher": "TIKOCI",
   "categories": [
     "Programming Languages",
@@ -39,7 +39,7 @@
   "engines": {
     "vscode": "^1.75.0"
   },
-  "main": "./client/out/extension",
+  "main": "./client/out/extension.js",
   "funding": [
     "https://coff.ee/amm0"
   ],
@@ -154,21 +154,18 @@
         "label": "RouterOS LSP Default Dark",
         "uiTheme": "vs-dark",
         "path": "./vscode-routeroslsp-theme.json"
-      },
-      {
-        "label": "RouterOS LSP Default Light",
-        "uiTheme": "vs",
-        "path": "./vscode-routeroslsp-theme.json"
       }
     ],
     "languages": [
       {
-        "id": "routeroslsp",
+        "id": "routeros",
         "extensions": [
           ".rsc"
         ],
+        "firstLine": "^#.*RouterOS.*",
         "aliases": [
           "RouterOS",
+          "routeros",
           "rsc"
         ],
         "configuration": "./client/language-configuration.json"
@@ -206,25 +203,41 @@
           "scope": "resource",
           "type": "boolean",
           "default": true,
-          "description": "[NeoVim only] Emulates RouterOS 'hotlock' for autocompetion"
+          "description": "[NeoVim only] Emulates RouterOS 'hotlock' for autocompletion"
+        },
+        "routeroslsp.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
         }
       }
     }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd ..",
-    "compile": "tsc -b",
-    "watch": "tsc -b -w",
     "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-    "vsix:package": "npm run postinstall && rm -f *.vsix && vsce package",
-    "vsix:install": "npm run vsix:remove; npm run vsix:package && code --install-extension lsp-routeros-ts-*.vsix",
+    "compile": "npm run compile:client && npm run compile:server",
+    "compile:client": "esbuild client/src/extension.ts --bundle --outfile=client/out/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
+    "compile:server": "esbuild server/src/server.ts --bundle --outfile=server/out/server.js --format=cjs --platform=node --sourcemap",
+    "watch": "npm run watch:server && npm run watch:client",
+    "watch:client": "esbuild client/src/extension.ts --bundle --outfile=client/out/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
+    "watch:server": "esbuild server/src/server.ts --bundle --outfile=server/out/server.js --format=cjs --platform=node --sourcemap --watch",
+    "package": "npm run compile && vsce package --no-dependencies",
+    "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd ..",
+    "vsix:install": "npm run vsix:remove; npm run package && code --install-extension lsp-routeros-ts-*.vsix",
     "vsix:remove": "code --uninstall-extension tikoci.lsp-routeros-ts",
     "bun:exe": "rm -rf *.bun-build && bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server && chmod +x ./lsp-routeros-server && mkdir -p ~/.bin && cp ./lsp-routeros-server ~/.bin",
     "nvim:install": "npm run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua"
   },
   "devDependencies": {
     "axios": "^1.9.0",
+    "esbuild": "^0.25.5",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {

@@ -7,3 +7,12 @@ icon.svg
 lsp-routeros*
 **/tsconfig.tsbuildinfo
 .github/*
+.vscode/**
+client/src/**
+server/src/**
+**/*.ts
+**/node_modules/**
+**/*.map
+.gitignore
+webpack.config.js
+.eslintrc.json

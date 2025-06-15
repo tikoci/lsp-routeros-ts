@@ -67,7 +67,7 @@
     },
     "error": {
       "foreground": "#9B0100",
-      "fontStyle": ["underline", "bold"]
+      "fontStyle": "bold"
     },
     "varname-global": {
       "foreground": "#079B9B",

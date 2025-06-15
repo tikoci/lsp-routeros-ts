@@ -23,7 +23,9 @@
         "panel": "dedicated",
         "reveal": "never"
       },
-      "problemMatcher": ["$tsc-watch"]
-    }
-  ]
+      "problemMatcher": [{
+        "base": "$eslint-compact",
+        "applyTo": "allDocuments"
+      }]
+    }]
 }
