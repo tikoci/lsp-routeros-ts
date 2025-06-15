@@ -166,8 +166,7 @@ jobs:
 
       # TODO: Publish release should be it's own build task, VSCode works and Open-VSX should too
       #
-      #- name: Publish to VSCode Marketplace
-      #  run: npx @vscode/vsce publish --no-dependencies --pre-release -p ${{secrets.VSCE_PAT}}
-
-      #- name: Publish to Open-VSX too
-      #  run: npx ovsx publish lsp-routeros-ts.vsix -p ${{secrets.OVSX_PAT}}
+      - name: Publish to VSCode Marketplace
+        run: npx @vscode/vsce publish --no-dependencies --pre-release -p ${{secrets.VSCE_PAT}}
+      - name: Publish to Open-VSX too
+        run: npx ovsx publish lsp-routeros-ts.vsix -p ${{secrets.OVSX_PAT}}

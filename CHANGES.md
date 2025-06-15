@@ -1,15 +1,13 @@
 ## Release Notes
 
 ### Known Issues in "latest" 
-* Size of VSIX is 200MB, which seem too big
-  * _Planned Fix_ - includes more node_modules than needed
 * More REST calls are made than strictly needed, resulting is potential sluggish behaviors.
-  * _Planned Fix_ - more caching of results is needed to improve responsiveness (i.e. if document is not changed from last request=highlight, no need re-compute tokens)
-* Publish to OpenVSX
-* In some case, the LSP may not trigger syntax coloring automatically after installing.  
-  * _Workarounds if colors are missing_:
+  * _Inprogress_ - more work to avoid overlapping calls that avoid cache of highlights
+* In some case, the LSP may not trigger syntax coloring automatically after installing — or at least takes a while when first loading LSP, sometimes.  
+  * _Workarounds if_ correct _colors are missing_:
     * "Type something" to cause an edit which triggers token parsing 
-    * Selecting "RouterOS LSP Default" as the "Color Theme" may help.  To bring up the Theme selector use 
+    * Change tabs
+    * Close and re-open file
 <kbd>⌘**K**</kbd> then <kbd>⌘**T**</kbd>, then pick RouterOS LSP from list (light or dark).
 * Tokenizer should detect RouterOS _data_ types like "ip" and "num" 
   * _Planned Fix_ - parse "none" token via regex & mark with new semantic tokens for routeros datatypes — since script is serialized to string internally all types likely can be inferred correctly 
@@ -20,12 +18,20 @@
     * needed for dev as easy way to "see" current "semantic tokens" as detected by editor
 * Blue color used for "escaped" types "\12\3A\BC" is too dark in dark mode
   * _Planned Fix_ - dark needs to change, but currently using same theme for both light/dark internally 
-* Autocompletion ("hotlock")...
-  * On VSCode, being uncheck to disable the dropdown of completions
-  * NeoVim 0.11+ is required for autocomplete, LSP will work but may get errors in older versions
 * "Triggers" characters should be LSP configuration options, currently: <kbd>space</kbd>, <kbd>/</kbd>, <kbd>:</kbd>, and <kbd>=</kbd>.  Space in particular may be "aggressive" as default. 
   
 ### Changelog
+
+
+#### 0.3.7
+
+##### Changes
+* Use icon in VSCode tabs for RouterOS files
+
+##### Fixes
+* Remove `package-lock.json` files to avoid warning in debug, and not used now that everything is packaged by `bun`.
+* Re-test publication from GitHub Action to Open-VSX
+  * but... should eventually be controllable via `workflow_dispatch`
 
 #### 0.3.6
 
@@ -107,10 +113,10 @@ _Publication test only - same changes from 0.3.6_
   * _Potential Fix_ - use `/console/inspect request=syntax` to get more metadata about
 * File Open and Save Operations
   * since we have REST connection loading/saving scripts to "Files", /system/script, etc. is possible
-    * _downside:_ LSP need "fuller" permisions
+    * _downside:_ LSP need "fuller" permissions
   * support using "back-to-home-files" since permissions can be control for that
 * Run on router (via REST or SSH configurable)
-* "Code Folding" - detect scopes since the control local variable visibility, better error detection (since individual scopes can be checked independant of larger script) and potential "shortcut" to opmization calls to /console/inspect
+* "Code Folding" - detect scopes since the control local variable visibility, better error detection (since individual scopes can be checked independent of larger script) and potential "shortcut" to optimization calls to /console/inspect
   * _Note_ require LSP knowing syntax which has been avoided to date since rules are complex/undocumented 
 * Support "Signatures" (i.e. like "/ip/route add dst-address=1.1.1.1" _within_ larger text, and perhaps show completions for base part "/ip/route add" etc)
 * Support Rename...
@@ -131,8 +137,7 @@ _Publication test only - same changes from 0.3.6_
   * File system support (i.e. router is a directory tree in VSCode "Files" view)
 
 ### Code and Packaging Improvements
-* Use `CHANGELOG.md` so it appears in VSCode
-* Add `vsce` and `ovsx` to CI and "npm run" actions to enable `--prerelease` VSIX publishing on build
-  * see https://github.com/EclipseFdn/open-vsx.org/wiki/Publishing-Extensions for OpenVSX `ovsx` part
+* Migrate to `CHANGELOG.md` so it appears in VSCode, currently just link
+* Control publication via GitHub Action dispatch, currently just publishing if build is successful
 * Icon `png` should be "built" using `svg`- currently manual process
 
