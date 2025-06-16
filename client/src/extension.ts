@@ -4,6 +4,8 @@ import {
   ExtensionContext,
   ConfigurationTarget,
   window,
+  UIKind,
+  env,
 } from "vscode";
 import fs = require("fs");
 
@@ -19,8 +21,18 @@ let client: LanguageClient;
 export function activate(context: ExtensionContext) {
   applySemanticColorsFromTheme(context);
 
+  let serverJSFile = "server.js" 
+  if (env.uiKind === UIKind.Web) {
+    // Running in VSCode for Web (e.g., vscode.dev or github.dev)
+    console.log("Running in VSCode Web");
+    serverJSFile = "server-web.js"
+  } else {
+    // Running in VSCode Desktop
+    console.log("Running in VSCode Desktop");
+  }
+  
   const serverModule = context.asAbsolutePath(
-    path.join("server", "out", "server.js")
+    path.join("server", "out", serverJSFile)
   );
 
   // If the extension is launched in debug mode then the debug server options are used

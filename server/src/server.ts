@@ -401,6 +401,7 @@ async function fetchInspect(
         input: text,
       },
       {
+        withCredentials: true,
         auth: {
           username: settings.username || "lsp",
           password: settings.password || "changeme",
