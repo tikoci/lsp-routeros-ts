@@ -23,6 +23,16 @@
 ### Changelog
 
 
+#### 0.3.8
+
+##### Changes
+* Support loading in VSCode for Web for testing
+    > RouterOS does not support CORS so browser support only work with a CORS proxy between web and RouterOS that correctly responds to browser's CORS preflight and provides correct CORS headers.
+
+##### Fixes
+* Add new build `--target=browser` to `bun` server and client, and `browser` in `package.json` so VSCode for Web uses code compiled for browser
+* Add `useCredentials: true` to Axios HTTP client calls so the CORS information is provided to any CORS proxy. 
+
 #### 0.3.7
 
 ##### Changes
