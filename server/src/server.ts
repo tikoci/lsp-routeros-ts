@@ -12,36 +12,22 @@ import {
   InsertTextFormat,
   TextDocumentPositionParams,
   DiagnosticSeverity,
-  Range,
-  WillCreateFilesRequest,
   DocumentDiagnosticReportKind,
   type DocumentDiagnosticReport,
   Diagnostic,
-  TextEdit,
-  TextDocumentIdentifier,
-  SemanticTokensParams,
   SemanticTokens,
   SemanticTokensBuilder,
   Hover,
-  HoverParams,
-  WorkspaceSymbolParams,
-  WorkspaceSymbol,
-  HandlerResult,
-  DidChangeConfigurationRegistrationOptions,
   DidChangeConfigurationParams,
   WorkspaceFoldersChangeEvent,
   CompletionParams,
   DocumentDiagnosticParams,
-  WorkspaceDiagnosticParams,
-  WorkspaceDiagnosticReport,
-  WorkspaceDocumentDiagnosticReport,
   TextDocumentChangeEvent,
-  TextDocumentSyncOptions,
 } from "vscode-languageserver/node";
 
 import { TextDocument } from "vscode-languageserver-textdocument";
 
-import axios = require("axios");
+import axios from "axios";
 
 const connection = createConnection(ProposedFeatures.all);
 connection.console.info(`RouterOS LSP loading...`);
@@ -401,6 +387,7 @@ async function fetchInspect(
         input: text,
       },
       {
+        // TODO: this should be set only if web
         withCredentials: true,
         auth: {
           username: settings.username || "lsp",

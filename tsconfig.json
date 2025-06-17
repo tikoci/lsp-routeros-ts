@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
     "target": "es2020",
-    "lib": ["es2020"],
+    "lib": ["es2020", "dom"],
     "outDir": "out",
     "rootDir": "src",
     "sourceMap": true,
-    "incremental": true
+    "incremental": true,
+    "moduleResolution": "bundler",
+    "allowJs": false,
+    "noEmit": false,
+    "moduleDetection": "force"
   },
   "include": [
     "src"

@@ -11,43 +11,21 @@ import {
 
 import {
   LanguageClient,
-  LanguageClientOptions,
-  ServerOptions,
-  TransportKind,
-} from "vscode-languageclient/node";
+  LanguageClientOptions
+} from "vscode-languageclient/browser";
 
-let client: LanguageClient;
+//let client: LanguageClient;
 
 console.log("RouterOS LSP loaded")
 
 export function activate(context: ExtensionContext) {
   console.log("RouterOS LSP activate() start")
-
-  if (env.uiKind === UIKind.Web) {
-    // Running in VSCode for Web (e.g., vscode.dev or github.dev)
-    console.log("Running in VSCode Web");
-  } else {
-    // Running in VSCode Desktop
-    console.log("Running in VSCode Desktop");
-  }
-
-  applySemanticColorsFromTheme(context);
-
-  console.log("Starting LSP Server...");
-  const serverModule = context.asAbsolutePath(
-    path.join("server", "out", "server.js")
+  
+  const serverWorker = new Worker(
+    new URL("../../server/out/server-web.js", import.meta.url),
+    { type: "module" }
   );
-
-  // If the extension is launched in debug mode then the debug server options are used
-  // Otherwise the run options are used
-  const serverOptions: ServerOptions = {
-    run: { module: serverModule, transport: TransportKind.ipc },
-    debug: {
-      module: serverModule,
-      transport: TransportKind.ipc,
-    },
-  };
-
+  
   // Options to control the language client
   const clientOptions: LanguageClientOptions = {
     documentSelector: [
@@ -60,26 +38,28 @@ export function activate(context: ExtensionContext) {
     synchronize: {
       fileEvents: workspace.createFileSystemWatcher("**/.rsc"),
     },
-    progressOnInitialization: true,
+    progressOnInitialization: true
   };
-
+  
   // Create the language client and start the client.
-  client = new LanguageClient(
+  let client = new LanguageClient(
     "routeroslsp",
     "RouterOS LSP",
-    serverOptions,
-    clientOptions
+    clientOptions,
+    serverWorker
   );
+  
+  console.log("Starting LSP Server...");
+  client.start()
+  context.subscriptions.push(client);
 
-  // Start the client. This will also launch the server
-  console.log("RouterOS LSP about to start()")
-  client.start();
-  context.subscriptions.push(client)
+  applySemanticColorsFromTheme(context)
 }
 
 export function deactivate() {
   console.log("RouterOS LSP extension deactivated")
 }
+
 
 async function applySemanticColorsFromTheme(context: ExtensionContext) {
   try {

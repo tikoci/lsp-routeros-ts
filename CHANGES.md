@@ -1,6 +1,7 @@
 ## Release Notes
 
 ### Known Issues in "latest" 
+* A connection error is handled very poorly – the Output via for "RouterOS LSP" will show errors but they are largely hidden otherwise.
 * More REST calls are made than strictly needed, resulting is potential sluggish behaviors.
   * _Inprogress_ - more work to avoid overlapping calls that avoid cache of highlights
 * In some case, the LSP may not trigger syntax coloring automatically after installing — or at least takes a while when first loading LSP, sometimes.  
@@ -21,6 +22,21 @@
 * "Triggers" characters should be LSP configuration options, currently: <kbd>space</kbd>, <kbd>/</kbd>, <kbd>:</kbd>, and <kbd>=</kbd>.  Space in particular may be "aggressive" as default. 
   
 ### Changelog
+
+#### 0.3.10
+
+##### Changes
+* Further changes to support VSCode for Web, at least LSP loads in `code serve-web` (with a [CORS proxy](https://forum.mikrotik.com/t/using-caddy-server-as-cors-proxy-for-rest-api/261562)) 
+
+##### Fixes
+* Changed all imports to use ESM ("esnext") - still uses CommonJS for desktop for build, but web is "pure" ESM
+* Broke startup code in `-web` versions since need slightly different import's
+
+
+#### 0.3.9
+
+_Internal test only - same changes from 0.3.6_
+
 
 #### 0.3.8
 

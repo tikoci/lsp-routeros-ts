@@ -22,6 +22,8 @@
       "presentation": {
         "panel": "dedicated",
         "reveal": "never"
-      }
+      },
+      "problemMatcher": []
+       
     }]
 }

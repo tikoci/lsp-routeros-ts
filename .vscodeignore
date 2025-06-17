@@ -13,6 +13,7 @@ lsp-routeros*
 client/src/**
 server/src/**
 **/*.ts
+**/*.mts
 **/node_modules/**
 **/*.map
 .gitignore
