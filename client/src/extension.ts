@@ -18,8 +18,10 @@ import {
 
 let client: LanguageClient;
 
+console.log("RouterOS LSP loaded")
+
 export function activate(context: ExtensionContext) {
-  applySemanticColorsFromTheme(context);
+  console.log("RouterOS LSP activate() start")
 
   let serverJSFile = "server.js" 
   if (env.uiKind === UIKind.Web) {
@@ -29,8 +31,10 @@ export function activate(context: ExtensionContext) {
   } else {
     // Running in VSCode Desktop
     console.log("Running in VSCode Desktop");
+    applySemanticColorsFromTheme(context);
   }
-  
+
+  console.log("Starting LSP Server...");
   const serverModule = context.asAbsolutePath(
     path.join("server", "out", serverJSFile)
   );
@@ -69,10 +73,12 @@ export function activate(context: ExtensionContext) {
   );
 
   // Start the client. This will also launch the server
+  console.log("RouterOS LSP about to start()")
   client.start();
 }
 
 export function deactivate(): Thenable<void> | undefined {
+  console.log("RouterOS LSP in deactivate()")
   if (!client) {
     return undefined;
   }

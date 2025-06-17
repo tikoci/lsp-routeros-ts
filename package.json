@@ -150,13 +150,6 @@
         "description": "Missing or unterminated syntax element"
       }
     ],
-    "themes": [
-      {
-        "label": "RouterOS LSP Default Dark",
-        "uiTheme": "vs-dark",
-        "path": "./vscode-routeroslsp-theme.json"
-      }
-    ],
     "languages": [
       {
         "id": "routeros",
