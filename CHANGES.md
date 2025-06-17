@@ -22,6 +22,14 @@
   
 ### Changelog
 
+#### 0.3.8
+
+##### Changes
+* removed "RouterOS Theme" since it prompt when installed, and theme was not useful
+
+##### Fixes
+* added logging to client to debug in vscode for web
+* remove them "contributes" for theme, theme file still used to "store" semantic token colors that extension code then applies outside theme
 
 #### 0.3.8
 

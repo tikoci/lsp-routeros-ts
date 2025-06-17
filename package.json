@@ -39,8 +39,8 @@
   "engines": {
     "vscode": "^1.75.0"
   },
-  "browser": "./client/out/extension-web.js",
   "main": "./client/out/extension.js",
+  "browser": "./client/out/extension-web.js",
   "funding": [
     "https://coff.ee/amm0"
   ],
