@@ -1,42 +1,34 @@
 /*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
+*  Copyright (c) Microsoft Corporation. All rights reserved.
+*  Licensed under the MIT License. See License.txt in the project root for license information.
+*--------------------------------------------------------------------------------------------*/
 import { createConnection, BrowserMessageReader, BrowserMessageWriter } from 'vscode-languageserver/browser';
 
-import { Color, ColorInformation, Range, InitializeParams, InitializeResult, ServerCapabilities, TextDocuments, ColorPresentation, TextEdit, TextDocumentIdentifier } from 'vscode-languageserver';
-import { TextDocument } from 'vscode-languageserver-textdocument';
+import {  } from 'vscode-languageserver';
+import {  } from 'vscode-languageserver-textdocument';
+import { startLspServer } from './shared';
 
 
 console.log('running server lsp-web-extension-sample');
 
 /* browser specific setup code */
-
 const messageReader = new BrowserMessageReader(self);
 const messageWriter = new BrowserMessageWriter(self);
 
 const connection = createConnection(messageReader, messageWriter);
+connection.console.info(`RouterOS LSP server connection to client created`);
 
 /* from here on, all code is non-browser specific and could be shared with a regular extension */
+startLspServer(connection);
+connection.console.info(`RouterOS LSP server startup completed`);
 
-connection.onInitialize((_params: InitializeParams): InitializeResult => {
-	const capabilities: ServerCapabilities = {
-		colorProvider: {} // provide a color provider
-	};
-	return { capabilities };
-});
 
-// Track open, change and close text document events
-const documents = new TextDocuments(TextDocument);
-documents.listen(connection);
-
-// Register providers
-connection.onDocumentColor(params => getColorInformation(params.textDocument));
-connection.onColorPresentation(params => getColorPresentation(params.color, params.range));
-
-// Listen on the connection
 connection.listen();
+connection.console.info(`RouterOS LSP server is listening`);
 
+/*
+//connection.onDocumentColor(params => getColorInformation(params.textDocument));
+//connection.onColorPresentation(params => getColorPresentation(params.color, params.range));
 
 const colorRegExp = /#([0-9A-Fa-f]{6})/g;
 
@@ -108,3 +100,4 @@ function parseColor(content: string, offset: number): Color {
 	const b = (16 * parseHexDigit(content.charCodeAt(offset + 5)) + parseHexDigit(content.charCodeAt(offset + 6))) / 255;
 	return Color.create(r, g, b, 1);
 }
+*/

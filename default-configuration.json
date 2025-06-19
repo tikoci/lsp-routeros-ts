@@ -1,0 +1,9 @@
+{
+    "routeroslsp": {
+      "maxNumberOfProblems": 100,
+      "baseUrl": "http://192.168.88.1",
+      "username": "lsp",
+      "password": "changeme",
+      "hotlock": true
+    }
+}

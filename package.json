@@ -3,7 +3,7 @@
   "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "publisher": "TIKOCI",
   "categories": [
     "Programming Languages",
@@ -24,6 +24,7 @@
   ],
   "preview": true,
   "pricing": "Free",
+  "config": {},
   "sponsor": {
     "url": "https://coff.ee/amm0"
   },
@@ -231,7 +232,7 @@
     "package:web": "webpack --mode production --devtool hidden-source-map",
     "compile:exe": "bun run bun:exe",
     "bun:exe": "rm -rf *.bun-build && bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server && chmod +x ./lsp-routeros-server && mkdir -p ~/.bin && cp ./lsp-routeros-server ~/.bin",
-		"test:web": "bun run test:web:firefox",
+    "test:web": "bun run test:web:firefox",
     "test:web:firefox": "bun run compile && vscode-test-web --browserType=firefox --extensionDevelopmentPath=.",
     "test:webhost": "code serve-web --server-base-path . --accept-server-license-terms --without-connection-token",
     "test:serve": "npx serve --cors -l 7474 --ssl-cert $HOME/.local/certs/localhost.pem --ssl-key $HOME/.local/certs/localhost-key.pem",
@@ -247,26 +248,33 @@
     "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd .."
   },
   "devDependencies": {
-		"eslint": "^9.13.0",
     "esbuild": "^0.25.5",
-		"ts-loader": "^9.5.1",
-		"typescript": "^5.8.3",
-		"typescript-eslint": "^8.26.0",
+    "eslint": "^9.13.0",
+    "mocha": "^10.3.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.26.0",
     "webpack": "^5.99.9",
-		"webpack-cli": "^5.1.4",
-    "mocha": "^10.3.0"
+    "webpack-cli": "^5.1.4"
   },
   "peerDependencies": {
-    "@vscode/test-web": "^0",
-    "@types/mocha": "^10.0.6",
-    "@types/bun": "^1.2.16",
     "@eslint/js": "^9.13.0",
-		"@stylistic/eslint-plugin": "^2.9.0",
+    "@stylistic/eslint-plugin": "^2.9.0",
     "@types/axios": "^0.9.36",
-    "@types/node": "^20.5.7"
+    "@types/bun": "^1.2.16",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.5.7",
+    "@vscode/test-web": "^0"
   },
   "private": false,
   "dependencies": {
-    "path-browserify": "^1.0.1"
+    "buffer": "^6.0.3",
+    "fs": "^0.0.1-security",
+    "https-browserify": "^1.0.0",
+    "path-browserify": "^1.0.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.4",
+    "util": "^0.12.5"
   }
 }

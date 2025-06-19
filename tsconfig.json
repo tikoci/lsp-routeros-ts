@@ -8,6 +8,9 @@
 		"strict": true,
 		"outDir": "dist",
 	},
+	"types": [
+ 		 "node"
+	],
 	"include": ["**/src/*"],
 	"exclude": ["node_modules", ".vscode-test-web"],
 	//"references": [

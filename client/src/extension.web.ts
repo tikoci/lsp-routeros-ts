@@ -4,46 +4,40 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ExtensionContext, Uri } from 'vscode';
-import { LanguageClientOptions } from 'vscode-languageclient';
-
 import { LanguageClient } from 'vscode-languageclient/browser';
+import { packageJsonInfo, applySemanticColorsFromTheme, getLanguageClientOptions } from './client';
 
-let client: LanguageClient | undefined;
+let client: LanguageClient;
+
+console.log("RouterOS LSP extension load starting...");
+
 // this method is called when vs code is activated
 export async function activate(context: ExtensionContext) {
+	console.log("RouterOS LSP activate() starting");
 
-	console.log('lsp-web-extension-sample activated!');
-
-	/*
-	 * all except the code to create the language client in not browser specific
-	 * and could be shared with a regular (Node) extension
-	 */
-	const documentSelector = [{ language: 'plaintext' }];
-
-	// Options to control the language client
-	const clientOptions: LanguageClientOptions = {
-		documentSelector,
-		synchronize: {},
-		initializationOptions: {}
-	};
-
-	client = createWorkerLanguageClient(context, clientOptions);
+	const serverMain = Uri.joinPath(context.extensionUri, './server/dist/server.web.js');
+	const worker = new Worker(serverMain.toString(true));
+	client = new LanguageClient(
+		...packageJsonInfo(context),
+		getLanguageClientOptions(),
+		worker
+	);
 
 	await client.start();
-	console.log('lsp-web-extension-sample server is ready');
+	context.subscriptions.push(client);
+	console.log("RouterOS LSP client.start() called");
+
+	applySemanticColorsFromTheme(context);
 }
 
+export function deactivate() {
+	console.log("RouterOS LSP extension deactivate() invoked");
+}
+
+/*
 export async function deactivate(): Promise<void> {
 	if (client !== undefined) {
 		await client.stop();
 	}
 }
-
-function createWorkerLanguageClient(context: ExtensionContext, clientOptions: LanguageClientOptions) {
-	// Create a worker. The worker main file implements the language server.
-	const serverMain = Uri.joinPath(context.extensionUri, './server/dist/server.web.js');
-	const worker = new Worker(serverMain.toString(true));
-
-	// create the language server client to communicate with the server running in the worker
-	return new LanguageClient('routeroslsp', 'RouterOS LSP', clientOptions, worker);
-}
+*/
