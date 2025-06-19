@@ -1,12 +1,5 @@
 ## Release Notes
 
-- matching lsp-web-extension
-- theme to JSON, cmd to apply it
-- semantic token notification
-- language config to support tikbook types?
-
-- [tikbook] new notebook cmd
-
 ### Known Issues in "latest" 
 * VSCode for Web is for E2E testing at this point - but will appear as Extension for limited testing purposes but does 
 * A connection error is handled very poorly – the Output via for "RouterOS LSP" will show errors but they are largely hidden otherwise.
