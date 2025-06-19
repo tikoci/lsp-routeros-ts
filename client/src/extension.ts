@@ -7,6 +7,7 @@ import {
   window,
   UIKind,
   env,
+  WorkspaceConfiguration,
 } from "vscode";
 
 import {
@@ -18,10 +19,10 @@ import {
 
 let client: LanguageClient;
 
-console.log("RouterOS LSP loaded")
+console.log("RouterOS LSP loaded");
 
 export function activate(context: ExtensionContext) {
-  console.log("RouterOS LSP activate() start")
+  console.log("RouterOS LSP activate() start");
 
   if (env.uiKind === UIKind.Web) {
     // Running in VSCode for Web (e.g., vscode.dev or github.dev)
@@ -35,7 +36,7 @@ export function activate(context: ExtensionContext) {
 
   console.log("Starting LSP Server...");
   const serverModule = context.asAbsolutePath(
-    path.join("server", "out", "server.js")
+    path.join("server", "dist", "server.js")
   );
 
   // If the extension is launched in debug mode then the debug server options are used
@@ -58,9 +59,10 @@ export function activate(context: ExtensionContext) {
       { language: "routeroslsp" },
     ],
     synchronize: {
-      fileEvents: workspace.createFileSystemWatcher("**/.rsc"),
+     // fileEvents: workspace.createFileSystemWatcher("**/.rsc")
     },
     progressOnInitialization: true,
+    initializationOptions: {}
   };
 
   // Create the language client and start the client.
@@ -72,13 +74,13 @@ export function activate(context: ExtensionContext) {
   );
 
   // Start the client. This will also launch the server
-  console.log("RouterOS LSP about to start()")
+  console.log("RouterOS LSP about to start()");
   client.start();
-  context.subscriptions.push(client)
+  context.subscriptions.push(client);
 }
 
 export function deactivate() {
-  console.log("RouterOS LSP extension deactivated")
+  console.log("RouterOS LSP extension deactivated");
 }
 
 async function applySemanticColorsFromTheme(context: ExtensionContext) {
@@ -98,7 +100,7 @@ async function applySemanticColorsFromTheme(context: ExtensionContext) {
 
     // Get current VS Code configuration
     const config = workspace.getConfiguration();
-    const currentCustomizations: any = config.get(
+    const currentCustomizations : WorkspaceConfiguration = config.get(
       "editor.semanticTokenColorCustomizations"
     );
     const currentRules = currentCustomizations.rules || {};

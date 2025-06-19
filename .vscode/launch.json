@@ -3,15 +3,39 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch Client",
       "type": "extensionHost",
       "request": "launch",
-      "name": "Launch Client",
       "runtimeExecutable": "${execPath}",
-      "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
-      "outFiles": ["${workspaceRoot}/client/out/**/*.js", "${workspaceRoot}/server/out/**/*.js"],
+      "args": [
+        "--extensionDevelopmentPath=${workspaceRoot}"
+      ],
+      "outFiles": [
+        "${workspaceRoot}/client/dist/extension.js",
+        "${workspaceRoot}/server/dist/server.js"
+      ],
+      "autoAttachChildProcesses": true,
       "preLaunchTask": {
         "type": "npm",
         "script": "compile"
+      }
+    },
+    {
+      "name": "Run Web Extension ",
+      "type": "extensionHost",
+      "debugWebWorkerHost": true,
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionDevelopmentKind=web"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/client/dist/extension.web.js",
+        "${workspaceFolder}/server/dist/server.web.js"
+      ],
+      "preLaunchTask": {
+        "type": "npm",
+        "script": "watch:web"
       }
     }
   ]

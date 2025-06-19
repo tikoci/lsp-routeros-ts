@@ -4,9 +4,11 @@ node_modules
 tsconfig.tsbuildinfo
 
 client/out
+client/dist
 client/node_modules
 
 server/out
+server/dist
 server/node_modules
 
 **/.*bun-build
@@ -19,3 +21,6 @@ lsp-routeros-*
 *.map
 
 tests
+test-data
+.scratch
+.vscode-test-web

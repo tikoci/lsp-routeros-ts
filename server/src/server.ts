@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Import from Microsoft's vscode-languageserver library
 import {
   createConnection,
@@ -27,12 +28,20 @@ import {
 
 import { TextDocument } from "vscode-languageserver-textdocument";
 
-import axios from "axios";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const axios = require('axios').default;
+// should be:
+//import * as axios from "axios";
+
+// TODO: wire defaults to vscode config change
+// axios.defaults.baseURL = 'https://api.example.com';
+// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const connection = createConnection(ProposedFeatures.all);
 connection.console.info(`RouterOS LSP loading...`);
 
-const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
+const documents = new TextDocuments(TextDocument);
 connection.console.log(
   `created 'documents' cache: #keys ${documents.keys.length}`
 );
@@ -67,7 +76,7 @@ const inspectHighlightCache = new Map<string, Promise<string[]>>();
 // capabilities of the connected client
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
-let hasDiagnosticRelatedInformationCapability = false;
+// let hasDiagnosticRelatedInformationCapability = false;
 
 // Initialize the server
 connection.onInitialize((params: InitializeParams) => {
@@ -84,14 +93,18 @@ connection.onInitialize((params: InitializeParams) => {
   hasConfigurationCapability = !!(
     capabilities.workspace && !!capabilities.workspace.configuration
   );
+
   hasWorkspaceFolderCapability = !!(
     capabilities.workspace && !!capabilities.workspace.workspaceFolders
-  );
+    );
+    
+  /*
   hasDiagnosticRelatedInformationCapability = !!(
     capabilities.textDocument &&
     capabilities.textDocument.publishDiagnostics &&
     capabilities.textDocument.publishDiagnostics.relatedInformation
   );
+  */
   
   // Set the capabilities of the server
   const result: InitializeResult = {
@@ -345,7 +358,7 @@ connection.onHover(
       const groupRange = getTokenRangeFromOffset(tokens, offset);
 
       //const hoverInfo = `### <kbd>${tokens[offset]}</kbd>\n\`offset ${offset} line ${pos.line} char ${pos.character} grp ${groupRange}\``;
-      const hoverInfo = `highlight: \`${tokens[offset]}\` (group ${groupRange})`
+      const hoverInfo = `highlight: \`${tokens[offset]}\` (group ${groupRange})`;
       connection.console.log(
         `connection.onHover(): offset ${offset} line ${pos.line} char ${pos.character} grp ${groupRange}`
       );
@@ -458,14 +471,14 @@ async function getDocumentInspectHighlights(
     return cached;
   }
   const settings = await getDocumentSettings(doc.uri);
-  if (!doc.getText)
+  if (!doc.getText){
     connection.console.error(
       `getDocumentInspectHighlights(${doc.uri}) document has not getText()`
-    );
+    );}
   const results = (
     await fetchInspect("highlight", doc.getText(), settings)
   )[0]?.highlight?.split(",");
-  if (results) inspectHighlightCache.set(doc.uri, results);
+  if (results) {inspectHighlightCache.set(doc.uri, results);}
   connection.console.log(
     `getDocumentInspectHighlights(${doc.uri}) got from ROUTER # ${results.length}`
   );
@@ -589,7 +602,6 @@ function getAllTokenRanges(arr: string[]): [string, number, number][] {
   
   while (i < arr.length) {
     const value = arr[i];
-    let start = i;
     let end = i;
 
     // Scan ahead while the value stays the same
@@ -597,7 +609,7 @@ function getAllTokenRanges(arr: string[]): [string, number, number][] {
       end++;
     }
 
-    result.push([value, start, end]);
+    result.push([value, i, end]);
     i = end + 1; // Move to the next distinct value
   }
 
@@ -626,9 +638,9 @@ documents.onDidChangeContent(async (change) => {
     diagnostics: await validateTextDocument(change.document),
   });
   */
-  getDocumentInspectHighlights(change.document)
+  getDocumentInspectHighlights(change.document);
   //connection.languages.diagnostics.refresh()
-  connection.languages.semanticTokens.refresh()
+  connection.languages.semanticTokens.refresh();
 });
 
 documents.onDidOpen(async (change: TextDocumentChangeEvent<TextDocument>) => {
@@ -641,7 +653,7 @@ documents.onDidOpen(async (change: TextDocumentChangeEvent<TextDocument>) => {
     diagnostics: await validateTextDocument(change.document),
   });*/
   //connection.languages.diagnostics.refresh()
-  connection.languages.semanticTokens.refresh()
+  connection.languages.semanticTokens.refresh();
 });
 
 // Make the text document manager listen on the connection

@@ -3,7 +3,7 @@
   "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "publisher": "TIKOCI",
   "categories": [
     "Programming Languages",
@@ -37,10 +37,10 @@
   "qna": "https://github.com/orgs/tikoci/discussions/categories/q-a",
   "homepage": "https://github.com/tikoci/lsp-routeros-ts/blob/main/README.md",
   "engines": {
-    "vscode": "^1.75.0"
+    "vscode": "^1.85.0"
   },
-  "main": "./client/out/extension.js",
-  "browser": "./client/out/extension-web.js",
+  "main": "./client/dist/extension.js",
+  "browser": "./client/dist/extension.web.js",
   "funding": [
     "https://coff.ee/amm0"
   ],
@@ -166,7 +166,7 @@
           "routeros",
           "rsc"
         ],
-        "configuration": "./client/language-configuration.json"
+        "configuration": "./language-configuration.json"
       }
     ],
     "configuration": {
@@ -218,35 +218,55 @@
     }
   },
   "scripts": {
-    "clean": "rm -rf ./server/out/* && rm -rf ./client/out/* && rm -f lsp-routeros-server* && rm -f *.vsix",
-    "postinstall": "cd client && bun install && cd ../server && bun install && cd ..",
-    "compile": "bun run compile:client && bun run compile:server && bun run compile:web:client && bun run compile:web:server",
-    "compile:client": "bun build client/src/extension.ts --outdir ./client/out --external vscode --format=cjs --target=node --sourcemap",
-    "compile:server": "bun build server/src/server.ts --outdir ./server/out --format=cjs --target=node --sourcemap",
-    "compile:web:client": "bun build client/src/extension-web.mts --outdir=./client/out --external vscode --format=esm --target=browser --sourcemap",
-    "compile:web:server": "bun build server/src/server-web.mts --outdir=./server/out --format=esm --target=browser --sourcemap",
+    "lint": "bun run audit; eslint",
+    "audit": "bun audit && cd server && bun audit && cd ../client && bun audit && cd ..",
+    "clean": "rm -rf package-lock.json && rm -rf ./server/dist && rm -rf ./client/dist && rm -rf ./server/out && rm -rf ./client/out && rm -f lsp-routeros-server* && rm -f *.vsix && rm -rf ./dist",
+    "vscode:prepublish": "bun run compile",
+    "compile": "bun run compile:client && bun run compile:server && bun run compile:exe && bun run compile:web",
+    "compile:web": "webpack",
+    "compile:client": "bun build client/src/extension.ts --outdir ./client/dist --external vscode --format=cjs --target=node --sourcemap",
+    "compile:server": "bun build server/src/server.ts --outdir ./server/dist --format=cjs --target=node --sourcemap",
+    "watch:web": "webpack --watch",
+    "watch:node": "bun run compile && bun build server/src/server.ts --outdir ./server/dist --format=cjs --target=node --sourcemap --watch",
+    "package:web": "webpack --mode production --devtool hidden-source-map",
     "compile:exe": "bun run bun:exe",
-    "vsix:package": "rm -f *.vsix && bun run compile && npx @vscode/vsce package --no-dependencies --pre-release",
     "bun:exe": "rm -rf *.bun-build && bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server && chmod +x ./lsp-routeros-server && mkdir -p ~/.bin && cp ./lsp-routeros-server ~/.bin",
+		"test:web": "bun run test:web:firefox",
+    "test:web:firefox": "bun run compile && vscode-test-web --browserType=firefox --extensionDevelopmentPath=.",
+    "test:webhost": "code serve-web --server-base-path . --accept-server-license-terms --without-connection-token",
+    "test:serve": "npx serve --cors -l 7474 --ssl-cert $HOME/.local/certs/localhost.pem --ssl-key $HOME/.local/certs/localhost-key.pem",
+    "test:serve:setup": "pushd . && mkdir -p $HOME/.local/certs && cd $HOME/.local/certs && mkcert && mkcert -install && popd",
+    "postinstall": "cd client && bun install && cd ../server && bun install && cd ..",
+    "package": "bun run lint && bun run compile && bun run vsix:package",
+    "vsix:package": "rm -f *.vsix && bun run compile && npx @vscode/vsce package --no-dependencies --pre-release",
     "vsix:install": "bun run vsix:remove; bun run vsix:package && code --install-extension lsp-routeros-ts-*.vsix",
     "vsix:remove": "code --uninstall-extension tikoci.lsp-routeros-ts",
-    "nvim:install": "bun run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua",
-    "watch": "bun run compile && bun run watch:client",
-    "watch:client": "bun build client/src/extension.ts --outdir ./client/out --external vscode --format=cjs --target=node --sourcemap --watch",
-    "watch:server": "bun build server/src/server.ts --outdir ./server/out --format=cjs --target=node --sourcemap --watch",
-    "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd ..",
-    "vscode:prepublish": "bun run compile",
+    "vsix:publish": "npx @vscode/vsce publish --no-dependencies --pre-release -p $VSCE_PAT",
     "ovsx:publish": "npx ovsx publish lsp-routeros-ts-*.vsix -p $OVSX_PAT",
-    "vsix:publish": "npx @vscode/vsce publish --no-dependencies --pre-release -p $VSCE_PAT"
+    "nvim:install": "bun run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua",
+    "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd .."
   },
   "devDependencies": {
-    "@types/bun": "^1.2.16",
-    "axios": "^1.9.0"
+		"eslint": "^9.13.0",
+    "esbuild": "^0.25.5",
+		"ts-loader": "^9.5.1",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.26.0",
+    "webpack": "^5.99.9",
+		"webpack-cli": "^5.1.4",
+    "mocha": "^10.3.0"
   },
   "peerDependencies": {
+    "@vscode/test-web": "^0",
+    "@types/mocha": "^10.0.6",
+    "@types/bun": "^1.2.16",
+    "@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
     "@types/axios": "^0.9.36",
-    "@types/node": "^20.5.7",
-    "typescript": "^5"
+    "@types/node": "^20.5.7"
   },
-  "private": false
+  "private": false,
+  "dependencies": {
+    "path-browserify": "^1.0.1"
+  }
 }

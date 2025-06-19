@@ -8,7 +8,7 @@ icon.svg
 **/.*bun-build
 lsp-routeros*
 **/tsconfig.tsbuildinfo
-.github/*
+.github
 .vscode/**
 client/src/**
 server/src/**
@@ -21,3 +21,15 @@ webpack.config.js
 .eslintrc.json
 bun.lock
 **/bun.lock
+.scratch
+.vscode/**
+**/*.ts
+**/*.map
+.gitignore
+**/tsconfig.json
+**/tsconfig.base.json
+contributing.md
+.travis.yml
+**/node_modules/**
+test-data
+*.mjs

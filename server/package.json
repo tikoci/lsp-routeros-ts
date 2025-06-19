@@ -3,17 +3,17 @@
   "description": "Language Server Protocol (LSP) Server for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "publisher": "TIKOCI",
   "engines": {
-    "node": "*"
-  },
+		"node": "*"
+	},
   "dependencies": {
-    "axios": "^1.9.0",
-    "vscode-languageserver": "^8.1.0",
-    "vscode-languageserver-textdocument": "^1.0.8"
+		"vscode-languageserver": "^9.0.1",
+		"vscode-languageserver-textdocument": "^1.0.11",
+    "axios": "^1"
   },
   "devDependencies": {
-    "@types/axios": "^0.9.36"
+    "@vscode/test-web": "*"
   }
 }

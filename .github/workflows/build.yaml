@@ -32,8 +32,8 @@ jobs:
           name: debug-lsp-routeros-ts-maps
           path: |
             *.map
-            ./out/*
-            ./**/out/*
+            ./dist/*
+            ./**/dist/*
             **/*.bun-build
 
       - name: Package VSIX
@@ -137,7 +137,7 @@ jobs:
 
             > [!NOTE]
             >
-            > "Known Issues" and "Changelog" can be found in [CHANGES.md](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGES.md).
+            > "Known Issues" and "Changelog" can be found in [CHANGELOG.md](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGELOG.md).
             >
             > See [README.md](https://github.com/tikoci/lsp-routeros-ts/README.md) for more details about installation and usage.
             >

@@ -14,7 +14,7 @@ The "trigger" to load the RouterOS LSP is a file ending in `.rsc`.  In most clie
 
 > [!TIP]
 >
-> Both "Known Issues" and a per-version "Changelog" (as well as future feature tracking) are now in [`CHANGES.md`](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGES.md) which tracks the _current_ state of affairs for `routeros-lsp-ts`.
+> Both "Known Issues" and a per-version "Changelog" (as well as future feature tracking) are now in [`CHANGELOG.md`](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGELOG.md) which tracks the _current_ state of affairs for `routeros-lsp-ts`.
 
 ## Install and Configuration
 
@@ -191,7 +191,7 @@ The LSP can be built using just `bun`.
 2. Run `bun install` 
 3. Run `bun compile`
 
-After which the LSP server will be generated as `./server/out/server.js`, and can be invoked using `node` to start the server.
+After which the LSP server will be generated as `./server/dist/server.js`, and can be invoked using `node` to start the server.
 
 ### Packaging LSP
 
@@ -291,7 +291,7 @@ As a result of various build processes, the following "artifacts" are produced a
 ├── server
 │   └── out
 |       ├── server.js         // compiled `.ts` - can use to start LSP using 
-node ./server/out/server.js`
+node ./server/dist/server.js`
 │       └── server.map.js     // used by debugger/errors to map line# between `js` and `ts`
 ├── lsp-routeros-server                   // always same platform as build system (used for development/locally)
 ├── lsp-routeros-server-darwin-x64        // macOS "Intel" - static binary of `server.ts`

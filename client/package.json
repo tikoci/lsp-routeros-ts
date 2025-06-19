@@ -6,12 +6,14 @@
   "version": "0.3.10",
   "publisher": "TIKOCI",
   "engines": {
-    "vscode": "^1.75.0"
-  },
-  "dependencies": {
-    "vscode-languageclient": "^8.1.0"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.81.0"
-  }
+		"vscode": "^1.85.0"
+	},
+	"dependencies": {
+		"vscode-languageclient": "^9.0.1"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.85.0",
+		"@vscode/test-web": "^0.0.51",
+		"@vscode/test-electron": "^2.3.9"
+	}
 }

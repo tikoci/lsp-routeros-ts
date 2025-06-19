@@ -1,26 +1,16 @@
 {
-  "compilerOptions": {
-    "module": "esnext",
-    "target": "es2020",
-    "lib": ["es2020", "dom"],
-    "outDir": "out",
-    "rootDir": "src",
-    "sourceMap": true,
-    "incremental": true,
-    "moduleResolution": "bundler",
-    "allowJs": false,
-    "noEmit": false,
-    "moduleDetection": "force"
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    ".vscode-test"
-  ],
-  "references": [
-    { "path": "./client" },
-    { "path": "./server" }
-  ]
+	"compilerOptions": {
+		"target": "es2020",
+		"lib": ["es2020", "WebWorker"],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"strict": true,
+		"outDir": "dist",
+	},
+	"include": ["**/src/*"],
+	"exclude": ["node_modules", ".vscode-test-web"],
+	//"references": [
+	//	{ "path": "./client"} , { "path": "./server" } 
+	//]
 }
