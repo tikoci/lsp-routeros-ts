@@ -16,6 +16,16 @@
   
 ## Changelog
 
+
+### 0.3.14
+
+#### Changes
+* More tweaks for vscode.dev/github.dev
+
+#### Fixes
+* `webpack` now uses "browser" in `mainFields` - perhaps that fix previous problems
+* removed extraneous node imports used by `webpack`
+
 ### 0.3.13
 
 #### Changes

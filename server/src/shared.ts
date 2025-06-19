@@ -426,7 +426,7 @@ async function fetchInspect(
 				},
 				headers: {
 					"Content-Type": "application/json",
-				},
+				}
 			}
 		);
 

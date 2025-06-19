@@ -16,7 +16,7 @@ export async function activate(context: ExtensionContext) {
 	console.log("RouterOS LSP activate() starting");
 
 	const serverMain = Uri.joinPath(context.extensionUri, 'server/dist/server.web.js');
-	console.info(`RouterOS LSP using server at ${serverMain.toString(true)}`)
+	console.info(`RouterOS LSP using server at ${serverMain.toString(true)}`);
 	const worker = new Worker(serverMain.toString(true));
 	client = new LanguageClient(
 		...packageJsonInfo(context),

@@ -74,17 +74,17 @@ const browserServerConfig = {
 		devtoolModuleFilenameTemplate: '../[resource-path]'
 	},
 	resolve: {
-		mainFields: ['module', 'main'],
+		mainFields: ['browser', 'module', 'main'],
 		extensions: ['.ts', '.js'], // support ts-files and js-files
 		alias: {},
 		fallback: {
-		 path: require.resolve("path-browserify"),
-		 util: require.resolve("util/"),
-		 stream: require.resolve("stream-browserify"),
-		 https: require.resolve("https-browserify") ,
-		 http: require.resolve("stream-http"),
-		 url: require.resolve("url/"),
-		 buffer: require.resolve("buffer/"),
+		 path: false, //require.resolve("path-browserify"),
+		 util: false, //require.resolve("util/"),
+		 stream: false, //require.resolve("stream-browserify"),
+		 https: false, //require.resolve("https-browserify") ,
+		 http: false, //require.resolve("stream-http"),
+		 url: false, //require.resolve("url/"),
+		 buffer: false, //require.resolve("buffer/"),
 		 //fs: require.resolve("fs/"),
 		},
 	},
