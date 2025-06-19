@@ -15,19 +15,22 @@ console.log("RouterOS LSP extension load starting...");
 export async function activate(context: ExtensionContext) {
 	console.log("RouterOS LSP activate() starting");
 
-	const serverMain = Uri.joinPath(context.extensionUri, './server/dist/server.web.js');
+	const serverMain = Uri.joinPath(context.extensionUri, 'server/dist/server.web.js');
+	console.info(`RouterOS LSP using server at ${serverMain.toString(true)}`)
 	const worker = new Worker(serverMain.toString(true));
 	client = new LanguageClient(
 		...packageJsonInfo(context),
 		getLanguageClientOptions(),
 		worker
 	);
+	console.log("RouterOS LSP about to start()");
 
 	await client.start();
 	context.subscriptions.push(client);
 	console.log("RouterOS LSP client.start() called");
 
 	applySemanticColorsFromTheme(context);
+	console.log("RouterOS LSP applySemanticColorsFromTheme() called");
 }
 
 export function deactivate() {

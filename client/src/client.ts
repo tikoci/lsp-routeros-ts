@@ -12,7 +12,7 @@ import {
 } from "vscode";
 import { LanguageClientOptions } from 'vscode-languageclient';
 
-export const packageJsonInfo = (context: ExtensionContext): [string, string] => [context.extension.packageJSON.name, context.extension.packageJSON.name];
+export const packageJsonInfo = (context: ExtensionContext): [string, string] => [context.extension.packageJSON.config.shortid, context.extension.packageJSON.displayName];
 
 export function getVSCodeType() {
   if (env.uiKind === UIKind.Web) {

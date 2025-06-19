@@ -4,12 +4,11 @@
 *--------------------------------------------------------------------------------------------*/
 import { createConnection, BrowserMessageReader, BrowserMessageWriter } from 'vscode-languageserver/browser';
 
-import {  } from 'vscode-languageserver';
-import {  } from 'vscode-languageserver-textdocument';
+console.log('RouterOS LSP server loaded');
 import { startLspServer } from './shared';
+console.debug(`RouterOS LSP server start code is typeof ${typeof startLspServer}`);
 
 
-console.log('running server lsp-web-extension-sample');
 
 /* browser specific setup code */
 const messageReader = new BrowserMessageReader(self);

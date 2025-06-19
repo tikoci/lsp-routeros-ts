@@ -16,7 +16,16 @@
   
 ## Changelog
 
-### 0.3.11
+### 0.3.13
+
+#### Changes
+* VSCode for Web did not work, see fixes.  CORS errors – from VSCode, not RouterOS – and crashs when starting `server.web.js` from extension.
+
+#### Fixes
+* _web only:_ Extension used wrong id and name after refactor, fixed by uses `package.json` to pull `config.shortid` (since `name` was not right in context)
+* _web only:_ Path used `./` in path `server.js`,   Not sure this full fix, but matches sample code.
+
+### 0.3.12
 
 #### Changes
 * VSCode for Web _should_ work with LSP E2E test
@@ -26,6 +35,12 @@
 * Debug fully setup:  configuration support both web and node, plus `bun run`'s to support `vscode-test` (which is hosted extension mode) and `npx serve` (which can be used to load local code into vscode.dev/github.dev using "Install extension from Location" using https://localhost:7474)  
 * Add `default-configuration.json` to externalize the default settings if LSP client does not support configuration (may just load from `package.json` instead in future)
 * Polyfils for Axios added to `webpack` web build _which would be handled automatically in modern tools, but VSCode Web requires older packaging mechanism for LSP server._
+
+
+### 0.3.11
+
+_Internal test only - same changes from 0.3.10_
+
 
 ### 0.3.10
 
@@ -51,7 +66,7 @@
 
 ### 0.3.9
 
-_Internal test only - same changes from 0.3.6_
+_Internal test only - same changes from 0.3.10_
 
 
 ### 0.3.8

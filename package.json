@@ -3,7 +3,7 @@
   "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "publisher": "TIKOCI",
   "categories": [
     "Programming Languages",
@@ -24,7 +24,9 @@
   ],
   "preview": true,
   "pricing": "Free",
-  "config": {},
+  "config": {
+    "shortid": "routeroslsp"
+  },
   "sponsor": {
     "url": "https://coff.ee/amm0"
   },
