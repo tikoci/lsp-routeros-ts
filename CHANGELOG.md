@@ -22,6 +22,8 @@
 
 #### Changes
 * Add initial "Document Symbol" support - currently `:local` and `:global`.  This is shown in the "outline" view in Explorer's expandable section near bottom.
+* "Completion" now uses text help from `/console/inspect` (if RouterOS provides one) and icons based on type of completion.
+* Problems now includes warning - since often only the first error is found by `/console/inspect`
 * _VSCode Only_ Code folding now using VSCode's default folding mechanism which seems to better capture various blocks - but no changes to LSP to provide "code folding".
 * `user-settings.json` is now where the default configuration (and non-VSCode editors) is stored, previously `default-configuration.json`. 
 
