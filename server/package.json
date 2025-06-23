@@ -6,14 +6,14 @@
   "version": "0.3.15",
   "publisher": "TIKOCI",
   "engines": {
-		"node": "*"
-	},
+    "node": "*"
+  },
   "dependencies": {
-		"vscode-languageserver": "^9.0.1",
-		"vscode-languageserver-textdocument": "^1.0.11",
-    "axios": "^1"
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.12",
+    "axios": "^1.10.0"
   },
   "devDependencies": {
-    "@vscode/test-web": "*"
+    "@vscode/test-web": "^0.0.70"
   }
 }
