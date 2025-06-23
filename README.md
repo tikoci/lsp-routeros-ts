@@ -9,6 +9,8 @@ The RouterOS LSP can be installed into most LSP clients.  Specifically, the foll
   * diagnostics ("Problems" in VSCode terms)
   * configuration (connection to RouterOS used by LSP)
   * hover (WIP, currently for debugging found tokens)
+  * symbols (WIP, currently just variables)
+  * _VSCode Only_ "Walkthrough" (WIP, shows wizard to setup LSP)
 
 The "trigger" to load the RouterOS LSP is a file ending in `.rsc`.  In most clients, you can also force the "language" ("syntax") type to be "routeros" or "routeroslsp". 
 
@@ -18,44 +20,23 @@ The "trigger" to load the RouterOS LSP is a file ending in `.rsc`.  In most clie
 
 ## Install and Configuration
 
-### Enabling RouterOS REST API 
-
-**For all LSP clients, the REST API must be allowed in RouterOS** and the firewall must allow traffic from the computer running the editor to the router.  
-
-By default on RouterOS, unsecured HTTP access is enabled.  To enable HTTPS, if not already enabled, use:
-```
-/certificate/enable-ssl-certificate 
-/ip/service enable www-ssl
-```
-_RouterOS LSP defaults to plain HTTP, so LSP configuration needs to change from http:// to https://_ when configuring an editor._
-
-Using a different RouterOS account with lower permissions is recommended.  The LSP default configuration assumes a user named "lsp", that can be created using:
-```
-/user/group add name=list policy=read,api,rest-api
-/user add name=lsp password=changeme group=lsp
-```
-See "Security Considerations" for more details.
-
-
 ### Editor (_LSP client_) Setup 
+
 Specific steps to install for common LSP clients:
 
-#### Visual Studio Code (VSCode)
+### Visual Studio Code (VSCode)
 
-The RouterOS LSP "language extension" has not yet been published.  Instead, a `VSIX` file is provided for download via https://github.com/tikoci/lsp-routeros-ts/releases. This will locally install the LSP and VSCode extension needed for RouterOS LSP support.  The VSCode UI does allow for adding the `lsp-routeros-ts-*.vsix`, but the CLI is shown for brevity: 
+#### Download `prerelease` from "Extensions" within VSCode
 
-##### Installing the VSIX
+Prerelease versions are published on the VSCode Marketplace.  Installation of the RouterOS LSP should be similar to other extension.
 
-To download the latest VSIX from Terminal, use:
-```
-wget -N https://github.com/tikoci/lsp-routeros-ts/releases/latest/download/lsp-routeros-ts.vsix
-```
+If you have VSCode install, use the following link to navigate to the extension within VSCode.  There will be a button for "Install" button.  Configuration is required after installation, see "Configuration" section below.
 
-After downloading the VSIX, to install use the following command, adjusting the download path and file as needed:
-```
-code --install-extension lsp-routeros-ts.vsix
-```
+https://marketplace.visualstudio.com/items?itemName=TIKOCI.lsp-routeros-ts
 
+> [!TIP]
+>
+> Also, please check out – "TikBook" – another extension that uses the RouterOS LSP but adds a VSCode's notebook interface for RouterOS script.  Please see the [TikBook VSCode Extension](https://marketplace.visualstudio.com/items?itemName=TIKOCI.tikbook) page for details.
 
 Configuration is required, specifically **RouterOS credentials must be configured in VSCode settings**...
 
@@ -88,14 +69,41 @@ RouterOS LSP logs most operations, perhaps too many.  If there are problems, log
 In VSCode, logs go to the "Output" view.  To bring up the "Output" view, use <kbd>Shift</kbd> + <kbd>⌘</kbd> + <kbd>U</kbd> then
 select "RouterOS LSP" from the dropdown at top to show the logs. 
 
+> [!WARN]
+>
+> Support for scripts containing UTF-8 characters is a WIP.  specifically, issues with colors and error being off by a few characters is likely symptom of the problem.  
+>
+> It recommend to select and use "Windows 1252" encoding within VSCode (which has an option to "Reopen using encoding", where you can select "Windows 1252").  The may help address issues.
+>
+> > [!NOTE]
+> > 
+> >  RouterOS does not support unicode, although it will accept UTF-8 in some locations.  Complicating this is LSP protocol internally uses UTF-16, but when serialized via HTTP to RouterOS it "becomes" UTF-8.  However, the UTF-8 adds more characters to output returned "highlight" tokens included the generated UTF-8 char codes - so the index between editor position and highlight token is off by the number of UTF-8 characters.  This gets confusing quick for the LSP that needs to match RouterOS highlights to a "position" with editors document (using line#/char#).
+>
+> **TL;DR** Sticking to `us-ascii` is your best bet.  The "completions" feature should work even with UTF-8, but other functions may produce "off by X char" type issues.  More work is planned to address UTF-8 in future.
 
-
-##### Removing the VSIX
-
-If you want to remove the VSIX, use:
-```
-code --uninstall-extension tikoci.lsp-routeros-ts
-```
+> #### _Alternatively_ Installing a VSCode VSIX file from GitHub Release
+> 
+>  Instead, a `VSIX` file is provided with the RouterOS LSP VSCode extension for download via https://github.com/tikoci/lsp-routeros-ts/releases. This will locally install the LSP and VSCode extension needed for RouterOS LSP support.  The VSCode UI does allow for adding the `lsp-routeros-ts-*.vsix`, but the CLI is shown for brevity: 
+> 
+> ##### GitHub Download Install
+> 
+> The option lets you pick a version to install, since the "Extension Marketplace" will always get latest version.
+> 
+> To download the latest VSIX from Terminal, use:
+> ```
+> wget -N https://github.com/tikoci/lsp-routeros-ts/releases/latest/download/lsp-routeros-ts.vsix
+> ```
+> 
+> After downloading the VSIX, to install use the following command, adjusting the download path and file as needed:
+> ```
+> code --install-extension lsp-routeros-ts.vsix
+> ```
+> ##### Removing the VSIX
+> 
+> If you want to remove the VSIX, use:
+> ```
+> code --uninstall-extension tikoci.lsp-routeros-ts
+> ```
 
 #### NeoVim (`nvim`)
 
@@ -157,18 +165,37 @@ Other LSP clients ("editors") should work, if the LSP client supports the "confi
 > The LSP spec's `workspace/configuration` ("configuration capability") is **required** for all LSP clients – since that is how RouterOS connection information is obtained.  Without it, the LSP will use the default configuration and be un-configurable by the user (since defaults are compiled in code).  Both `nvim` and VSCode support `workspace/configuration`, most other editors with LSP do too.
 
 
-### Security Considerations
+### Enabling RouterOS REST API in RouterOS
 
-RouterOS LSP  does not use "write" or "sensitive" policies.  As such, it is highly recommended to avoid using "full" users in the configuration.  Instead, a new RouterOS user can be used to limit the needed permissions.  To create one, use:
+**For all LSP clients, the REST API must be allowed in RouterOS** and the firewall must allow traffic from the computer running the editor to the router.  
+
+By default on RouterOS, unsecured HTTP access is enabled.  To enable HTTPS, if not already enabled, use:
+```
+/certificate/enable-ssl-certificate 
+/ip/service enable www-ssl
+```
+_RouterOS LSP defaults to plain HTTP, so LSP configuration needs to change from http:// to https://_ when configuring an editor._
+
+Using a different RouterOS account with lower permissions is recommended.  The LSP default configuration assumes a user named "lsp", that can be created using:
 ```
 /user/group add name=list policy=read,api,rest-api
 /user add name=lsp password=changeme group=lsp
 ```
-_The defaults/example configuration uses the above – change as needed._
+
+> ### Security Considerations
+> 
+> RouterOS LSP does not use "write" or "sensitive" policies.  As such, it is highly recommended to avoid using "full" users in the configuration.  Instead, a new RouterOS user can be used to limit the needed permissions.  
+
+
+> [!TIP]
+>
+> A virtual machine can be used with the "free" version of RouterOS's "CHR" as the `baseUrl`.  This approach avoids storing any "real" router's password in the LSP configuration.  For Mac, UTM can be used as the host, and tikoci's "mikropkl" has ready-to-use images can bring up RouterOS CHR in a few steps, see [tikoci/mikropkl](https://github.com/tikoci/mikropkl) for details. 
+
 
 On the router, either the "www" or "www-ssl" service must be enabled, and accessible to any editor using the LSP server.  Firewall configuration may need to be adjusted, but beyond the scope here. 
 
 When using "https://" (TLS), the certificate chain must be valid from the LSP client editor. So self-signed certificates on REST API may not work out-of-box.
+
 > Also the LSP has **no** "allow unsafe certificates" option, so the router TLS certificate (and/or it's CAs and intermediates) must be installed via OS into the system's "keychain" (certificate store).
 
 
@@ -178,8 +205,6 @@ The code uses Microsoft's node/TypeScript bun library [vscode-languageserver-nod
 While this allows first-class support for Visual Studio Code ("VSCode"), the LSP server also work with other editors - either via `node` or using TypeScript compiled by `bun build --compile` into a standalone executable.
 
 To provide "AST-like" data to the LSP, HTTP/S REST calls to a running RouterOS device to retrieve data from `/console/inspect`, specifically `request=highlight` and `request=completion` operations.  Using `/console/inspect` via REST means the LSP is always matched to a specific RouterOS version's AST — so newer commands and attributes will automatically be available simply by upgrading the connected RouterOS.  But this also means **without a running RouterOS device, the LSP will cannot function.**  
-
-> A virtual machine can be used with the "free" version of RouterOS's "CHR" as the `baseUrl`.  This approach avoids storing any "real" router's password in the LSP configuration.  For Mac, UTM can be used as the host, and tikoci's "mikropkl" has ready-to-use images can bring up RouterOS CHR in a few steps, see [tikoci/mikropkl](https://github.com/tikoci/mikropkl) for details. 
 
 ### Building LSP
 

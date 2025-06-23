@@ -3,7 +3,7 @@
   "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "publisher": "TIKOCI",
   "categories": [
     "Programming Languages",
@@ -214,17 +214,71 @@
             "messages",
             "verbose"
           ],
-          "default": "off",
+          "default": "messages",
           "description": "Traces the communication between VS Code and the language server."
         }
       }
-    }
+    },
+    "walkthroughs": [
+      {
+        "id": "routerlsp-walkthrough",
+        "title": "RouterOS LSP Setup",
+        "description": "In order to use the RouterOS LSP, a \"live\" connection to a RouterOS device is required.  This can be set in \"Settings\"",
+        "steps": [
+          {
+            "id": "changeBaseUri",
+            "title": "Set RouterOS `baseURL` with RouterOS connection information",
+            "description": "Protocol (`http:` or `https:`) and host to need to be set in the `baseURL`.\n\n[Change Setting](command:workbench.action.openSettings?\"routeroslsp.baseUrl\")",
+            "media": {
+              "markdown": "docs/walkthrough.md"
+            },
+            "completionEvents": [
+              "onSettingChanged:routeroslsp.baseUrl"
+            ]
+          },
+          {
+            "id": "changeUsername",
+            "title": "Set RouterOS `username` to use",
+            "description": "The default user name `lsp` and should be changed.\n\n[Change Setting](command:workbench.action.openSettings?\"routeroslsp.username\")",
+            "media": {
+              "markdown": "docs/walkthrough.md"
+            },
+            "completionEvents": [
+              "onSettingChanged:routeroslsp.username"
+            ]
+          },
+          {
+            "id": "changePassword",
+            "title": "Set RouterOS `password` to use",
+            "description": "The default password is `changeme` and should be changed.\n\n[Change Setting](command:workbench.action.openSettings?\"routeroslsp.password\")",
+            "media": {
+              "markdown": "docs/walkthrough.md"
+            },
+            "completionEvents": [
+              "onSettingChanged:routeroslsp.password"
+            ]
+          },
+          {
+            "id": "webRemote",
+            "title": "VSCode for Web needs a CORS proxy setup",
+            "description": "A proxy server is required between RouterOS and VSCode for Web, otherwise LSP will not work!",
+            "when": "workspacePlatform == 'webworker'",
+            "media": {
+              "markdown": "docs/walkthrough.md"
+            },
+            "completionEvents": [
+              "onStepSelected"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "lint": "bun run audit; eslint",
     "audit": "bun audit && cd server && bun audit && cd ../client && bun audit && cd ..",
     "clean": "rm -rf package-lock.json && rm -rf ./server/dist && rm -rf ./client/dist && rm -rf ./server/out && rm -rf ./client/out && rm -f lsp-routeros-server* && rm -f *.vsix && rm -rf ./dist",
-    "vscode:prepublish": "bun run compile",
+    "vscode:prepublish": "bun run lint && bun run compile",
     "compile": "bun run compile:client && bun run compile:server && bun run compile:exe && bun run compile:web",
     "compile:web": "webpack",
     "compile:client": "bun build client/src/extension.ts --outdir ./client/dist --external vscode --format=cjs --target=node --sourcemap",
@@ -262,7 +316,7 @@
   "peerDependencies": {
     "@eslint/js": "^9.29.0",
     "@stylistic/eslint-plugin": "^2.13.0",
-    "@types/axios": "^0.9.36",
+    "@types/axios": "^1",
     "@types/bun": "^1.2.16",
     "@types/mocha": "^10.0.10",
     "@types/node": "^20.5.7",

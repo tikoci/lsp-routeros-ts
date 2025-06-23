@@ -17,7 +17,25 @@
 ## Changelog
 
 
+
+### 0.3.15
+
+#### Changes
+* Add initial "Document Symbol" support - currently `:local` and `:global`.  This is shown in the "outline" view in Explorer's expandable section near bottom.
+* _VSCode Only_ Code folding now using VSCode's default folding mechanism which seems to better capture various blocks - but no changes to LSP to provide "code folding".
+* `user-settings.json` is now where the default configuration (and non-VSCode editors) is stored, previously `default-configuration.json`. 
+
+
+#### Fixes
+* Significant refactor into separate files/classes.  More work to do to better separate REST from LSP client requests to avoid extra calls.  Some "queue" is likely needed to avoid "race conditions" (in the sense editors current text got older LSP data since more recent requests took longer) 
+* In VSCode _client_ language extension, remove "folding" subsection from `language-configuration.json` from borrowed  [devMike.mikrotik-routeros-script](https://marketplace.visualstudio.com/items?itemName=devMike.mikrotik-routeros-script) extension — the force VSCode to use it's defaults which produces better results for allowing collapsing code blocks ("folding").
+* `webpack` now uses "browser" in `mainFields` - perhaps that fix previous problems
+* removed extraneous node imports used by `webpack`
+
+
 ### 0.3.14
+
+> _Update_ VSCode for Web was tested and worked in 0.3.14, with CORS Proxy, after publication.  
 
 #### Changes
 * More tweaks for vscode.dev/github.dev
@@ -29,7 +47,7 @@
 ### 0.3.13
 
 #### Changes
-* VSCode for Web did not work, see fixes.  CORS errors – from VSCode, not RouterOS – and crashs when starting `server.web.js` from extension.
+* VSCode for Web did not work, see fixes.  CORS errors – from VSCode, not RouterOS – and crashes when starting `server.web.js` from extension.
 
 #### Fixes
 * _web only:_ Extension used wrong id and name after refactor, fixed by uses `package.json` to pull `config.shortid` (since `name` was not right in context)

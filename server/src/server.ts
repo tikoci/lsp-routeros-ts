@@ -5,12 +5,14 @@ import {
   ProposedFeatures,
 } from "vscode-languageserver/node";
 
-import { startLspServer } from './shared';
+import { LspController } from './controller';
+
+console.log('RouterOS LSP server worker started');
 
 const connection = createConnection(ProposedFeatures.all);
 connection.console.info(`RouterOS LSP server connection to client created`);
 
-startLspServer(connection);
+LspController.start(connection);
 connection.console.info(`RouterOS LSP server startup completed`);
 
 connection.listen();
