@@ -1,7 +1,6 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    
+	"version": "2.0.0",
+	"tasks": [
 		{
 			"type": "npm",
 			"script": "compile",
@@ -12,7 +11,7 @@
 			"presentation": {
 				"panel": "dedicated",
 				"reveal": "never"
-			}/*,
+			} /*,
 			"problemMatcher": [
 				"$tsc"
 			]*/
@@ -59,9 +58,8 @@
 				"reveal": "never"
 			},
 			"problemMatcher": [
-				"$ts-webpack-watch",
-				"$tslint-webpack-watch"
+				"$tsc-watch"
 			]
 		}
-  ]
+	]
 }

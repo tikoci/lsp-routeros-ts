@@ -20,7 +20,8 @@
       "foreground": "#079B9B"
     },
     "variable-parameter": {
-      "foreground": "#079B9B"
+      "foreground": "#9B0100",
+      "fontStyle": "italic"
     },
     "variable-local": {
       "foreground": "#079B9B"

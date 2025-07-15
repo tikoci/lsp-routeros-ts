@@ -9,7 +9,7 @@
 		"outDir": "dist",
 		"rootDir": "src",
 		"esModuleInterop": true
-		//"composite": true
+		// "composite": true
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", ".vscode-test-web", ".vscode-test"]

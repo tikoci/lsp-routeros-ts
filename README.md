@@ -11,8 +11,9 @@ The RouterOS LSP can be installed into most LSP clients.  Specifically, the foll
   * hover (WIP, currently for debugging found tokens)
   * symbols (WIP, currently just variables)
   * _VSCode Only_ "Walkthrough" (WIP, shows wizard to setup LSP)
+  * _VSCode Only_ "Commands" (via Command Palette) 
 
-The "trigger" to load the RouterOS LSP is a file ending in `.rsc`.  In most clients, you can also force the "language" ("syntax") type to be "routeros" or "routeroslsp". 
+The "trigger" to load the RouterOS LSP is a file ending in `.rsc` or language being set to `routeros` (typically in bottom right of task bar in VS Code).  In most other clients, you can also force the "language" ("syntax") type to be "routeros". 
 
 > [!TIP]
 >
@@ -42,6 +43,8 @@ Configuration is required, specifically **RouterOS credentials must be configure
 
 ##### Configuring LSP with Visual Studio Code
 
+> In 0.5.1, you can use the Command Palette to access RouterOS LSP setting.  Typically <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> (or <kbd>Ctrl</kbd> instead of ⌘ on Windows).  Search for "RouterOS LSP" and command will appear for "Show Settings".
+
 Launch VSCode, if not already running. LSP configuration can be done by "Open User Settings":
 1. Use <kbd>Ctrl</kbd> + <kbd>,</kbd> (on Mac, <kbd>⌘</kbd> + <kbd>,</kbd>) to show settings
 2. Select "Extensions" from left
@@ -51,15 +54,13 @@ Launch VSCode, if not already running. LSP configuration can be done by "Open Us
 
 ![img](https://i.ibb.co/6JfjhwKT/Screenshot-2025-06-09-at-10-30-05-AM.png)
 
-In VSCode, settings are also available by hitting the ⚙️ "gear" icon after locating the "RouterOS LSP" in the "Extensions" section in VSCode.
 > ![Router-OS-LSP-as-VSIX-loaded-in-VSCode](https://i.ibb.co/1t1y3kLL/Router-OS-LSP-as-VSIX-loaded-in-VSCode.png)
 
 ##### Customizing Colors in VSCode
 
-RouterOS LSP provides "semantic tokens" which are used for "colorization" and uses custom "syntax types" to match RouterOS names and style.  By default, the LSP uses RouterOS's color scheme – so syntax _should_ match RouterOS CLI colors.  RouterOS LSP includes a VSCode "Color Theme" that can be used for further color customization if desired.  
+RouterOS LSP provides "semantic tokens" which are used for "colorization" and uses custom "syntax types" to match RouterOS names and style.  By default, the LSP uses RouterOS's color scheme – so syntax _should_ match RouterOS CLI colors. 
 
-> If colors are not shown, or incorrectly match RouterOS CLI, then the  "Color Theme" can be explicitly selected using <kbd>⌘</kbd><kbd>K</kbd> then <kbd>⌘</kbd><kbd>T</kbd>, and picking "RouterOS LSP Default" under the dark or light section.   
-
+> If colors are not shown, or incorrectly match RouterOS CLI, then you can use the "Refresh Semantic Tokens (Syntax Colors)" command to refresh them.
 
 
 ##### Troubleshooting VSCode and RouterOS LSP
@@ -69,41 +70,30 @@ RouterOS LSP logs most operations, perhaps too many.  If there are problems, log
 In VSCode, logs go to the "Output" view.  To bring up the "Output" view, use <kbd>Shift</kbd> + <kbd>⌘</kbd> + <kbd>U</kbd> then
 select "RouterOS LSP" from the dropdown at top to show the logs. 
 
-> [!WARN]
->
-> Support for scripts containing UTF-8 characters is a WIP.  specifically, issues with colors and error being off by a few characters is likely symptom of the problem.  
->
-> It recommend to select and use "Windows 1252" encoding within VSCode (which has an option to "Reopen using encoding", where you can select "Windows 1252").  The may help address issues.
->
-> > [!NOTE]
-> > 
-> >  RouterOS does not support unicode, although it will accept UTF-8 in some locations.  Complicating this is LSP protocol internally uses UTF-16, but when serialized via HTTP to RouterOS it "becomes" UTF-8.  However, the UTF-8 adds more characters to output returned "highlight" tokens included the generated UTF-8 char codes - so the index between editor position and highlight token is off by the number of UTF-8 characters.  This gets confusing quick for the LSP that needs to match RouterOS highlights to a "position" with editors document (using line#/char#).
->
-> **TL;DR** Sticking to `us-ascii` is your best bet.  The "completions" feature should work even with UTF-8, but other functions may produce "off by X char" type issues.  More work is planned to address UTF-8 in future.
 
-> #### _Alternatively_ Installing a VSCode VSIX file from GitHub Release
-> 
->  Instead, a `VSIX` file is provided with the RouterOS LSP VSCode extension for download via https://github.com/tikoci/lsp-routeros-ts/releases. This will locally install the LSP and VSCode extension needed for RouterOS LSP support.  The VSCode UI does allow for adding the `lsp-routeros-ts-*.vsix`, but the CLI is shown for brevity: 
-> 
-> ##### GitHub Download Install
-> 
-> The option lets you pick a version to install, since the "Extension Marketplace" will always get latest version.
-> 
-> To download the latest VSIX from Terminal, use:
-> ```
-> wget -N https://github.com/tikoci/lsp-routeros-ts/releases/latest/download/lsp-routeros-ts.vsix
-> ```
-> 
-> After downloading the VSIX, to install use the following command, adjusting the download path and file as needed:
-> ```
-> code --install-extension lsp-routeros-ts.vsix
-> ```
-> ##### Removing the VSIX
-> 
-> If you want to remove the VSIX, use:
-> ```
-> code --uninstall-extension tikoci.lsp-routeros-ts
-> ```
+#### _Alternatively_ Installing a VSCode VSIX file from GitHub Release
+ 
+Instead, a `VSIX` file is provided with the RouterOS LSP VSCode extension for download via https://github.com/tikoci/lsp-routeros-ts/releases. This will locally install the LSP and VSCode extension needed for RouterOS LSP support.  The VSCode UI does allow for adding the `lsp-routeros-ts-*.vsix`, but the CLI is shown for brevity: 
+ 
+ ##### GitHub Download Install
+ 
+ The option lets you pick a version to install, since the "Extension Marketplace" will always get latest version.
+ 
+ To download the latest VSIX from Terminal, use:
+ ```
+ wget -N https://github.com/tikoci/lsp-routeros-ts/releases/latest/download/lsp-routeros-ts.vsix
+ ```
+ 
+After downloading the VSIX, to install use the following command, adjusting the download path and file as needed:
+```
+code --install-extension lsp-routeros-ts.vsix
+```
+##### Removing the VSIX
+
+If you want to remove the VSIX, use:
+```
+code --uninstall-extension tikoci.lsp-routeros-ts
+```
 
 #### NeoVim (`nvim`)
 
@@ -164,6 +154,22 @@ Other LSP clients ("editors") should work, if the LSP client supports the "confi
 
 > The LSP spec's `workspace/configuration` ("configuration capability") is **required** for all LSP clients – since that is how RouterOS connection information is obtained.  Without it, the LSP will use the default configuration and be un-configurable by the user (since defaults are compiled in code).  Both `nvim` and VSCode support `workspace/configuration`, most other editors with LSP do too.
 
+### Settings and Configuration
+
+_more cleanup need_
+
+#### LSP `workspace/configuration` Options
+
+The supported settings are defined as:
+```typescript
+interface LspSettings {
+  baseUrl: string;     // "http://192.168.88.1"
+  username: string;    // "lsp"
+  password: string;    // "changeme"
+  apiTimeout: number   // 15 
+  allowClientProvidedCredentials: boolean //true
+}
+```
 
 ### Enabling RouterOS REST API in RouterOS
 
@@ -197,6 +203,35 @@ On the router, either the "www" or "www-ssl" service must be enabled, and access
 When using "https://" (TLS), the certificate chain must be valid from the LSP client editor. So self-signed certificates on REST API may not work out-of-box.
 
 > Also the LSP has **no** "allow unsafe certificates" option, so the router TLS certificate (and/or it's CAs and intermediates) must be installed via OS into the system's "keychain" (certificate store).
+
+## Features and Usage 
+
+_section under development_
+
+![](https://i.ibb.co/d4C7x7xy/VS-Code-LSP-Commands.png)
+
+#### Available Commands in Visual Studio Code
+
+  * **Test RouterOS Connection** - verifies LSP has working connection to RouterOS 
+  * **Refresh Semantic Tokens** - forces re-calculation of color for open docs in editor
+  * **Show Logs (Output)** - shows VS Code "Output" window, with "RouterOS LSP" selected
+  * **Show Settings** - shows RouterOS LSP settings, including RouterOS credentials
+  * **Apply Semantic Color Overrides to Settings** - if applied, allows manual tweaking of colors in "Settings (JSON)"
+
+### Unicode Handling
+
+For syntax checking and colorization any characters outside of `us-ascii` ("lower ASCII") are encoded as a `_` when checked by RouterOS `/console/inspect`.  This keeps character indexes the same between RouterOS's Windows1252 and VS Code's UTF-16 internal representation, even through UTF-8 is used by HTTP.  
+
+Since unicode characters are not in path/cmd/attributes/etc, the LSP can substitute any high-ASCII characters with a `_` since they cannot be "syntax", only comments and similar - which all use 'none' token anyway.  This  _should_ be harmless as the replaced character are only used as input when processing to get tokens, so editing and saving are unaffected.  As such, script files can use any codepage or Unicode encoding in editor.  
+
+Although remains possible some unknown "corner cases" could cause tokens to be misaligned, any codepage/unicode will be always preserved in script files, in all cases.  _i.e._ LSP will never change or convert _your_ file, just it's representation to RouterOS `/console/inspect` _e.g._ with _any_ high-ASCII encoded as `_`.  
+
+> If you find issues where colors are off by a few characters, and not fixed by a "Refresh Semantic Tokens" commands, please report in GitHub [issues](https://github.com/tikoci/lsp-routeros-ts/issues) and include your script with problem.
+
+> #### Background on RouterOS and Unicode
+> RouterOS does not support unicode, although it will accept UTF-8 in some UIs and locations (_i.e._ webfig, REST).  In fact, the OS does not actually know unicode - it just pass the bytes through its single-byte string type.  Historically RouterOS has used Windows1252 (or another) codepage, so LSP cannot just assume all strings are UTF-8 as other MikroTik clients (WinBox, Dude) may use codepages and locale.  
+>
+>Complicating this further is LSP protocol internally uses UTF-16, but when serialized via HTTP to RouterOS it "becomes" UTF-8.  However, the UTF-8 adds more characters to output returned "highlight" semantic tokens too - so the index between editor position and highlight token is off by "extra" bytes in multi-byte UTF-8 characters.  This gets confusing quick for the LSP that needs to match RouterOS highlights to the editors "position" (line#/col#), with RouterOS "highlights" (semantic tokens) using index into string array not line/cols.
 
 
 ## Implementation and Development
@@ -240,36 +275,9 @@ To create a single file executable, `bun run bun:exe` can be used.  This will co
 > `--socket` is untested.  In the future, this _could_ enable the LSP to live in a RouterOS `/container` - so the LSP Server be the same as router with `/console/inspect` API, allowing syntax to always be in-sync.  
 
 
-#### VSCode Marketplace
-_Still in "Alpha" — so not published in Microsoft Extensions catalog currently.  However most of the "underpinnings", like an icon, `.vscodeignore`, `package.json` things, readme, etc... are present since `vsix` package already needed them._
-
-
 ### Developing the LSP using VSCode
 
-To modify the project, VSCode is recommended since it has good debugging tools and other support for LSP development.
-
-1. Change to the project's code directory, and run `code .` to start VSCode:
-2. Build the extension (both client and server) with <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> (or <kbd>Control</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>)
-3. Open the Run and Debug view and press "Launch Client" (or press `F5`). This will open a "[Extension Development Host]" VSCode window.
-4. Edits made to your `server.ts` will be rebuilt immediately but you'll need to "Launch Client" again (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>F5</kbd>) from the primary VSCode window to see the impact of your changes.
-5. Modify code as desired.  And feel free to submit any pull request to [GitHub](https://github.com/tikoci/lsp-routeros-ts).
-
-Additionally, see Microsoft's [debugging instructions][debug] for using VSCode "Extension Development Host" support.
-
-
-### LSP `workspace/configuration` Options
-
-The supported settings are defined in `./server/server.ts`:
-```typescript
-interface LspSettings {
- maxNumberOfProblems: number;  // 100
- baseUrl: string;              // "http://192.168.88.1"
- username: string;             // "lsp"
- password: string;             // "changeme",
- hotlock: boolean;             // true
-}
-```
-_Metadata for the settings stored in `./package.json` under "contributes"._
+The source code is at [GitHub](https://github.com/tikoci/lsp-routeros-ts) and can be cloned for local development.  To modify the project, VSCode is recommended since it has good debugging tools and other support for LSP development.   Additionally, see Microsoft's [debugging instructions][debug] for using VSCode "Extension Development Host" support.
 
 
 #### Project Structure
@@ -297,12 +305,12 @@ operation of the LSP itself.
 │   ├── language-configuration.json   // define basics of RouterOS to VSCode
 │   ├── package.json        // extension client node dependencies
 │   └── src
-│       └── extension.ts    // "shim" between VSCode and LSP server
+│       └── *.ts    // "shim" between VSCode and LSP server
 ├── package.json            // both Makefile and manifest & stores config schema
 ├── server
 │   ├── package.json        // LSP server node dependencies
 │   └── src
-│       └── server.ts       // LSP server code
+│       └── *.ts       // LSP server code
 └── nvim-routeros-lsp-init.lua    // `init.lua` code to add LSP to `nvim`
 ```
 

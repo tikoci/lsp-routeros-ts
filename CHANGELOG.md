@@ -1,22 +1,50 @@
 # Release Notes
 
 ## Known Issues in "latest" 
-* A connection error is handled very poorly – the Output via for "RouterOS LSP" will show errors but they are largely hidden otherwise.
-* More REST calls are made than strictly needed, resulting is potential sluggish behaviors.
-* In some case, the LSP may not trigger syntax coloring automatically after installing — or at least takes a while when first loading LSP, sometimes.  
+* Hopefully mitigated, but LSP may not trigger syntax coloring automatically when LSP is first loaded.   
   * _Workarounds if_ correct _colors are missing_:
-    * "Type something" to cause an edit which triggers token parsing 
-    * Change tabs
+    * Run command, "Refresh Semantic Tokens (Syntax Colors)" from VS Code Command Palette (<kbd>F1</kbd> or <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
+    * Editing the file should trigger coloring
     * Close and re-open file
-* Tokenizer should detect RouterOS _data_ types like "ip" and "num" 
-* Windows untested, and Window ARM64 build does not compile
-* In VSCode, "Hover" on Code and "Problems" tab present more debug information than nice text, and inefficient
-* Blue color used for "escaped" types "\12\3A\BC" is too dark in dark mode
-* "Triggers" characters should be LSP configuration options, currently: <kbd>space</kbd>, <kbd>/</kbd>, <kbd>:</kbd>, and <kbd>=</kbd>.  Space in particular may be "aggressive" as default. 
-  
+* "Walkthough" (shown after install on VS Code "Welcome" screen) needs to be updated to show commands and more graphics.
+* `README.md` is still very much a WIP - so it's more a catalog of notes, than documentation today.
+* In VSCode, "Hover" on Code and "Problems" tab present more debug information than nice text – although they do allow to see "token" so remaining for now.  In future, "hover on code" will likely change, or be an option
+* "Triggers" characters should be LSP configuration options, currently: <kbd>space</kbd>, <kbd>/</kbd>, <kbd>:</kbd>, and <kbd>=</kbd>.  Space in particular may be "aggressive" as default.
+* Tokenizer should detect RouterOS _data_ types like "ip" and "num", but does not. 
+* Blue color used for "escaped" types "\12\3A\BC" is too dark in dark mode - other colors could be tweaked more.
+* Standalone LSP (i.e. NeoVim) on Windows is untested, and Window ARM64 build does not compile currently. _VS Code for Windows uses JS-based extension, so does **not** standalone LSP_ 
+
 ## Changelog
 
+### 0.5.1
 
+#### Changes
+* New "Watchdog" module to test LSP connection. A notification will appear with results, including an error code when run in all cases.  Watchdog currently only runs:
+  * on first loading of RouterOS LSP (_i.e._ when opening an `.rsc` file open after VS Code was started) 
+  * via new "Test RouterOS Connection" anytime using VS Code Command Pallette (<kbd>F1</kbd> or <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) 
+  * when VS Code configuration ("Settings") change for LSP change
+* Add command support (`workspace/executeCommand`) to LSP, including new commands:
+  * Test Connection to RouterOS - verifies LSP has working connection to RouterOS 
+  * Refresh Semantic Tokens - forces re-calculation of color for open docs in editor
+  * [VS Code] Show Logs (Output) - shows VS Code "Output" window, with "RouterOS LSP" selected
+  * [VS Code] Show Settings - shows RouterOS LSP settings, including RouterOS credentials
+  * [VS Code] Apply Semantic Colors Overrides to Settings - if applied, allows manual tweaking of colors in "Settings (JSON)"
+  * [Internal] Use Client Credentials - used by TikBook to "override" LSP settings and use it's credentials
+* [VSCode] commands above are run by LSP Server, but added to the "Command Palette" by this extension LSP client part, to provide quick access to the configuration and troubleshooting tools
+* Added `[` as a triggering character for completion
+* Support for TikBook notebook format types as documents, and various other tweak to align language detection
+* Use MikroTik logo for `.rsc` (or other files with `languageId` of `routeros`), instead of RouterOS LSP icon
+* VSCode for Web should work but cannot be E2E tested without publication of build, so at this point unknown if something broke in recent refactoring.
+
+#### Fixes
+* Significant refactoring, including more modularization and standardized eslint+stylistic code formatting applied.
+* Cleanup of LSP document handling, including better caching logic, including more focused cache invalidation
+* Improved logging: better consistency, content with more curated data, normalized levels used, etc 
+* Update VS Code engine to 1.101, along with minor updates to various node dependencies
+* REST API client support running request with interceptors (to allow capturing raw exception, which is used by Test Connection command)
+* Improved settings management internally, allow using updated settings without restart
+
+> 0.4.x was skipped, reserving even number major or minor semver for VS Code builds without `--pre-release`
 
 ### 0.3.15
 
@@ -64,7 +92,7 @@
 * Refactored common code between "node"/desktop and "web" into `client.ts` (extension) and `shared.ts` (server) – the `extension[-web].ts` are now minimal stubs (since only startup is really different between node and web, at least from code POV)
 * Debug fully setup:  configuration support both web and node, plus `bun run`'s to support `vscode-test` (which is hosted extension mode) and `npx serve` (which can be used to load local code into vscode.dev/github.dev using "Install extension from Location" using https://localhost:7474)  
 * Add `default-configuration.json` to externalize the default settings if LSP client does not support configuration (may just load from `package.json` instead in future)
-* Polyfils for Axios added to `webpack` web build _which would be handled automatically in modern tools, but VSCode Web requires older packaging mechanism for LSP server._
+* polyfills for Axios added to `webpack` web build _which would be handled automatically in modern tools, but VSCode Web requires older packaging mechanism for LSP server._
 
 
 ### 0.3.11

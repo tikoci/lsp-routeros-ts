@@ -3,7 +3,7 @@
   "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.3.15",
+  "version": "0.5.1",
   "publisher": "TIKOCI",
   "categories": [
     "Programming Languages",
@@ -40,12 +40,19 @@
   "qna": "https://github.com/orgs/tikoci/discussions/categories/q-a",
   "homepage": "https://github.com/tikoci/lsp-routeros-ts/blob/main/README.md",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.101.0"
   },
   "main": "./client/dist/extension.js",
   "browser": "./client/dist/extension.web.js",
   "funding": [
     "https://coff.ee/amm0"
+  ],
+  "activationEvents": [
+    "onEmbeddedLanguage:routeros",
+    "onLanguage:tikbook",
+    "onNotebook:tikbook",
+    "onNotebook:routeros",
+    "onNotebook:interactive"
   ],
   "contributes": {
     "semanticTokenTypes": [
@@ -157,8 +164,8 @@
       {
         "id": "routeros",
         "icon": {
-          "light": "icon.png",
-          "dark": "icon.png"
+          "light": "mikrotik.png",
+          "dark": "mikrotik.png"
         },
         "extensions": [
           ".rsc"
@@ -167,43 +174,68 @@
         "aliases": [
           "RouterOS",
           "routeros",
-          "rsc"
+          "routeroslsp",
+          "rsc",
+          "TikBook"
         ],
-        "configuration": "./language-configuration.json"
+        "filenamePatterns": [
+          "*.rsc",
+          "*.routeros",
+          "*.tikbook",
+          "*.tikbook.rsc",
+          "*.md.rsc"
+        ],
+        "configuration": "./language-configuration.json",
+        "mimetypes": [
+          "text/x-routeros"
+        ]
       }
     ],
     "configuration": {
       "type": "object",
       "title": "RouterOS LSP",
       "properties": {
-        "routeroslsp.maxNumberOfProblems": {
-          "scope": "resource",
-          "type": "number",
-          "default": 100,
-          "description": "Controls the maximum number of problems produced by the server."
-        },
         "routeroslsp.baseUrl": {
           "scope": "resource",
           "type": "string",
           "default": "http://192.168.88.1",
+          "order": 1,
           "description": "Set the host and protocol to connect to RouterOS.  e.g.: 'https://192.168.88.1'"
         },
         "routeroslsp.username": {
           "scope": "resource",
           "type": "string",
           "default": "lsp",
-          "description": "Username to use when LSP connects to a real RouterOS device"
+          "order": 2,
+          "description": "Username to use when LSP connects to a RouterOS device"
         },
         "routeroslsp.password": {
           "scope": "resource",
           "type": "string",
           "default": "changeme",
-          "description": "Password to use when LSP connects to a real RouterOS device"
+          "order": 3,
+          "description": "Password to use when LSP connects to a RouterOS device"
+        },
+        "routeroslsp.allowClientProvidedCredentials": {
+          "scope": "resource",
+          "type": "boolean",
+          "default": true,
+          "order": 4,
+          "markdownDescription": "When enabled, allows a client to 'override' the above settings with client provide values.  <small>When disabled, the LSP connection settings are always used, and client credentials are ignored.</small>"
+        },
+        "routeroslsp.apiTimeout": {
+          "scope": "resource",
+          "type": "number",
+          "default": 15,
+          "description": "How long a command sent to RouterOS waits for a response before giving up",
+          "order": 5
         },
         "routeroslsp.hotlock": {
           "scope": "resource",
           "type": "boolean",
           "default": true,
+          "order": 6,
+          "deprecationMessage": "This is only used by NeoVim. Will be removed from VS Code settings in future.",
           "description": "[NeoVim only] Emulates RouterOS 'hotlock' for autocompletion"
         },
         "routeroslsp.trace.server": {
@@ -219,6 +251,44 @@
         }
       }
     },
+    "commands": [
+      {
+        "command": "routeroslsp.cmd.settings.show",
+        "title": "Show Settings",
+        "category": "RouterOS LSP",
+        "icon": "$(settings)"
+      },
+      {
+        "command": "routeroslsp.cmd.outputs.show",
+        "title": "Show Logs (Output)",
+        "category": "RouterOS LSP",
+        "icon": "$(output)"
+      },
+      {
+        "command": "routeroslsp.server.sendSemanticTokensRefresh",
+        "title": "Refresh Semantic Tokens (Syntax Colors)",
+        "category": "RouterOS LSP",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "routeroslsp.cmd.applySemanticTokenColors",
+        "title": "Apply Semantic Color Overrides to Settings",
+        "category": "RouterOS LSP",
+        "icon": "$(symbol-color)"
+      },
+      {
+        "command": "routeroslsp.cmd.testConnection",
+        "title": "Test RouterOS Connection",
+        "category": "RouterOS LSP",
+        "icon": "$(tasklist)"
+      },
+      {
+        "command": "routeroslsp.server.testConnection",
+        "title": "Get RouterOS Name from Connection",
+        "category": "Development",
+        "enablement": "false"
+      }
+    ],
     "walkthroughs": [
       {
         "id": "routerlsp-walkthrough",
@@ -275,9 +345,9 @@
     ]
   },
   "scripts": {
-    "lint": "bun run audit; eslint",
+    "lint": "bun run audit; npx eslint ./server/src/*.ts ./client/src/*.ts",
     "audit": "bun audit && cd server && bun audit && cd ../client && bun audit && cd ..",
-    "clean": "rm -rf package-lock.json && rm -rf ./server/dist && rm -rf ./client/dist && rm -rf ./server/out && rm -rf ./client/out && rm -f lsp-routeros-server* && rm -f *.vsix && rm -rf ./dist",
+    "clean": "rm -rf package-lock.json && rm -rf .*.bun-build && rm -rf ./server/dist && rm -rf ./client/dist && rm -rf ./server/out && rm -rf ./client/out && rm -f lsp-routeros-server* && rm -f *.vsix && rm -rf ./dist",
     "vscode:prepublish": "bun run lint && bun run compile",
     "compile": "bun run compile:client && bun run compile:server && bun run compile:exe && bun run compile:web",
     "compile:web": "webpack",
@@ -287,7 +357,7 @@
     "watch:node": "bun run compile && bun build server/src/server.ts --outdir ./server/dist --format=cjs --target=node --sourcemap --watch",
     "package:web": "webpack --mode production --devtool hidden-source-map",
     "compile:exe": "bun run bun:exe",
-    "bun:exe": "rm -rf *.bun-build && bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server && chmod +x ./lsp-routeros-server && mkdir -p ~/.bin && cp ./lsp-routeros-server ~/.bin",
+    "bun:exe": "rm -rf .*.bun-build && bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server && chmod +x ./lsp-routeros-server && mkdir -p ~/.bin && cp ./lsp-routeros-server ~/.bin",
     "test:web": "bun run test:web:firefox",
     "test:web:firefox": "bun run compile && vscode-test-web --browserType=firefox --extensionDevelopmentPath=.",
     "test:webhost": "code serve-web --server-base-path . --accept-server-license-terms --without-connection-token",
@@ -304,21 +374,28 @@
     "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd .."
   },
   "devDependencies": {
-    "esbuild": "^0.25.5",
-    "eslint": "^9.29.0",
+    "@eslint/js": "^9.31.0",
+    "@stylistic/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.37.0",
+    "@typescript-eslint/parser": "^8.37.0",
+    "esbuild": "^0.25.6",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.5",
+    "jiti": "^2.4.2",
     "mocha": "^10.8.2",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.35.0",
-    "webpack": "^5.99.9",
+    "typescript-eslint": "^8.37.0",
+    "webpack": "^5.100.1",
     "webpack-cli": "^5.1.4"
   },
   "peerDependencies": {
-    "@eslint/js": "^9.29.0",
-    "@stylistic/eslint-plugin": "^2.13.0",
-    "@types/bun": "^1.2.16",
+    "@types/axios": "^0.14.4",
+    "@types/bun": "^1.2.18",
+    "@types/luxon": "^3.6.2",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^20.5.7",
+    "@types/vscode": "^1.102.0",
+    "@vscode/test-electron": "^2.5.2",
     "@vscode/test-web": "^0.0.70"
   },
   "private": false,
