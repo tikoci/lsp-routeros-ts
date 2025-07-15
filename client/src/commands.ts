@@ -1,4 +1,4 @@
-import { commands, ConfigurationTarget, ExtensionContext, ProgressLocation, Uri, window, workspace, WorkspaceConfiguration } from 'vscode'
+import { commands, ConfigurationTarget, ExtensionContext, Uri, window, workspace, WorkspaceConfiguration } from 'vscode'
 import { type BaseLanguageClient } from 'vscode-languageclient'
 
 export function initializeCommands(context: ExtensionContext, client: BaseLanguageClient) {
@@ -24,8 +24,27 @@ export function initializeCommands(context: ExtensionContext, client: BaseLangua
       // Errors are handled inside applySemanticTokenColorsFromFile
     }),
 
-    commands.registerCommand('routeroslsp.cmd.testConnection', async () => {
+    commands.registerCommand('routeroslsp.cmd.testConnection', async (showOptions = true) => {
       client.info('<client.cmd> [routeroslsp.cmd.testConnection] invoked]')
+      try {
+        // window.showInformationMessage(`Starting RouterOS LSP connection test`)
+        const results = await commands.executeCommand<string | Error>('routeroslsp.server.testConnection')
+        client.debug('<client.cmd> [routeroslsp.cmd.testConnection] success', results)
+        if (typeof results === 'string') window.showInformationMessage(`Successfully connected to '${results}' via RouterOS LSP`)
+        else throw results
+      }
+      catch (error) {
+        client.error('ERROR <client.cmd> [routeroslsp.cmd.testConnection]:', error, false)
+        const errMsg = `RouterOS LSP not working: ${error.message ? error.message : JSON.stringify(error)}`
+        if (showOptions === true) {
+          showErrorWithOptions(errMsg)
+        }
+        else {
+          window.showErrorMessage(errMsg)
+        }
+      }
+      /*
+      // this may be problematic with LSP client/server, and not really cancellable either.  Keep for now to reuse elsewhere.
       window.withProgress({
         location: ProgressLocation.Notification,
         title: 'Testing RouterOS LSP connection...',
@@ -42,21 +61,27 @@ export function initializeCommands(context: ExtensionContext, client: BaseLangua
           showErrorWithOptions(`RouterOS LSP not working:  ${error.message ? error.message : JSON.stringify(error)}`)
         }
       })
+      */
     }),
   ]
 }
 
 function showErrorWithOptions(text) {
-  window.showErrorMessage(text, 'Update Settings', 'Show Log', 'Ignore').then((button) => {
+  window.showErrorMessage(text, 'Settings', 'Show Log', 'Retry', 'Close').then((button) => {
     if (button) {
       switch (button) {
-        case 'Update Settings':
+        case 'Settings':
           commands.executeCommand('routeroslsp.cmd.settings.show')
+          commands.executeCommand('routeroslsp.cmd.testConnection')
           break
         case 'Show Log':
           commands.executeCommand('routeroslsp.cmd.outputs.show')
+          commands.executeCommand('routeroslsp.cmd.testConnection')
           break
-        case 'Ignore':
+        case 'Retry':
+          commands.executeCommand('routeroslsp.cmd.testConnection')
+          break
+        case 'Close':
           break
       }
     }

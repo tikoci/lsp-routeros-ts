@@ -5,7 +5,6 @@ import { Disposable, State } from 'vscode-languageclient'
 
 export function initializeWatchdog(context: ExtensionContext, client) {
   return [new (class implements Disposable {
-    timeout: 10
     context = context
     client = client
     dispose() { }

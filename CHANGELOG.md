@@ -6,6 +6,7 @@
     * Run command, "Refresh Semantic Tokens (Syntax Colors)" from VS Code Command Palette (<kbd>F1</kbd> or <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
     * Editing the file should trigger coloring
     * Close and re-open file
+* VS Code for Web will hang when opening files.  Need further debugging, but seemingly **not** related to CORS or packaging.  Attempted fix in 0.5.2.
 * "Walkthough" (shown after install on VS Code "Welcome" screen) needs to be updated to show commands and more graphics.
 * `README.md` is still very much a WIP - so it's more a catalog of notes, than documentation today.
 * In VSCode, "Hover" on Code and "Problems" tab present more debug information than nice text – although they do allow to see "token" so remaining for now.  In future, "hover on code" will likely change, or be an option
@@ -15,6 +16,18 @@
 * Standalone LSP (i.e. NeoVim) on Windows is untested, and Window ARM64 build does not compile currently. _VS Code for Windows uses JS-based extension, so does **not** standalone LSP_ 
 
 ## Changelog
+
+### 0.5.2
+
+#### Changes
+
+* Watchdog refinements to cleanup UI
+  * removed "withProgress" style notification, too confusing
+  * add clear buttons on error state, including "Retry"
+
+#### Fixes
+* VS Code for Web, one theory on "hang" in 0.5.1 is watchdog use of `window.withProgress`, as behind the scene it both new in LSP spec and mixed used of Promise and `await`.  Removing the notification with progress bar also cleans up UI.
+
 
 ### 0.5.1
 
