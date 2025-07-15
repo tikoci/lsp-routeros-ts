@@ -115,7 +115,7 @@ export class LspController {
 
     // handle future configuration changes
     connection.onDidChangeConfiguration((e: DidChangeConfigurationParams) => {
-      log.info(`<LspController> {onDidChangeConfiguration} ${e.settings.routeroslsp.baseUrl} user ${e.settings.routeroslsp.user} apiTimeout ${e.settings.routeroslsp.apiTimeout} allowClientProvidedCredentials ${e.settings.routeroslsp.allowClientProvidedCredentials}`)
+      log.info(`<LspController> {onDidChangeConfiguration} ${e.settings.routeroslsp.baseUrl} user ${e.settings.routeroslsp.username} apiTimeout ${e.settings.routeroslsp.apiTimeout} allowClientProvidedCredentials ${e.settings.routeroslsp.allowClientProvidedCredentials}`)
       if (e.settings.routeroslsp) {
         updateSettings(e.settings.routeroslsp)
         this.#documents.keys().forEach((k) => {
