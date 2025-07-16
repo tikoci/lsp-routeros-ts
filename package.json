@@ -40,7 +40,7 @@
   "qna": "https://github.com/orgs/tikoci/discussions/categories/q-a",
   "homepage": "https://github.com/tikoci/lsp-routeros-ts/blob/main/README.md",
   "engines": {
-    "vscode": "^1.101.0"
+    "vscode": "^1.78.2"
   },
   "main": "./client/dist/extension.js",
   "browser": "./client/dist/extension.web.js",

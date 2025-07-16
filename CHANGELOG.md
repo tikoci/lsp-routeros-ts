@@ -7,7 +7,7 @@
     * Editing the file should trigger coloring
     * Close and re-open file
 * VS Code for Web will hang when opening files.  Need further debugging, but seemingly **not** related to CORS or packaging.  Attempted fix in 0.5.2.
-* "Walkthough" (shown after install on VS Code "Welcome" screen) needs to be updated to show commands and more graphics.
+* "Walkthrough" (shown after install on VS Code "Welcome" screen) needs to be updated to show commands and more graphics.
 * `README.md` is still very much a WIP - so it's more a catalog of notes, than documentation today.
 * In VSCode, "Hover" on Code and "Problems" tab present more debug information than nice text – although they do allow to see "token" so remaining for now.  In future, "hover on code" will likely change, or be an option
 * "Triggers" characters should be LSP configuration options, currently: <kbd>space</kbd>, <kbd>/</kbd>, <kbd>:</kbd>, and <kbd>=</kbd>.  Space in particular may be "aggressive" as default.
@@ -16,6 +16,16 @@
 * Standalone LSP (i.e. NeoVim) on Windows is untested, and Window ARM64 build does not compile currently. _VS Code for Windows uses JS-based extension, so does **not** standalone LSP_ 
 
 ## Changelog
+
+### 0.5.3
+
+### Changes
+* Relaxed VS Code minimum version requirements accidentally increased in LSP v0.5.1 that require the very latest stable version.  Version as old as 1.78 (April 2023) should work fine (and was used previously).  However, only version 1.101 (May 2025) has been tested and thus recommended to use the latest version of VS Code.
+
+### Fixes
+* Change `engine` for `vscode` to use `^1.78.2` instead of `^1.101` in `package.json`
+* Small fix in log message with an `undefined` instead of `username`
+
 
 ### 0.5.2
 
