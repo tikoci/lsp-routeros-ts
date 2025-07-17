@@ -20,7 +20,7 @@
 ### 0.5.3
 
 ### Changes
-* Relaxed VS Code minimum version requirements accidentally increased in LSP v0.5.1 that require the very latest stable version.  Version as old as 1.78 (April 2023) should work fine (and was used previously).  However, only version 1.101 (May 2025) has been tested and thus recommended to use the latest version of VS Code.
+* Relaxed VS Code minimum version requirements accidentally increased in LSP v0.5.1 that required the very latest stable version.  Versions as old as 1.78 (April 2023) should work fine (and was used previously).  However, only version 1.101 (May 2025) has been tested and thus recommended to use the latest version of VS Code.
 
 ### Fixes
 * Change `engine` for `vscode` to use `^1.78.2` instead of `^1.101` in `package.json`

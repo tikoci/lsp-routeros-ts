@@ -22,6 +22,10 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+      
+      - name: Calculate LOCs
+        run: |
+          npx cloc --git HEAD
 
       - name: Build project
         run: npm run compile
