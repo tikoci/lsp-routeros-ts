@@ -396,9 +396,9 @@
     "@stylistic/eslint-plugin": "^5.2.0",
     "@typescript-eslint/eslint-plugin": "^8.37.0",
     "@typescript-eslint/parser": "^8.37.0",
-    "esbuild": "^0.25.6",
+    "esbuild": "^0.25.7",
     "eslint": "^9.31.0",
-    "eslint-config-prettier": "^10.1.5",
+    "eslint-config-prettier": "^10.1.8",
     "jiti": "^2.4.2",
     "mocha": "^10.8.2",
     "ts-loader": "^9.5.2",
@@ -422,6 +422,7 @@
     "util": "^0.12.5"
   },
   "overrides": {
-    "on-headers": "^1.1.0"
+    "on-headers": "^1.1.0",
+    "@eslint/plugin-kit": "^0.3.3"
   }
 }
