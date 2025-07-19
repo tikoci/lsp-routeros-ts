@@ -1,6 +1,6 @@
 import { ExtensionContext, Uri } from 'vscode'
 import { LanguageClient } from 'vscode-languageclient/browser'
-import { packageJsonInfo, getLanguageClientOptions } from './client'
+import { getPackageInfo, getLanguageClientOptions } from './client'
 import { initializeCommands } from './commands'
 import { initializeWatchdog } from './watchdog'
 
@@ -16,7 +16,7 @@ export async function activate(context: ExtensionContext) {
   console.info(`RouterOS LSP using server at ${serverMain.toString(true)}`)
   const worker = new Worker(serverMain.toString(true))
   client = new LanguageClient(
-    ...packageJsonInfo(context),
+    ...getPackageInfo(context),
     getLanguageClientOptions(),
     worker,
   )
@@ -26,20 +26,16 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(
     client,
     ...initializeCommands(context, client),
-    ...initializeWatchdog(context, client),
+    initializeWatchdog(context, client, 3000),
   )
 
-  console.log('RouterOS LSP client.start() called')
+  client.info('RouterOS LSP client start() returned, activate() done')
 }
 
-export function deactivate() {
-  console.log('RouterOS LSP extension deactivate() invoked')
+export function deactivate(): Thenable<void> | undefined {
+  if (!client) {
+    return undefined
+  }
+  client.info('RouterOS LSP extension deactivate() calling stop()')
+  return client.stop()
 }
-
-/*
-export async function deactivate(): Promise<void> {
-if (client !== undefined) {
-  await client.stop();
-}
-}
-*/

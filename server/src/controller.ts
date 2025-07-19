@@ -26,20 +26,20 @@ import {
 } from 'vscode-languageserver'
 import { DocumentUri, TextDocument } from 'vscode-languageserver-textdocument'
 import { CompletionInspectResponseItem, RouterRestClient } from './routeros'
-import { ConnectionLogger, getSettings, log, updateSettings, useConnectionUrl } from './shared'
+import { clearConnectionUrl, ConnectionLogger, getSettings, log, updateSettings, useConnectionUrl } from './shared'
 import { LspDocument } from './model'
 import { HighlightTokens } from './tokens'
+// import { AxiosError } from 'axios'
 
 // MARK: LspController
 
 export class LspController {
   #connection: Connection
-
   #documents: TextDocuments<TextDocument>
-
   #lspDocuments = new Map<string, LspDocument>()
-
   #ready: Promise<void>
+  #hasConfigurationCapability = false
+  #hasShowMessageCapability = false
 
   get isReady(): Promise<void> {
     return this.#ready
@@ -56,8 +56,6 @@ export class LspController {
   get lspDocuments() {
     return this.#lspDocuments
   }
-
-  hasConfigurationCapability = false
 
   static shortid = 'routeroslsp'
 
@@ -88,19 +86,24 @@ export class LspController {
       )) {
         serverCapabilities = {
           ...serverCapabilities,
-          ...{ workspace: { workspaceFolders: { supported: true } } },
+          ...{
+            workspace: { workspaceFolders: { supported: true } },
+          },
         }
+        log.debug(`<LspController> {onInitialize} workspaceFolders true`)
       }
-      this.hasConfigurationCapability = !!(
+      this.#hasShowMessageCapability = LspController.hasCapability('showMessage', params)
+      log.debug(`<LspController> {onInitialize} hasShowMessageCapability ${this.#hasShowMessageCapability}`)
+      this.#hasConfigurationCapability = !!(
         params.capabilities.workspace && !!params.capabilities.workspace.configuration
       )
-      log.debug(`<LspController> {onInitialize} returning capabilities to client`)
+      log.debug(`<LspController> {onInitialize} hasConfigurationCapability ${this.#hasConfigurationCapability}`)
       return { capabilities: serverCapabilities }
     })
 
     connection.onInitialized(() => {
       // connection.client.register(SemanticTokensRegistrationType.type, );
-      if (this.hasConfigurationCapability === true) {
+      if (this.#hasConfigurationCapability === true) {
         connection.client.register(DidChangeConfigurationNotification.type, { section: 'routeroslsp' })
         log.debug(`<LspController> {onInitialized} refresh configuration`)
         connection.workspace.getConfiguration(LspController.shortid).then((e) => {
@@ -175,19 +178,38 @@ export class LspController {
 
     // execute (commands sent from client/editor to run in LSP)
     connection.onExecuteCommand(async (e) => {
-      log.info(`<LspController> {onExecuteCommand} [${e.command}] ${JSON.stringify(e.arguments)}`)
-      await LspController.default.isReady
+      log.info(
+        `<LspController> {onExecuteCommand} [${e.command}] ${JSON.stringify(
+          e.arguments?.map((a, i) => e.command === 'routeroslsp.server.useConnectionUrl' && i === 2 ? '***' : a))}`)
+      await this.isReady
       switch (e.command) {
-        case 'routeroslsp.server.sendSemanticTokensRefresh': return connection.languages.semanticTokens.refresh()
-        case 'routeroslsp.server.useConnectionUrl': return useConnectionUrl(e)
-        case 'routeroslsp.server.testConnection': {
+        case 'routeroslsp.server.sendSemanticTokensRefresh': {
+          return connection.languages.semanticTokens.refresh()
+        }
+        case 'routeroslsp.server.useConnectionUrl': {
+          return useConnectionUrl(e)
+        }
+        case 'routeroslsp.server.clearConnectionUrl': {
+          return clearConnectionUrl()
+        }
+        case 'routeroslsp.server.router.getIdentity': {
           try {
             return await RouterRestClient.default.getIdentityRaw()
           }
           catch (error) { return error }
         }
+        case 'routeroslsp.server.getConnectionUrl': {
+          const settings = getSettings()
+          const url = URL.parse(settings.baseUrl)
+          if (url !== null) {
+            url.username = settings.username
+            return url.toString()
+          }
+          else {
+            return null
+          }
+        }
       }
-      // return e.arguments || 'lsp got command'
     })
 
     // listen to document cache
@@ -196,8 +218,9 @@ export class LspController {
     log.debug('<LspController> {constructor} done')
   }
 
+  /*
   get settings() {
-    if (this.hasConfigurationCapability === null) {
+    if (this.#hasConfigurationCapability === null) {
       return this.connection.workspace.getConfiguration(LspController.shortid).then((e) => {
         updateSettings(e)
         log.info(JSON.stringify(getSettings()))
@@ -208,6 +231,7 @@ export class LspController {
       return Promise.resolve(getSettings())
     }
   }
+    */
 
   async getLspDocument(uri: DocumentUri, refresh = false): Promise<LspDocument> {
     let lspdocument
@@ -250,12 +274,13 @@ export class LspController {
         && clientCapabilities.textDocument.publishDiagnostics
         && clientCapabilities.textDocument.publishDiagnostics.relatedInformation
       )
+      case 'showMessage': return !!(clientCapabilities.window && !!clientCapabilities.window.showMessage)
       default:
         return false
     }
   }
 
-  // MARK: define server caps
+  // MARK: server caps
 
   static getServerCapabilities(params: InitializeParams): ServerCapabilities {
     return {
@@ -264,7 +289,9 @@ export class LspController {
         commands: [
           'routeroslsp.server.sendSemanticTokensRefresh',
           'routeroslsp.server.useConnectionUrl',
-          'routeroslsp.server.testConnection',
+          'routeroslsp.server.clearConnectionUrl',
+          'routeroslsp.server.router.getIdentity',
+          'routeroslsp.server.getConnectionUrl',
         ],
       },
       /* // future:
@@ -329,7 +356,7 @@ export class LspController {
     this.connection.sendDiagnostics(diagnostics)
   }
 
-  // MARK: handle hover
+  // MARK: hover
 
   onHoverHandler = (controller: LspController) => async (params: TextDocumentPositionParams): Promise<Hover | undefined> => {
     const lspdoc = await controller.getLspDocument(params.textDocument.uri)
@@ -358,7 +385,7 @@ export class LspController {
     }
   }
 
-  // MARK: handle diagnostics
+  // MARK: diagnostics
 
   handleDiagnostics = (controller: LspController) => async (params: DocumentDiagnosticParams) => {
     log.debug(`<LspController> {handleDiagnostics} for ${params.textDocument.uri}`)
@@ -379,7 +406,7 @@ export class LspController {
     }
   }
 
-  // MARK: handle completion
+  // MARK: completion
 
   onCompletionResolveHandler = (_: LspController) => (item: CompletionItem): CompletionItem => {
     return item
@@ -442,7 +469,7 @@ export class LspController {
     }
   }
 
-  // MARK: handle semantic tokens
+  // MARK: tokens
 
   generateSemanticTokens = (controller: LspController) => async (params: SemanticTokensParams): Promise<SemanticTokens | null> => {
     const startTime = Date.now()
@@ -480,7 +507,7 @@ export class LspController {
     return packed
   }
 
-  // MARK: handle symbols
+  // MARK: symbols
 
   onDocumentSymbols = (controller: LspController) => async (params: DocumentSymbolParams): Promise<SymbolInformation[] | DocumentSymbol[] | undefined | null> => {
     log.debug('<LspController> {onDocumentSymbols} starting: ${params.textDocument.uri}')

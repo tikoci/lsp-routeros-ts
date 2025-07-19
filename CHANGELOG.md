@@ -6,7 +6,6 @@
     * Run command, "Refresh Semantic Tokens (Syntax Colors)" from VS Code Command Palette (<kbd>F1</kbd> or <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
     * Editing the file should trigger coloring
     * Close and re-open file
-* VS Code for Web will hang when opening files.  Need further debugging, but seemingly **not** related to CORS or packaging.  Attempted fix in 0.5.2.
 * "Walkthrough" (shown after install on VS Code "Welcome" screen) needs to be updated to show commands and more graphics.
 * `README.md` is still very much a WIP - so it's more a catalog of notes, than documentation today.
 * In VSCode, "Hover" on Code and "Problems" tab present more debug information than nice text – although they do allow to see "token" so remaining for now.  In future, "hover on code" will likely change, or be an option
@@ -16,6 +15,23 @@
 * Standalone LSP (i.e. NeoVim) on Windows is untested, and Window ARM64 build does not compile currently. _VS Code for Windows uses JS-based extension, so does **not** standalone LSP_ 
 
 ## Changelog
+
+### 0.5.4
+
+### Changes
+* Settings now use "application" scope (i.e. user)
+* VS Code for Web support verified in 0.5.3 (previously failed 0.5.2). CORS proxy still required to use VSCode Web
+* Improvement in watchdog/notifications (still "raw"/unfriendly error messages)
+* Clear client credential support for TikBook
+
+### Fixes
+* Redact passwords introduced by exception from HTTP client library (axios-http) [GH issue #3](https://github.com/tikoci/lsp-routeros-ts/issues/3)
+* Update several dependencies to resolve `npm audit` issues
+* Refactor settings on LSP server, use LSP client as primary connection tester
+* Minor code cleanup on LSP client (extension)
+* Wait for start() on client before subscribing
+* Add small delay (1s) to initial RouterOS connection test to allow "warmup" after started event.  Avoids error notification when extension is reloaded (i.e. upgrade)
+* Housekeeping: typos, `cloc` to build
 
 ### 0.5.3
 

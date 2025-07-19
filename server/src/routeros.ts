@@ -125,11 +125,11 @@ export class RouterRestClient implements RouterApiClientInterface {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private pipelineRequestError(error: any) {
     if (isAxiosError(error)) {
-      log.warn(`ERROR <RouterRestClient> |req| ${error.config?.url} ${error.code} ${error.message}`)
+      log.warn(`ERROR <RouterRestClient> |req| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
     }
-    // else {
-    log.warn(`ERROR <RouterRestClient> |req| error: ${JSON.stringify(error)}`)
-    // }
+    else {
+      log.warn(`ERROR <RouterRestClient> |req| error: ${JSON.stringify(error)}`)
+    }
     LspController.default.lspDocuments.clear()
   }
 
@@ -141,7 +141,7 @@ export class RouterRestClient implements RouterApiClientInterface {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private pipelineResponseError(error: any) {
     if (isAxiosError(error)) {
-      log.warn(`ERROR <RouterRestClient> |response| ${error.config?.url} ${error.code} ${error.message}`)
+      log.warn(`ERROR <RouterRestClient> |response| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
     }
     else {
       log.warn(`ERROR <RouterRestClient> |response| error: ${JSON.stringify(error)}`)

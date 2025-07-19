@@ -2,8 +2,22 @@ import { commands, ConfigurationTarget, ExtensionContext, Uri, window, workspace
 import { type BaseLanguageClient } from 'vscode-languageclient'
 
 export function initializeCommands(context: ExtensionContext, client: BaseLanguageClient) {
-  // Register commands and add them to context.subscriptions
   return [
+
+    commands.registerCommand('routeroslsp.cmd.applySemanticTokenColors', async () => {
+      const success = await applySemanticTokenColorsFromFile(context, client)
+      if (success) {
+        const msg = 'Applied RouterOS syntax coloring to settings'
+        client.info(`<client.cmd> [routeroslsp.cmd.applySemanticTokenColors] applied successfully`)
+        window.showInformationMessage(msg)
+      }
+      else {
+        const msg = 'Failed to apply semantic colors to settings'
+        client.error(`<client.cmd> [routeroslsp.cmd.applySemanticTokenColors] ${msg}`)
+        window.showWarningMessage(msg)
+      }
+    }),
+
     commands.registerCommand('routeroslsp.cmd.settings.show', () => {
       client.info('<client.cmd> [routeroslsp.cmd.settings.show] invoked')
       commands.executeCommand('workbench.action.openSettings', `@ext:TIKOCI.lsp-routeros-ts`)
@@ -15,53 +29,32 @@ export function initializeCommands(context: ExtensionContext, client: BaseLangua
       client.outputChannel.show()
     }),
 
-    commands.registerCommand('routeroslsp.cmd.applySemanticTokenColors', async () => {
-      client.info('<client.cmd> [routeroslsp.cmd.applySemanticTokenColors] invoked')
-      const success = await applySemanticTokenColorsFromFile(context, client)
-      if (success) {
-        window.showInformationMessage('Applied RouterOS syntax coloring to settings')
-      }
-      // Errors are handled inside applySemanticTokenColorsFromFile
-    }),
-
-    commands.registerCommand('routeroslsp.cmd.testConnection', async (showOptions = true) => {
-      client.info('<client.cmd> [routeroslsp.cmd.testConnection] invoked]')
-      try {
-        // window.showInformationMessage(`Starting RouterOS LSP connection test`)
-        const results = await commands.executeCommand<string | Error>('routeroslsp.server.testConnection')
-        client.debug('<client.cmd> [routeroslsp.cmd.testConnection] success', results)
-        if (typeof results === 'string') window.showInformationMessage(`Successfully connected to '${results}' via RouterOS LSP`)
-        else throw results
-      }
-      catch (error) {
-        client.error('ERROR <client.cmd> [routeroslsp.cmd.testConnection]:', error, false)
-        const errMsg = `RouterOS LSP not working: ${error.message ? error.message : JSON.stringify(error)}`
-        if (showOptions === true) {
-          showErrorWithOptions(errMsg)
-        }
-        else {
-          window.showErrorMessage(errMsg)
-        }
-      }
-      /*
-      // this may be problematic with LSP client/server, and not really cancellable either.  Keep for now to reuse elsewhere.
-      window.withProgress({
-        location: ProgressLocation.Notification,
-        title: 'Testing RouterOS LSP connection...',
-        cancellable: true,
-      }, async () => {
-        try {
-          const results = await commands.executeCommand<string | Error>('routeroslsp.server.testConnection')
-          client.debug('<client.cmd> [routeroslsp.cmd.testConnection] got error]', results)
-          if (typeof results === 'string') window.showInformationMessage(`Successfully connected to '${results}' via RouterOS LSP`)
-          else throw results
-        }
-        catch (error) {
-          client.error('ERROR <client.cmd> [routeroslsp.cmd.testConnection]:', error, false)
-          showErrorWithOptions(`RouterOS LSP not working:  ${error.message ? error.message : JSON.stringify(error)}`)
-        }
-      })
-      */
+    commands.registerCommand('routeroslsp.cmd.testConnection', async () => {
+      commands.executeCommand('routeroslsp.server.router.getIdentity').then(
+        (identity) => {
+          if (typeof identity === 'string') {
+            commands.executeCommand('routeroslsp.server.getConnectionUrl')
+              .then(
+                connectionUrl =>
+                  window.showInformationMessage(`RouterOS LSP connected to '${identity}' ${connectionUrl}`),
+                error => client.warn(`<client.cmd> [routeroslsp.cmd.testConnection]`, error))
+            client.debug('<client.cmd> [routeroslsp.cmd.testConnection] success', identity)
+          }
+          else {
+            const error = identity as (Error & { code?: string })
+            client.error('ERROR <client.cmd> [routeroslsp.cmd.testConnection] identity is empty', undefined, false)
+            const errMsg = `RouterOS LSP not working: ${error.code || ''} ${error.message ? error.message : error.name ? error.name : JSON.stringify(error)}`
+            showErrorWithOptions(errMsg)
+          }
+        },
+        (error) => {
+          {
+            client.error('ERROR <client.cmd> [routeroslsp.cmd.testConnection] exception caught:', JSON.stringify(error), false)
+            const errMsg = `RouterOS LSP exception raised: ${error.code || ''} ${error.message ? error.message : error.name ? error.name : JSON.stringify(error)}`
+            showErrorWithOptions(errMsg)
+          }
+        },
+      )
     }),
   ]
 }
@@ -133,15 +126,9 @@ export async function applySemanticTokenColorsFromFile(context: ExtensionContext
       )
     }
     return true
-    // window.showInformationMessage("Semantic colors applied from theme!");
   }
   catch (error) {
     client.error('Error applying semantic colors from theme:', error, false)
-    window.showWarningMessage('Failed to apply semantic colors from theme')
   }
   return false
 }
-
-/* context.subscriptions.push(commands.registerCommand('routeroslsp.cmd.sendSemanticTokensRefresh', () => {
-    commands.executeCommand('routeroslsp.server.sendSemanticTokensRefresh', true)
-  })) */

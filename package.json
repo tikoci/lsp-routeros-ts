@@ -196,35 +196,35 @@
       "title": "RouterOS LSP",
       "properties": {
         "routeroslsp.baseUrl": {
-          "scope": "resource",
+          "scope": "application",
           "type": "string",
           "default": "http://192.168.88.1",
           "order": 1,
           "description": "Set the host and protocol to connect to RouterOS.  e.g.: 'https://192.168.88.1'"
         },
         "routeroslsp.username": {
-          "scope": "resource",
+          "scope": "application",
           "type": "string",
           "default": "lsp",
           "order": 2,
           "description": "Username to use when LSP connects to a RouterOS device"
         },
         "routeroslsp.password": {
-          "scope": "resource",
+          "scope": "application",
           "type": "string",
           "default": "changeme",
           "order": 3,
           "description": "Password to use when LSP connects to a RouterOS device"
         },
         "routeroslsp.allowClientProvidedCredentials": {
-          "scope": "resource",
+          "scope": "application",
           "type": "boolean",
           "default": true,
           "order": 4,
           "markdownDescription": "When enabled, allows a client to 'override' the above settings with client provide values.  <small>When disabled, the LSP connection settings are always used, and client credentials are ignored.</small>"
         },
         "routeroslsp.apiTimeout": {
-          "scope": "resource",
+          "scope": "application",
           "type": "number",
           "default": 15,
           "description": "How long a command sent to RouterOS waits for a response before giving up",
@@ -283,9 +283,27 @@
         "icon": "$(tasklist)"
       },
       {
-        "command": "routeroslsp.server.testConnection",
+        "command": "routeroslsp.server.router.getIdentity",
         "title": "Get RouterOS Name from Connection",
-        "category": "Development",
+        "category": "RouterOS LSP Test",
+        "enablement": "false"
+      },
+      {
+        "command": "routeroslsp.server.getConnectionUrl",
+        "title": "Get Printable Connection URL",
+        "category": "RouterOS LSP Internal",
+        "enablement": "false"
+      },
+      {
+        "command": "routeroslsp.server.useConnectionUrl",
+        "title": "Use provided credentials for RouterOS",
+        "category": "RouterOS LSP Internal",
+        "enablement": "false"
+      },
+      {
+        "command": "routeroslsp.server.clearConnectionUrl",
+        "title": "Clear provided credentials from clients via command",
+        "category": "RouterOS LSP Internal",
         "enablement": "false"
       }
     ],
@@ -345,7 +363,7 @@
     ]
   },
   "scripts": {
-    "lint": "bun run audit; npx eslint ./server/src/*.ts ./client/src/*.ts",
+    "lint": "bun run audit && npx eslint ./server/src/*.ts ./client/src/*.ts",
     "audit": "bun audit && cd server && bun audit && cd ../client && bun audit && cd ..",
     "clean": "rm -rf package-lock.json && rm -rf .*.bun-build && rm -rf ./server/dist && rm -rf ./client/dist && rm -rf ./server/out && rm -rf ./client/out && rm -f lsp-routeros-server* && rm -f *.vsix && rm -rf ./dist",
     "vscode:prepublish": "bun run lint && bun run compile",
@@ -375,7 +393,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
-    "@stylistic/eslint-plugin": "^5.1.0",
+    "@stylistic/eslint-plugin": "^5.2.0",
     "@typescript-eslint/eslint-plugin": "^8.37.0",
     "@typescript-eslint/parser": "^8.37.0",
     "esbuild": "^0.25.6",
@@ -386,7 +404,7 @@
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.37.0",
-    "webpack": "^5.100.1",
+    "webpack": "^5.100.2",
     "webpack-cli": "^5.1.4"
   },
   "peerDependencies": {
@@ -402,5 +420,8 @@
   "dependencies": {
     "path-browserify": "^1.0.1",
     "util": "^0.12.5"
+  },
+  "overrides": {
+    "on-headers": "^1.1.0"
   }
 }

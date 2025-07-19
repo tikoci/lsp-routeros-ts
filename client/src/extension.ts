@@ -6,7 +6,7 @@ import {
   LanguageClient,
   TransportKind,
 } from 'vscode-languageclient/node'
-import { packageJsonInfo, getLanguageClientOptions } from './client'
+import { getPackageInfo, getLanguageClientOptions } from './client'
 import { initializeCommands } from './commands'
 import { initializeWatchdog } from './watchdog'
 
@@ -14,13 +14,13 @@ let client: LanguageClient
 
 console.info('RouterOS LSP extension load starting')
 
-export function activate(context: ExtensionContext) {
-  console.log('RouterOS LSP activate() starting')
+export async function activate(context: ExtensionContext) {
+  console.log('RouterOS LSP client activate() starting')
 
   const serverModule = context.asAbsolutePath('./server/dist/server.js')
 
   client = new LanguageClient(
-    ...packageJsonInfo(context),
+    ...getPackageInfo(context),
     {
       run: { module: serverModule, transport: TransportKind.ipc },
       debug: {
@@ -31,18 +31,20 @@ export function activate(context: ExtensionContext) {
     getLanguageClientOptions(),
   )
 
+  await client.start()
   context.subscriptions.push(
     client,
     ...initializeCommands(context, client),
-    ...initializeWatchdog(context, client),
+    initializeWatchdog(context, client, 3000),
   )
 
-  // Start the client. This will also launch the server
-  client.start()
-
-  console.log('RouterOS LSP client.start() called')
+  client.info('RouterOS LSP client start() returned, activate() done')
 }
 
-export function deactivate() {
-  console.log('RouterOS LSP extension deactivate() invoked')
+export function deactivate(): Thenable<void> | undefined {
+  if (!client) {
+    return undefined
+  }
+  client.info('RouterOS LSP extension deactivate() calling stop()')
+  return client.stop()
 }
