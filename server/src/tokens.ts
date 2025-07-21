@@ -13,7 +13,7 @@ export class HighlightTokens {
   get tokens() { return this.#tokens }
   get tokenRanges() { return this.#tokenRanges }
   get regexToken(): string[] {
-    log.info(`<HighlightToken> regexToken() called`)
+    log.debug(`<HighlightToken> regexToken() called`)
 
     const text = this.document.getText()
     return this.tokens.map((t, i, a) => {
@@ -72,9 +72,7 @@ export class HighlightTokens {
       }
     })
     if (foundRange === undefined) {
-      console.log(position)
-      console.log(this.tokenRanges)
-      throw new Error('HighlightTokens:rangePosition - provided position found no tokens')
+      log.error(`ERROR <tokens> {atPosition} found no token ranges at position`)
     }
     return foundRange
   }

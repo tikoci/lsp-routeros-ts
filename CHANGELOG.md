@@ -23,9 +23,15 @@
 * VS Code for Web support verified in 0.5.3 (previously failed 0.5.2). CORS proxy still required to use VSCode Web
 * Improvement in watchdog/notifications (still "raw"/unfriendly error messages)
 * Clear client credential support for TikBook
+* Added new setting to allow self-signed certificates.  On VS Code, also requires `http.proxySupport` be set to `fallback`.
+* Added "New RouterOS Script" as option in VS Code's "New File..." menu
+* Set default for `.rsc` to be spaces for indentation with tabstop of 4 
+* New LSP commands to get the connection URL (without password) and "using client credentials" status for display/use by clients
+
 
 ### Fixes
 * Redact passwords introduced by exception from HTTP client library (axios-http) [GH issue #3](https://github.com/tikoci/lsp-routeros-ts/issues/3)
+* Logging cleanup, minor re-arrangement of commands handlers
 * Update several dependencies to resolve `npm audit` issues
 * Refactor settings on LSP server, use LSP client as primary connection tester
 * Minor code cleanup on LSP client (extension)

@@ -191,6 +191,14 @@
         ]
       }
     ],
+    "configurationDefaults": {
+      "[routeros]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "editor.indentSize": 4,
+        "editor.detectIndentation": true
+      }
+    },
     "configuration": {
       "type": "object",
       "title": "RouterOS LSP",
@@ -199,29 +207,29 @@
           "scope": "application",
           "type": "string",
           "default": "http://192.168.88.1",
-          "order": 1,
+          "order": 2,
           "description": "Set the host and protocol to connect to RouterOS.  e.g.: 'https://192.168.88.1'"
         },
         "routeroslsp.username": {
           "scope": "application",
           "type": "string",
           "default": "lsp",
-          "order": 2,
+          "order": 3,
           "description": "Username to use when LSP connects to a RouterOS device"
         },
         "routeroslsp.password": {
           "scope": "application",
           "type": "string",
           "default": "changeme",
-          "order": 3,
+          "order": 4,
           "description": "Password to use when LSP connects to a RouterOS device"
         },
         "routeroslsp.allowClientProvidedCredentials": {
           "scope": "application",
           "type": "boolean",
           "default": true,
-          "order": 4,
-          "markdownDescription": "When enabled, allows a client to 'override' the above settings with client provide values.  <small>When disabled, the LSP connection settings are always used, and client credentials are ignored.</small>"
+          "order": 1,
+          "markdownDescription": "When enabled, allows another extension, like [TikBook](command:extension.open?%5B%22TIKOCI.tikbook%22%5D), to 'override' the settings below.  _When disabled, the settings below are **always** used, and other credentials are ignored._"
         },
         "routeroslsp.apiTimeout": {
           "scope": "application",
@@ -230,12 +238,20 @@
           "description": "How long a command sent to RouterOS waits for a response before giving up",
           "order": 5
         },
+        "routeroslsp.checkCertificates": {
+          "scope": "application",
+          "type": "boolean",
+          "default": false,
+          "order": 6,
+          "markdownDescription": "For `https`, when enabled, all certificates must be signed by a trusted certificate.  To allow self-signed certificates, disable this setting.  _This is unsupported in VS Code for the Web - CORS is always required_"
+        },
         "routeroslsp.hotlock": {
           "scope": "resource",
           "type": "boolean",
           "default": true,
-          "order": 6,
-          "deprecationMessage": "This is only used by NeoVim. Will be removed from VS Code settings in future.",
+          "order": 7,
+          "readOnly": true,
+          "deprecationMessage": "This is only used by NeoVim.  Will be removed from VS Code settings in future.",
           "description": "[NeoVim only] Emulates RouterOS 'hotlock' for autocompletion"
         },
         "routeroslsp.trace.server": {
@@ -305,8 +321,27 @@
         "title": "Clear provided credentials from clients via command",
         "category": "RouterOS LSP Internal",
         "enablement": "false"
+      },
+      {
+        "command": "routeroslsp.server.isUsingClientCredentials",
+        "title": "True if RouterOS LSP is using client provided credentials",
+        "category": "RouterOS LSP Internal",
+        "enablement": "false"
+      },
+      {
+        "command": "routeroslsp.cmd.newFile",
+        "title": "RouterOS Script",
+        "category": "RouterOS"
       }
     ],
+    "menus": {
+      "file/newFile": [
+        {
+          "command": "routeroslsp.cmd.newFile",
+          "group": "file"
+        }
+      ]
+    },
     "walkthroughs": [
       {
         "id": "routerlsp-walkthrough",

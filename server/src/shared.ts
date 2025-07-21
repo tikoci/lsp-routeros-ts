@@ -16,6 +16,7 @@ export interface LspSettings {
   password: string
   apiTimeout: number
   allowClientProvidedCredentials: boolean
+  checkCertificates: boolean
 }
 
 export interface LspSettingsUpdate {
@@ -23,6 +24,7 @@ export interface LspSettingsUpdate {
   username?: string
   password?: string
   apiTimeout?: number
+  checkCertificates?: boolean
 }
 
 export const defaultSettings: LspSettings = {
@@ -31,10 +33,22 @@ export const defaultSettings: LspSettings = {
   password: 'changeme',
   apiTimeout: 15,
   allowClientProvidedCredentials: true,
+  checkCertificates: false,
 }
 
 const routeroslspSettings: LspSettings = defaultSettings
 let clientProvidedSettings: LspSettingsUpdate = {}
+
+let _isUsingClientCredentials = false
+export function isUsingClientCredentials() {
+  return _isUsingClientCredentials
+}
+
+let _clientCredentialsProviderId: string | null = null
+export function getClientCredentialsProviderId(): string | null {
+  if (_isUsingClientCredentials && _clientCredentialsProviderId) return _clientCredentialsProviderId
+  else return null
+}
 
 export function getSettings() {
   let settings: LspSettings
@@ -46,12 +60,12 @@ export function getSettings() {
       password: clientProvidedSettings.password || routeroslspSettings.password,
       apiTimeout: clientProvidedSettings.apiTimeout || routeroslspSettings.apiTimeout,
       allowClientProvidedCredentials: routeroslspSettings.allowClientProvidedCredentials,
+      checkCertificates: routeroslspSettings.checkCertificates,
     }
   }
   else {
     settings = routeroslspSettings
   }
-  // log.debug(`${JSON.stringify(settings)}`)
   return settings
 }
 
@@ -87,20 +101,55 @@ export function updateSettings(newSettings: LspSettings) {
       routeroslspSettings.allowClientProvidedCredentials = newSettings.allowClientProvidedCredentials
     }
   }
+  if (typeof newSettings.checkCertificates === 'boolean') {
+    if (newSettings.checkCertificates !== routeroslspSettings.checkCertificates) {
+      isDirty = true
+      routeroslspSettings.checkCertificates = newSettings.checkCertificates
+    }
+  }
   const replacedSettings = getSettings()
-  if (isDirty) log.info(`<updateSettings> now using ${replacedSettings.baseUrl} ${replacedSettings.username} ${replacedSettings.password ? '***' : 'null'} timeout ${replacedSettings.apiTimeout} allowClientProvidedCredentials ${replacedSettings.allowClientProvidedCredentials}`)
+  if (isDirty) log.info(`<settings> {update} now using ${replacedSettings.baseUrl} ${replacedSettings.username} ${replacedSettings.password ? '***' : 'null'} timeout ${replacedSettings.apiTimeout} allowClientProvidedCredentials ${replacedSettings.allowClientProvidedCredentials} checkCertificates ${replacedSettings.checkCertificates}`)
   return isDirty
+}
+
+export function getDisplayConnectionUrl(withUsername = true) {
+  const url = getConnectionUrl(withUsername)
+  if (url) {
+    let userPart = ''
+    if (withUsername) {
+      userPart = `${url.username}@`
+    }
+    return `${url.protocol}//${userPart}${url.host}${url.pathname.substring(0, url.pathname.length - 1)}`
+  }
+  else return null
+}
+
+export function getConnectionUrl(withUsername = false): URL | null {
+  const settings = getSettings()
+  const url = URL.parse(settings.baseUrl)
+  if (url) {
+    if (withUsername) {
+      url.username = settings.username
+    }
+    if (url.pathname[url.pathname.length - 1] !== '/') {
+      url.pathname += '/'
+    }
+    return url
+  }
+  else {
+    return null
+  }
 }
 
 export function useConnectionUrl(e: ExecuteCommandParams): boolean {
   let isDirty = false
   if (getSettings().allowClientProvidedCredentials) {
     const newCredentials: LspSettingsUpdate = {}
-    log.debug(`[useConnectionUrl] starting with ${e.arguments?.length} arguments`)
     if (e.arguments) {
       // eslint-disable-next-line prefer-const
-      let [baseUrl, username, password, apiTimeout] = e.arguments
-      if (baseUrl) {
+      let [extension, baseUrl, username, password, apiTimeout, checkCertificates] = e.arguments
+      if (extension && baseUrl) {
+        _clientCredentialsProviderId = extension
         const url = URL.parse(baseUrl)
         if (url && url.protocol && url.host) {
           baseUrl = `${url.protocol}//${url.host}`
@@ -133,19 +182,27 @@ export function useConnectionUrl(e: ExecuteCommandParams): boolean {
             log.info(`[useConnectionUrl] client provided apiTimeout: ${apiTimeout}`)
           }
         }
+        if (checkCertificates && typeof checkCertificates === 'boolean') {
+          newCredentials.checkCertificates = checkCertificates
+          if (newCredentials.checkCertificates !== getSettings().checkCertificates) {
+            isDirty = true
+            log.info(`[useConnectionUrl] client provided apiTimeout: ${checkCertificates}`)
+          }
+        }
         clientProvidedSettings = newCredentials
       }
       else {
-        log.warn(`[useConnectionUrl] failed due to missing 'baseUrl', which is required in args`)
+        log.error(`ERROR [useConnectionUrl] failed due to missing 'baseUrl', which is required in args`)
       }
     }
     else {
-      log.warn(`[useConnectionUrl] failed due to no args`)
+      log.error(`ERROR [useConnectionUrl] failed due to no args`)
     }
   }
   else {
     log.warn(`[useConnectionUrl] Use client credentials blocked by 'allowClientProvidedCredentials=false'`)
   }
+  if (isDirty) _isUsingClientCredentials = true
   return isDirty
 }
 
@@ -160,11 +217,12 @@ export function clearConnectionUrl() {
     delete clientProvidedSettings.password
     delete clientProvidedSettings.apiTimeout
     isDirty = true
-    log.info('<useConnectionUrl> removed client authentication cache')
+    log.info('[clearConnectionUrl] removed client authentication cache')
     // LspController.default.connection.window.showInformationMessage(`<useConnectionUrl> use LSP settings: ${getSettings().baseUrl}`)
   }
   else {
-    log.debug('<useConnectionUrl> no client authentication to remove')
+    log.debug('[clearConnectionUrl] no client authentication to remove')
   }
+  _isUsingClientCredentials = false
   return isDirty
 }

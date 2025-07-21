@@ -1,11 +1,5 @@
 import { LspController } from './controller'
-import { getSettings, log } from './shared'
-
-// const axios = require('axios').default;
-
-// import { type InternalAxiosRequestConfig } from 'axios';
-// import { default as axios } from 'axios';
-// import { InternalAxiosRequestConfig } from 'axios';
+import { getConnectionUrl, getSettings, log } from './shared'
 import axios, { AxiosResponse, InternalAxiosRequestConfig, isAxiosError } from 'axios'
 
 export interface WrappedExecuteResponse {
@@ -85,17 +79,22 @@ export class RouterRestClient implements RouterApiClientInterface {
   }
 
   public dispose() {
-    log.info(`<RouterRestClient> {dispose} called`)
+    log.info(`<httpclient> {dispose} called`)
     this.#abortOnDispose.abort()
   }
 
   get rawHttpClient() {
     const settings = getSettings()
+    const url = getConnectionUrl(false)
+    if (!url) log.error('ERROR <httpclinet> {rawHttpClient} HTTP client using invalid URL from Settings')
+    else url.pathname += 'rest'
+    const baseUrlString = url ? url.toString() : settings.baseUrl
     return axios.create({
-      baseURL: `${settings.baseUrl}/rest`,
+      baseURL: baseUrlString,
       timeout: settings.apiTimeout * 1000, // in ms, settings uses seconds
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true,
+      httpsAgent: settings.checkCertificates ? undefined : LspController.nodeHttpsAllowAllAgent,
       auth: {
         username: settings.username,
         password: settings.password,
@@ -118,40 +117,40 @@ export class RouterRestClient implements RouterApiClientInterface {
   }
 
   private pipelineRequestSuccess(req: InternalAxiosRequestConfig) {
-    log.debug(`<RouterRestClient> |request| incoming ${req.url}`)
+    log.debug(`<httpclient> |request| incoming ${req.url}`)
     return req
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private pipelineRequestError(error: any) {
     if (isAxiosError(error)) {
-      log.warn(`ERROR <RouterRestClient> |req| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
+      log.error(`ERROR <httpclient> |req| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
     }
     else {
-      log.warn(`ERROR <RouterRestClient> |req| error: ${JSON.stringify(error)}`)
+      log.error(`ERROR <httpclient> |req| error: ${JSON.stringify(error)}`)
     }
     LspController.default.lspDocuments.clear()
   }
 
   private pipelineResponseSuccess(resp: AxiosResponse) {
-    log.info(`<RouterRestClient> |response| success ${resp.config.url}`)
+    log.info(`<httpclient> |response| success ${resp.config.url}`)
     return resp
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private pipelineResponseError(error: any) {
     if (isAxiosError(error)) {
-      log.warn(`ERROR <RouterRestClient> |response| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
+      log.error(`ERROR <httpclient> |response| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
     }
     else {
-      log.warn(`ERROR <RouterRestClient> |response| error: ${JSON.stringify(error)}`)
+      log.error(`ERROR <httpclient> |response| error: ${JSON.stringify(error)}`)
     }
     LspController.default.lspDocuments.clear()
     return null
   }
 
   async _execute(cmd: string) {
-    log.info(`<RouterRestClient> _execute() called with ${cmd.length} chars}`)
+    log.info(`<httpclient> _execute() called with ${cmd.length} chars}`)
     return await this.httpClient.post<WrappedExecuteResponse>(
       '/execute', {
         'as-string': true,
@@ -161,7 +160,7 @@ export class RouterRestClient implements RouterApiClientInterface {
 
   // async execute(cmd: string, wrapperType: "json"|"csv"|"rest"|undefined){}
   async _inspect<T>(request: string, input: string, path?: string) {
-    log.info(`<RouterRestClient> _inspect(${request}) called, input len ${input.length}`)
+    log.info(`<httpclient> _inspect(${request}) called, input len ${input.length}`)
     return await this.httpClient.post<T[]>(
       '/console/inspect', {
         request: request,

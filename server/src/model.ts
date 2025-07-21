@@ -17,9 +17,9 @@ export class LspDocument {
 
   get highlightTokens() {
     const start = Date.now()
-    log.debug(`<LspDocument> {get highlightTokens} started for ${this.uri}`)
+    log.debug(`<lspdoc> {get highlightTokens} started for ${this.uri}`)
     this.#highlightTokens.then((_) => {
-      log.debug(`<LspDocument> {get highlightTokens} done in ${Date.now() - start}ms for ${this.uri}`)
+      log.debug(`<lspdoc> {get highlightTokens} done in ${Date.now() - start}ms for ${this.uri}`)
     })
     return this.#highlightTokens
   }
@@ -41,7 +41,7 @@ export class LspDocument {
     this.#highlightTokens = this.#fetchHighlightTokens()
     // this.#text = this.#document.getText()
     // LspController.default.connection.languages.semanticTokens.refresh()
-    log.debug(`<LspDocument> {constructor} finished ${this.uri}`)
+    log.debug(`<lspdoc> {constructor} finished ${this.uri}`)
   }
 
   dispose() { }
@@ -51,19 +51,20 @@ export class LspDocument {
   }
 
   static async create(document: TextDocument) {
-    log.debug(`<LspDocument> {{create}} called ${document.uri}`)
+    log.debug(`<lspdoc> {{create}} called ${document.uri}`)
     // const settings = await LspController.default.connection.workspace.getConfiguration({ section: LspController.shortid, scopeUri: document.uri })
     const cachedDoc = LspController.default.documents.get(document.uri)
     if (cachedDoc) {
       return new LspDocument(cachedDoc)
     }
     else {
-      throw new Error(`<LspDocument> {{create}} found no active document`)
+      log.error(`ERROR <lspdoc> {create} found no document for ${document.uri}`)
+      return null
     }
   }
 
   async completion(position: Position) {
-    log.debug(`<LspDocument> {completion} called ${this.uri} at ln ${position.line} col ${position.character}`)
+    log.debug(`<lspdoc> {completion} called ${this.uri} at ln ${position.line} col ${position.character}`)
 
     return RouterRestClient.default.inspectCompletion(this.#document.getText().substring(
       0,
@@ -74,8 +75,8 @@ export class LspDocument {
   // MARK: diagnostics provider
 
   // TODO: should take diagnostic "type", refactor HighlightTokens = mess
-  async diagnostics(): Promise <Diagnostic[]> {
-    log.debug(`<LspDocument> {diagnostics} called: ${this.uri}`)
+  async diagnostics(): Promise<Diagnostic[]> {
+    log.debug(`<lspdoc> {diagnostics} called: ${this.uri}`)
 
     const tokens = await this.highlightTokens
     const tokenRanges = tokens.tokenRanges
@@ -141,12 +142,12 @@ export class LspDocument {
       })
     }
     */
-    log.info(`<LspDocument> {diagnostics} done, found ${errors.length} for ${this.uri}`)
+    log.info(`<lspdoc> {diagnostics} done, found ${errors.length} for ${this.uri}`)
     return errors
   }
 
   async #fetchHighlightTokens(range?: Range): Promise<HighlightTokens> {
-    log.info(`<LspDocument> {#fetchHighlightTokens} started for ${this.uri}`)
+    log.info(`<lspdoc> {#fetchHighlightTokens} started for ${this.uri}`)
 
     let text = this.#document.getText()
     if (range) {
@@ -157,7 +158,7 @@ export class LspDocument {
       32767,
     ))
     const parsedToken = highlightInspectResponse?.[0]?.highlight.split(',')
-    log.info('<LspDocument> {#fetchHighlightTokens} got new tokens')
+    log.info('<lspdoc> {#fetchHighlightTokens} got new tokens')
 
     return new HighlightTokens(
       parsedToken || [],

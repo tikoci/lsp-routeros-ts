@@ -1,3 +1,4 @@
+// import { isAxiosError, AxiosError } from 'axios'
 import { commands, ConfigurationTarget, ExtensionContext, Uri, window, workspace, WorkspaceConfiguration } from 'vscode'
 import { type BaseLanguageClient } from 'vscode-languageclient'
 
@@ -13,14 +14,14 @@ export function initializeCommands(context: ExtensionContext, client: BaseLangua
       }
       else {
         const msg = 'Failed to apply semantic colors to settings'
-        client.error(`<client.cmd> [routeroslsp.cmd.applySemanticTokenColors] ${msg}`)
+        client.error(`ERROR <client.cmd> [routeroslsp.cmd.applySemanticTokenColors] ${msg}`)
         window.showWarningMessage(msg)
       }
     }),
 
-    commands.registerCommand('routeroslsp.cmd.settings.show', () => {
-      client.info('<client.cmd> [routeroslsp.cmd.settings.show] invoked')
-      commands.executeCommand('workbench.action.openSettings', `@ext:TIKOCI.lsp-routeros-ts`)
+    commands.registerCommand('routeroslsp.cmd.settings.show', (query = '@ext:TIKOCI.lsp-routeros-ts') => {
+      client.info(`<client.cmd> [routeroslsp.cmd.settings.show] invoked ${query}`)
+      commands.executeCommand('workbench.action.openSettings', query)
       client.outputChannel.show()
     }),
 
@@ -29,56 +30,14 @@ export function initializeCommands(context: ExtensionContext, client: BaseLangua
       client.outputChannel.show()
     }),
 
-    commands.registerCommand('routeroslsp.cmd.testConnection', async () => {
-      commands.executeCommand('routeroslsp.server.router.getIdentity').then(
-        (identity) => {
-          if (typeof identity === 'string') {
-            commands.executeCommand('routeroslsp.server.getConnectionUrl')
-              .then(
-                connectionUrl =>
-                  window.showInformationMessage(`RouterOS LSP connected to '${identity}' ${connectionUrl}`),
-                error => client.warn(`<client.cmd> [routeroslsp.cmd.testConnection]`, error))
-            client.debug('<client.cmd> [routeroslsp.cmd.testConnection] success', identity)
-          }
-          else {
-            const error = identity as (Error & { code?: string })
-            client.error('ERROR <client.cmd> [routeroslsp.cmd.testConnection] identity is empty', undefined, false)
-            const errMsg = `RouterOS LSP not working: ${error.code || ''} ${error.message ? error.message : error.name ? error.name : JSON.stringify(error)}`
-            showErrorWithOptions(errMsg)
-          }
-        },
-        (error) => {
-          {
-            client.error('ERROR <client.cmd> [routeroslsp.cmd.testConnection] exception caught:', JSON.stringify(error), false)
-            const errMsg = `RouterOS LSP exception raised: ${error.code || ''} ${error.message ? error.message : error.name ? error.name : JSON.stringify(error)}`
-            showErrorWithOptions(errMsg)
-          }
-        },
+    commands.registerCommand('routeroslsp.cmd.newFile', () => {
+      client.debug('<client.cmd> [routeroslsp.cmd.newFile] invoked')
+      workspace.openTextDocument({ language: 'routeros', content: '\n\n', encoding: 'utf8' }).then(
+        docs => window.showTextDocument(docs),
+        error => client.error(`ERROR <client.cmd> [routeroslsp.cmd.newFile] could not create blank text file: ${error}`),
       )
     }),
   ]
-}
-
-function showErrorWithOptions(text) {
-  window.showErrorMessage(text, 'Settings', 'Show Log', 'Retry', 'Close').then((button) => {
-    if (button) {
-      switch (button) {
-        case 'Settings':
-          commands.executeCommand('routeroslsp.cmd.settings.show')
-          commands.executeCommand('routeroslsp.cmd.testConnection')
-          break
-        case 'Show Log':
-          commands.executeCommand('routeroslsp.cmd.outputs.show')
-          commands.executeCommand('routeroslsp.cmd.testConnection')
-          break
-        case 'Retry':
-          commands.executeCommand('routeroslsp.cmd.testConnection')
-          break
-        case 'Close':
-          break
-      }
-    }
-  })
 }
 
 export async function applySemanticTokenColorsFromFile(context: ExtensionContext, client: BaseLanguageClient) {
