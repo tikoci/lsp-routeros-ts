@@ -56,9 +56,13 @@ jobs:
             chmod +x ./lsp-routeros-server-$outname
             zip ./lsp-routeros-server-$outname.zip ./lsp-routeros-server-$outname
           done
-          echo "special case for windows build since it uses .exe"
+
+      - name: Package Windows version of standalone LSP server
+        run: |
           bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server-windows-x64 --target bun-windows-x64
+          ls -l ./lsp-routeros-server-windows-x64.exe
           chmod +x ./lsp-routeros-server-windows-x64.exe
+          ls -la
           zip ./lsp-routeros-server-windows-x64.zip ./lsp-routeros-server-windows-x64.exe
 
       - name: Upload VSIX artifact
