@@ -53,7 +53,7 @@ jobs:
           for i in bun-linux-x64 bun-linux-arm64 bun-darwin-x64 bun-darwin-arm64 bun-linux-x64-musl bun-linux-arm64-musl; do
             outname="${i#bun-}"
             bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server-$outname --target $i
-            chmod +x ./lsp-routeros-server-$outname
+            chmod 755 ./lsp-routeros-server-$outname
             zip ./lsp-routeros-server-$outname.zip ./lsp-routeros-server-$outname
           done
 
@@ -61,7 +61,7 @@ jobs:
         run: |
           bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server-windows-x64 --target bun-windows-x64
           ls -l ./lsp-routeros-server-windows-x64.exe
-          chmod +x ./lsp-routeros-server-windows-x64.exe
+          chmod 755 ./lsp-routeros-server-windows-x64.exe
           ls -la
           zip ./lsp-routeros-server-windows-x64.zip ./lsp-routeros-server-windows-x64.exe
 
