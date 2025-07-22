@@ -20,6 +20,7 @@
     "vscode-languageserver-types": "*"
   },
   "overrides": {
-    "on-headers": "^1.1.0"
+    "on-headers": "^1.1.0",
+    "form-data": "^4.0.4"
   }
 }

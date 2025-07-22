@@ -66,7 +66,7 @@ class LspClientWatchdog implements Disposable {
           commands.executeCommand('routeroslsp.server.getConnectionUrl')
             .then(
               connectionUrl =>
-                window.showInformationMessage(`RouterOS LSP connected to '${identity}' ${isUsingClientCredentials ? 'using TikBook settings' : ''}: ${connectionUrl} `),
+                commands.executeCommand('routeroslsp.server.isUsingClientCredentials').then(isUsingClientCredentials => window.showInformationMessage(`RouterOS LSP connected to '${identity}' ${isUsingClientCredentials ? 'using TikBook settings' : ''}: ${connectionUrl} `)),
               error => this.client.warn(`<client.cmd> [routeroslsp.cmd.testConnection]`, error))
           this.client.debug('<client.cmd> [routeroslsp.cmd.testConnection] success', identity)
         }

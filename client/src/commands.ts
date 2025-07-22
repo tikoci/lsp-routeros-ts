@@ -1,4 +1,3 @@
-// import { isAxiosError, AxiosError } from 'axios'
 import { commands, ConfigurationTarget, ExtensionContext, Uri, window, workspace, WorkspaceConfiguration } from 'vscode'
 import { type BaseLanguageClient } from 'vscode-languageclient'
 

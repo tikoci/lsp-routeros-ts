@@ -41,6 +41,7 @@ let clientProvidedSettings: LspSettingsUpdate = {}
 
 let _isUsingClientCredentials = false
 export function isUsingClientCredentials() {
+  if (routeroslspSettings.allowClientProvidedCredentials === false) return false
   return _isUsingClientCredentials
 }
 
