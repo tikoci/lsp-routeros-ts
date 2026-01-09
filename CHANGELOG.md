@@ -16,6 +16,10 @@
 
 ## Changelog
 
+### 0.6.0
+
+No changes. Promoted v0.5.4 from a `pre-release`.
+
 ### 0.5.4
 
 ### Changes

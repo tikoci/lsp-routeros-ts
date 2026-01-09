@@ -3,7 +3,7 @@
   "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "publisher": "TIKOCI",
   "categories": [
     "Programming Languages",
@@ -20,7 +20,7 @@
     "neovim",
     "langserver"
   ],
-  "preview": true,
+  "preview": false,
   "pricing": "Free",
   "config": {
     "shortid": "routeroslsp"
@@ -416,10 +416,12 @@
     "test:serve:setup": "pushd . && mkdir -p $HOME/.local/certs && cd $HOME/.local/certs && mkcert && mkcert -install && popd",
     "postinstall": "cd client && bun install && cd ../server && bun install && cd ..",
     "package": "bun run lint && bun run compile && bun run vsix:package",
-    "vsix:package": "rm -f *.vsix && bun run compile && npx @vscode/vsce package --no-dependencies --pre-release",
+    "vsix:package": "rm -f *.vsix && bun run compile && npx @vscode/vsce package --no-dependencies",
+    "vsix:package:prerelease": "rm -f *.vsix && bun run compile && npx @vscode/vsce package --no-dependencies --pre-release",
     "vsix:install": "bun run vsix:remove; bun run vsix:package && code --install-extension lsp-routeros-ts-*.vsix",
     "vsix:remove": "code --uninstall-extension tikoci.lsp-routeros-ts",
-    "vsix:publish": "npx @vscode/vsce publish --no-dependencies --pre-release -p $VSCE_PAT",
+    "vsix:publish": "npx @vscode/vsce publish --no-dependencies -p $VSCE_PAT",
+    "vsix:publish:prerelease": "npx @vscode/vsce publish --no-dependencies --pre-release -p $VSCE_PAT",
     "ovsx:publish": "npx ovsx publish lsp-routeros-ts-*.vsix -p $OVSX_PAT",
     "nvim:install": "bun run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua",
     "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd .."
