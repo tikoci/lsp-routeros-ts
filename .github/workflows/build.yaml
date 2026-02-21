@@ -21,14 +21,14 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: npm install
+        run: bun install
       
       - name: Calculate LOCs
         run: |
           npx cloc --git HEAD
 
       - name: Build project
-        run: npm run compile
+        run: bun run compile
 
       - name: Upload JavaScript .map files for symbols
         uses: actions/upload-artifact@v4
@@ -46,7 +46,7 @@ jobs:
           mv lsp-routeros-ts-*.vsix lsp-routeros-ts.vsix
 
       - name: Package standalone "bun exe" for the native platform of CI
-        run: npm run compile:exe
+        run: bun run compile:exe
 
       - name: Package cross-platform version of standalone LSP server
         run: |
@@ -156,7 +156,7 @@ jobs:
             A sample configuration file for NeoVim (`nvim`) , `nvim-routeros-lsp-init.lua`, is provided for download.
 
             > _Note about download file names..._
-            > `darwin-` in name is for macOS, with `-arm64` is Apple Silcon while `-x64` is for Intel-based Mac platforms.
+            > `darwin-` in name is for macOS, with `-arm64` is Apple Silicon while `-x64` is for Intel-based Mac platforms.
             > `-musl` in name is for Alpine Linux or some other specialized Linux distros.
 
           artifacts: |
