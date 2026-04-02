@@ -52,8 +52,25 @@ export interface ChildInspectResponseItem {
 }
 
 interface RouterApiClientInterface {
-	inspectCompletion: (input: string, path?: string) => Promise<CompletionInspectResponseItem[]>
-	inspectHighlight: (input: string, path?: string) => Promise<HighlightInspectResponseItem[]>
+	inspectCompletion: (input: string, path?: string) => Promise<CompletionInspectResponseItem[] | undefined>
+	inspectHighlight: (input: string, path?: string) => Promise<HighlightInspectResponseItem[] | undefined>
+}
+
+/**
+ * Normalized error that crosses the LSP protocol boundary.
+ *
+ * Axios errors have circular references, non-standard shapes, and internal fields
+ * (config, request, response objects) that don't survive JSON-RPC serialization.
+ * This type contains only the fields the client watchdog actually uses to produce
+ * user-facing error messages (see watchdog.ts `getTextFromError`).
+ *
+ * All HTTP errors from RouterRestClient are converted to this shape before leaving
+ * routeros.ts, so no Axios types leak into controller.ts or across the wire.
+ */
+export interface RouterOSClientError {
+	code: string
+	message: string
+	status?: number
 }
 
 // MARK: RouterRestClient
@@ -84,12 +101,15 @@ export class RouterRestClient implements RouterApiClientInterface {
 		this.#abortOnDispose.abort()
 	}
 
-	/** Raw Axios instance without interceptors — used for getIdentityRaw (watchdog). */
-	get rawHttpClient(): AxiosInstance {
-		return this.#createAxiosInstance()
-	}
-
-	/** Axios instance with logging/error interceptors. Cached; rebuilt on config changes via `invalidateClient()`. */
+	/**
+	 * Axios instance with logging/error interceptors.
+	 * Cached; rebuilt on config changes via `invalidateClient()`.
+	 *
+	 * The response error interceptor logs and fires onHttpError, then re-throws
+	 * as a normalized RouterOSClientError. Callers that want graceful degradation
+	 * (inspect/execute) catch and return empty results. Callers that want the error
+	 * (getIdentity for watchdog) let it propagate.
+	 */
 	get httpClient(): AxiosInstance {
 		if (!this.#httpClient) {
 			this.#httpClient = this.#createAxiosInstance()
@@ -130,6 +150,8 @@ export class RouterRestClient implements RouterApiClientInterface {
 		})
 	}
 
+	// MARK: Interceptors
+
 	#onRequestSuccess(req: InternalAxiosRequestConfig) {
 		log.debug(`<httpclient> |request| incoming ${req.url}`)
 		return req
@@ -142,6 +164,7 @@ export class RouterRestClient implements RouterApiClientInterface {
 			log.error(`ERROR <httpclient> |req| error: ${JSON.stringify(error)}`)
 		}
 		RouterRestClient.onHttpError?.()
+		throw normalizeError(error)
 	}
 
 	#onResponseSuccess(resp: AxiosResponse) {
@@ -149,37 +172,61 @@ export class RouterRestClient implements RouterApiClientInterface {
 		return resp
 	}
 
-	#onResponseError(error: unknown) {
+	/**
+	 * Response error interceptor. Logs the error, fires the cache-clearing callback,
+	 * then re-throws as a plain RouterOSClientError.
+	 *
+	 * Previously this returned `null`, which resolved the promise and caused all
+	 * callers to silently get `undefined` data. Now callers must catch explicitly —
+	 * the inspect/execute methods catch and return empty results (graceful degradation),
+	 * while getIdentity lets the error propagate to the watchdog.
+	 */
+	#onResponseError(error: unknown): never {
 		if (isAxiosError(error)) {
 			log.error(`ERROR <httpclient> |response| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
 		} else {
 			log.error(`ERROR <httpclient> |response| error: ${JSON.stringify(error)}`)
 		}
 		RouterRestClient.onHttpError?.()
-		return null
+		throw normalizeError(error)
 	}
 
 	// MARK: API methods
 
-	async _execute(cmd: string) {
+	/**
+	 * Execute a RouterOS script via REST. Returns the script output string,
+	 * or undefined if the request fails (graceful degradation).
+	 */
+	async _execute(cmd: string): Promise<string | undefined> {
 		log.info(`<httpclient> _execute() called with ${cmd.length} chars`)
-		return await this.httpClient
-			.post<WrappedExecuteResponse>('/execute', {
+		try {
+			const resp = await this.httpClient.post<WrappedExecuteResponse>('/execute', {
 				'as-string': true,
 				script: cmd,
 			})
-			.then((resp) => resp?.data?.ret)
+			return resp.data?.ret
+		} catch {
+			return undefined
+		}
 	}
 
-	async _inspect<T>(request: string, input: string, path?: string) {
+	/**
+	 * Query /console/inspect. Returns the response array,
+	 * or undefined if the request fails (graceful degradation).
+	 * Errors are already logged and caches cleared by the interceptor.
+	 */
+	async _inspect<T>(request: string, input: string, path?: string): Promise<T[] | undefined> {
 		log.info(`<httpclient> _inspect(${request}) called, input len ${input.length}`)
-		return await this.httpClient
-			.post<T[]>('/console/inspect', {
+		try {
+			const resp = await this.httpClient.post<T[]>('/console/inspect', {
 				request: request,
 				input: input,
 				path: path,
 			})
-			.then((resp) => resp?.data)
+			return resp.data
+		} catch {
+			return undefined
+		}
 	}
 
 	inspectHighlight = (input: string, path?: string) => {
@@ -203,15 +250,54 @@ export class RouterRestClient implements RouterApiClientInterface {
 	}
 
 	scriptEnvironment = async () => {
-		return this.httpClient.post('/system/script/environment/print', {}).then((resp) => resp?.data)
+		try {
+			const resp = await this.httpClient.post('/system/script/environment/print', {})
+			return resp?.data
+		} catch {
+			return undefined
+		}
 	}
 
+	/**
+	 * Get the router's identity name. Used by the watchdog for connection testing.
+	 * Throws RouterOSClientError on failure — the watchdog needs the error details
+	 * to show user-friendly messages (see watchdog.ts `getTextFromError`).
+	 */
 	getIdentity = (): Promise<string> => {
 		return this.httpClient.get('/system/identity', {}).then((resp) => resp?.data?.name)
 	}
+}
 
-	getIdentityRaw = (): Promise<string> => {
-		return this.rawHttpClient.get('/system/identity', {}).then((resp) => resp?.data?.name)
+// MARK: Error normalization
+
+/**
+ * Convert any error (typically AxiosError) into a plain RouterOSClientError.
+ *
+ * AxiosError objects contain circular references (config.headers → AxiosHeaders),
+ * axios-internal fields, and the full request/response bodies. These don't serialize
+ * across JSON-RPC and cause confusing behavior when the client tries to read `.code`
+ * or `.status` from the deserialized object.
+ *
+ * This function extracts only the fields the client watchdog needs and produces a
+ * plain object that survives JSON serialization cleanly.
+ */
+function normalizeError(error: unknown): RouterOSClientError {
+	if (isAxiosError(error)) {
+		return {
+			code: error.code || 'UNKNOWN',
+			message: error.message,
+			status: error.response?.status,
+		}
+	}
+	if (error instanceof Error) {
+		return {
+			code: (error as Error & { code?: string }).code || error.name || 'UNKNOWN',
+			message: error.message,
+		}
+	}
+	return {
+		code: 'UNKNOWN',
+		message: String(error),
 	}
 }
 

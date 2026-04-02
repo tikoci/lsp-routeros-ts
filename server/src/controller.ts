@@ -156,9 +156,11 @@ export class LspController {
 					return connection.languages.semanticTokens.refresh()
 				case 'routeroslsp.server.router.getIdentity': {
 					try {
-						return await RouterRestClient.default.getIdentityRaw()
+						return await RouterRestClient.default.getIdentity()
 					} catch (error) {
-						log.error(`ERROR <server> {onExecuteCommand} getIdentity failed: ${error instanceof Error ? error.message : String(error)}`)
+						// error is a RouterOSClientError (plain object with code/message/status)
+						// — safe to return across JSON-RPC to the client watchdog
+						log.error(`ERROR <server> {onExecuteCommand} getIdentity failed: ${error instanceof Error ? error.message : (error as { message?: string }).message || String(error)}`)
 						return error
 					}
 				}
