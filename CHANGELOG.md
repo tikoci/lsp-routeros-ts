@@ -25,6 +25,14 @@
 * Added lint step to CI pipeline
 * Added `bump:minor` script for version management
 * VS Code pre-release convention: odd minor versions (0.7.x) are pre-releases
+* `controller.ts` refactored: LSP handlers converted from curried arrow functions to private `async #method()` — eliminates circular imports, simplifies `this` access, improves testability
+* Dead code removed from `controller.ts`: previously commented-out inlay hints, unused public getters (`lspDocuments`, `documents`), notebook sync debug logging, and stale TODOs
+* Added `RouterOSClientError` interface — normalized plain-object error shape that crosses the LSP protocol boundary cleanly (fields: `code`, `message`, `status`)
+* Added `normalizeError()` utility in `routeros.ts` — converts `AxiosError`/`Error`/unknown into a serializable `RouterOSClientError`
+* Removed `rawHttpClient` and `getIdentityRaw` from `routeros.ts` — one Axios client instance, one code path
+* **Web extension** now explicitly terminates the Web Worker on `deactivate()` to avoid orphaned Workers
+* **Watchdog** now tracks all event subscriptions in a `disposables` array — listeners no longer leak on `dispose()`
+* `deactivate()` in both entry points is now `async` and explicitly disposes the watchdog before stopping the `LanguageClient`
 
 #### Fixes
 
@@ -40,6 +48,10 @@
 * Added type annotations to `getTextFromError` and `showErrorWithOptions` in watchdog.ts
 * Removed dead commented-out imports from controller.ts, model.ts, watchdog.ts
 * Fixed ESLint ignore patterns (`*.*s*` was too broad, `./**/test*` was invalid glob)
+* Fixed HTTP interceptors calling `JSON.stringify(error)` on unknown errors — throws on circular objects; now normalizes first and logs only safe `{code, message}` fields
+* Fixed watchdog crash when `getIdentity` resolves with `undefined` — added `toErrorInfo()` helper that safely extracts error fields from any value shape
+* Replaced `Timeout.refresh()` in watchdog with `clearTimeout` + `setTimeout` — Node's `.refresh()` is not available in Web Worker context
+* Watchdog `dispose()` is now idempotent via `#isDisposed` guard — safe to call multiple times
 
 ### 0.6.0 (release)
 

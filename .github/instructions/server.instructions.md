@@ -6,20 +6,21 @@ description: "Use when editing LSP server files. Covers server architecture, Rou
 # LSP Server Development
 
 ## Architecture
-- `controller.ts` is the core — all LSP handlers live here as arrow function methods
+- `controller.ts` is the core — all LSP handlers live here as private `async #method()` members
 - `routeros.ts` wraps Axios for all RouterOS HTTP calls — never make raw HTTP calls elsewhere
 - `model.ts` provides `LspDocument` with lazy async token caching — use `.highlightTokens` Promise
 - `tokens.ts` parses `/console/inspect` highlight responses — modify here for token interpretation
 - `shared.ts` manages settings and logging — use `log.debug/info/warn/error`, never `console.log`
 
 ## Handler Pattern
-All LSP handlers follow this pattern:
+All LSP handlers are private async methods on `LspController`:
 ```typescript
-handlerName = (controller: LspController) => async (params: SomeParams): Promise<Result> => {
-    await controller.isReady
+async #handlerName(params: SomeParams): Promise<Result> {
+    await this.isReady
     // ... handler logic
 }
 ```
+Register them in `registerLspHandlers()` using `this.#handlerName.bind(this)`.
 
 ## Singleton Access
 - `LspController.default` — the controller instance
@@ -42,7 +43,9 @@ When adding Node.js-specific features, guard with runtime checks. The webpack co
 
 ## Error Handling
 - HTTP interceptors in `routeros.ts` clear document cache on errors — don't duplicate this
-- Handlers should catch and log errors, returning empty/null results (graceful degradation)
+- Errors are normalized to `RouterOSClientError` (`code`, `message`, `status`) via `normalizeError()` before crossing the LSP protocol boundary — avoids circular-reference JSON serialization crashes
+- `inspect*` and `execute` methods return `undefined` on error (graceful degradation)
+- `getIdentity` propagates the error as `RouterOSClientError` — the watchdog needs the details
 - Never let an unhandled error crash the LSP server — it kills the user's editing experience
 
 ## Adding New LSP Features

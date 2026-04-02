@@ -52,3 +52,10 @@ Both entry points share `client.ts` and `commands.ts`. Differences:
 - Keep the client minimal — if logic could live in the server, put it there
 - Test both desktop and web after changes (F5 for desktop, "Run Web Extension" for web)
 - Don't import Node.js modules directly — the web entry point runs in a browser context
+
+## Watchdog Lifecycle
+- `ConnectionWatchdog` tracks subscriptions in a `disposables` array — always push registrations there
+- `dispose()` is idempotent via `#isDisposed` guard — safe to call multiple times
+- Use `clearTimeout` + `setTimeout` for scheduling, **not** `Timeout.refresh()` — Node's `.refresh()` is not available in a Web Worker
+- `deactivate()` in both entry points is `async`; it disposes the watchdog before stopping the `LanguageClient`
+- The web entry point additionally terminates the Worker on deactivate

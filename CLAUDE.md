@@ -34,7 +34,7 @@ server/                      # LSP server (the brain — portable across editors
   src/
     server.ts                # Node.js entry point
     server.web.ts            # Browser entry point
-    controller.ts            # All LSP protocol handlers (~850 lines)
+    controller.ts            # All LSP protocol handlers (~500 lines)
     model.ts                 # Per-document state, caching, async token fetching
     routeros.ts              # HTTP client for RouterOS REST API
     shared.ts                # Settings, logging, credential management
@@ -174,8 +174,11 @@ GitHub Actions workflow (manual trigger):
 
 ### Error Handling
 - HTTP interceptors clear document cache on errors → forces re-fetch on next request
+- `RouterOSClientError` interface (`code`, `message`, `status`) is the normalized error shape that crosses the LSP protocol boundary — avoids circular-reference crashes when serializing over JSON-RPC
+- `normalizeError()` in `routeros.ts` converts `AxiosError`/`Error`/unknown into a plain `RouterOSClientError`
+- `inspect*` and `execute` methods return `undefined` on error (graceful degradation); `getIdentity` propagates the error (watchdog needs it)
 - Diagnostics degrade gracefully: no tokens = empty array + log
-- Watchdog maps error codes to user-friendly messages with action buttons
+- Watchdog maps error codes to user-friendly messages with action buttons; `toErrorInfo()` helper safely extracts fields from any error shape
 
 ### Async Patterns
 - `readyResolver` Promise gates all handlers until initialization completes
@@ -199,13 +202,13 @@ GitHub Actions workflow (manual trigger):
 
 | LSP Feature | Status | Handler in controller.ts |
 |-------------|--------|--------------------------|
-| Completion | ✅ Working | `onCompletionHandler` |
-| Semantic Tokens | ✅ Working | `generateSemanticTokens` |
-| Diagnostics | ✅ Working | `handleDiagnostics` |
-| Hover | ⚠️ Basic (shows token type) | `onHoverHandler` |
-| Document Symbols | ⚠️ Basic (variables only) | `onDocumentSymbols` |
+| Completion | ✅ Working | `#onCompletion` |
+| Semantic Tokens | ✅ Working | `#generateSemanticTokens` |
+| Diagnostics | ✅ Working | `#handleDiagnostics` |
+| Hover | ⚠️ Basic (shows token type) | `#onHover` |
+| Document Symbols | ⚠️ Basic (variables only) | `#onDocumentSymbols` |
 | Execute Commands | ✅ Working (6 commands) | `onExecuteCommand` |
-| Inlay Hints | 🚫 Disabled (commented out) | — |
+| Inlay Hints | 🚫 Removed (dead code cleaned up) | — |
 | Definition/References | 🚫 Not implemented | — |
 | Formatting | 🚫 Not implemented | — |
 | Code Actions | 🚫 Not implemented | — |
@@ -214,7 +217,7 @@ See [BACKLOG.md](BACKLOG.md) for planned LSP feature additions.
 
 ## Known Gotchas
 
-1. **~~Completion handler typo~~**: Fixed — `onCompletionHandler` is now correctly spelled.
+1. **Handler naming**: Handlers are private class methods (`#onCompletion`, `#onHover`, etc.) — not public or arrow-function properties. Don't reference old names like `onCompletionHandler`.
 2. **32KB document limit**: RouterOS API truncates large scripts. The LSP silently truncates at this boundary.
 3. **Unicode → underscore replacement**: Non-ASCII characters replaced with `?` before sending to RouterOS. Character indexes must be preserved carefully.
 4. **Self-signed TLS**: Node.js uses `rejectUnauthorized: false` by default. Web target cannot bypass certificate checks — requires CORS proxy.
