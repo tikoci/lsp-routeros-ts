@@ -1,0 +1,7 @@
+# LLM instruction files — different audience, intentionally use patterns linters flag
+CLAUDE.md
+AGENTS.md
+DESIGN.md
+BACKLOG.md
+.github/copilot-instructions.md
+.github/instructions/
