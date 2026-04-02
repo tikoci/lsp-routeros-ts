@@ -27,7 +27,7 @@ import {
 } from 'vscode-languageserver'
 import { type DocumentUri, TextDocument } from 'vscode-languageserver-textdocument'
 import { LspDocument } from './model'
-import { type CompletionInspectResponseItem, RouterRestClient } from './routeros'
+import { type CompletionInspectResponseItem, normalizeError, type RouterOSClientError, RouterRestClient } from './routeros'
 import { ConnectionLogger, clearConnectionUrl, getDisplayConnectionUrl, isUsingClientCredentials, log, SEMANTIC_TOKEN_REFRESH_DELAY_MS, updateSettings, useConnectionUrl } from './shared'
 import { HighlightTokens } from './tokens'
 
@@ -158,10 +158,11 @@ export class LspController {
 					try {
 						return await RouterRestClient.default.getIdentity()
 					} catch (error) {
-						// error is a RouterOSClientError (plain object with code/message/status)
-						// — safe to return across JSON-RPC to the client watchdog
-						log.error(`ERROR <server> {onExecuteCommand} getIdentity failed: ${error instanceof Error ? error.message : (error as { message?: string }).message || String(error)}`)
-						return error
+						// Re-normalize at the boundary — interceptors produce RouterOSClientError,
+						// but anything else in the call chain could throw a raw Error.
+						const normalized: RouterOSClientError = normalizeError(error)
+						log.error(`ERROR <server> {onExecuteCommand} getIdentity failed: ${normalized.code} ${normalized.message}`)
+						return normalized
 					}
 				}
 				case 'routeroslsp.server.useConnectionUrl': {

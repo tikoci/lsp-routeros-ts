@@ -157,14 +157,15 @@ export class RouterRestClient implements RouterApiClientInterface {
 		return req
 	}
 
-	#onRequestError(error: unknown) {
+	#onRequestError(error: unknown): never {
+		const normalized = normalizeError(error)
 		if (isAxiosError(error)) {
 			log.error(`ERROR <httpclient> |req| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
 		} else {
-			log.error(`ERROR <httpclient> |req| error: ${JSON.stringify(error)}`)
+			log.error(`ERROR <httpclient> |req| error: ${normalized.code} ${normalized.message}`)
 		}
 		RouterRestClient.onHttpError?.()
-		throw normalizeError(error)
+		throw normalized
 	}
 
 	#onResponseSuccess(resp: AxiosResponse) {
@@ -182,13 +183,14 @@ export class RouterRestClient implements RouterApiClientInterface {
 	 * while getIdentity lets the error propagate to the watchdog.
 	 */
 	#onResponseError(error: unknown): never {
+		const normalized = normalizeError(error)
 		if (isAxiosError(error)) {
 			log.error(`ERROR <httpclient> |response| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
 		} else {
-			log.error(`ERROR <httpclient> |response| error: ${JSON.stringify(error)}`)
+			log.error(`ERROR <httpclient> |response| error: ${normalized.code} ${normalized.message}`)
 		}
 		RouterRestClient.onHttpError?.()
-		throw normalizeError(error)
+		throw normalized
 	}
 
 	// MARK: API methods
@@ -281,7 +283,7 @@ export class RouterRestClient implements RouterApiClientInterface {
  * This function extracts only the fields the client watchdog needs and produces a
  * plain object that survives JSON serialization cleanly.
  */
-function normalizeError(error: unknown): RouterOSClientError {
+export function normalizeError(error: unknown): RouterOSClientError {
 	if (isAxiosError(error)) {
 		return {
 			code: error.code || 'UNKNOWN',

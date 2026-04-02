@@ -75,18 +75,18 @@ class LspClientWatchdog implements Disposable {
 					)
 					this.client.debug('<client.cmd> [routeroslsp.cmd.testConnection] success', identity)
 				} else {
-					const error = identity as Error & { code?: string }
+					// identity is a RouterOSClientError {code, message, status?} from the server,
+					// or undefined/null if something unexpected happened
 					this.client.error('ERROR <client.cmd> [routeroslsp.cmd.testConnection] identity is empty', undefined, false)
-					const errMsg = this.getTextFromError(error, activeBaseUrl as string, isUsingClientCredentials) // `RouterOS LSP not working: ${error.code || ''} ${error.message ? error.message : error.name ? error.name : JSON.stringify(error)}`
+					const error = toErrorInfo(identity)
+					const errMsg = this.getTextFromError(error, activeBaseUrl as string, isUsingClientCredentials)
 					showErrorWithOptions(errMsg, isUsingClientCredentials)
 				}
 			},
 			(error) => {
-				{
-					this.client.error('ERROR <client.cmd> [routeroslsp.cmd.testConnection] exception caught:', JSON.stringify(error), false)
-					const errMsg = this.getTextFromError(error as { code?: string; message?: string; name?: string; status?: number }, activeBaseUrl as string, isUsingClientCredentials) // `RouterOS LSP exception raised: ${error.code || ''} ${error.message ? error.message : error.name ? error.name : JSON.stringify(error)}`
-					showErrorWithOptions(errMsg, isUsingClientCredentials)
-				}
+				this.client.error('ERROR <client.cmd> [routeroslsp.cmd.testConnection] exception caught', undefined, false)
+				const errMsg = this.getTextFromError(toErrorInfo(error), activeBaseUrl as string, isUsingClientCredentials)
+				showErrorWithOptions(errMsg, isUsingClientCredentials)
 			},
 		)
 	}
@@ -144,6 +144,28 @@ class LspClientWatchdog implements Disposable {
 		}
 		return errText
 	}
+}
+
+/**
+ * Safely extract error-like fields from whatever the server returned.
+ * The server should return a RouterOSClientError {code, message, status?},
+ * but could return undefined/null if getIdentity resolved with no data,
+ * or an unknown shape if JSON-RPC deserialization produced something unexpected.
+ */
+function toErrorInfo(value: unknown): { code?: string; message?: string; name?: string; status?: number } {
+	if (value == null) {
+		return { code: 'UNKNOWN', message: 'No response from RouterOS (identity was empty)' }
+	}
+	if (typeof value === 'object') {
+		const obj = value as Record<string, unknown>
+		return {
+			code: typeof obj.code === 'string' ? obj.code : typeof obj.code === 'number' ? String(obj.code) : undefined,
+			message: typeof obj.message === 'string' ? obj.message : undefined,
+			name: typeof obj.name === 'string' ? obj.name : undefined,
+			status: typeof obj.status === 'number' ? obj.status : undefined,
+		}
+	}
+	return { message: String(value) }
 }
 
 function showErrorWithOptions(text: string, _isUsingClientCredentials: boolean) {
