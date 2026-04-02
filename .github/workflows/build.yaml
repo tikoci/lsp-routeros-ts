@@ -36,6 +36,9 @@ jobs:
       - name: Build project
         run: bun run compile
 
+      - name: Test (unit)
+        run: bun run test
+
       - name: Lint
         run: npx eslint ./server/src/*.ts ./client/src/*.ts
 

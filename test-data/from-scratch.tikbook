@@ -1,0 +1,30 @@
+/ip address/print
+
+/ip route/print  
+
+
+
+
+
+
+
+#| This is a test
+#| # More Markdown
+#| ### More markdown
+#| 
+#| 
+#| 
+#| 
+#| 
+#| 
+#| 
+
+:put [:serialize to=dsv delimiter=, [/container/print as-value] options=dsv.remap]
+#.
+
+
+{ 
+	container/print
+}
+#.
+

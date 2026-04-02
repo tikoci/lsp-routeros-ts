@@ -21,8 +21,8 @@ lsp-routeros-*
 **/*.map
 *.map
 
-tests
-test-data
+test-data/vscode.dev/
+test-data/Polygot.dib
 .scratch
 .vscode-test-web
 build-standalone.sh

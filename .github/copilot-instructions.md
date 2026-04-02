@@ -23,6 +23,7 @@ RouterOS LSP is a Language Server Protocol implementation for MikroTik RouterOS 
 bun install                 # Install all deps (chains client + server)
 bun run compile             # Full build (client + server + exe + web)
 bun run watch:node          # Dev mode — rebuild server on changes
+bun run test                # Run all tests (unit + snapshot + model + client)
 bun run lint                # ESLint
 bun run vsix:package        # Package .vsix for VSCode Marketplace
 bun run bun:exe             # Build standalone binary (copies to ~/.bin/)
@@ -50,6 +51,7 @@ bun run bun:exe             # Build standalone binary (copies to ~/.bin/)
 | Settings & logging | `server/src/shared.ts` |
 | VSCode commands | `client/src/commands.ts` |
 | Connection watchdog | `client/src/watchdog.ts` |
+| Watchdog error mapping (pure) | `client/src/watchdog-errors.ts` |
 | NeoVim integration | `nvim-routeros-lsp-init.lua` |
 
 ## Cross-Project Context

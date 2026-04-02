@@ -29,6 +29,8 @@ client/                      # VSCode extension client (thin binding)
     client.ts                # Shared: document selectors, package info
     commands.ts              # VSCode Command Palette actions
     watchdog.ts              # Connection health monitor
+    watchdog-errors.ts       # Pure error-mapping functions (extracted for testability)
+    watchdog-errors.test.ts  # Tests for toErrorInfo/getTextFromError
 
 server/                      # LSP server (the brain — portable across editors)
   src/
@@ -39,10 +41,20 @@ server/                      # LSP server (the brain — portable across editors
     routeros.ts              # HTTP client for RouterOS REST API
     shared.ts                # Settings, logging, credential management
     tokens.ts                # Token parser for /console/inspect highlight data
+    *.test.ts                # Unit tests (co-located with source)
+    test-preload.ts          # Bun test preload — silences log output
+    capture-snapshots.ts     # CLI tool: captures .highlight files from live CHR
+    integration.test.ts      # CHR integration tests (skipped when no CHR)
+    snapshot.test.ts         # Offline tests against .rsc.highlight snapshot pairs
 
-test-data/                   # Sample .rsc and .tikbook files for manual testing
+test-data/                   # .rsc scripts + .highlight snapshots for testing
+  edge-cases/                # Targeted: empty, comment-only, single-command, oversize, unicode
+  eworm/                     # Scripts from eworm-de/routeros-scripts (GPL, attributed)
+  forum/                     # Scripts sourced from forum.mikrotik.com
+  *.rsc.highlight            # Saved highlight responses for offline snapshot tests
 docs/                        # User-facing docs (walkthrough, CORS guide)
 
+bunfig.toml                  # Bun config — test preload for log silencing
 nvim-routeros-lsp-init.lua   # NeoVim LSP configuration script
 build-standalone.sh          # Cross-platform bun compile loop
 webpack.config.js            # Web target bundling only
@@ -190,13 +202,28 @@ GitHub Actions workflow (manual trigger):
 - Backed by LSP `connection.console.*`
 - HTTP request/response logging in Axios interceptors
 
-## Testing Status
+## Testing
 
-**No automated tests exist yet.** Test infrastructure is a planned addition:
-- `test-data/` has sample `.rsc` and `.tikbook` files for manual testing
-- No `tests/` directory exists yet — all sample data lives in `test-data/`
-- The `mocha` devDependency was removed (unused). Tests should use `bun test` when added.
-- See [BACKLOG.md](BACKLOG.md) for planned testing strategy
+Tests use `bun test` with co-located `*.test.ts` files. Run with `bun test server/src/ client/src/` or `bun run test`.
+
+### Test tiers
+
+| Tier | Files | What it tests | CHR required? |
+|------|-------|---------------|---------------|
+| Unit | `controller.test.ts`, `tokens.test.ts`, `routeros.test.ts`, `shared.test.ts` | Pure functions, static methods, settings lifecycle | No |
+| Model | `model.test.ts` | `LspDocument.diagnostics()` with mocked `inspectHighlight` | No |
+| Snapshot | `snapshot.test.ts` | Token parsing against saved `.rsc.highlight` files | No |
+| Client | `watchdog-errors.test.ts` | `toErrorInfo`/`getTextFromError` error mapping | No |
+| Integration | `integration.test.ts` | Full highlight pipeline against live CHR for all `test-data/**/*.rsc` | Yes |
+
+### Key details
+
+- `bunfig.toml` configures a preload (`test-preload.ts`) that silences `log.*` output during tests
+- Integration tests auto-skip when no CHR is reachable (default `http://192.168.74.150`, override via `ROUTEROS_TEST_URL`)
+- `capture-snapshots.ts` is a CLI tool (`bun run server/src/capture-snapshots.ts`) that regenerates `.highlight` snapshot files from a live CHR
+- `test-data/` is committed — snapshot `.highlight` files and scripts are available in CI for offline tests
+- Snapshot tests revealed unknown token types `arg-scope`, `arg-dot` — not yet in `HighlightTokens.TokenTypes` (see BACKLOG)
+- See [BACKLOG.md](BACKLOG.md) for remaining testing work (VSCode integration tests, CI snapshot capture)
 
 ## LSP Capabilities Implemented
 

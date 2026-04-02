@@ -6,23 +6,30 @@
 ## Quality & Infrastructure
 
 ### Testing
-- 📋 **Set up `bun test` runner** — configure test infrastructure using Bun's built-in test runner
-- 📋 **Anchor tests for tokens.ts** — test `HighlightTokens` parsing against known `/console/inspect` responses
-- 📋 **Anchor tests for routeros.ts** — mock HTTP responses, verify request formation
-- 📋 **Anchor tests for model.ts** — test `LspDocument` caching and invalidation behavior
-- 📋 **Anchor tests for controller.ts** — test LSP handler logic with mock documents
-- 📋 **Integration tests with QEMU CHR** — boot temporary RouterOS instance for E2E testing (see restraml pattern)
-- :clipboard: **Test data catalog** — document what each file in `test-data/` exercises
+- ✅ **Set up `bun test` runner** — configured with `bunfig.toml` preload for log silencing
+- ✅ **Anchor tests for tokens.ts** — `HighlightTokens` parsing, `tokenRanges`, `atPosition`, `regexToken`
+- ✅ **Anchor tests for routeros.ts** — `replaceNonAscii`, `normalizeError`
+- ✅ **Anchor tests for shared.ts** — settings, `updateSettings`, `getConnectionUrl`, `useConnectionUrl`
+- ✅ **Anchor tests for controller.ts** — `shortid`, `getServerCapabilities`, `hasCapability`
+- ✅ **Anchor tests for model.ts** — `LspDocument.diagnostics()` with mocked `RouterRestClient`
+- ✅ **Snapshot tests for tokens** — parses `.rsc.highlight` snapshot files offline (dynamic per snapshot pair)
+- ✅ **Watchdog error mapping tests** — `toErrorInfo`/`getTextFromError` (extracted to `watchdog-errors.ts`)
+- ✅ **Integration tests with QEMU CHR** — `inspectHighlight` for all `test-data/**/*.rsc` against live CHR (auto-skips when no CHR)
+- ✅ **Test data catalog** — `test-data/` expanded with eworm, forum, edge-case scripts + snapshot `.highlight` files
+- 📋 **VSCode integration tests** — boot real VS Code with `@vscode/test-electron`, install VSIX, verify semantic tokens, diagnostics, and completion work end-to-end
+- 📋 **Snapshot capture in CI** — run `capture-snapshots.ts` against CHR to regenerate `.highlight` files and detect regressions
 
 ### CI/CD
 - ✅ **Add lint to CI** — `build.yaml` now runs ESLint after compile
-- 📋 **Add test step to CI** — run `bun test` after compile
+- ✅ **Add test step to CI** — `bun test` runs after compile in `build.yaml`
 - 📋 **QEMU CHR in CI** — like restraml, boot CHR in GitHub Actions for integration tests
 - 📋 **Automated VSIX publishing** — trigger publish on version tag
 
 ### Code Quality
 - ✅ **Fix typo: `onComletionHandler`** → `onCompletionHandler` (already correct in code, docs were wrong)
 - ✅ **Fix typo: `inspectHighligh`** → `inspectHighlight` (routeros.ts, model.ts)
+- 📋 **Add `arg-scope` and `arg-dot` to TokenTypes** — snapshot tests revealed RouterOS returns these token types but they're not in `HighlightTokens.TokenTypes`; currently mapped to `?` in regexToken
+- ✅ **Clean up duplicate `test-data/eworm-de/`** — merged into `test-data/eworm/`
 - 📋 **Migrate ESLint to Biome** — align with user preference for single lint/format tool
 - 📋 **Add `no-console` ESLint rule** — enforce `log.*` usage over `console.log`
 

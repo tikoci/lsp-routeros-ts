@@ -397,6 +397,7 @@
   },
   "scripts": {
     "lint": "bunx @biomejs/biome check ./server/src/ ./client/src/",
+    "test": "bun test server/src/ client/src/",
     "audit": "bun audit && cd server && bun audit && cd ../client && bun audit && cd ..",
     "clean": "rm -rf package-lock.json && rm -rf .*.bun-build && rm -rf ./server/dist && rm -rf ./client/dist && rm -rf ./server/out && rm -rf ./client/out && rm -f lsp-routeros-server* && rm -f *.vsix && rm -rf ./dist",
     "vscode:prepublish": "bun run lint && bun run compile",
