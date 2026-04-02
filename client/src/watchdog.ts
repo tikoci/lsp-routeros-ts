@@ -9,33 +9,59 @@ class LspClientWatchdog implements Disposable {
 	context: ExtensionContext
 	client: BaseLanguageClient
 	disposables: Disposable[] = []
-	scheduledTest
+	scheduledTest: ReturnType<typeof setTimeout> | null = null
+	testDelay: integer
+	#isDisposed = false
 
 	constructor(context: ExtensionContext, client: BaseLanguageClient, testDelay: integer) {
-		this.scheduledTest = setTimeout(() => this.test(), testDelay)
 		this.context = context
 		this.client = client
-		this.client.onDidChangeState((e) => {
-			if (e.newState === State.Running) {
-				this.scheduledTest.refresh()
-			}
-			this.client.info(`<watchdog> LSP client state changed from ${State[e.oldState]} to ${State[e.newState]}`)
-		})
+		this.testDelay = testDelay
+		this.scheduleTest()
 
-		workspace.onDidChangeConfiguration((e) => {
-			if (e.affectsConfiguration('routeroslsp')) {
-				this.scheduledTest.refresh()
-			}
-		})
+		this.disposables.push(
+			this.client.onDidChangeState((e) => {
+				if (e.newState === State.Running) {
+					this.scheduleTest()
+				}
+				this.client.info(`<watchdog> LSP client state changed from ${State[e.oldState]} to ${State[e.newState]}`)
+			}),
+		)
+
+		this.disposables.push(
+			workspace.onDidChangeConfiguration((e) => {
+				if (e.affectsConfiguration('routeroslsp')) {
+					this.scheduleTest()
+				}
+			}),
+		)
 
 		this.disposables.push(commands.registerCommand('routeroslsp.cmd.testConnection', () => this.testCommandHandler()))
 	}
 
+	scheduleTest() {
+		if (this.scheduledTest) {
+			clearTimeout(this.scheduledTest)
+		}
+		this.scheduledTest = setTimeout(() => {
+			this.scheduledTest = null
+			this.test()
+		}, this.testDelay)
+	}
+
 	dispose() {
+		if (this.#isDisposed) return
+		this.#isDisposed = true
+
 		this.disposables.forEach((e) => {
 			e.dispose()
 		})
-		clearTimeout(this.scheduledTest)
+		this.disposables = []
+
+		if (this.scheduledTest) {
+			clearTimeout(this.scheduledTest)
+			this.scheduledTest = null
+		}
 	}
 
 	test() {

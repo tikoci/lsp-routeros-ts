@@ -39,6 +39,8 @@ export class LspController {
 	#lspDocuments = new Map<string, LspDocument>()
 	#ready: Promise<void>
 	#hasConfigurationCapability = false
+	#pendingSemanticRefreshTimers = new Set<ReturnType<typeof setTimeout>>()
+	#isDisposed = false
 
 	get isReady(): Promise<void> {
 		return this.#ready
@@ -62,6 +64,39 @@ export class LspController {
 		log.debug('<server> start()')
 		LspController.#default = new LspController(connection)
 		return LspController.#default
+	}
+
+	dispose() {
+		if (this.#isDisposed) return
+		this.#isDisposed = true
+
+		for (const timer of this.#pendingSemanticRefreshTimers) {
+			clearTimeout(timer)
+		}
+		this.#pendingSemanticRefreshTimers.clear()
+
+		this.#lspDocuments.clear()
+		RouterRestClient.onHttpError = null
+		RouterRestClient.default.dispose()
+		log.info('<server> {dispose} completed')
+	}
+
+	#scheduleSemanticTokensRefresh() {
+		if (this.#isDisposed) return
+
+		const timer = setTimeout(() => {
+			this.#pendingSemanticRefreshTimers.delete(timer)
+			if (this.#isDisposed) return
+
+			try {
+				this.#connection.languages.semanticTokens.refresh()
+			} catch (error: unknown) {
+				const normalized = normalizeError(error)
+				log.warn(`WARN <server> {semanticTokens.refresh} failed: ${normalized.code} ${normalized.message}`)
+			}
+		}, SEMANTIC_TOKEN_REFRESH_DELAY_MS)
+
+		this.#pendingSemanticRefreshTimers.add(timer)
 	}
 
 	private constructor(connection: Connection) {
@@ -102,21 +137,22 @@ export class LspController {
 		})
 
 		connection.onDidChangeConfiguration((e: DidChangeConfigurationParams) => {
+			const cfg = e.settings?.routeroslsp
 			log.info(
-				`<server> {onDidChangeConfiguration} ${e.settings.routeroslsp.baseUrl} user ${e.settings.routeroslsp.username} apiTimeout ${e.settings.routeroslsp.apiTimeout} allowClientProvidedCredentials ${e.settings.routeroslsp.allowClientProvidedCredentials}`,
+				`<server> {onDidChangeConfiguration} ${cfg?.baseUrl ?? '<unset>'} user ${cfg?.username ?? '<unset>'} apiTimeout ${cfg?.apiTimeout ?? '<unset>'} allowClientProvidedCredentials ${cfg?.allowClientProvidedCredentials ?? '<unset>'}`,
 			)
-			if (e.settings.routeroslsp) {
-				updateSettings(e.settings.routeroslsp)
+			if (cfg) {
+				updateSettings(cfg)
 				RouterRestClient.default.invalidateClient()
 				this.#documents.keys().forEach((k) => {
 					this.#lspDocuments.get(k)?.refresh()
 				})
-				setTimeout(() => connection.languages.semanticTokens.refresh(), SEMANTIC_TOKEN_REFRESH_DELAY_MS)
+				this.#scheduleSemanticTokensRefresh()
 			} else log.warn('<server> {onDidChangeConfiguration} got no settings, skipping update')
 		})
 
 		// Force token refresh after ready — gives RouterOS time to settle
-		this.isReady.then(() => setTimeout(() => connection.languages.semanticTokens.refresh(), SEMANTIC_TOKEN_REFRESH_DELAY_MS))
+		this.isReady.then(() => this.#scheduleSemanticTokensRefresh())
 
 		// MARK: Document lifecycle
 
@@ -144,6 +180,8 @@ export class LspController {
 		connection.onCompletionResolve((item) => item)
 		connection.onRequest('textDocument/semanticTokens/full', async (params) => this.#generateSemanticTokens(params))
 		connection.onDocumentSymbol(async (params) => this.#onDocumentSymbols(params))
+		connection.onShutdown(() => this.dispose())
+		connection.onExit(() => this.dispose())
 
 		// MARK: Execute commands
 
