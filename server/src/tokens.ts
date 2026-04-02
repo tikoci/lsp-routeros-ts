@@ -97,21 +97,14 @@ export class HighlightTokens {
 	}
 
 	atPosition(position: Position): HighlightTokenRangeItem | undefined {
-		// this.tokenRange(this.atPosition(position));
 		if (this.#document.offsetAt(position) >= this.#tokens.length) {
 			return undefined
 		}
-		let foundRange: HighlightTokenRangeItem | undefined
-		this.tokenRanges.forEach((tokenRange) => {
-			if (this.positionInRange(position, tokenRange.range)) {
-				foundRange = tokenRange
-				return
-			}
-		})
-		if (foundRange === undefined) {
+		const found = this.tokenRanges.find((tokenRange) => this.positionInRange(position, tokenRange.range))
+		if (!found) {
 			log.error(`ERROR <tokens> {atPosition} found no token ranges at position`)
 		}
-		return foundRange
+		return found
 	}
 
 	positionInRange(pos: Position, range: Range): boolean {

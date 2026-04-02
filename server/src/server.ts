@@ -1,5 +1,3 @@
-// Import from Microsoft's vscode-languageserver library
-
 import * as https from 'node:https'
 import { createConnection, ProposedFeatures } from 'vscode-languageserver/node'
 import { LspController } from './controller'
