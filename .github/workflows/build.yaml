@@ -1,7 +1,13 @@
 name: Build and Release
 
 on:
-  workflow_dispatch:      
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: 'Publish as pre-release (odd minor version, e.g. 0.7.x)'
+        required: true
+        default: true
+        type: boolean
 
 jobs:
   build:
@@ -30,6 +36,9 @@ jobs:
       - name: Build project
         run: bun run compile
 
+      - name: Lint
+        run: npx eslint ./server/src/*.ts ./client/src/*.ts
+
       - name: Upload JavaScript .map files for symbols
         uses: actions/upload-artifact@v4
         with:
@@ -42,7 +51,11 @@ jobs:
 
       - name: Package VSIX
         run: |
-          npm run vsix:package
+          if [ "${{ inputs.prerelease }}" = "true" ]; then
+            npm run vsix:package:prerelease
+          else
+            npm run vsix:package
+          fi
           mv lsp-routeros-ts-*.vsix lsp-routeros-ts.vsix
 
       - name: Package standalone "bun exe" for the native platform of CI
@@ -137,7 +150,7 @@ jobs:
           name: v${{ steps.pkgver.outputs.version }}
           tag: v${{ steps.pkgver.outputs.version }}
           draft: false
-          prerelease: true
+          prerelease: ${{ inputs.prerelease }}
           allowUpdates: true
           updateOnlyUnreleased: true
           body: |
@@ -175,6 +188,11 @@ jobs:
       # TODO: Publish release should be it's own build task, VSCode works and Open-VSX should too
       #
       - name: Publish to VSCode Marketplace
-        run: npx @vscode/vsce publish --no-dependencies -p ${{secrets.VSCE_PAT}}
+        run: |
+          if [ "${{ inputs.prerelease }}" = "true" ]; then
+            npx @vscode/vsce publish --no-dependencies --pre-release -p ${{secrets.VSCE_PAT}}
+          else
+            npx @vscode/vsce publish --no-dependencies -p ${{secrets.VSCE_PAT}}
+          fi
       - name: Publish to Open-VSX too
         run: npx ovsx publish lsp-routeros-ts.vsix -p ${{secrets.OVSX_PAT}}

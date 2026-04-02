@@ -12,16 +12,17 @@
 - 📋 **Anchor tests for model.ts** — test `LspDocument` caching and invalidation behavior
 - 📋 **Anchor tests for controller.ts** — test LSP handler logic with mock documents
 - 📋 **Integration tests with QEMU CHR** — boot temporary RouterOS instance for E2E testing (see restraml pattern)
-- 📋 **Test data catalog** — document what each file in `test-data/` exercises
+- :clipboard: **Test data catalog** — document what each file in `test-data/` exercises
 
 ### CI/CD
-- 📋 **Add lint to CI** — `build.yaml` runs compile but not lint
+- ✅ **Add lint to CI** — `build.yaml` now runs ESLint after compile
 - 📋 **Add test step to CI** — run `bun test` after compile
 - 📋 **QEMU CHR in CI** — like restraml, boot CHR in GitHub Actions for integration tests
 - 📋 **Automated VSIX publishing** — trigger publish on version tag
 
 ### Code Quality
-- 📋 **Fix typo: `onComletionHandler`** → `onCompletionHandler` (search all references first)
+- ✅ **Fix typo: `onComletionHandler`** → `onCompletionHandler` (already correct in code, docs were wrong)
+- ✅ **Fix typo: `inspectHighligh`** → `inspectHighlight` (routeros.ts, model.ts)
 - 📋 **Migrate ESLint to Biome** — align with user preference for single lint/format tool
 - 📋 **Add `no-console` ESLint rule** — enforce `log.*` usage over `console.log`
 

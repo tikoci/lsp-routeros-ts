@@ -17,7 +17,31 @@
 
 ## Changelog
 
-### 0.6.0
+### 0.7.0 (pre-release)
+
+#### Changes
+
+* CI workflow now supports both release and pre-release publishing via workflow dispatch input
+* Added lint step to CI pipeline
+* Added `bump:minor` script for version management
+* VS Code pre-release convention: odd minor versions (0.7.x) are pre-releases
+
+#### Fixes
+
+* Fixed `inspectHighligh` method name typo → `inspectHighlight` (routeros.ts, model.ts)
+* Fixed template literal in `onDocumentSymbols` that was using single quotes instead of backticks
+* Fixed error log typos: `higlightTokens` → `highlightTokens`, `httpclinet` → `httpclient`, `getdoc` → `get doc`
+* Fixed diagnostic codes with stray `}` characters (`token:unchecked}` → `token:unchecked`)
+* Fixed assignment-in-return in `LspController.start()`
+* Fixed `==` loose equality operators → `===` strict equality in controller.ts
+* Removed empty `import { } from './shared'` in server.ts
+* Changed `any` error handler parameter types to `unknown` in routeros.ts
+* Added explicit type annotation to `getLspDocument` variable
+* Added type annotations to `getTextFromError` and `showErrorWithOptions` in watchdog.ts
+* Removed dead commented-out imports from controller.ts, model.ts, watchdog.ts
+* Fixed ESLint ignore patterns (`*.*s*` was too broad, `./**/test*` was invalid glob)
+
+### 0.6.0 (release)
 
 ### Changes
 

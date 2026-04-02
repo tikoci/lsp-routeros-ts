@@ -1,5 +1,5 @@
 ---
-applyTo: "tests/**,test-data/**"
+applyTo: "test-data/**"
 description: "Use when writing or modifying tests. Covers test strategy, anchor testing pattern, QEMU CHR integration testing, and test data conventions."
 ---
 
@@ -40,9 +40,11 @@ For E2E tests against a real RouterOS instance:
 - `*.tikbook` — TikBook notebook format files
 - `from-scratch.tikbook` — Empty/minimal notebook
 - `sample.rsc` — General-purpose test script
-- `piano.rsc` — Edge case testing
+- `piano.rsc` — Edge case testing (musical beeps)
+- `export.rsc` — Full router config export (1000+ lines)
+- `test.rsc` — Complex VLAN script
 
 ## File Naming
 - Test files: `{module}.test.ts` (e.g., `tokens.test.ts`)
 - Test fixtures: `test-data/{description}.json` for mocked API responses
-- Integration data: `tests/*.rsc` for full-script testing
+- Integration scripts: `test-data/*.rsc` for full-script testing

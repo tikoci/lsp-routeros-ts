@@ -40,8 +40,7 @@ server/                      # LSP server (the brain — portable across editors
     shared.ts                # Settings, logging, credential management
     tokens.ts                # Token parser for /console/inspect highlight data
 
-test-data/                   # Sample .rsc and .tikbook files
-tests/                       # Test .rsc files (no test runner yet)
+test-data/                   # Sample .rsc and .tikbook files for manual testing
 docs/                        # User-facing docs (walkthrough, CORS guide)
 
 nvim-routeros-lsp-init.lua   # NeoVim LSP configuration script
@@ -192,15 +191,15 @@ GitHub Actions workflow (manual trigger):
 
 **No automated tests exist yet.** Test infrastructure is a planned addition:
 - `test-data/` has sample `.rsc` and `.tikbook` files for manual testing
-- `tests/` has `.rsc` files used for manual LSP behavior verification
-- The `mocha` devDependency exists but no test runner is configured
+- No `tests/` directory exists yet — all sample data lives in `test-data/`
+- The `mocha` devDependency was removed (unused). Tests should use `bun test` when added.
 - See [BACKLOG.md](BACKLOG.md) for planned testing strategy
 
 ## LSP Capabilities Implemented
 
 | LSP Feature | Status | Handler in controller.ts |
 |-------------|--------|--------------------------|
-| Completion | ✅ Working | `onComletionHandler` (note: typo in code) |
+| Completion | ✅ Working | `onCompletionHandler` |
 | Semantic Tokens | ✅ Working | `generateSemanticTokens` |
 | Diagnostics | ✅ Working | `handleDiagnostics` |
 | Hover | ⚠️ Basic (shows token type) | `onHoverHandler` |
@@ -215,7 +214,7 @@ See [BACKLOG.md](BACKLOG.md) for planned LSP feature additions.
 
 ## Known Gotchas
 
-1. **Completion handler typo**: `onComletionHandler` (missing 'p') — preserved for compatibility, don't rename without search
+1. **~~Completion handler typo~~**: Fixed — `onCompletionHandler` is now correctly spelled.
 2. **32KB document limit**: RouterOS API truncates large scripts. The LSP silently truncates at this boundary.
 3. **Unicode → underscore replacement**: Non-ASCII characters replaced with `?` before sending to RouterOS. Character indexes must be preserved carefully.
 4. **Self-signed TLS**: Node.js uses `rejectUnauthorized: false` by default. Web target cannot bypass certificate checks — requires CORS proxy.

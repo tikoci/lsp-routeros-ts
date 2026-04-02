@@ -3,7 +3,7 @@
   "description": "Language Server Protocol (LSP) for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "publisher": "TIKOCI",
   "categories": [
     "Programming Languages",
@@ -396,7 +396,7 @@
     ]
   },
   "scripts": {
-    "lint": "bun run audit && npx eslint ./server/src/*.ts ./client/src/*.ts",
+    "lint": "bunx @biomejs/biome check ./server/src/ ./client/src/",
     "audit": "bun audit && cd server && bun audit && cd ../client && bun audit && cd ..",
     "clean": "rm -rf package-lock.json && rm -rf .*.bun-build && rm -rf ./server/dist && rm -rf ./client/dist && rm -rf ./server/out && rm -rf ./client/out && rm -f lsp-routeros-server* && rm -f *.vsix && rm -rf ./dist",
     "vscode:prepublish": "bun run lint && bun run compile",
@@ -424,29 +424,21 @@
     "vsix:publish:prerelease": "npx @vscode/vsce publish --no-dependencies --pre-release -p $VSCE_PAT",
     "ovsx:publish": "npx ovsx publish lsp-routeros-ts-*.vsix -p $OVSX_PAT",
     "nvim:install": "bun run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua",
-    "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd .."
+    "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd ..",
+    "bump:minor": "npm version minor; cd server; npm version minor; cd ../client; npm version minor; cd .."
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@stylistic/eslint-plugin": "^5.9.0",
-    "@typescript-eslint/eslint-plugin": "^8.56.0",
-    "@typescript-eslint/parser": "^8.56.0",
-    "esbuild": "^0.27.3",
-    "eslint": "^10.0.1",
-    "eslint-config-prettier": "^10.1.8",
-    "jiti": "^2.6.1",
-    "mocha": "^11.7.5",
+    "@biomejs/biome": "^2.4.10",
+    "esbuild": "^0.27.5",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.0",
-    "webpack": "^5.105.2",
+    "webpack": "^5.105.4",
     "webpack-cli": "^6.0.1",
-    "axios": "^1.13.5"
+    "axios": "^1.14.0"
   },
   "peerDependencies": {
     "@types/bun": "^1.3.9",
     "@types/luxon": "^3.7.1",
-    "@types/mocha": "^10.0.10",
     "@types/vscode": "^1.109.0",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/test-web": "^0.0.79"
@@ -459,8 +451,11 @@
   "overrides": {
     "on-headers": "^1.1.0",
     "form-data": "^4.0.4",
-    "minimatch": "^10.2.2",
+    "minimatch": "^10.2.3",
     "diff": "^8.0.3",
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^4.1.1",
+    "picomatch": "^2.3.2",
+    "koa": "^3.1.2",
+    "path-to-regexp": "^8.4.0"
   }
 }
