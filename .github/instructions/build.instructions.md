@@ -39,6 +39,13 @@ Windows arm64 has not been tested and may not compile.
 ## VSIX Packaging
 `npx @vscode/vsce package --no-dependencies` — packages the extension without bundling node_modules (dependencies are bundled by bun build).
 
+## npm Package Publishing
+`npm:publish` script: `compile:server` → prepend `#!/usr/bin/env node` shebang → `cd server && npm publish`.
+
+The shebang step is required because `bun build` outputs plain JS without a shebang. npm/yarn/pnpm may create symlinks to the bin entry instead of wrapper scripts, which requires the shebang to be present for the file to be executable.
+
+CI uses `NODE_AUTH_TOKEN` (from `NPM_TOKEN` secret) with `registry-url: "https://registry.npmjs.org"` on the `setup-node` step — the `registry-url` is mandatory for `setup-node` to write the token into `.npmrc`.
+
 **`.vscodeignore` is critical** — it controls exactly what files end up in the VSIX. Review it whenever you add new root-level files, new `dist/` outputs, new docs, or new tooling config. Use `npx @vscode/vsce ls --no-dependencies` to see the current inclusion list before packaging or pushing. Developer/AI context files (e.g. `CLAUDE.md`, `DESIGN.md`, `BACKLOG.md`, `biome.json`, `bunfig.toml`, `.markdownlint*`, `.claude/`) and NeoVim-only files must **never** appear in the VSIX.
 
 ## VSIX Pre-release Convention

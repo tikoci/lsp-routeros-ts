@@ -14,8 +14,6 @@ RouterOS LSP supports:
 - **Semantic Tokens** — syntax highlighting that matches RouterOS CLI colors
 - **Hover Information** — help and variable inspection (Work in Progress)
 - **Document Symbols** — navigate variables and commands (Work in Progress)
-- **References** — find usages
-- **Definition Lookup** — jump to definitions
 - **VSCode Commands** — additional actions via Command Palette (VSCode only)
 - **Walkthrough** — guided setup wizard (VSCode only)
 
@@ -325,7 +323,7 @@ The LSP uses `bun run` scripts defined in `package.json`:
 - `watch:node` — Rebuild server on file changes
 - `vsix:package` — Package VSCode extension
 - `bun:exe` — Build standalone server binary
-- `lint` — Run ESLint on code
+- `lint` — Run Biome checks on code
 
 For new LSP features, add handlers to `server/src/controller.ts`. Refer to the [LSP Protocol Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/) for complete details.
 

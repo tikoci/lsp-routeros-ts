@@ -172,19 +172,22 @@ The client is intentionally thin:
 | `vsix:package` | Package .vsix (runs compile + vsce) |
 | `vsix:package:prerelease` | Package .vsix as pre-release (`--pre-release`) |
 | `bun:exe` | Same as compile:exe + copies to ~/.bin/ |
-| `lint` | `bun audit` + ESLint on server + client |
+| `lint` | `bun audit` + Biome check on server + client |
 | `test` | `bun test server/src/ client/src/` |
 | `bump:patch` | Sync patch version across root + server + client package.json |
 | `bump:minor` | Sync minor version across root + server + client package.json |
+| `npm:publish` | `compile:server` + prepend shebang + `npm publish` from server/ |
 
 ### CI (`build.yaml`)
 
 GitHub Actions workflow (manual trigger):
-1. Setup Node 22 + Bun
+1. Setup Node 22 + Bun (with `registry-url` set for npm auth)
 2. Install, build, lint
 3. Package VSIX
 4. Cross-compile standalone binaries for 8 platforms (Linux x64/arm64, macOS x64/arm64, Linux musl, Windows x64/arm64)
 5. Create GitHub Release with all artifacts
+6. Publish VSIX to VSCode Marketplace and Open-VSX
+7. Publish server package to npm as `@tikoci/routeroslsp` (if `NPM_TOKEN` secret is set)
 
 ## Code Patterns
 

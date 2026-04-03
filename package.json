@@ -425,7 +425,7 @@
     "vsix:publish:prerelease": "npx @vscode/vsce publish --no-dependencies --pre-release -p $VSCE_PAT",
     "ovsx:publish": "npx ovsx publish lsp-routeros-ts-*.vsix -p $OVSX_PAT",
     "nvim:install": "bun run bun:exe && mkdir -p ~/.config/nvim && cp nvim-routeros-lsp-init.lua ~/.config/nvim && grep -q \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" ~/.config/nvim/init.lua || echo \"dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')\" >> ~/.config/nvim/init.lua",
-    "npm:publish": "bun run compile:server && cd server && npm publish",
+    "npm:publish": "bun run compile:server && printf '#!/usr/bin/env node\n' | cat - server/dist/server.js > server/dist/server.js.tmp && mv server/dist/server.js.tmp server/dist/server.js && cd server && npm publish",
     "bump:patch": "npm version patch; cd server; npm version patch; cd ../client; npm version patch; cd ..",
     "bump:minor": "npm version minor; cd server; npm version minor; cd ../client; npm version minor; cd .."
   },

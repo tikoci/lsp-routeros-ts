@@ -13,7 +13,7 @@
 * "Triggers" characters should be LSP configuration options, currently: <kbd>space</kbd>, <kbd>/</kbd>, <kbd>:</kbd>, and <kbd>=</kbd>.  Space in particular may be "aggressive" as default.
 * Tokenizer should detect RouterOS _data_ types like "ip" and "num", but does not.
 * Blue color used for "escaped" types "\12\3A\BC" is too dark in dark mode - other colors could be tweaked more.
-* Standalone LSP (i.e. NeoVim) on Windows is untested, and Window ARM64 build does not compile currently. _VS Code for Windows uses JS-based extension, so does **not** standalone LSP_
+* Standalone LSP (i.e. NeoVim) on Windows is untested. _VS Code for Windows uses JS-based extension, so does **not** use the standalone LSP_
 
 ## Changelog
 
@@ -27,6 +27,7 @@
   * Semantic token refresh debounced (400 ms) and now fires on `TextChangedI` as well as `TextChanged` — diagnostics update while typing in insert mode
   * `vim.schedule()` deferred start added — LSP attaches when module loads into an already-open `.rsc` buffer (fixes lazy.nvim deferred loading)
 * `server/package.json` bin entry renamed `routeroslsp-langserver` → `routeroslsp`
+* `npm:publish` script now prepends `#!/usr/bin/env node` shebang to `dist/server.js` before publishing — required for some package managers that create symlinks instead of wrapper scripts
 * CI: added `registry-url` to `setup-node` step so `NODE_AUTH_TOKEN` is written to `.npmrc` for `npm publish`
 * README NeoVim section updated: correct `lua/` subdirectory, new binary name, lazy.nvim `return {}` note
 
