@@ -39,5 +39,13 @@ Windows arm64 has not been tested and may not compile.
 ## VSIX Packaging
 `npx @vscode/vsce package --no-dependencies` — packages the extension without bundling node_modules (dependencies are bundled by bun build).
 
+## VSIX Pre-release Convention
+VSCode uses odd minor versions for pre-releases (e.g. `0.7.x` is pre-release, `0.8.x` is stable). Scripts:
+- `vsix:package` — stable release (`vsce package`)
+- `vsix:package:prerelease` — pre-release (`vsce package --pre-release`)
+
+CI's `build.yaml` has a `prerelease` boolean input that selects between them.
+
 ## Version Bumping
-`bump:patch` script syncs version across root, server, and client `package.json` files.
+- `bump:patch` — syncs patch version across root, server, and client `package.json` files
+- `bump:minor` — syncs minor version across all three `package.json` files

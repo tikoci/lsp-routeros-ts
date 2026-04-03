@@ -170,8 +170,12 @@ The client is intentionally thin:
 | `watch:node` | Dev mode: compile + watch server changes |
 | `watch:web` | Dev mode: webpack watch |
 | `vsix:package` | Package .vsix (runs compile + vsce) |
+| `vsix:package:prerelease` | Package .vsix as pre-release (`--pre-release`) |
 | `bun:exe` | Same as compile:exe + copies to ~/.bin/ |
 | `lint` | `bun audit` + ESLint on server + client |
+| `test` | `bun test server/src/ client/src/` |
+| `bump:patch` | Sync patch version across root + server + client package.json |
+| `bump:minor` | Sync minor version across root + server + client package.json |
 
 ### CI (`build.yaml`)
 
