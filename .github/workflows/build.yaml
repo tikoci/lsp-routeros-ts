@@ -22,6 +22,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install `bun`
         uses: oven-sh/setup-bun@v2
@@ -78,8 +79,11 @@ jobs:
           bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server-windows-x64 --target bun-windows-x64
           ls -l ./lsp-routeros-server-windows-x64.exe
           chmod 755 ./lsp-routeros-server-windows-x64.exe
-          ls -la
           zip ./lsp-routeros-server-windows-x64.zip ./lsp-routeros-server-windows-x64.exe
+          bun build --compile ./server/src/server.ts --outfile ./lsp-routeros-server-windows-arm64 --target bun-windows-arm64
+          ls -l ./lsp-routeros-server-windows-arm64.exe
+          chmod 755 ./lsp-routeros-server-windows-arm64.exe
+          zip ./lsp-routeros-server-windows-arm64.zip ./lsp-routeros-server-windows-arm64.exe
 
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
@@ -108,15 +112,14 @@ jobs:
       - name: Upload lsp-routeros-server artifact for bun-windows-x64
         uses: actions/upload-artifact@v4
         with:
-          name: lsp-routeros-server-windows-x64.exe
+          name: lsp-routeros-server-windows-x64
           path: lsp-routeros-server-windows-x64.zip
 
-      # disable - "bun-windows-arm64" target is failing, think it needs newer (or older) `bun` - requires investigation (and not easily testable)
-      #- name: Upload lsp-routeros-server artifact for bun-windows-arm64
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #    name: lsp-routeros-server-windows-arm64
-      #    path: lsp-routeros-server-windows-arm64.zip
+      - name: Upload lsp-routeros-server artifact for bun-windows-arm64
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsp-routeros-server-windows-arm64
+          path: lsp-routeros-server-windows-arm64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-darwin-x64
         uses: actions/upload-artifact@v4
@@ -168,12 +171,13 @@ jobs:
 
             For *VSCode*, download `lsp-routeros-ts.vsix` and install use `code --install-extension lsp-routeros-ts.vsix` from your download directory.
 
-            For *NeoVim or other LSP clients*, download the specific `lsp-routeros-server-*` for your OS/platform, and copy to `~/.bin` (or another directory).
-            A sample configuration file for NeoVim (`nvim`) , `nvim-routeros-lsp-init.lua`, is provided for download.
+            For *NeoVim or other LSP clients*, the easiest install is via npm: `npm install -g @tikoci/routeroslsp` (requires Node.js). Then configure NeoVim with the provided `nvim-routeros-lsp-init.lua`.
+
+            Alternatively, download the pre-built `lsp-routeros-server-*` binary for your OS/platform from the assets below (no Node.js required).
 
             > _Note about download file names..._
-            > `darwin-` in name is for macOS, with `-arm64` is Apple Silicon while `-x64` is for Intel-based Mac platforms.
-            > `-musl` in name is for Alpine Linux or some other specialized Linux distros.
+            > `darwin-` in name is for macOS, with `-arm64` for Apple Silicon and `-x64` for Intel Macs.
+            > `-musl` in name is for Alpine Linux or other musl-based distros.
 
           artifacts: |
             lsp-routeros-ts.vsix
@@ -181,6 +185,7 @@ jobs:
             lsp-routeros-server-linux-x64.zip
             lsp-routeros-server-linux-arm64.zip
             lsp-routeros-server-windows-x64.zip
+            lsp-routeros-server-windows-arm64.zip
             lsp-routeros-server-darwin-x64.zip
             lsp-routeros-server-darwin-arm64.zip
             lsp-routeros-server-linux-x64-musl.zip
@@ -199,3 +204,9 @@ jobs:
           fi
       - name: Publish to Open-VSX too
         run: npx ovsx publish lsp-routeros-ts.vsix -p ${{secrets.OVSX_PAT}}
+
+      - name: Publish server to npm as @tikoci/routeroslsp
+        if: ${{ secrets.NPM_TOKEN != '' }}
+        run: npm run npm:publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

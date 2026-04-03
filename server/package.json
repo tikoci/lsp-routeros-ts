@@ -1,12 +1,29 @@
 {
-  "name": "routeroslsp",
+  "name": "@tikoci/routeroslsp",
   "description": "Language Server Protocol (LSP) Server for MikroTik RouterOS",
   "author": "AmmØ",
   "license": "MIT",
   "version": "0.7.1",
   "publisher": "TIKOCI",
+  "homepage": "https://github.com/tikoci/lsp-routeros-ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tikoci/lsp-routeros-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tikoci/lsp-routeros-ts/issues"
+  },
+  "bin": {
+    "routeroslsp": "./dist/server.js"
+  },
+  "files": [
+    "dist/server.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
-    "node": "*"
+    "node": ">=18"
   },
   "dependencies": {
     "axios": "^1.13.5",

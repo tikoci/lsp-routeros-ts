@@ -80,10 +80,11 @@
 
 ## NeoVim / Standalone
 
-- 📋 **Fix/verify NeoVim init script** — update `nvim-routeros-lsp-init.lua` for modern NeoVim (0.10+)
-- 📋 **Document lazy.nvim setup** — many NeoVim users use lazy.nvim plugin manager
+- ✅ **Fix/verify NeoVim init script** — updated `nvim-routeros-lsp-init.lua` for NeoVim 0.10+: removed deprecated `buf_attach_client`/`on_init` pattern, fixed `vim.highlight`→`vim.hl`, guarded `vim.lsp.completion` (0.11+), improved `root_dir` detection
+- ✅ **Document lazy.nvim setup** — added lazy.nvim snippet to README; npm install path removes quarantine friction
+- ✅ **Publish npm package** — `@tikoci/routeroslsp` with `routeroslsp-langserver` bin; reduces NeoVim install to 4 steps with no platform binary selection
 - 📋 **lspconfig entry** — contribute to nvim-lspconfig for official NeoVim LSP registry
-- 📋 **Windows standalone testing** — Windows arm64 doesn't compile, Windows x64 untested
+- ✅ **Windows arm64 in CI** — added to `build.yaml` build loop (was disabled; user reports compiles now)
 - 📋 **Socket transport testing** — `--socket=<port>` is experimental, needs validation
 
 ## Documentation

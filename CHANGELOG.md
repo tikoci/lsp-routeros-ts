@@ -17,13 +17,25 @@
 
 ## Changelog
 
+### 0.7.2 (pre-release)
+
+#### Changes
+
+* NeoVim LSP config (`nvim-routeros-lsp-init.lua`) rewritten:
+  * Lua module must be placed in `~/.config/nvim/lua/routeroslsp.lua` (NeoVim `require()` path)
+  * npm binary renamed from `routeroslsp-langserver` → `routeroslsp` (aligns with `routeroslsp.*` settings namespace)
+  * Semantic token refresh debounced (400 ms) and now fires on `TextChangedI` as well as `TextChanged` — diagnostics update while typing in insert mode
+  * `vim.schedule()` deferred start added — LSP attaches when module loads into an already-open `.rsc` buffer (fixes lazy.nvim deferred loading)
+* `server/package.json` bin entry renamed `routeroslsp-langserver` → `routeroslsp`
+* CI: added `registry-url` to `setup-node` step so `NODE_AUTH_TOKEN` is written to `.npmrc` for `npm publish`
+* README NeoVim section updated: correct `lua/` subdirectory, new binary name, lazy.nvim `return {}` note
+
 ### 0.7.1 (pre-release)
 
 #### Fixes
 
-* Fixed `integration.test.ts` `beforeAll` timeout — raised to 15s so the Axios 5s connect attempt resolves before bun:test kills the hook; was producing `(fail) [5000ms]` in CI when no CHR is available
-* Fixed CI `Lint` step — changed `npx eslint` to `bun run lint` (Biome); ESLint v9+ requires `eslint.config.js` and would have failed
-* Cleaned up `.vscodeignore` — removed dev/AI/build file leaks (`CLAUDE.md`, `DESIGN.md`, `BACKLOG.md`, `biome.json`, `bunfig.toml`, `build-standalone.sh`, `user-settings.json`, `.markdownlint*`, `.claude/`, `nvim-routeros-lsp-init.lua`, `icon.svg`, `docs/cors.md`, compiled `*.test.js` and utility scripts from `dist/`); rewrote as clean, commented file
+* Cleaned up `.vscodeignore` — removed dev/AI/build file leaks
+
 
 ### 0.7.0 (pre-release)
 
@@ -44,6 +56,8 @@
 
 #### Fixes
 
+* Fixed `integration.test.ts` `beforeAll` timeout — raised to 15s so the Axios 5s connect attempt resolves before bun:test kills the hook; was producing `(fail) [5000ms]` in CI when no CHR is available
+* Fixed CI `Lint` step — changed `npx eslint` to `bun run lint` (Biome)
 * Fixed `inspectHighligh` method name typo → `inspectHighlight` (routeros.ts, model.ts)
 * Fixed template literal in `onDocumentSymbols` that was using single quotes instead of backticks
 * Fixed error log typos: `higlightTokens` → `highlightTokens`, `httpclinet` → `httpclient`, `getdoc` → `get doc`

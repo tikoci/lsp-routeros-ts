@@ -51,35 +51,93 @@ By selecting the "Install" button, you will be prompted by your browser to insta
 
 ### Other Editors and LSP Clients
 
-For editors other than VSCode, download the LSP server binary from [GitHub Releases](https://github.com/tikoci/lsp-routeros-ts/releases).
+For editors other than VSCode, RouterOS LSP provides a standalone language server. The recommended install is via npm (no Gatekeeper/quarantine issues on macOS, works on all platforms with Node.js):
 
 ![LSP running in NeoVim](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDJiOHV6ZDZsamN6bDJxN21zb3hjZ3I2cm5hNDJzbGpqeWtydXAxMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/reM309KJpRbotDSkL5/giphy.gif)
 
-> 🛟 Limited testing has been done with NeoVim. Other LSP manager plugins are not tested. Contributions welcome!
-
 ### NeoVim Install
 
-1. Download the NeoVim LSP server for your platform from [GitHub Releases](https://github.com/tikoci/lsp-routeros-ts/releases) and place it in `~/.bin/` (or adjust the path in step 3)
+**Step 1 — Install the LSP server** (pick one):
 
-2. Edit your NeoVim `init.lua` (typically at `~/.config/nvim/init.lua`) and add:
+```bash
+# Option A: npm (recommended — no platform-specific filenames, no quarantine issues on macOS)
+npm install -g @tikoci/routeroslsp
 
-   ```lua
-   dofile(os.getenv('HOME') .. '/.config/nvim/nvim-routeros-lsp-init.lua')
-   ```
+# Option B: standalone binary from GitHub Releases (no Node.js required)
+# Download lsp-routeros-server-<platform>.zip from https://github.com/tikoci/lsp-routeros-ts/releases
+# Unzip and place in ~/.bin/ — see platform names below
+```
 
-3. Download [`nvim-routeros-lsp-init.lua`](https://github.com/tikoci/lsp-routeros-ts/blob/main/nvim-routeros-lsp-init.lua) to `~/.config/nvim/nvim-routeros-lsp-init.lua`
+**Step 2 — Download the NeoVim config** to `~/.config/nvim/lua/routeroslsp.lua`:
 
-4. Edit `nvim-routeros-lsp-init.lua` from [GitHub Releases](https://github.com/tikoci/lsp-routeros-ts/releases) and set your RouterOS credentials and connection details at the top of the file.  See [NeoVim Configuration](#neovim-configuration) below for details.
+```bash
+mkdir -p ~/.config/nvim/lua
+curl -o ~/.config/nvim/lua/routeroslsp.lua \
+  https://raw.githubusercontent.com/tikoci/lsp-routeros-ts/main/nvim-routeros-lsp-init.lua
+```
 
-5. _On macOS only_, If the downloaded server binary is blocked, remove the quarantine flag:
+**Step 3 — Edit credentials** at the top of `~/.config/nvim/lua/routeroslsp.lua`:
 
-   ```bash
-   xattr -d com.apple.quarantine ~/.bin/lsp-routeros-server-darwin-arm64
-   ```
+```lua
+local settings = {
+  routeroslsp = {
+    baseUrl = "http://192.168.88.1",  -- change to your router IP, or https://
+    username = "lsp",                  -- RouterOS user with read,api,rest-api policy
+    password = "changeme",             -- RouterOS user password
+  }
+}
+```
 
-6. Open a `.rsc` file in NeoVim and the LSP should load. You'll see a confirmation message at the bottom of the editor.
+**Step 4 — Load in NeoVim.** Add one line to `~/.config/nvim/init.lua`:
 
-7. To trigger code completion, use <kbd>Ctrl</kbd> + <kbd>Z</kbd> followed by <kbd>Ctrl</kbd> + <kbd>O</kbd> (omni-complete) while in INSERT mode.
+```lua
+require('routeroslsp')
+```
+
+Open a `.rsc` file — you'll see "RouterOS LSP attached" in the status line. Completion works in insert mode with `<C-x><C-o>` (or automatically if you have a completion plugin).
+
+#### lazy.nvim setup
+
+If you use [lazy.nvim](https://lazy.folke.io/), add this to your plugin specs instead of the `require` above:
+
+```lua
+{
+  -- points to your own nvim config dir — no git clone needed
+  dir = vim.fn.stdpath("config"),
+  name = "routeroslsp",
+  -- BufReadPre fires before BufEnter, ensuring our autocmd is registered in time
+  event = "BufReadPre *.rsc",
+  config = function()
+    require("routeroslsp")
+  end,
+}
+```
+
+> **Note:** If you put this in a dedicated spec file (e.g. `lua/plugins/routeroslsp.lua`), wrap it in `return { ... }` so lazy.nvim can load it.
+
+#### Standalone binary platform names
+
+If using the GitHub Releases binary (Option B), the filename suffix matches your platform:
+
+| Platform | Filename suffix |
+|---|---|
+| macOS Apple Silicon | `darwin-arm64` |
+| macOS Intel | `darwin-x64` |
+| Linux x64 | `linux-x64` |
+| Linux ARM64 | `linux-arm64` |
+| Windows x64 | `windows-x64.exe` |
+| Windows ARM64 | `windows-arm64.exe` |
+
+Place the binary in `~/.bin/` (or any directory in your `$PATH`). When using the binary instead of npm, set `lspexec` at the top of `routeroslsp.lua`:
+
+```lua
+-- Option B: standalone binary
+local lspexec = {os.getenv("HOME") .. "/.bin/lsp-routeros-server-darwin-arm64", "--stdio"}
+```
+
+#### Other LSP clients (Helix, Emacs, etc.)
+
+Any editor supporting the `workspace/configuration` LSP capability works. The server binary is `routeroslsp --stdio` (npm) or `lsp-routeros-server-<platform> --stdio` (GitHub Releases). Configure your editor to pass `routeroslsp.*` settings via `workspace/configuration` — see your editor's LSP documentation for the exact format.
 
 ## Configuration
 
@@ -140,32 +198,9 @@ After installing, configure your RouterOS connection:
 
 Alternatively, use the **Command Palette** (<kbd>⌘</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> on Mac or <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> on Windows/Linux), search for "RouterOS LSP: Show Settings", and select it. In VS Code's `settings.json`, all setting uses the `routeroslsp.*` prefix.  
 
-### NeoVim Configuration
-
-Edit the configuration section at the top of `nvim-routeros-lsp-init.lua` with your RouterOS connection details:
-
-```lua
-local settings = {
-  routeroslsp = {
-    baseUrl = "http://192.168.88.1",  -- Change to your router or https://
-    username = "lsp",                  -- Change to your RouterOS user
-    password = "changeme",             -- Change to your RouterOS password
-    hotlock = true
-  }
-}
-```
-
-Also verify the **platform** is correct in the `local lspexec` variable. For example, on macOS with Apple Silicon:
-
-```lua
-local lspexec = { os.getenv("HOME") .. "/.bin/lsp-routeros-server-darwin-arm64", "--stdio" }
-```
-
-Adjust the filename for your platform: `darwin-x64` (Intel Mac), `linux-x64`, `linux-arm64`, `windows-x64.exe`, etc.
-
 ### Other LSP Clients
 
-Other LSP clients should work if they support the **`workspace/configuration` capability**, which is the standard way LSP clients receive configuration. RouterOS connection settings must be provided somehow to the LSP client. Both NeoVim and VSCode support this; most modern LSP-capable editors do as well.
+Other LSP clients should work if they support the **`workspace/configuration`** capability. See the [Other LSP clients](#other-lsp-clients-helix-emacs-etc) section above.
 
 ## Troubleshooting
 

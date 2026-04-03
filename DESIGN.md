@@ -57,6 +57,16 @@ Bun handles Node.js compilation and standalone binaries excellently. But it cann
 
 The standalone binary uses `bun build --compile` targeting multiple platforms. It reads settings via LSP `workspace/configuration` protocol — not environment variables or config files. The NeoVim integration script (`nvim-routeros-lsp-init.lua`) provides the configuration handler on the client side.
 
+### Standalone Distribution: npm vs. Native Binary
+
+Two distribution methods are supported for the standalone server:
+
+1. **npm package (`@tikoci/routeroslsp`)** — Preferred for most users. Publishes the compiled `server/dist/server.js` with a `routeroslsp-langserver` bin shim. Install with `npm install -g @tikoci/routeroslsp`. Advantages: no platform-specific filenames, avoids macOS Gatekeeper quarantine for downloaded binaries, auto-updates with `npm update`, works anywhere Node.js is installed.
+
+2. **Native binary (GitHub Releases)** — For environments without Node.js (embedded Linux, minimal setups). Built with `bun build --compile` per platform. Disadvantage: macOS users must remove quarantine attribute after download.
+
+**Rule:** Keep the npm package as the primary documented install path. The native binary is a secondary option, not the default.
+
 ## HTTP Client Design
 
 ### Why Axios (Not Fetch)
