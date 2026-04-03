@@ -8,6 +8,15 @@ on:
         required: true
         default: true
         type: boolean
+      bump_type:
+        description: 'Version bump to apply after publish (keeps package.json at next version)'
+        required: false
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - skip
 
 jobs:
   build:
@@ -210,3 +219,35 @@ jobs:
         run: npm run npm:publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Bump version and prepare CHANGELOG skeleton for next release
+        if: ${{ inputs.bump_type != 'skip' }}
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+
+          # Bump version in all three package.json files without creating a git commit/tag
+          npm version ${{ inputs.bump_type }} --no-git-tag-version
+          cd server && npm version ${{ inputs.bump_type }} --no-git-tag-version && cd ..
+          cd client && npm version ${{ inputs.bump_type }} --no-git-tag-version && cd ..
+
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          export NEW_VERSION
+          IS_PRERELEASE="${{ inputs.prerelease }}"
+          export IS_PRERELEASE
+
+          # Prepend a skeleton CHANGELOG entry for the upcoming version
+          python3 -c "
+          import os
+          v = os.environ['NEW_VERSION']
+          label = ' (pre-release)' if os.environ['IS_PRERELEASE'] == 'true' else ''
+          stub = '\n### ' + v + label + '\n\n#### Changes\n\n#### Fixes\n\n'
+          with open('CHANGELOG.md') as f: c = f.read()
+          c = c.replace('## Changelog\n', '## Changelog\n' + stub, 1)
+          with open('CHANGELOG.md', 'w') as f: f.write(c)
+          "
+
+          git add package.json server/package.json client/package.json CHANGELOG.md
+          git commit -m "chore: bump to v${NEW_VERSION} after publish [skip ci]"
+          git push

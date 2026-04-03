@@ -7,6 +7,19 @@ applyTo: "CHANGELOG.md"
 
 CHANGELOG.md is displayed to users in the VSCode extension UI ("Release Notes"). Write for extension users, not developers.
 
+## Version convention — package.json is always the next version
+
+After each publish, CI automatically:
+1. Bumps all `package.json` files to the next version (`patch` by default, controllable via workflow input)
+2. Prepends a skeleton `### x.y.z` entry to CHANGELOG.md with empty `#### Changes` and `#### Fixes` sections
+3. Commits and pushes — so the default branch always reflects "not yet published"
+
+**What this means when editing:**
+- The version in `package.json` is the **next** version to be published — it has not shipped yet
+- The top CHANGELOG entry already has the correct version heading — just fill in the bullets
+- You never need to add a new version heading or run `bump:patch` manually
+- If the `#### Changes` or `#### Fixes` section has nothing to add, remove it before publishing
+
 ## Structure
 
 Each release has two optional sections — use whichever apply:

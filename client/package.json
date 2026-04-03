@@ -3,7 +3,7 @@
   "description": "VSCode Extension Client for MikroTik RouterOS using LSP",
   "author": "AmmØ",
   "license": "MIT",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "publisher": "TIKOCI",
   "engines": {
     "vscode": "^1.78.2"
