@@ -58,3 +58,11 @@ CI's `build.yaml` has a `prerelease` boolean input that selects between them.
 ## Version Bumping
 - `bump:patch` — syncs patch version across root, server, and client `package.json` files
 - `bump:minor` — syncs minor version across all three `package.json` files
+- Version bumps are not user-visible changes — don't add them to CHANGELOG.md
+
+## CHANGELOG.md
+
+`CHANGELOG.md` is shown as "Release Notes" in the VSCode extension UI — write for users, not developers. See `changelog.instructions.md` for full conventions. Key points:
+- Update when making user-visible changes (features, bug fixes, breaking changes)
+- Each release has **Changes** (features/improvements) and **Fixes** (bugs, summarized cleanup)
+- Don't log version bumps, CI-only changes, or lint fixes individually

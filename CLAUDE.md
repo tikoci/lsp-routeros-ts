@@ -232,6 +232,12 @@ Tests use `bun test` with co-located `*.test.ts` files. Run with `bun test serve
 - Snapshot tests revealed unknown token types `arg-scope`, `arg-dot` — not yet in `HighlightTokens.TokenTypes` (see BACKLOG)
 - See [BACKLOG.md](BACKLOG.md) for remaining testing work (VSCode integration tests, CI snapshot capture)
 
+## CHANGELOG.md
+
+`CHANGELOG.md` is user-facing — it's displayed as "Release Notes" in the VSCode extension UI. Write for extension users, not developers.
+
+Each release has **Changes** (user-visible features/improvements) and **Fixes** (bug fixes). Update the changelog when making user-visible changes. Don't log version bumps, CI-only changes, or individual lint fixes. Refactors are worth a summarized bullet under Fixes since users may correlate behavior changes. See `.github/instructions/changelog.instructions.md` for full conventions.
+
 ## LSP Capabilities Implemented
 
 | LSP Feature | Status | Handler in controller.ts |

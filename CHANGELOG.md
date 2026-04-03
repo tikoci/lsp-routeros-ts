@@ -21,60 +21,35 @@
 
 #### Changes
 
-* NeoVim LSP config (`nvim-routeros-lsp-init.lua`) rewritten:
-  * Lua module must be placed in `~/.config/nvim/lua/routeroslsp.lua` (NeoVim `require()` path)
-  * npm binary renamed from `routeroslsp-langserver` → `routeroslsp` (aligns with `routeroslsp.*` settings namespace)
-  * Semantic token refresh debounced (400 ms) and now fires on `TextChangedI` as well as `TextChanged` — diagnostics update while typing in insert mode
-  * `vim.schedule()` deferred start added — LSP attaches when module loads into an already-open `.rsc` buffer (fixes lazy.nvim deferred loading)
-* `server/package.json` bin entry renamed `routeroslsp-langserver` → `routeroslsp`
-* `npm:publish` script now prepends `#!/usr/bin/env node` shebang to `dist/server.js` before publishing — required for some package managers that create symlinks instead of wrapper scripts
-* CI: added `registry-url` to `setup-node` step so `NODE_AUTH_TOKEN` is written to `.npmrc` for `npm publish`
-* README NeoVim section updated: correct `lua/` subdirectory, new binary name, lazy.nvim `return {}` note
+* Improved NeoVim support (`nvim-routeros-lsp-init.lua` rewritten):
+  * Semantic tokens now refresh while typing (debounced 400 ms)
+  * Lazy.nvim deferred loading works correctly — LSP attaches to already-open `.rsc` buffers
+  * Lua module path changed to `~/.config/nvim/lua/routeroslsp.lua`
+* npm package now includes shebang — fixes execution under package managers that symlink bins directly
 
 ### 0.7.1 (pre-release)
 
 #### Fixes
 
-* Cleaned up `.vscodeignore` — removed dev/AI/build file leaks
-
+* Reduced VSIX package size — excluded dev/AI/build files that were leaking into the extension package
 
 ### 0.7.0 (pre-release)
 
 #### Changes
 
-* CI workflow now supports both release and pre-release publishing via workflow dispatch input
-* Added lint step to CI pipeline
-* Added `bump:minor` script for version management
-* VS Code pre-release convention: odd minor versions (0.7.x) are pre-releases
-* `controller.ts` refactored: LSP handlers converted from curried arrow functions to private `async #method()` — eliminates circular imports, simplifies `this` access, improves testability
-* Dead code removed from `controller.ts`: previously commented-out inlay hints, unused public getters (`lspDocuments`, `documents`), notebook sync debug logging, and stale TODOs
-* Added `RouterOSClientError` interface — normalized plain-object error shape that crosses the LSP protocol boundary cleanly (fields: `code`, `message`, `status`)
-* Added `normalizeError()` utility in `routeros.ts` — converts `AxiosError`/`Error`/unknown into a serializable `RouterOSClientError`
-* Removed `rawHttpClient` and `getIdentityRaw` from `routeros.ts` — one Axios client instance, one code path
-* **Web extension** now explicitly terminates the Web Worker on `deactivate()` to avoid orphaned Workers
-* **Watchdog** now tracks all event subscriptions in a `disposables` array — listeners no longer leak on `dispose()`
-* `deactivate()` in both entry points is now `async` and explicitly disposes the watchdog before stopping the `LanguageClient`
+* CI now supports both stable release and pre-release publishing via workflow dispatch
+* VS Code pre-release convention adopted: odd minor versions (0.7.x) are pre-releases
+* Web extension properly terminates its Worker on deactivate — no more orphaned processes
+* Watchdog cleans up all event listeners on dispose — fixes subscription leaks
 
 #### Fixes
 
-* Fixed `integration.test.ts` `beforeAll` timeout — raised to 15s so the Axios 5s connect attempt resolves before bun:test kills the hook; was producing `(fail) [5000ms]` in CI when no CHR is available
-* Fixed CI `Lint` step — changed `npx eslint` to `bun run lint` (Biome)
-* Fixed `inspectHighligh` method name typo → `inspectHighlight` (routeros.ts, model.ts)
-* Fixed template literal in `onDocumentSymbols` that was using single quotes instead of backticks
-* Fixed error log typos: `higlightTokens` → `highlightTokens`, `httpclinet` → `httpclient`, `getdoc` → `get doc`
-* Fixed diagnostic codes with stray `}` characters (`token:unchecked}` → `token:unchecked`)
-* Fixed assignment-in-return in `LspController.start()`
-* Fixed `==` loose equality operators → `===` strict equality in controller.ts
-* Removed empty `import { } from './shared'` in server.ts
-* Changed `any` error handler parameter types to `unknown` in routeros.ts
-* Added explicit type annotation to `getLspDocument` variable
-* Added type annotations to `getTextFromError` and `showErrorWithOptions` in watchdog.ts
-* Removed dead commented-out imports from controller.ts, model.ts, watchdog.ts
-* Fixed ESLint ignore patterns (`*.*s*` was too broad, `./**/test*` was invalid glob)
-* Fixed HTTP interceptors calling `JSON.stringify(error)` on unknown errors — throws on circular objects; now normalizes first and logs only safe `{code, message}` fields
-* Fixed watchdog crash when `getIdentity` resolves with `undefined` — added `toErrorInfo()` helper that safely extracts error fields from any value shape
-* Replaced `Timeout.refresh()` in watchdog with `clearTimeout` + `setTimeout` — Node's `.refresh()` is not available in Web Worker context
-* Watchdog `dispose()` is now idempotent via `#isDisposed` guard — safe to call multiple times
+* Fixed watchdog crash when RouterOS connection returns undefined identity
+* Fixed HTTP error logging crash on circular error objects (e.g. Axios errors)
+* Fixed watchdog timer incompatibility with Web Worker context
+* Refactored `controller.ts` — LSP handlers converted from curried arrow functions to private class methods; dead code removed (inlay hint stubs, unused getters, stale TODOs)
+* Refactored `routeros.ts` — normalized error handling into `RouterOSClientError` interface; consolidated to single HTTP client instance
+* Code cleanup: typo fixes, strict equality, type annotations, lint config corrections across server and client
 
 ### 0.6.0 (release)
 
