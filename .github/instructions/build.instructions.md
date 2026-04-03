@@ -40,7 +40,7 @@ Windows arm64 has not been tested and may not compile.
 `npx @vscode/vsce package --no-dependencies` — packages the extension without bundling node_modules (dependencies are bundled by bun build).
 
 ## VSIX Pre-release Convention
-VSCode uses odd minor versions for pre-releases (e.g. `0.7.x` is pre-release, `0.8.x` is stable). Scripts:
+VSCode uses odd minor versions for pre-releases (e.g. `0.7.x` is pre-release, `0.6.x` is stable). Scripts:
 - `vsix:package` — stable release (`vsce package`)
 - `vsix:package:prerelease` — pre-release (`vsce package --pre-release`)
 
