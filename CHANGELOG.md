@@ -17,6 +17,14 @@
 
 ## Changelog
 
+### 0.7.1 (pre-release)
+
+#### Fixes
+
+* Fixed `integration.test.ts` `beforeAll` timeout — raised to 15s so the Axios 5s connect attempt resolves before bun:test kills the hook; was producing `(fail) [5000ms]` in CI when no CHR is available
+* Fixed CI `Lint` step — changed `npx eslint` to `bun run lint` (Biome); ESLint v9+ requires `eslint.config.js` and would have failed
+* Cleaned up `.vscodeignore` — removed dev/AI/build file leaks (`CLAUDE.md`, `DESIGN.md`, `BACKLOG.md`, `biome.json`, `bunfig.toml`, `build-standalone.sh`, `user-settings.json`, `.markdownlint*`, `.claude/`, `nvim-routeros-lsp-init.lua`, `icon.svg`, `docs/cors.md`, compiled `*.test.js` and utility scripts from `dist/`); rewrote as clean, commented file
+
 ### 0.7.0 (pre-release)
 
 #### Changes

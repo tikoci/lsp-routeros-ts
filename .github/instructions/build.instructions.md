@@ -39,6 +39,8 @@ Windows arm64 has not been tested and may not compile.
 ## VSIX Packaging
 `npx @vscode/vsce package --no-dependencies` — packages the extension without bundling node_modules (dependencies are bundled by bun build).
 
+**`.vscodeignore` is critical** — it controls exactly what files end up in the VSIX. Review it whenever you add new root-level files, new `dist/` outputs, new docs, or new tooling config. Use `npx @vscode/vsce ls --no-dependencies` to see the current inclusion list before packaging or pushing. Developer/AI context files (e.g. `CLAUDE.md`, `DESIGN.md`, `BACKLOG.md`, `biome.json`, `bunfig.toml`, `.markdownlint*`, `.claude/`) and NeoVim-only files must **never** appear in the VSIX.
+
 ## VSIX Pre-release Convention
 VSCode uses odd minor versions for pre-releases (e.g. `0.7.x` is pre-release, `0.6.x` is stable). Scripts:
 - `vsix:package` — stable release (`vsce package`)
