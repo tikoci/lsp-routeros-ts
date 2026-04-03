@@ -81,7 +81,7 @@ beforeAll(async () => {
 		console.warn(`⚠ CHR not reachable at ${CHR_URL} — integration tests will be skipped`)
 		chrAvailable = false
 	}
-})
+}, 15000) // allow Axios 5s connect timeout to resolve before bun:test times out the hook
 
 afterAll(() => {
 	// Restore default settings
