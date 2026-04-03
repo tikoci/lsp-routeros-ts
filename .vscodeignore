@@ -1,35 +1,59 @@
-**/*.ts
-**/tsconfig.json
-test*
-tests
-**/tests
-icon.svg
-**/*.map
-**/.*bun-build
-lsp-routeros*
-**/tsconfig.tsbuildinfo
-.github
-.vscode/**
-client/src/**
-server/src/**
+# ── Source files (compiled by bun build / webpack into dist/) ───────────────
 **/*.ts
 **/*.mts
-**/node_modules/**
 **/*.map
-.gitignore
-webpack.config.js
-.eslintrc.json
-bun.lock
-**/bun.lock
-.scratch
-.vscode/**
-**/*.ts
-**/*.map
-.gitignore
 **/tsconfig.json
 **/tsconfig.base.json
-contributing.md
+**/tsconfig.tsbuildinfo
+webpack.config.js
+
+# ── Test artifacts (compiled test files that end up in dist/) ────────────────
+**/*.test.js
+server/dist/test-preload.js
+server/dist/capture-snapshots.js
+test-data/
+
+# ── Build & developer tooling ────────────────────────────────────────────────
+biome.json
+.eslintrc.json
+build-standalone.sh
+bunfig.toml
+bun.lock
+**/bun.lock
+**/*.bun-build
+user-settings.json
+
+# ── Agent / AI context files ─────────────────────────────────────────────────
+.claude/
+CLAUDE.md
+DESIGN.md
+BACKLOG.md
+
+# ── Markdown lint config ─────────────────────────────────────────────────────
+.markdownlint.yaml
+.markdownlint-cli2.yaml
+
+# ── NeoVim / standalone-only files ──────────────────────────────────────────
+nvim-routeros-lsp-init.lua
+lsp-routeros-server
+lsp-routeros-server*
+
+# ── CI / VCS config ──────────────────────────────────────────────────────────
+.github/
+.gitignore
 .travis.yml
-**/node_modules/**
-test-data
-*.mjs
+
+# ── Editor / IDE config ──────────────────────────────────────────────────────
+.vscode/
+
+# ── Docs: CORS guide (not referenced by walkthrough) ─────────────────────────
+docs/cors.md
+
+# ── node_modules ─────────────────────────────────────────────────────────────
+**/node_modules/
+
+# ── Scratch / temp ───────────────────────────────────────────────────────────
+.scratch/
+
+# ── Unreferenced source assets ────────────────────────────────────────────────
+icon.svg
