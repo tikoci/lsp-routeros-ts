@@ -2,8 +2,8 @@
 	"compilerOptions": {
 		"target": "es2020",
 		"lib": ["es2020", "WebWorker"],
-		"module": "commonjs",
-		"moduleResolution": "node",
+		"module": "es2022",
+		"moduleResolution": "bundler",
 		"sourceMap": true,
 		"strict": true,
 		"outDir": "dist",
@@ -12,5 +12,5 @@
 		// "composite": true
 	},
 	"include": ["src"],
-	"exclude": ["node_modules", ".vscode-test-web", ".vscode-test", "src/**/*.test.ts", "src/test-preload.ts", "src/capture-snapshots.ts"]
+	"exclude": ["node_modules", ".vscode-test-web", ".vscode-test"]
 }

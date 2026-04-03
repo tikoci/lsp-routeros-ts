@@ -1,0 +1,21 @@
+# markdownlint-cli2 configuration (ignores and globs)
+# https://github.com/DavidAnson/markdownlint-cli2
+#
+# Rules are in .markdownlint.yaml (also read by IDE extensions).
+# This file handles CLI-specific settings: which files to skip.
+
+# Ignore LLM instruction files — different audience, intentionally use patterns
+# that linters flag (long lines, emphasis as headers, loose structure).
+# Also ignore generated/vendored directories.
+ignores:
+  - "CLAUDE.md"
+  - "AGENTS.md"
+  - "DESIGN.md"
+  - "BACKLOG.md"
+  - ".github/copilot-instructions.md"
+  - ".github/instructions/**"
+  - "node_modules/**"
+  - "**/node_modules/**"
+  - ".vscode-test-web/**"
+  - ".vscode-test/**"
+  - "test-data/**"

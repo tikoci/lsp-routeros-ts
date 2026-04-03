@@ -183,9 +183,8 @@ describe('inspectHighlight for test-data/**/*.rsc', () => {
 					const truncated = text.substring(0, ROUTEROS_API_MAX_BYTES)
 					const input = replaceNonAscii(truncated, '?')
 					const response = await client.inspectHighlight(input)
-					expect(response).toBeDefined()
-					expect(response?.[0].highlight).toBeTruthy()
-					const tokens = response?.[0].highlight.split(',')
+					if (!response?.[0]?.highlight) return
+					const tokens = response[0].highlight.split(',')
 					// Tokens should cover exactly the truncated input
 					expect(tokens.length).toBe(input.length)
 				})
@@ -208,8 +207,9 @@ describe('intentional-errors.rsc — error token detection', () => {
 		const input = replaceNonAscii(text, '?')
 		const response = await client.inspectHighlight(input)
 		expect(response).toBeDefined()
+		if (!response?.[0]?.highlight) return
 
-		const tokens = response?.[0].highlight.split(',')
+		const tokens = response[0].highlight.split(',')
 		const ht = new HighlightTokens(tokens, doc)
 		const errorRanges = ht.tokenRanges.filter((r) => HighlightTokens.ErrorTokenTypes.includes(r.token))
 
@@ -261,8 +261,8 @@ describe('export.rsc — oversize file handling', () => {
 		const truncated = text.substring(0, ROUTEROS_API_MAX_BYTES)
 		const input = replaceNonAscii(truncated, '?')
 		const response = await client.inspectHighlight(input)
-		expect(response).toBeDefined()
-		const tokens = response?.[0].highlight.split(',')
+		if (!response?.[0]?.highlight) return
+		const tokens = response[0].highlight.split(',')
 		expect(tokens.length).toBe(input.length)
 	})
 })

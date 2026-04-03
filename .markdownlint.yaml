@@ -1,0 +1,58 @@
+# markdownlint rules config (read by both markdownlint-cli2 and IDE extensions)
+# https://github.com/DavidAnson/markdownlint
+
+# MD013 — line length: long lines are normal in technical docs and tables
+MD013: false
+
+# MD024 — duplicate headings: common in changelogs ("Changes", "Fixes" repeat
+# across releases) and technical reference docs
+MD024: false
+
+# MD033 — inline HTML: allow elements GitHub renders in its Markdown flavor.
+# <kbd> is used throughout for keyboard shortcuts; the others are semantic HTML
+# that GitHub supports.
+MD033:
+  allowed_elements:
+    - kbd
+    - mark
+    - details
+    - summary
+    - sub
+    - sup
+    - abbr
+    - dl
+    - dt
+    - dd
+    - figure
+    - figcaption
+    - br
+
+# MD036 — emphasis as heading: italic release notes in CHANGELOG ("Internal
+# test only") are intentional annotations, not heading substitutes
+MD036: false
+
+# MD028 — blank line in blockquote: GitHub renders these fine; the README uses
+# spaced blockquotes deliberately for visual separation
+MD028: false
+
+# MD001 — heading increment: disabled, headings jump levels in some docs
+MD001: false
+
+# MD060 — table column style: compact separators (---) are fine
+MD060: false
+
+# --- Signal rules explicitly enabled ---
+
+# MD040 — fenced code blocks must have a language tag
+MD040: true
+
+# MD046 — fenced code blocks only (no indented code blocks)
+MD046:
+  style: fenced
+
+# MD048 — consistent fence style (backticks)
+MD048:
+  style: backtick
+
+# MD058 — blank lines around tables
+MD058: true
