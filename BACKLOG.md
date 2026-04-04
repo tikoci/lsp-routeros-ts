@@ -6,6 +6,7 @@
 ## Quality & Infrastructure
 
 ### Testing
+- 📋 **Update oversize integration test to use `oversize-32k.rsc`** — `export.rsc` was removed from test-data root; the `export.rsc — oversize file handling` describe in `integration.test.ts` now silently no-ops (`if (!exportFile) return`). Should be updated to find `edge-cases/oversize-32k.rsc` instead.
 - ✅ **Set up `bun test` runner** — configured with `bunfig.toml` preload for log silencing
 - ✅ **Anchor tests for tokens.ts** — `HighlightTokens` parsing, `tokenRanges`, `atPosition`, `regexToken`
 - ✅ **Anchor tests for routeros.ts** — `replaceNonAscii`, `normalizeError`
@@ -113,6 +114,15 @@
 
 ## Cross-Extension Integration
 
+### TikBook Notebook Format Support
+
+TikBook uses two notebook formats. Example files for both are in `test-data/tikbook/`.
+
+**RouterOS-first** (`.tikbook.rsc`): `#!tikbook` shebang at top; `#.` separates cells; `#.markdown` starts a markdown cell; RouterOS comments (`# text`) used for inline prose.
+
+**Markdown-first** (`.tikbook.rsc.md` / `.rsc.md`): `[//]: #!tikbook` marker at top; ` ```routeros ` fenced code blocks are executable cells; regular Markdown for prose between cells.
+
+- 📋 **TikBook: Semantic highlighting in `routeros` fenced blocks in `.rsc.md`** — parse `.rsc.md` files and apply RouterOS LSP semantic tokens inside ` ```routeros ` fenced code blocks. This should generalize to any `.md` file, not just TikBook notebooks — similar to embedded-language LSP features. Requires splitting the document into RouterOS ranges before querying `/console/inspect`, and remapping token offsets back to document positions.
 - 📋 **TikBook: Move cell execution to LSP** — currently in TikBook, should be LSP feature
 - 📋 **TikBook: LSP-based notebook diagnostics** — use LSP diagnostics for notebook cells
 - 📋 **restraml: Validate configs against schema** — use RAML/OpenAPI schemas for deeper validation
