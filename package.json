@@ -119,36 +119,6 @@
         "description": "Comment or annotation"
       },
       {
-        "id": "obj-inactive",
-        "superType": "modifier",
-        "description": "Inactive or disabled object"
-      },
-      {
-        "id": "syntax-obsolete",
-        "superType": "modifier",
-        "description": "Obsolete or deprecated syntax"
-      },
-      {
-        "id": "variable-undefined",
-        "superType": "modifier",
-        "description": "Undefined variable reference"
-      },
-      {
-        "id": "ambiguous",
-        "superType": "modifier",
-        "description": "Ambiguous or unclear token"
-      },
-      {
-        "id": "syntax-old",
-        "superType": "modifier",
-        "description": "Old or legacy syntax"
-      },
-      {
-        "id": "error",
-        "superType": "modifier",
-        "description": "Syntax or semantic error"
-      },
-      {
         "id": "varname-global",
         "superType": "variable",
         "description": "Global variable name"
@@ -156,6 +126,40 @@
       {
         "id": "syntax-noterm",
         "description": "Missing or unterminated syntax element"
+      }
+    ],
+    "semanticTokenModifiers": [
+      {
+        "id": "scope",
+        "description": "Argument scope qualifier"
+      },
+      {
+        "id": "dot",
+        "description": "Argument dot-prefixed qualifier"
+      },
+      {
+        "id": "inactive",
+        "description": "Inactive or disabled object"
+      },
+      {
+        "id": "obsolete",
+        "description": "Obsolete or deprecated syntax"
+      },
+      {
+        "id": "undefined",
+        "description": "Undefined symbol reference"
+      },
+      {
+        "id": "ambiguous",
+        "description": "Ambiguous token or parse context"
+      },
+      {
+        "id": "legacy",
+        "description": "Old or legacy syntax"
+      },
+      {
+        "id": "error",
+        "description": "Syntax or semantic error"
       }
     ],
     "languages": [
@@ -262,6 +266,20 @@
           ],
           "default": "messages",
           "description": "Traces the communication between VS Code and the language server."
+        },
+        "routeroslsp.semanticColors.autoApply": {
+          "scope": "application",
+          "type": "boolean",
+          "default": true,
+          "order": 8,
+          "description": "Automatically applies RouterOS semantic color rules at extension startup"
+        },
+        "routeroslsp.semanticColors.enableOverrideRules": {
+          "scope": "application",
+          "type": "boolean",
+          "default": true,
+          "order": 9,
+          "description": "When enabled, RouterOS semantic color rules are written into VS Code semantic token customizations"
         }
       }
     },

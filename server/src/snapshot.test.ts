@@ -56,15 +56,8 @@ describe('Snapshot tests: .rsc + .highlight pairs', () => {
 
 			it('all tokens are known types', () => {
 				const knownTypes = new Set(HighlightTokens.TokenTypes)
-				// Some snapshots may have newer token types (e.g., arg-scope, arg-dot)
-				// that aren't in the current TokenTypes list. We'll collect unknowns
-				// but not fail — just warn.
-				const unknowns = new Set(tokens.filter((t) => !knownTypes.has(t)))
-				if (unknowns.size > 0) {
-					// These are token types the CHR returned that we don't have in our legend
-					// This is informational — the parser still handles them as ranges
-					console.warn(`  ${rel}: extra token types: ${[...unknowns].join(', ')}`)
-				}
+				const unknowns = new Set(tokens.filter((t) => !knownTypes.has(HighlightTokens.toSemanticToken(t).type)))
+				expect([...unknowns]).toEqual([])
 			})
 
 			it('HighlightTokens parses without error', () => {

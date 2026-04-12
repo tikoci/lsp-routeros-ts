@@ -1,5 +1,16 @@
-import { ConfigurationTarget, commands, type ExtensionContext, Uri, type WorkspaceConfiguration, window, workspace } from 'vscode'
+import { ConfigurationTarget, commands, type ExtensionContext, Uri, window, workspace } from 'vscode'
 import type { BaseLanguageClient } from 'vscode-languageclient'
+
+const ROUTEROS_SHORTID = 'routeroslsp'
+
+interface ApplySemanticTokenOptions {
+	skipWhenOverridesDisabled?: boolean
+}
+
+interface SemanticTokenColorCustomizations {
+	enabled?: boolean
+	rules?: Record<string, unknown>
+}
 
 export function initializeCommands(context: ExtensionContext, client: BaseLanguageClient) {
 	return [
@@ -37,8 +48,29 @@ export function initializeCommands(context: ExtensionContext, client: BaseLangua
 	]
 }
 
-export async function applySemanticTokenColorsFromFile(context: ExtensionContext, client: BaseLanguageClient) {
+export async function autoApplySemanticTokenColorsOnStartup(context: ExtensionContext, client: BaseLanguageClient) {
+	const config = workspace.getConfiguration()
+	const autoApply = config.get<boolean>(`${ROUTEROS_SHORTID}.semanticColors.autoApply`, true)
+	if (!autoApply) {
+		client.debug('<client.cmd> [semanticColors] auto-apply disabled by settings')
+		return
+	}
+
+	const applied = await applySemanticTokenColorsFromFile(context, client, { skipWhenOverridesDisabled: true })
+	if (applied) {
+		client.info('<client.cmd> [semanticColors] startup auto-apply complete')
+	}
+}
+
+export async function applySemanticTokenColorsFromFile(context: ExtensionContext, client: BaseLanguageClient, options: ApplySemanticTokenOptions = {}) {
 	try {
+		const config = workspace.getConfiguration()
+		const enableOverrides = config.get<boolean>(`${ROUTEROS_SHORTID}.semanticColors.enableOverrideRules`, true)
+		if (options.skipWhenOverridesDisabled && !enableOverrides) {
+			client.debug('<client.cmd> [semanticColors] override rules disabled by settings')
+			return true
+		}
+
 		// Path to your theme file in extension root
 		const themePath = Uri.joinPath(context.extensionUri, './vscode-routeroslsp-theme.json')
 
@@ -49,14 +81,14 @@ export async function applySemanticTokenColorsFromFile(context: ExtensionContext
 		// Extract semantic token colors from theme
 		const semanticTokenColors = themeData.semanticTokenColors || {}
 
-		// Get current VS Code configuration
-		const config = workspace.getConfiguration()
-		const currentCustomizations: WorkspaceConfiguration = config.get('editor.semanticTokenColorCustomizations')
-		const currentRules = currentCustomizations.rules || {}
+		const currentCustomizations = config.get<SemanticTokenColorCustomizations>('editor.semanticTokenColorCustomizations') ?? ({} as SemanticTokenColorCustomizations)
+		const currentRules = currentCustomizations.rules ?? {}
+		const routerosRuleKeys = new Set(Object.keys(semanticTokenColors))
 
-		// Merge theme semantic colors with existing rules
+		// Merge RouterOS semantic colors with existing rules while preserving unrelated entries.
+		const filteredRules = Object.fromEntries(Object.entries(currentRules).filter(([k]) => !routerosRuleKeys.has(k)))
 		const updatedRules = {
-			...currentRules,
+			...filteredRules,
 			...semanticTokenColors,
 		}
 

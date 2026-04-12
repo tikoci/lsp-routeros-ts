@@ -47,32 +47,40 @@
       "foreground": "#D0CFCC",
       "fontStyle": "italic"
     },
-    "obj-inactive": {
+    "syntax-val.inactive": {
       "foreground": "#9B0100",
       "fontStyle": "italic"
     },
-    "syntax-obsolete": {
+    "syntax-val.obsolete": {
       "foreground": "#9B0100",
-      "fontStyle": "strikethrough"
+      "fontStyle": "italic"
     },
-    "variable-undefined": {
+    "varname.undefined": {
       "foreground": "#9B0100",
-      "fontStyle": "strikethrough"
+      "fontStyle": "italic"
     },
-    "ambiguous": {
+    "syntax-val.ambiguous": {
       "foreground": "#9B0100",
       "fontStyle": "underline"
     },
-    "syntax-old": {
+    "syntax-val.legacy": {
       "foreground": "#9B0100"
     },
-    "error": {
+    "syntax-val.error": {
       "foreground": "#9B0100",
       "fontStyle": "bold"
     },
     "varname-global": {
       "foreground": "#079B9B",
       "fontStyle": "bold"
+    },
+    "arg.scope": {
+      "foreground": "#009C00",
+      "fontStyle": "bold"
+    },
+    "arg.dot": {
+      "foreground": "#009C00",
+      "fontStyle": "italic"
     },
     "syntax-noterm": {
       "foreground": "#07009B",

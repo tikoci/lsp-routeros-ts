@@ -7,6 +7,12 @@ interface HighlightTokenRangeItem {
 	token: HighlightToken
 	range: Range
 }
+
+interface SemanticTokenLegendItem {
+	type: string
+	modifiers: string[]
+}
+
 export class HighlightTokens {
 	#tokens: HighlightToken[]
 	#document: TextDocument
@@ -49,6 +55,10 @@ export class HighlightTokens {
 					return 'C'
 				case t === 'arg':
 					return 'A'
+				case t === 'arg-scope':
+					return 'A'
+				case t === 'arg-dot':
+					return '.'
 				case t === 'variable-parameter':
 					return 'a'
 				case t === 'variable-local':
@@ -153,13 +163,49 @@ export class HighlightTokens {
 		'escaped',
 		'variable-global',
 		'comment',
-		'obj-inactive',
-		'syntax-obsolete',
-		'variable-undefined',
-		'ambiguous',
-		'syntax-old',
-		'error',
 		'varname-global',
 		'syntax-noterm',
 	]
+
+	static TokenModifiers = ['scope', 'dot', 'inactive', 'obsolete', 'undefined', 'ambiguous', 'legacy', 'error']
+
+	static toSemanticToken(token: string): SemanticTokenLegendItem {
+		switch (token) {
+			case 'arg-scope':
+				return { type: 'arg', modifiers: ['scope'] }
+			case 'arg-dot':
+				return { type: 'arg', modifiers: ['dot'] }
+			case 'obj-inactive':
+				return { type: 'syntax-val', modifiers: ['inactive'] }
+			case 'syntax-obsolete':
+				return { type: 'syntax-val', modifiers: ['obsolete'] }
+			case 'variable-undefined':
+				return { type: 'varname', modifiers: ['undefined'] }
+			case 'ambiguous':
+				return { type: 'syntax-val', modifiers: ['ambiguous'] }
+			case 'syntax-old':
+				return { type: 'syntax-val', modifiers: ['legacy'] }
+			case 'error':
+				return { type: 'syntax-val', modifiers: ['error'] }
+			default:
+				return { type: token, modifiers: [] }
+		}
+	}
+
+	static getTokenTypeIndex(token: string): number {
+		const semantic = HighlightTokens.toSemanticToken(token)
+		return HighlightTokens.TokenTypes.indexOf(semantic.type)
+	}
+
+	static getTokenModifierMask(token: string): number {
+		const semantic = HighlightTokens.toSemanticToken(token)
+		let mask = 0
+		for (const modifier of semantic.modifiers) {
+			const index = HighlightTokens.TokenModifiers.indexOf(modifier)
+			if (index >= 0) {
+				mask = mask | (1 << index)
+			}
+		}
+		return mask
+	}
 }

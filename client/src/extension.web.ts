@@ -1,7 +1,7 @@
 import { type Disposable, type ExtensionContext, Uri } from 'vscode'
 import { LanguageClient } from 'vscode-languageclient/browser'
 import { getLanguageClientOptions, getPackageInfo } from './client'
-import { initializeCommands } from './commands'
+import { autoApplySemanticTokenColorsOnStartup, initializeCommands } from './commands'
 import { initializeWatchdog } from './watchdog'
 
 let client: LanguageClient | undefined
@@ -21,6 +21,7 @@ export async function activate(context: ExtensionContext) {
 	console.log('RouterOS LSP about to start()')
 
 	await client.start()
+	await autoApplySemanticTokenColorsOnStartup(context, client)
 	watchdog = initializeWatchdog(context, client, 3000)
 	context.subscriptions.push(client, ...initializeCommands(context, client), watchdog)
 

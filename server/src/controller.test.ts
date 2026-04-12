@@ -56,10 +56,11 @@ describe('LspController.getServerCapabilities', () => {
 		expect(caps.completionProvider).toBeDefined()
 	})
 
-	it('includes semanticTokensProvider with TokenTypes legend', () => {
+	it('includes semanticTokensProvider with TokenTypes and TokenModifiers legends', () => {
 		const caps = LspController.getServerCapabilities(minimalParams)
-		const legend = caps.semanticTokensProvider as { legend: { tokenTypes: string[] } }
+		const legend = caps.semanticTokensProvider as { legend: { tokenTypes: string[]; tokenModifiers: string[] } }
 		expect(legend.legend.tokenTypes).toEqual(HighlightTokens.TokenTypes)
+		expect(legend.legend.tokenModifiers).toEqual(HighlightTokens.TokenModifiers)
 	})
 
 	it('includes executeCommandProvider with 6 commands', () => {

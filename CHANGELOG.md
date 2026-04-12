@@ -2,11 +2,6 @@
 
 ## Known Issues in "latest"
 
-* Hopefully mitigated, but LSP may not trigger syntax coloring automatically when LSP is first loaded.
-  * _Workarounds if_ correct _colors are missing_:
-    * Run command, "Refresh Semantic Tokens (Syntax Colors)" from VS Code Command Palette (<kbd>F1</kbd> or <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
-    * Editing the file should trigger coloring
-    * Close and re-open file
 * "Walkthrough" (shown after install on VS Code "Welcome" screen) needs to be updated to show commands and more graphics.
 * `README.md` is still very much a WIP - so it's more a catalog of notes, than documentation today.
 * In VSCode, "Hover" on Code and "Problems" tab present more debug information than nice text – although they do allow to see "token" so remaining for now.  In future, "hover on code" will likely change, or be an option
@@ -21,7 +16,16 @@
 
 #### Changes
 
+* RouterOS semantic token color overrides now apply automatically at extension startup
+* Added settings to control startup behavior:
+  * `routeroslsp.semanticColors.autoApply` (default: `true`)
+  * `routeroslsp.semanticColors.enableOverrideRules` (default: `true`)
+* Semantic token mapping now uses token modifiers for RouterOS states (inactive, obsolete, undefined, ambiguous, legacy, error) to improve default theme fallback behavior
+
 #### Fixes
+
+* Added semantic handling for RouterOS highlight tokens like `arg-scope` and `arg-dot` so semantic token generation no longer drops them
+* Semantic token generation now skips unknown token types safely instead of emitting invalid indexes
 
 
 ### 0.7.2 (pre-release)

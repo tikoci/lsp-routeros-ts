@@ -2,7 +2,7 @@ import type { Disposable, ExtensionContext } from 'vscode'
 
 import { LanguageClient, TransportKind } from 'vscode-languageclient/node'
 import { getLanguageClientOptions, getPackageInfo } from './client'
-import { initializeCommands } from './commands'
+import { autoApplySemanticTokenColorsOnStartup, initializeCommands } from './commands'
 import { initializeWatchdog } from './watchdog'
 
 let client: LanguageClient | undefined
@@ -28,6 +28,7 @@ export async function activate(context: ExtensionContext) {
 	)
 
 	await client.start()
+	await autoApplySemanticTokenColorsOnStartup(context, client)
 	watchdog = initializeWatchdog(context, client, 3000)
 	context.subscriptions.push(client, ...initializeCommands(context, client), watchdog)
 

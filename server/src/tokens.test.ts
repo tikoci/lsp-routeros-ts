@@ -15,8 +15,8 @@ function makeTokens(text: string, highlight: string) {
 }
 
 describe('HighlightTokens.TokenTypes', () => {
-	it('has exactly 21 entries', () => {
-		expect(HighlightTokens.TokenTypes).toHaveLength(21)
+	it('has exactly 15 entries', () => {
+		expect(HighlightTokens.TokenTypes).toHaveLength(15)
 	})
 
 	it('starts with none and dir', () => {
@@ -25,7 +25,7 @@ describe('HighlightTokens.TokenTypes', () => {
 	})
 
 	it('contains error', () => {
-		expect(HighlightTokens.TokenTypes).toContain('error')
+		expect(HighlightTokens.TokenTypes).toContain('syntax-val')
 	})
 
 	it('contains variable-local and variable-global', () => {
@@ -44,10 +44,28 @@ describe('HighlightTokens.ErrorTokenTypes', () => {
 		expect(HighlightTokens.ErrorTokenTypes).toContain('error')
 	})
 
+	it('maps raw error tokens into semantic types and modifiers', () => {
+		expect(HighlightTokens.toSemanticToken('variable-undefined')).toEqual({ type: 'varname', modifiers: ['undefined'] })
+		expect(HighlightTokens.toSemanticToken('error')).toEqual({ type: 'syntax-val', modifiers: ['error'] })
+		expect(HighlightTokens.toSemanticToken('syntax-obsolete')).toEqual({ type: 'syntax-val', modifiers: ['obsolete'] })
+	})
+
 	it('is a subset of TokenTypes', () => {
 		for (const t of HighlightTokens.ErrorTokenTypes) {
-			expect(HighlightTokens.TokenTypes).toContain(t)
+			expect(HighlightTokens.getTokenTypeIndex(t)).toBeGreaterThanOrEqual(0)
 		}
+	})
+})
+
+describe('HighlightTokens.TokenModifiers', () => {
+	it('has exactly 8 entries', () => {
+		expect(HighlightTokens.TokenModifiers).toHaveLength(8)
+	})
+
+	it('creates non-zero modifier mask for raw mapped tokens', () => {
+		expect(HighlightTokens.getTokenModifierMask('error')).toBeGreaterThan(0)
+		expect(HighlightTokens.getTokenModifierMask('arg-scope')).toBeGreaterThan(0)
+		expect(HighlightTokens.getTokenModifierMask('arg-dot')).toBeGreaterThan(0)
 	})
 })
 

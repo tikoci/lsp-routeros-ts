@@ -286,7 +286,7 @@ export class LspController {
 			semanticTokensProvider: {
 				legend: {
 					tokenTypes: HighlightTokens.TokenTypes,
-					tokenModifiers: [],
+					tokenModifiers: HighlightTokens.TokenModifiers,
 				},
 				full: { delta: false },
 				range: false,
@@ -425,13 +425,13 @@ export class LspController {
 			for (const tokenRange of htokens.tokenRanges) {
 				if (tokenRange.token === 'none') continue
 				const pos = tokenRange.range.start
-				builder.push(
-					pos.line,
-					pos.character,
-					document.document.offsetAt(tokenRange.range.end) - document.document.offsetAt(tokenRange.range.start) + 1,
-					HighlightTokens.TokenTypes.indexOf(tokenRange.token),
-					0,
-				)
+				const tokenTypeIndex = HighlightTokens.getTokenTypeIndex(tokenRange.token)
+				if (tokenTypeIndex < 0) {
+					log.warn(`<server> {generateSemanticTokens} unknown semantic token type '${tokenRange.token}'`)
+					continue
+				}
+				const modifierMask = HighlightTokens.getTokenModifierMask(tokenRange.token)
+				builder.push(pos.line, pos.character, document.document.offsetAt(tokenRange.range.end) - document.document.offsetAt(tokenRange.range.start) + 1, tokenTypeIndex, modifierMask)
 			}
 		}
 
