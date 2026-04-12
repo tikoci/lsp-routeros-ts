@@ -1,0 +1,2821 @@
+{
+	"sourceUrl": "https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033",
+	"topicId": 151033,
+	"topicTitle": "✂ Rextended Fragments of Snippets",
+	"sourceTopics": [
+		{
+			"id": 151033,
+			"title": "✂ Rextended Fragments of Snippets",
+			"url": "https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033"
+		},
+		{
+			"id": 103825,
+			"title": "Wi-Fi on-off switch",
+			"url": "https://forum.mikrotik.com/t/wi-fi-on-off-switch/103825"
+		},
+		{
+			"id": 132775,
+			"title": "mkdir function for easy folder creation",
+			"url": "https://forum.mikrotik.com/t/mkdir-function-for-easy-folder-creation/132775"
+		},
+		{
+			"id": 63496,
+			"title": "how to get the \"avg-rtt\" value of command \"ping\"",
+			"url": "https://forum.mikrotik.com/t/how-to-get-the-avg-rtt-value-of-command-ping/63496"
+		},
+		{
+			"id": 121369,
+			"title": "RouterOS SNMP Get",
+			"url": "https://forum.mikrotik.com/t/routeros-snmp-get/121369"
+		},
+		{
+			"id": 68576,
+			"title": "I did it! Script to compute UNIX time!",
+			"url": "https://forum.mikrotik.com/t/i-did-it-script-to-compute-unix-time/68576"
+		},
+		{
+			"id": 143071,
+			"title": "Importing IP List from file",
+			"url": "https://forum.mikrotik.com/t/importing-ip-list-from-file/143071"
+		},
+		{
+			"id": 151020,
+			"title": "How to download only one piece of file at a time with /tool fetch and put it inside a variable",
+			"url": "https://forum.mikrotik.com/t/how-to-download-only-one-piece-of-file-at-a-time-with-tool-fetch-and-put-it-inside-a-variable/151020"
+		},
+		{
+			"id": 115644,
+			"title": "Decode USSD on wAP LTE kit",
+			"url": "https://forum.mikrotik.com/t/decode-ussd-on-wap-lte-kit/115644"
+		},
+		{
+			"id": 97913,
+			"title": "How to convert a HEX value to a char?",
+			"url": "https://forum.mikrotik.com/t/how-to-convert-a-hex-value-to-a-char/97913"
+		},
+		{
+			"id": 133640,
+			"title": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"url": "https://forum.mikrotik.com/t/address-lists-downloader-dshield-spamhaus-drop-edrop-etc/133640"
+		},
+		{
+			"id": 149116,
+			"title": "Classless-Routes not being added by dhcp-client",
+			"url": "https://forum.mikrotik.com/t/classless-routes-not-being-added-by-dhcp-client/149116"
+		},
+		{
+			"id": 52654,
+			"title": "How to covert int to hex type value and save it in a string?",
+			"url": "https://forum.mikrotik.com/t/how-to-covert-int-to-hex-type-value-and-save-it-in-a-string/52654"
+		},
+		{
+			"id": 150559,
+			"title": "Incomprehensible behavior of Netwatch and a script that imitates it.",
+			"url": "https://forum.mikrotik.com/t/incomprehensible-behavior-of-netwatch-and-a-script-that-imitates-it/150559"
+		},
+		{
+			"id": 150195,
+			"title": "WAN Load Balancing between 2 ISPs - one with CGNAT and another in bridge mode (real IPV4 address)",
+			"url": "https://forum.mikrotik.com/t/wan-load-balancing-between-2-isps-one-with-cgnat-and-another-in-bridge-mode-real-ipv4-address/150195"
+		},
+		{
+			"id": 150516,
+			"title": "Dual WAN Failover Script Ping Command",
+			"url": "https://forum.mikrotik.com/t/dual-wan-failover-script-ping-command/150516"
+		},
+		{
+			"id": 150066,
+			"title": "CRS - VLAN - Add untagged interfaces via script",
+			"url": "https://forum.mikrotik.com/t/crs-vlan-add-untagged-interfaces-via-script/150066"
+		},
+		{
+			"id": 150050,
+			"title": "changing from number to date",
+			"url": "https://forum.mikrotik.com/t/changing-from-number-to-date/150050"
+		},
+		{
+			"id": 110950,
+			"title": "send MikroTik Notification via WhatsApp",
+			"url": "https://forum.mikrotik.com/t/send-mikrotik-notification-via-whatsapp/110950"
+		},
+		{
+			"id": 79536,
+			"title": "Suppress output from ping in script?",
+			"url": "https://forum.mikrotik.com/t/suppress-output-from-ping-in-script/79536"
+		},
+		{
+			"id": 104992,
+			"title": "X86_64 ROS - 64bit Mikrotik",
+			"url": "https://forum.mikrotik.com/t/x86-64-ros-64bit-mikrotik/104992"
+		},
+		{
+			"id": 149267,
+			"title": "Random number between 0 and 99 or string between 00 and 99",
+			"url": "https://forum.mikrotik.com/t/random-number-between-0-and-99-or-string-between-00-and-99/149267"
+		},
+		{
+			"id": 148996,
+			"title": "Buying - RB1100AHx4 Dude Edition - Questions about Firewall",
+			"url": "https://forum.mikrotik.com/t/buying-rb1100ahx4-dude-edition-questions-about-firewall/148996"
+		},
+		{
+			"id": 113429,
+			"title": "HELP with error in script to import the IPv4 full bogons list from www.team-cymru.org",
+			"url": "https://forum.mikrotik.com/t/help-with-error-in-script-to-import-the-ipv4-full-bogons-list-from-www-team-cymru-org/113429"
+		},
+		{
+			"id": 151793,
+			"title": "concatenate values to create variable name",
+			"url": "https://forum.mikrotik.com/t/concatenate-values-to-create-variable-name/151793"
+		},
+		{
+			"id": 151723,
+			"title": "fetch capable of following redirects",
+			"url": "https://forum.mikrotik.com/t/fetch-capable-of-following-redirects/151723"
+		},
+		{
+			"id": 151870,
+			"title": "Sorted array of files",
+			"url": "https://forum.mikrotik.com/t/sorted-array-of-files/151870"
+		},
+		{
+			"id": 77321,
+			"title": "Return IP Octet Function",
+			"url": "https://forum.mikrotik.com/t/return-ip-octet-function/77321"
+		},
+		{
+			"id": 151933,
+			"title": "Option39 DHCPv6 Client",
+			"url": "https://forum.mikrotik.com/t/option39-dhcpv6-client/151933"
+		},
+		{
+			"id": 145326,
+			"title": "Persistent Environment Variables",
+			"url": "https://forum.mikrotik.com/t/persistent-environment-variables/145326"
+		},
+		{
+			"id": 149189,
+			"title": "Router crashes are wiping the config",
+			"url": "https://forum.mikrotik.com/t/router-crashes-are-wiping-the-config/149189"
+		},
+		{
+			"id": 157724,
+			"title": "Convert uptime to date and time",
+			"url": "https://forum.mikrotik.com/t/convert-uptime-to-date-and-time/157724"
+		},
+		{
+			"id": 158109,
+			"title": "FLOAT datatype",
+			"url": "https://forum.mikrotik.com/t/float-datatype/158109"
+		},
+		{
+			"id": 158216,
+			"title": "[SMS] Timestamp, system date and case sensitive",
+			"url": "https://forum.mikrotik.com/t/sms-timestamp-system-date-and-case-sensitive/158216"
+		},
+		{
+			"id": 74610,
+			"title": "Script \"... find where !routing-mark\" stops work routerOS6.7",
+			"url": "https://forum.mikrotik.com/t/script-find-where-routing-mark-stops-work-routeros6-7/74610"
+		},
+		{
+			"id": 75450,
+			"title": "v6.11 released",
+			"url": "https://forum.mikrotik.com/t/v6-11-released/75450"
+		},
+		{
+			"id": 160011,
+			"title": "Script fails to create file",
+			"url": "https://forum.mikrotik.com/t/script-fails-to-create-file/160011"
+		},
+		{
+			"id": 161897,
+			"title": "Convert Identity name to uppercase",
+			"url": "https://forum.mikrotik.com/t/convert-identity-name-to-uppercase/161897"
+		},
+		{
+			"id": 5183,
+			"title": "Changing the MMM/DD/YYYY date format.",
+			"url": "https://forum.mikrotik.com/t/changing-the-mmm-dd-yyyy-date-format/5183"
+		},
+		{
+			"id": 162755,
+			"title": "command \"print where\" not case insensitive",
+			"url": "https://forum.mikrotik.com/t/command-print-where-not-case-insensitive/162755"
+		},
+		{
+			"id": 162848,
+			"title": "newb in scripting: getting byte value from lease-options string.",
+			"url": "https://forum.mikrotik.com/t/newb-in-scripting-getting-byte-value-from-lease-options-string/162848"
+		},
+		{
+			"id": 163033,
+			"title": "iterate over all elements of an array of unknown dimension",
+			"url": "https://forum.mikrotik.com/t/iterate-over-all-elements-of-an-array-of-unknown-dimension/163033"
+		},
+		{
+			"id": 163067,
+			"title": "NO WAY?! AI writes Mikrotik-Scripts...",
+			"url": "https://forum.mikrotik.com/t/no-way-ai-writes-mikrotik-scripts/163067"
+		},
+		{
+			"id": 163488,
+			"title": "Finding duplicates in array",
+			"url": "https://forum.mikrotik.com/t/finding-duplicates-in-array/163488"
+		},
+		{
+			"id": 163850,
+			"title": "Change word in comment",
+			"url": "https://forum.mikrotik.com/t/change-word-in-comment/163850"
+		},
+		{
+			"id": 163718,
+			"title": "Function of transferring the script over SSH",
+			"url": "https://forum.mikrotik.com/t/function-of-transferring-the-script-over-ssh/163718"
+		},
+		{
+			"id": 164329,
+			"title": "Convert any text to UNICODE",
+			"url": "https://forum.mikrotik.com/t/convert-any-text-to-unicode/164329"
+		},
+		{
+			"id": 142687,
+			"title": "How to add color to output",
+			"url": "https://forum.mikrotik.com/t/how-to-add-color-to-output/142687"
+		},
+		{
+			"id": 164889,
+			"title": "Base64 and SHA256 function for Scripting",
+			"url": "https://forum.mikrotik.com/t/base64-and-sha256-function-for-scripting/164889"
+		},
+		{
+			"id": 166898,
+			"title": "Log Filter",
+			"url": "https://forum.mikrotik.com/t/log-filter/166898"
+		},
+		{
+			"id": 167618,
+			"title": "prevent the script from running if it is already running",
+			"url": "https://forum.mikrotik.com/t/prevent-the-script-from-running-if-it-is-already-running/167618"
+		},
+		{
+			"id": 132192,
+			"title": "Can a script be created if a wrong login name is used",
+			"url": "https://forum.mikrotik.com/t/can-a-script-be-created-if-a-wrong-login-name-is-used/132192"
+		},
+		{
+			"id": 156344,
+			"title": "script to add ip to list based on log - help needed",
+			"url": "https://forum.mikrotik.com/t/script-to-add-ip-to-list-based-on-log-help-needed/156344"
+		},
+		{
+			"id": 166576,
+			"title": "⚠️WARNING: RouterOS v7.10+ will break all scripts based on [/system clock get date] or other date(s)",
+			"url": "https://forum.mikrotik.com/t/warning-routeros-v7-10-will-break-all-scripts-based-on-system-clock-get-date-or-other-date-s/166576"
+		}
+	],
+	"snippetCount": 254,
+	"generatedAt": "2026-04-12T20:53:15.814Z",
+	"snippets": [
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 868591,
+			"postNumber": 10,
+			"author": "rextended",
+			"createdAt": "2022-05-24T14:12:26.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0010-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 885766,
+			"postNumber": 15,
+			"author": "rextended",
+			"createdAt": "2022-08-26T12:30:13.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0015-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 885766,
+			"postNumber": 15,
+			"author": "rextended",
+			"createdAt": "2022-08-26T12:30:13.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0015-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 885766,
+			"postNumber": 15,
+			"author": "rextended",
+			"createdAt": "2022-08-26T12:30:13.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0015-snippet-03.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 885766,
+			"postNumber": 15,
+			"author": "rextended",
+			"createdAt": "2022-08-26T12:30:13.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0015-snippet-04.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 885766,
+			"postNumber": 15,
+			"author": "rextended",
+			"createdAt": "2022-08-26T12:30:13.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0015-snippet-05.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 885766,
+			"postNumber": 15,
+			"author": "rextended",
+			"createdAt": "2022-08-26T12:30:13.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0015-snippet-06.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 896322,
+			"postNumber": 17,
+			"author": "rextended",
+			"createdAt": "2022-10-31T12:55:16.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0017-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 896322,
+			"postNumber": 17,
+			"author": "rextended",
+			"createdAt": "2022-10-31T12:55:16.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0017-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 896326,
+			"postNumber": 18,
+			"author": "rextended",
+			"createdAt": "2022-10-31T13:32:16.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0018-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 896326,
+			"postNumber": 18,
+			"author": "rextended",
+			"createdAt": "2022-10-31T13:32:16.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0018-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 896326,
+			"postNumber": 18,
+			"author": "rextended",
+			"createdAt": "2022-10-31T13:32:16.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0018-snippet-03.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 896326,
+			"postNumber": 18,
+			"author": "rextended",
+			"createdAt": "2022-10-31T13:32:16.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0018-snippet-04.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 896328,
+			"postNumber": 19,
+			"author": "rextended",
+			"createdAt": "2022-10-31T13:41:26.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0019-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 896328,
+			"postNumber": 19,
+			"author": "rextended",
+			"createdAt": "2022-10-31T13:41:26.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0019-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 898492,
+			"postNumber": 20,
+			"author": "rextended",
+			"createdAt": "2022-11-14T16:15:53.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0020-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 898492,
+			"postNumber": 20,
+			"author": "rextended",
+			"createdAt": "2022-11-14T16:15:53.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0020-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 898734,
+			"postNumber": 21,
+			"author": "rextended",
+			"createdAt": "2022-11-16T09:24:52.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0021-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 898734,
+			"postNumber": 21,
+			"author": "rextended",
+			"createdAt": "2022-11-16T09:24:52.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0021-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 910214,
+			"postNumber": 34,
+			"author": "rextended",
+			"createdAt": "2023-01-25T20:47:25.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0034-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 910214,
+			"postNumber": 34,
+			"author": "rextended",
+			"createdAt": "2023-01-25T20:47:25.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0034-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 922022,
+			"postNumber": 48,
+			"author": "rextended",
+			"createdAt": "2023-03-28T00:17:33.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0048-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 922022,
+			"postNumber": 48,
+			"author": "rextended",
+			"createdAt": "2023-03-28T00:17:33.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0048-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 922128,
+			"postNumber": 49,
+			"author": "rextended",
+			"createdAt": "2023-03-28T12:59:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0049-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 922128,
+			"postNumber": 49,
+			"author": "rextended",
+			"createdAt": "2023-03-28T12:59:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0049-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 922722,
+			"postNumber": 56,
+			"author": "rextended",
+			"createdAt": "2023-03-31T09:58:37.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0056-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 922722,
+			"postNumber": 56,
+			"author": "rextended",
+			"createdAt": "2023-03-31T09:58:37.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0056-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 922734,
+			"postNumber": 57,
+			"author": "rextended",
+			"createdAt": "2023-03-31T10:58:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0057-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 922734,
+			"postNumber": 57,
+			"author": "rextended",
+			"createdAt": "2023-03-31T10:58:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0057-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 922901,
+			"postNumber": 58,
+			"author": "rextended",
+			"createdAt": "2023-04-01T08:23:45.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0058-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 941257,
+			"postNumber": 70,
+			"author": "rextended",
+			"createdAt": "2023-07-14T07:12:15.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0070-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 941257,
+			"postNumber": 70,
+			"author": "rextended",
+			"createdAt": "2023-07-14T07:12:15.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0070-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 941439,
+			"postNumber": 71,
+			"author": "rextended",
+			"createdAt": "2023-07-15T00:05:50.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0071-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 941439,
+			"postNumber": 71,
+			"author": "rextended",
+			"createdAt": "2023-07-15T00:05:50.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0071-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 941441,
+			"postNumber": 72,
+			"author": "rextended",
+			"createdAt": "2023-07-15T00:18:23.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0072-snippet-01.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 941441,
+			"postNumber": 72,
+			"author": "rextended",
+			"createdAt": "2023-07-15T00:18:23.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0072-snippet-02.rsc"
+		},
+		{
+			"topicId": 151033,
+			"topicTitle": "✂ Rextended Fragments of Snippets",
+			"postId": 941441,
+			"postNumber": 72,
+			"author": "rextended",
+			"createdAt": "2023-07-15T00:18:23.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151033-post-0072-snippet-03.rsc"
+		},
+		{
+			"topicId": 103825,
+			"topicTitle": "Wi-Fi on-off switch",
+			"postId": 798512,
+			"postNumber": 17,
+			"author": "rextended",
+			"createdAt": "2021-05-17T08:13:02.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-103825-post-0017-snippet-01.rsc"
+		},
+		{
+			"topicId": 103825,
+			"topicTitle": "Wi-Fi on-off switch",
+			"postId": 798512,
+			"postNumber": 17,
+			"author": "rextended",
+			"createdAt": "2021-05-17T08:13:02.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-103825-post-0017-snippet-02.rsc"
+		},
+		{
+			"topicId": 103825,
+			"topicTitle": "Wi-Fi on-off switch",
+			"postId": 896374,
+			"postNumber": 21,
+			"author": "rextended",
+			"createdAt": "2022-10-31T17:13:03.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-103825-post-0021-snippet-01.rsc"
+		},
+		{
+			"topicId": 103825,
+			"topicTitle": "Wi-Fi on-off switch",
+			"postId": 896381,
+			"postNumber": 24,
+			"author": "rextended",
+			"createdAt": "2022-10-31T17:21:11.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-103825-post-0024-snippet-01.rsc"
+		},
+		{
+			"topicId": 132775,
+			"topicTitle": "mkdir function for easy folder creation",
+			"postId": 817428,
+			"postNumber": 17,
+			"author": "rextended",
+			"createdAt": "2021-09-08T17:50:27.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132775-post-0017-snippet-01.rsc"
+		},
+		{
+			"topicId": 132775,
+			"topicTitle": "mkdir function for easy folder creation",
+			"postId": 817428,
+			"postNumber": 17,
+			"author": "rextended",
+			"createdAt": "2021-09-08T17:50:27.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132775-post-0017-snippet-02.rsc"
+		},
+		{
+			"topicId": 63496,
+			"topicTitle": "how to get the \"avg-rtt\" value of command \"ping\"",
+			"postId": 816142,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2021-09-03T22:38:10.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-63496-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 121369,
+			"topicTitle": "RouterOS SNMP Get",
+			"postId": 816141,
+			"postNumber": 13,
+			"author": "rextended",
+			"createdAt": "2021-09-03T22:20:21.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-121369-post-0013-snippet-01.rsc"
+		},
+		{
+			"topicId": 68576,
+			"topicTitle": "I did it! Script to compute UNIX time!",
+			"postId": 815767,
+			"postNumber": 14,
+			"author": "rextended",
+			"createdAt": "2021-09-01T21:42:40.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-68576-post-0014-snippet-01.rsc"
+		},
+		{
+			"topicId": 68576,
+			"topicTitle": "I did it! Script to compute UNIX time!",
+			"postId": 815767,
+			"postNumber": 14,
+			"author": "rextended",
+			"createdAt": "2021-09-01T21:42:40.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-68576-post-0014-snippet-02.rsc"
+		},
+		{
+			"topicId": 68576,
+			"topicTitle": "I did it! Script to compute UNIX time!",
+			"postId": 815884,
+			"postNumber": 18,
+			"author": "rextended",
+			"createdAt": "2021-09-02T14:17:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-68576-post-0018-snippet-01.rsc"
+		},
+		{
+			"topicId": 68576,
+			"topicTitle": "I did it! Script to compute UNIX time!",
+			"postId": 815884,
+			"postNumber": 18,
+			"author": "rextended",
+			"createdAt": "2021-09-02T14:17:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-68576-post-0018-snippet-02.rsc"
+		},
+		{
+			"topicId": 68576,
+			"topicTitle": "I did it! Script to compute UNIX time!",
+			"postId": 919671,
+			"postNumber": 19,
+			"author": "rextended",
+			"createdAt": "2023-03-15T10:16:00.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-68576-post-0019-snippet-01.rsc"
+		},
+		{
+			"topicId": 68576,
+			"topicTitle": "I did it! Script to compute UNIX time!",
+			"postId": 924076,
+			"postNumber": 24,
+			"author": "rextended",
+			"createdAt": "2023-04-06T18:28:31.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-68576-post-0024-snippet-01.rsc"
+		},
+		{
+			"topicId": 68576,
+			"topicTitle": "I did it! Script to compute UNIX time!",
+			"postId": 963118,
+			"postNumber": 33,
+			"author": "rextended",
+			"createdAt": "2023-11-14T17:31:14.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-68576-post-0033-snippet-01.rsc"
+		},
+		{
+			"topicId": 68576,
+			"topicTitle": "I did it! Script to compute UNIX time!",
+			"postId": 1182447,
+			"postNumber": 39,
+			"author": "rextended",
+			"createdAt": "2026-01-02T08:18:14.200Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-68576-post-0039-snippet-01.rsc"
+		},
+		{
+			"topicId": 143071,
+			"topicTitle": "Importing IP List from file",
+			"postId": 811392,
+			"postNumber": 14,
+			"author": "rextended",
+			"createdAt": "2021-08-09T12:16:57.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-143071-post-0014-snippet-01.rsc"
+		},
+		{
+			"topicId": 143071,
+			"topicTitle": "Importing IP List from file",
+			"postId": 811445,
+			"postNumber": 18,
+			"author": "rextended",
+			"createdAt": "2021-08-09T15:38:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-143071-post-0018-snippet-01.rsc"
+		},
+		{
+			"topicId": 143071,
+			"topicTitle": "Importing IP List from file",
+			"postId": 811445,
+			"postNumber": 18,
+			"author": "rextended",
+			"createdAt": "2021-08-09T15:38:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-143071-post-0018-snippet-02.rsc"
+		},
+		{
+			"topicId": 143071,
+			"topicTitle": "Importing IP List from file",
+			"postId": 811513,
+			"postNumber": 23,
+			"author": "rextended",
+			"createdAt": "2021-08-09T19:55:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-143071-post-0023-snippet-01.rsc"
+		},
+		{
+			"topicId": 143071,
+			"topicTitle": "Importing IP List from file",
+			"postId": 811530,
+			"postNumber": 25,
+			"author": "rextended",
+			"createdAt": "2021-08-09T21:47:45.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-143071-post-0025-snippet-01.rsc"
+		},
+		{
+			"topicId": 143071,
+			"topicTitle": "Importing IP List from file",
+			"postId": 811754,
+			"postNumber": 29,
+			"author": "rextended",
+			"createdAt": "2021-08-11T11:41:04.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-143071-post-0029-snippet-01.rsc"
+		},
+		{
+			"topicId": 143071,
+			"topicTitle": "Importing IP List from file",
+			"postId": 811805,
+			"postNumber": 33,
+			"author": "rextended",
+			"createdAt": "2021-08-11T17:18:37.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-143071-post-0033-snippet-01.rsc"
+		},
+		{
+			"topicId": 143071,
+			"topicTitle": "Importing IP List from file",
+			"postId": 812097,
+			"postNumber": 52,
+			"author": "rextended",
+			"createdAt": "2021-08-13T11:37:40.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-143071-post-0052-snippet-01.rsc"
+		},
+		{
+			"topicId": 151020,
+			"topicTitle": "How to download only one piece of file at a time with /tool fetch and put it inside a variable",
+			"postId": 811826,
+			"postNumber": 1,
+			"author": "rextended",
+			"createdAt": "2021-08-11T20:55:05.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151020-post-0001-snippet-01.rsc"
+		},
+		{
+			"topicId": 151020,
+			"topicTitle": "How to download only one piece of file at a time with /tool fetch and put it inside a variable",
+			"postId": 811826,
+			"postNumber": 1,
+			"author": "rextended",
+			"createdAt": "2021-08-11T20:55:05.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151020-post-0001-snippet-02.rsc"
+		},
+		{
+			"topicId": 115644,
+			"topicTitle": "Decode USSD on wAP LTE kit",
+			"postId": 811237,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2021-08-07T23:00:46.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-115644-post-0004-snippet-01.rsc"
+		},
+		{
+			"topicId": 97913,
+			"topicTitle": "How to convert a HEX value to a char?",
+			"postId": 811236,
+			"postNumber": 9,
+			"author": "rextended",
+			"createdAt": "2021-08-07T22:48:25.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-97913-post-0009-snippet-01.rsc"
+		},
+		{
+			"topicId": 97913,
+			"topicTitle": "How to convert a HEX value to a char?",
+			"postId": 910304,
+			"postNumber": 11,
+			"author": "rextended",
+			"createdAt": "2023-01-26T12:32:25.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-97913-post-0011-snippet-01.rsc"
+		},
+		{
+			"topicId": 97913,
+			"topicTitle": "How to convert a HEX value to a char?",
+			"postId": 910304,
+			"postNumber": 11,
+			"author": "rextended",
+			"createdAt": "2023-01-26T12:32:25.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-97913-post-0011-snippet-02.rsc"
+		},
+		{
+			"topicId": 97913,
+			"topicTitle": "How to convert a HEX value to a char?",
+			"postId": 910947,
+			"postNumber": 14,
+			"author": "rextended",
+			"createdAt": "2023-01-30T10:57:49.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-97913-post-0014-snippet-01.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 810786,
+			"postNumber": 87,
+			"author": "rextended",
+			"createdAt": "2021-08-05T12:08:03.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0087-snippet-01.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 810807,
+			"postNumber": 88,
+			"author": "rextended",
+			"createdAt": "2021-08-05T14:24:06.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0088-snippet-01.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 810807,
+			"postNumber": 88,
+			"author": "rextended",
+			"createdAt": "2021-08-05T14:24:06.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0088-snippet-02.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 810807,
+			"postNumber": 88,
+			"author": "rextended",
+			"createdAt": "2021-08-05T14:24:06.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0088-snippet-03.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 815247,
+			"postNumber": 114,
+			"author": "rextended",
+			"createdAt": "2021-08-31T10:32:57.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0114-snippet-01.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 815247,
+			"postNumber": 114,
+			"author": "rextended",
+			"createdAt": "2021-08-31T10:32:57.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0114-snippet-02.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 817666,
+			"postNumber": 116,
+			"author": "rextended",
+			"createdAt": "2021-09-09T14:08:17.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0116-snippet-01.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 818209,
+			"postNumber": 120,
+			"author": "rextended",
+			"createdAt": "2021-09-11T11:52:14.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0120-snippet-01.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 870435,
+			"postNumber": 158,
+			"author": "rextended",
+			"createdAt": "2022-06-03T16:29:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0158-snippet-01.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 870435,
+			"postNumber": 158,
+			"author": "rextended",
+			"createdAt": "2022-06-03T16:29:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0158-snippet-02.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 870435,
+			"postNumber": 158,
+			"author": "rextended",
+			"createdAt": "2022-06-03T16:29:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0158-snippet-03.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 873059,
+			"postNumber": 182,
+			"author": "rextended",
+			"createdAt": "2022-06-16T08:11:20.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0182-snippet-01.rsc"
+		},
+		{
+			"topicId": 133640,
+			"topicTitle": "Address lists downloader (DShield, Spamhaus DROP/EDROP, etc)",
+			"postId": 898076,
+			"postNumber": 197,
+			"author": "rextended",
+			"createdAt": "2022-11-11T13:23:44.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-133640-post-0197-snippet-01.rsc"
+		},
+		{
+			"topicId": 149116,
+			"topicTitle": "Classless-Routes not being added by dhcp-client",
+			"postId": 810770,
+			"postNumber": 21,
+			"author": "rextended",
+			"createdAt": "2021-08-05T09:52:22.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149116-post-0021-snippet-01.rsc"
+		},
+		{
+			"topicId": 149116,
+			"topicTitle": "Classless-Routes not being added by dhcp-client",
+			"postId": 810770,
+			"postNumber": 21,
+			"author": "rextended",
+			"createdAt": "2021-08-05T09:52:22.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149116-post-0021-snippet-02.rsc"
+		},
+		{
+			"topicId": 149116,
+			"topicTitle": "Classless-Routes not being added by dhcp-client",
+			"postId": 810770,
+			"postNumber": 21,
+			"author": "rextended",
+			"createdAt": "2021-08-05T09:52:22.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149116-post-0021-snippet-03.rsc"
+		},
+		{
+			"topicId": 149116,
+			"topicTitle": "Classless-Routes not being added by dhcp-client",
+			"postId": 1045426,
+			"postNumber": 27,
+			"author": "rextended",
+			"createdAt": "2025-02-03T08:38:05.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149116-post-0027-snippet-01.rsc"
+		},
+		{
+			"topicId": 52654,
+			"topicTitle": "How to covert int to hex type value and save it in a string?",
+			"postId": 808602,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2021-07-23T22:19:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-52654-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 52654,
+			"topicTitle": "How to covert int to hex type value and save it in a string?",
+			"postId": 808602,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2021-07-23T22:19:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-52654-post-0005-snippet-02.rsc"
+		},
+		{
+			"topicId": 52654,
+			"topicTitle": "How to covert int to hex type value and save it in a string?",
+			"postId": 808602,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2021-07-23T22:19:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-52654-post-0005-snippet-03.rsc"
+		},
+		{
+			"topicId": 52654,
+			"topicTitle": "How to covert int to hex type value and save it in a string?",
+			"postId": 808602,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2021-07-23T22:19:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-52654-post-0005-snippet-04.rsc"
+		},
+		{
+			"topicId": 52654,
+			"topicTitle": "How to covert int to hex type value and save it in a string?",
+			"postId": 808602,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2021-07-23T22:19:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-52654-post-0005-snippet-05.rsc"
+		},
+		{
+			"topicId": 52654,
+			"topicTitle": "How to covert int to hex type value and save it in a string?",
+			"postId": 808603,
+			"postNumber": 6,
+			"author": "rextended",
+			"createdAt": "2021-07-24T00:34:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-52654-post-0006-snippet-01.rsc"
+		},
+		{
+			"topicId": 52654,
+			"topicTitle": "How to covert int to hex type value and save it in a string?",
+			"postId": 808603,
+			"postNumber": 6,
+			"author": "rextended",
+			"createdAt": "2021-07-24T00:34:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-52654-post-0006-snippet-02.rsc"
+		},
+		{
+			"topicId": 150559,
+			"topicTitle": "Incomprehensible behavior of Netwatch and a script that imitates it.",
+			"postId": 808247,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-07-21T16:52:56.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150559-post-0002-snippet-01.rsc"
+		},
+		{
+			"topicId": 150559,
+			"topicTitle": "Incomprehensible behavior of Netwatch and a script that imitates it.",
+			"postId": 808247,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-07-21T16:52:56.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150559-post-0002-snippet-02.rsc"
+		},
+		{
+			"topicId": 150559,
+			"topicTitle": "Incomprehensible behavior of Netwatch and a script that imitates it.",
+			"postId": 808387,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2021-07-22T13:31:30.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150559-post-0007-snippet-01.rsc"
+		},
+		{
+			"topicId": 150195,
+			"topicTitle": "WAN Load Balancing between 2 ISPs - one with CGNAT and another in bridge mode (real IPV4 address)",
+			"postId": 805705,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-07-03T23:33:08.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150195-post-0002-snippet-01.rsc"
+		},
+		{
+			"topicId": 150195,
+			"topicTitle": "WAN Load Balancing between 2 ISPs - one with CGNAT and another in bridge mode (real IPV4 address)",
+			"postId": 895126,
+			"postNumber": 8,
+			"author": "rextended",
+			"createdAt": "2022-10-25T09:35:14.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150195-post-0008-snippet-01.rsc"
+		},
+		{
+			"topicId": 150195,
+			"topicTitle": "WAN Load Balancing between 2 ISPs - one with CGNAT and another in bridge mode (real IPV4 address)",
+			"postId": 896800,
+			"postNumber": 12,
+			"author": "rextended",
+			"createdAt": "2022-11-03T11:12:53.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150195-post-0012-snippet-01.rsc"
+		},
+		{
+			"topicId": 150195,
+			"topicTitle": "WAN Load Balancing between 2 ISPs - one with CGNAT and another in bridge mode (real IPV4 address)",
+			"postId": 896800,
+			"postNumber": 12,
+			"author": "rextended",
+			"createdAt": "2022-11-03T11:12:53.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150195-post-0012-snippet-02.rsc"
+		},
+		{
+			"topicId": 150516,
+			"topicTitle": "Dual WAN Failover Script Ping Command",
+			"postId": 807880,
+			"postNumber": 8,
+			"author": "rextended",
+			"createdAt": "2021-07-19T13:34:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150516-post-0008-snippet-01.rsc"
+		},
+		{
+			"topicId": 150516,
+			"topicTitle": "Dual WAN Failover Script Ping Command",
+			"postId": 807880,
+			"postNumber": 8,
+			"author": "rextended",
+			"createdAt": "2021-07-19T13:34:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150516-post-0008-snippet-02.rsc"
+		},
+		{
+			"topicId": 150516,
+			"topicTitle": "Dual WAN Failover Script Ping Command",
+			"postId": 807880,
+			"postNumber": 8,
+			"author": "rextended",
+			"createdAt": "2021-07-19T13:34:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150516-post-0008-snippet-03.rsc"
+		},
+		{
+			"topicId": 150516,
+			"topicTitle": "Dual WAN Failover Script Ping Command",
+			"postId": 810347,
+			"postNumber": 25,
+			"author": "rextended",
+			"createdAt": "2021-08-03T07:21:30.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150516-post-0025-snippet-01.rsc"
+		},
+		{
+			"topicId": 150516,
+			"topicTitle": "Dual WAN Failover Script Ping Command",
+			"postId": 810347,
+			"postNumber": 25,
+			"author": "rextended",
+			"createdAt": "2021-08-03T07:21:30.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150516-post-0025-snippet-02.rsc"
+		},
+		{
+			"topicId": 150516,
+			"topicTitle": "Dual WAN Failover Script Ping Command",
+			"postId": 810505,
+			"postNumber": 27,
+			"author": "rextended",
+			"createdAt": "2021-08-03T23:47:28.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150516-post-0027-snippet-01.rsc"
+		},
+		{
+			"topicId": 150066,
+			"topicTitle": "CRS - VLAN - Add untagged interfaces via script",
+			"postId": 805592,
+			"postNumber": 8,
+			"author": "rextended",
+			"createdAt": "2021-07-02T15:57:00.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150066-post-0008-snippet-01.rsc"
+		},
+		{
+			"topicId": 150066,
+			"topicTitle": "CRS - VLAN - Add untagged interfaces via script",
+			"postId": 806035,
+			"postNumber": 10,
+			"author": "rextended",
+			"createdAt": "2021-07-06T12:43:11.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150066-post-0010-snippet-01.rsc"
+		},
+		{
+			"topicId": 150050,
+			"topicTitle": "changing from number to date",
+			"postId": 804786,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-06-28T00:54:35.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150050-post-0002-snippet-01.rsc"
+		},
+		{
+			"topicId": 150050,
+			"topicTitle": "changing from number to date",
+			"postId": 804786,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-06-28T00:54:35.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150050-post-0002-snippet-02.rsc"
+		},
+		{
+			"topicId": 150050,
+			"topicTitle": "changing from number to date",
+			"postId": 804786,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-06-28T00:54:35.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150050-post-0002-snippet-03.rsc"
+		},
+		{
+			"topicId": 150050,
+			"topicTitle": "changing from number to date",
+			"postId": 804795,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2021-06-28T06:44:38.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-150050-post-0004-snippet-01.rsc"
+		},
+		{
+			"topicId": 110950,
+			"topicTitle": "send MikroTik Notification via WhatsApp",
+			"postId": 801260,
+			"postNumber": 10,
+			"author": "rextended",
+			"createdAt": "2021-06-03T16:28:05.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-110950-post-0010-snippet-01.rsc"
+		},
+		{
+			"topicId": 110950,
+			"topicTitle": "send MikroTik Notification via WhatsApp",
+			"postId": 898508,
+			"postNumber": 28,
+			"author": "rextended",
+			"createdAt": "2022-11-14T18:09:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-110950-post-0028-snippet-01.rsc"
+		},
+		{
+			"topicId": 79536,
+			"topicTitle": "Suppress output from ping in script?",
+			"postId": 802437,
+			"postNumber": 6,
+			"author": "rextended",
+			"createdAt": "2021-06-10T12:51:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-79536-post-0006-snippet-01.rsc"
+		},
+		{
+			"topicId": 104992,
+			"topicTitle": "X86_64 ROS - 64bit Mikrotik",
+			"postId": 801618,
+			"postNumber": 83,
+			"author": "rextended",
+			"createdAt": "2021-06-05T14:36:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-104992-post-0083-snippet-01.rsc"
+		},
+		{
+			"topicId": 149267,
+			"topicTitle": "Random number between 0 and 99 or string between 00 and 99",
+			"postId": 799402,
+			"postNumber": 1,
+			"author": "rextended",
+			"createdAt": "2021-05-22T16:33:06.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149267-post-0001-snippet-01.rsc"
+		},
+		{
+			"topicId": 149267,
+			"topicTitle": "Random number between 0 and 99 or string between 00 and 99",
+			"postId": 799402,
+			"postNumber": 1,
+			"author": "rextended",
+			"createdAt": "2021-05-22T16:33:06.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149267-post-0001-snippet-02.rsc"
+		},
+		{
+			"topicId": 148996,
+			"topicTitle": "Buying - RB1100AHx4 Dude Edition - Questions about Firewall",
+			"postId": 797777,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2021-05-10T16:26:34.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-148996-post-0004-snippet-01.rsc"
+		},
+		{
+			"topicId": 148996,
+			"topicTitle": "Buying - RB1100AHx4 Dude Edition - Questions about Firewall",
+			"postId": 797777,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2021-05-10T16:26:34.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-148996-post-0004-snippet-02.rsc"
+		},
+		{
+			"topicId": 148996,
+			"topicTitle": "Buying - RB1100AHx4 Dude Edition - Questions about Firewall",
+			"postId": 797777,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2021-05-10T16:26:34.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-148996-post-0004-snippet-03.rsc"
+		},
+		{
+			"topicId": 148996,
+			"topicTitle": "Buying - RB1100AHx4 Dude Edition - Questions about Firewall",
+			"postId": 797777,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2021-05-10T16:26:34.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-148996-post-0004-snippet-04.rsc"
+		},
+		{
+			"topicId": 148996,
+			"topicTitle": "Buying - RB1100AHx4 Dude Edition - Questions about Firewall",
+			"postId": 1185479,
+			"postNumber": 36,
+			"author": "rextended",
+			"createdAt": "2026-01-16T10:40:47.209Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-148996-post-0036-snippet-01.rsc"
+		},
+		{
+			"topicId": 113429,
+			"topicTitle": "HELP with error in script to import the IPv4 full bogons list from www.team-cymru.org",
+			"postId": 795398,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2021-04-22T00:02:17.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-113429-post-0004-snippet-01.rsc"
+		},
+		{
+			"topicId": 151793,
+			"topicTitle": "concatenate values to create variable name",
+			"postId": 818161,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-09-10T23:41:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151793-post-0002-snippet-01.rsc"
+		},
+		{
+			"topicId": 151793,
+			"topicTitle": "concatenate values to create variable name",
+			"postId": 818161,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-09-10T23:41:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151793-post-0002-snippet-02.rsc"
+		},
+		{
+			"topicId": 151793,
+			"topicTitle": "concatenate values to create variable name",
+			"postId": 818161,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-09-10T23:41:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151793-post-0002-snippet-03.rsc"
+		},
+		{
+			"topicId": 151793,
+			"topicTitle": "concatenate values to create variable name",
+			"postId": 918333,
+			"postNumber": 9,
+			"author": "rextended",
+			"createdAt": "2023-03-07T12:24:26.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151793-post-0009-snippet-01.rsc"
+		},
+		{
+			"topicId": 151793,
+			"topicTitle": "concatenate values to create variable name",
+			"postId": 918713,
+			"postNumber": 20,
+			"author": "rextended",
+			"createdAt": "2023-03-09T08:46:29.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151793-post-0020-snippet-01.rsc"
+		},
+		{
+			"topicId": 151723,
+			"topicTitle": "fetch capable of following redirects",
+			"postId": 817679,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2021-09-09T14:30:47.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151723-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 151723,
+			"topicTitle": "fetch capable of following redirects",
+			"postId": 817686,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2021-09-09T14:56:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151723-post-0007-snippet-01.rsc"
+		},
+		{
+			"topicId": 151723,
+			"topicTitle": "fetch capable of following redirects",
+			"postId": 817686,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2021-09-09T14:56:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151723-post-0007-snippet-02.rsc"
+		},
+		{
+			"topicId": 151870,
+			"topicTitle": "Sorted array of files",
+			"postId": 818859,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-09-14T23:20:09.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151870-post-0002-snippet-01.rsc"
+		},
+		{
+			"topicId": 151870,
+			"topicTitle": "Sorted array of files",
+			"postId": 818927,
+			"postNumber": 10,
+			"author": "rextended",
+			"createdAt": "2021-09-15T09:51:12.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151870-post-0010-snippet-01.rsc"
+		},
+		{
+			"topicId": 77321,
+			"topicTitle": "Return IP Octet Function",
+			"postId": 819277,
+			"postNumber": 15,
+			"author": "rextended",
+			"createdAt": "2021-09-16T23:08:30.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-77321-post-0015-snippet-01.rsc"
+		},
+		{
+			"topicId": 151933,
+			"topicTitle": "Option39 DHCPv6 Client",
+			"postId": 819308,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2021-09-17T07:14:25.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151933-post-0002-snippet-01.rsc"
+		},
+		{
+			"topicId": 151933,
+			"topicTitle": "Option39 DHCPv6 Client",
+			"postId": 819323,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2021-09-17T08:32:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151933-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 151933,
+			"topicTitle": "Option39 DHCPv6 Client",
+			"postId": 819323,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2021-09-17T08:32:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151933-post-0005-snippet-02.rsc"
+		},
+		{
+			"topicId": 151933,
+			"topicTitle": "Option39 DHCPv6 Client",
+			"postId": 819323,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2021-09-17T08:32:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-151933-post-0005-snippet-03.rsc"
+		},
+		{
+			"topicId": 145326,
+			"topicTitle": "Persistent Environment Variables",
+			"postId": 822053,
+			"postNumber": 6,
+			"author": "rextended",
+			"createdAt": "2021-10-02T10:30:29.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-145326-post-0006-snippet-01.rsc"
+		},
+		{
+			"topicId": 145326,
+			"topicTitle": "Persistent Environment Variables",
+			"postId": 822053,
+			"postNumber": 6,
+			"author": "rextended",
+			"createdAt": "2021-10-02T10:30:29.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-145326-post-0006-snippet-02.rsc"
+		},
+		{
+			"topicId": 145326,
+			"topicTitle": "Persistent Environment Variables",
+			"postId": 869722,
+			"postNumber": 17,
+			"author": "rextended",
+			"createdAt": "2022-05-31T12:22:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-145326-post-0017-snippet-01.rsc"
+		},
+		{
+			"topicId": 145326,
+			"topicTitle": "Persistent Environment Variables",
+			"postId": 869722,
+			"postNumber": 17,
+			"author": "rextended",
+			"createdAt": "2022-05-31T12:22:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-145326-post-0017-snippet-02.rsc"
+		},
+		{
+			"topicId": 145326,
+			"topicTitle": "Persistent Environment Variables",
+			"postId": 936746,
+			"postNumber": 43,
+			"author": "rextended",
+			"createdAt": "2023-06-16T23:22:19.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-145326-post-0043-snippet-01.rsc"
+		},
+		{
+			"topicId": 145326,
+			"topicTitle": "Persistent Environment Variables",
+			"postId": 1044169,
+			"postNumber": 56,
+			"author": "rextended",
+			"createdAt": "2025-01-28T11:15:49.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-145326-post-0056-snippet-01.rsc"
+		},
+		{
+			"topicId": 149189,
+			"topicTitle": "Router crashes are wiping the config",
+			"postId": 799347,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2021-05-22T08:47:05.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149189-post-0007-snippet-01.rsc"
+		},
+		{
+			"topicId": 149189,
+			"topicTitle": "Router crashes are wiping the config",
+			"postId": 799347,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2021-05-22T08:47:05.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149189-post-0007-snippet-02.rsc"
+		},
+		{
+			"topicId": 149189,
+			"topicTitle": "Router crashes are wiping the config",
+			"postId": 799347,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2021-05-22T08:47:05.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149189-post-0007-snippet-03.rsc"
+		},
+		{
+			"topicId": 149189,
+			"topicTitle": "Router crashes are wiping the config",
+			"postId": 799347,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2021-05-22T08:47:05.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149189-post-0007-snippet-04.rsc"
+		},
+		{
+			"topicId": 149189,
+			"topicTitle": "Router crashes are wiping the config",
+			"postId": 799347,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2021-05-22T08:47:05.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-149189-post-0007-snippet-05.rsc"
+		},
+		{
+			"topicId": 157724,
+			"topicTitle": "Convert uptime to date and time",
+			"postId": 864332,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2022-05-02T02:06:57.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-157724-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 157724,
+			"topicTitle": "Convert uptime to date and time",
+			"postId": 864660,
+			"postNumber": 12,
+			"author": "rextended",
+			"createdAt": "2022-05-03T12:14:14.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-157724-post-0012-snippet-01.rsc"
+		},
+		{
+			"topicId": 157724,
+			"topicTitle": "Convert uptime to date and time",
+			"postId": 864906,
+			"postNumber": 20,
+			"author": "rextended",
+			"createdAt": "2022-05-04T10:49:45.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-157724-post-0020-snippet-01.rsc"
+		},
+		{
+			"topicId": 157724,
+			"topicTitle": "Convert uptime to date and time",
+			"postId": 907467,
+			"postNumber": 36,
+			"author": "rextended",
+			"createdAt": "2023-01-13T01:39:57.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-157724-post-0036-snippet-01.rsc"
+		},
+		{
+			"topicId": 157724,
+			"topicTitle": "Convert uptime to date and time",
+			"postId": 907471,
+			"postNumber": 37,
+			"author": "rextended",
+			"createdAt": "2023-01-13T02:10:14.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-157724-post-0037-snippet-01.rsc"
+		},
+		{
+			"topicId": 157724,
+			"topicTitle": "Convert uptime to date and time",
+			"postId": 907471,
+			"postNumber": 37,
+			"author": "rextended",
+			"createdAt": "2023-01-13T02:10:14.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-157724-post-0037-snippet-02.rsc"
+		},
+		{
+			"topicId": 157724,
+			"topicTitle": "Convert uptime to date and time",
+			"postId": 907471,
+			"postNumber": 37,
+			"author": "rextended",
+			"createdAt": "2023-01-13T02:10:14.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-157724-post-0037-snippet-03.rsc"
+		},
+		{
+			"topicId": 157724,
+			"topicTitle": "Convert uptime to date and time",
+			"postId": 913171,
+			"postNumber": 40,
+			"author": "rextended",
+			"createdAt": "2023-02-10T10:54:17.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-157724-post-0040-snippet-01.rsc"
+		},
+		{
+			"topicId": 158109,
+			"topicTitle": "FLOAT datatype",
+			"postId": 867665,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2022-05-19T11:05:33.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-158109-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 158109,
+			"topicTitle": "FLOAT datatype",
+			"postId": 867665,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2022-05-19T11:05:33.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-158109-post-0005-snippet-02.rsc"
+		},
+		{
+			"topicId": 158109,
+			"topicTitle": "FLOAT datatype",
+			"postId": 923383,
+			"postNumber": 15,
+			"author": "rextended",
+			"createdAt": "2023-04-03T21:24:08.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-158109-post-0015-snippet-01.rsc"
+		},
+		{
+			"topicId": 158109,
+			"topicTitle": "FLOAT datatype",
+			"postId": 923384,
+			"postNumber": 16,
+			"author": "rextended",
+			"createdAt": "2023-04-03T21:24:40.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-158109-post-0016-snippet-01.rsc"
+		},
+		{
+			"topicId": 158109,
+			"topicTitle": "FLOAT datatype",
+			"postId": 923384,
+			"postNumber": 16,
+			"author": "rextended",
+			"createdAt": "2023-04-03T21:24:40.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-158109-post-0016-snippet-02.rsc"
+		},
+		{
+			"topicId": 158216,
+			"topicTitle": "[SMS] Timestamp, system date and case sensitive",
+			"postId": 868303,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2022-05-23T11:15:07.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-158216-post-0004-snippet-01.rsc"
+		},
+		{
+			"topicId": 158216,
+			"topicTitle": "[SMS] Timestamp, system date and case sensitive",
+			"postId": 868309,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2022-05-23T11:26:23.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-158216-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 158216,
+			"topicTitle": "[SMS] Timestamp, system date and case sensitive",
+			"postId": 868309,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2022-05-23T11:26:23.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-158216-post-0005-snippet-02.rsc"
+		},
+		{
+			"topicId": 158216,
+			"topicTitle": "[SMS] Timestamp, system date and case sensitive",
+			"postId": 868379,
+			"postNumber": 13,
+			"author": "rextended",
+			"createdAt": "2022-05-23T15:43:51.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-158216-post-0013-snippet-01.rsc"
+		},
+		{
+			"topicId": 158216,
+			"topicTitle": "[SMS] Timestamp, system date and case sensitive",
+			"postId": 868379,
+			"postNumber": 13,
+			"author": "rextended",
+			"createdAt": "2022-05-23T15:43:51.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-158216-post-0013-snippet-02.rsc"
+		},
+		{
+			"topicId": 74610,
+			"topicTitle": "Script \"... find where !routing-mark\" stops work routerOS6.7",
+			"postId": 388436,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2014-02-25T15:33:02.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-74610-post-0002-snippet-01.rsc"
+		},
+		{
+			"topicId": 74610,
+			"topicTitle": "Script \"... find where !routing-mark\" stops work routerOS6.7",
+			"postId": 388443,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2014-02-25T16:17:39.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-74610-post-0004-snippet-01.rsc"
+		},
+		{
+			"topicId": 75450,
+			"topicTitle": "v6.11 released",
+			"postId": 393233,
+			"postNumber": 43,
+			"author": "rextended",
+			"createdAt": "2014-03-21T18:57:49.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-75450-post-0043-snippet-01.rsc"
+		},
+		{
+			"topicId": 75450,
+			"topicTitle": "v6.11 released",
+			"postId": 393233,
+			"postNumber": 43,
+			"author": "rextended",
+			"createdAt": "2014-03-21T18:57:49.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-75450-post-0043-snippet-02.rsc"
+		},
+		{
+			"topicId": 75450,
+			"topicTitle": "v6.11 released",
+			"postId": 393878,
+			"postNumber": 110,
+			"author": "rextended",
+			"createdAt": "2014-03-25T08:43:36.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-75450-post-0110-snippet-01.rsc"
+		},
+		{
+			"topicId": 75450,
+			"topicTitle": "v6.11 released",
+			"postId": 393878,
+			"postNumber": 110,
+			"author": "rextended",
+			"createdAt": "2014-03-25T08:43:36.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-75450-post-0110-snippet-02.rsc"
+		},
+		{
+			"topicId": 75450,
+			"topicTitle": "v6.11 released",
+			"postId": 393985,
+			"postNumber": 140,
+			"author": "rextended",
+			"createdAt": "2014-03-25T15:25:17.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-75450-post-0140-snippet-01.rsc"
+		},
+		{
+			"topicId": 160011,
+			"topicTitle": "Script fails to create file",
+			"postId": 882991,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2022-08-09T11:15:41.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-160011-post-0004-snippet-01.rsc"
+		},
+		{
+			"topicId": 160011,
+			"topicTitle": "Script fails to create file",
+			"postId": 882995,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2022-08-09T11:34:31.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-160011-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 160011,
+			"topicTitle": "Script fails to create file",
+			"postId": 882996,
+			"postNumber": 6,
+			"author": "rextended",
+			"createdAt": "2022-08-09T11:42:55.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-160011-post-0006-snippet-01.rsc"
+		},
+		{
+			"topicId": 160011,
+			"topicTitle": "Script fails to create file",
+			"postId": 882997,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2022-08-09T11:46:04.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-160011-post-0007-snippet-01.rsc"
+		},
+		{
+			"topicId": 161897,
+			"topicTitle": "Convert Identity name to uppercase",
+			"postId": 896293,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2022-10-31T09:23:17.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-161897-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 161897,
+			"topicTitle": "Convert Identity name to uppercase",
+			"postId": 896302,
+			"postNumber": 6,
+			"author": "rextended",
+			"createdAt": "2022-10-31T10:27:30.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-161897-post-0006-snippet-01.rsc"
+		},
+		{
+			"topicId": 5183,
+			"topicTitle": "Changing the MMM/DD/YYYY date format.",
+			"postId": 891494,
+			"postNumber": 10,
+			"author": "rextended",
+			"createdAt": "2022-10-03T13:03:14.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-5183-post-0010-snippet-01.rsc"
+		},
+		{
+			"topicId": 5183,
+			"topicTitle": "Changing the MMM/DD/YYYY date format.",
+			"postId": 891494,
+			"postNumber": 10,
+			"author": "rextended",
+			"createdAt": "2022-10-03T13:03:14.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-5183-post-0010-snippet-02.rsc"
+		},
+		{
+			"topicId": 5183,
+			"topicTitle": "Changing the MMM/DD/YYYY date format.",
+			"postId": 952412,
+			"postNumber": 17,
+			"author": "rextended",
+			"createdAt": "2023-09-11T06:52:12.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-5183-post-0017-snippet-01.rsc"
+		},
+		{
+			"topicId": 5183,
+			"topicTitle": "Changing the MMM/DD/YYYY date format.",
+			"postId": 1192270,
+			"postNumber": 19,
+			"author": "rextended",
+			"createdAt": "2026-02-23T20:01:34.884Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-5183-post-0019-snippet-01.rsc"
+		},
+		{
+			"topicId": 5183,
+			"topicTitle": "Changing the MMM/DD/YYYY date format.",
+			"postId": 1192270,
+			"postNumber": 19,
+			"author": "rextended",
+			"createdAt": "2026-02-23T20:01:34.884Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-5183-post-0019-snippet-02.rsc"
+		},
+		{
+			"topicId": 5183,
+			"topicTitle": "Changing the MMM/DD/YYYY date format.",
+			"postId": 1192284,
+			"postNumber": 22,
+			"author": "rextended",
+			"createdAt": "2026-02-23T22:54:24.356Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-5183-post-0022-snippet-01.rsc"
+		},
+		{
+			"topicId": 5183,
+			"topicTitle": "Changing the MMM/DD/YYYY date format.",
+			"postId": 1192284,
+			"postNumber": 22,
+			"author": "rextended",
+			"createdAt": "2026-02-23T22:54:24.356Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-5183-post-0022-snippet-02.rsc"
+		},
+		{
+			"topicId": 5183,
+			"topicTitle": "Changing the MMM/DD/YYYY date format.",
+			"postId": 1192286,
+			"postNumber": 23,
+			"author": "rextended",
+			"createdAt": "2026-02-23T23:20:16.845Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-5183-post-0023-snippet-01.rsc"
+		},
+		{
+			"topicId": 162755,
+			"topicTitle": "command \"print where\" not case insensitive",
+			"postId": 901687,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2022-12-07T16:21:24.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-162755-post-0002-snippet-01.rsc"
+		},
+		{
+			"topicId": 162755,
+			"topicTitle": "command \"print where\" not case insensitive",
+			"postId": 902011,
+			"postNumber": 6,
+			"author": "rextended",
+			"createdAt": "2022-12-09T15:36:20.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-162755-post-0006-snippet-01.rsc"
+		},
+		{
+			"topicId": 162848,
+			"topicTitle": "newb in scripting: getting byte value from lease-options string.",
+			"postId": 902369,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2022-12-12T00:41:32.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-162848-post-0002-snippet-01.rsc"
+		},
+		{
+			"topicId": 162848,
+			"topicTitle": "newb in scripting: getting byte value from lease-options string.",
+			"postId": 902417,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2022-12-12T10:27:26.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-162848-post-0004-snippet-01.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 903718,
+			"postNumber": 3,
+			"author": "rextended",
+			"createdAt": "2022-12-20T13:12:15.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0003-snippet-01.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 903722,
+			"postNumber": 6,
+			"author": "rextended",
+			"createdAt": "2022-12-20T13:24:32.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0006-snippet-01.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 903804,
+			"postNumber": 15,
+			"author": "rextended",
+			"createdAt": "2022-12-21T02:35:12.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0015-snippet-01.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 903858,
+			"postNumber": 18,
+			"author": "rextended",
+			"createdAt": "2022-12-21T12:17:17.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0018-snippet-01.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 903867,
+			"postNumber": 21,
+			"author": "rextended",
+			"createdAt": "2022-12-21T13:00:31.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0021-snippet-01.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 904075,
+			"postNumber": 38,
+			"author": "rextended",
+			"createdAt": "2022-12-22T11:09:22.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0038-snippet-01.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 904075,
+			"postNumber": 38,
+			"author": "rextended",
+			"createdAt": "2022-12-22T11:09:22.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0038-snippet-02.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 904075,
+			"postNumber": 38,
+			"author": "rextended",
+			"createdAt": "2022-12-22T11:09:22.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0038-snippet-03.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 904097,
+			"postNumber": 42,
+			"author": "rextended",
+			"createdAt": "2022-12-22T12:41:34.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0042-snippet-01.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 904097,
+			"postNumber": 42,
+			"author": "rextended",
+			"createdAt": "2022-12-22T12:41:34.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0042-snippet-02.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 904136,
+			"postNumber": 46,
+			"author": "rextended",
+			"createdAt": "2022-12-22T15:38:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0046-snippet-01.rsc"
+		},
+		{
+			"topicId": 163033,
+			"topicTitle": "iterate over all elements of an array of unknown dimension",
+			"postId": 904136,
+			"postNumber": 46,
+			"author": "rextended",
+			"createdAt": "2022-12-22T15:38:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163033-post-0046-snippet-02.rsc"
+		},
+		{
+			"topicId": 163067,
+			"topicTitle": "NO WAY?! AI writes Mikrotik-Scripts...",
+			"postId": 904027,
+			"postNumber": 9,
+			"author": "rextended",
+			"createdAt": "2022-12-22T08:50:36.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163067-post-0009-snippet-01.rsc"
+		},
+		{
+			"topicId": 163067,
+			"topicTitle": "NO WAY?! AI writes Mikrotik-Scripts...",
+			"postId": 904034,
+			"postNumber": 11,
+			"author": "rextended",
+			"createdAt": "2022-12-22T09:14:20.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163067-post-0011-snippet-01.rsc"
+		},
+		{
+			"topicId": 163488,
+			"topicTitle": "Finding duplicates in array",
+			"postId": 907009,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2023-01-11T15:35:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163488-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 163850,
+			"topicTitle": "Change word in comment",
+			"postId": 909888,
+			"postNumber": 3,
+			"author": "rextended",
+			"createdAt": "2023-01-24T15:44:39.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163850-post-0003-snippet-01.rsc"
+		},
+		{
+			"topicId": 163850,
+			"topicTitle": "Change word in comment",
+			"postId": 909944,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2023-01-24T19:36:45.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163850-post-0007-snippet-01.rsc"
+		},
+		{
+			"topicId": 163718,
+			"topicTitle": "Function of transferring the script over SSH",
+			"postId": 910141,
+			"postNumber": 12,
+			"author": "rextended",
+			"createdAt": "2023-01-25T16:11:46.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-163718-post-0012-snippet-01.rsc"
+		},
+		{
+			"topicId": 164329,
+			"topicTitle": "Convert any text to UNICODE",
+			"postId": 913535,
+			"postNumber": 17,
+			"author": "rextended",
+			"createdAt": "2023-02-12T02:14:43.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164329-post-0017-snippet-01.rsc"
+		},
+		{
+			"topicId": 164329,
+			"topicTitle": "Convert any text to UNICODE",
+			"postId": 913542,
+			"postNumber": 18,
+			"author": "rextended",
+			"createdAt": "2023-02-12T03:42:11.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164329-post-0018-snippet-01.rsc"
+		},
+		{
+			"topicId": 164329,
+			"topicTitle": "Convert any text to UNICODE",
+			"postId": 914494,
+			"postNumber": 25,
+			"author": "rextended",
+			"createdAt": "2023-02-16T00:09:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164329-post-0025-snippet-01.rsc"
+		},
+		{
+			"topicId": 164329,
+			"topicTitle": "Convert any text to UNICODE",
+			"postId": 914494,
+			"postNumber": 25,
+			"author": "rextended",
+			"createdAt": "2023-02-16T00:09:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164329-post-0025-snippet-02.rsc"
+		},
+		{
+			"topicId": 164329,
+			"topicTitle": "Convert any text to UNICODE",
+			"postId": 914494,
+			"postNumber": 25,
+			"author": "rextended",
+			"createdAt": "2023-02-16T00:09:58.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164329-post-0025-snippet-03.rsc"
+		},
+		{
+			"topicId": 164329,
+			"topicTitle": "Convert any text to UNICODE",
+			"postId": 914833,
+			"postNumber": 26,
+			"author": "rextended",
+			"createdAt": "2023-02-17T18:25:23.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164329-post-0026-snippet-01.rsc"
+		},
+		{
+			"topicId": 164329,
+			"topicTitle": "Convert any text to UNICODE",
+			"postId": 914833,
+			"postNumber": 26,
+			"author": "rextended",
+			"createdAt": "2023-02-17T18:25:23.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164329-post-0026-snippet-02.rsc"
+		},
+		{
+			"topicId": 164329,
+			"topicTitle": "Convert any text to UNICODE",
+			"postId": 914890,
+			"postNumber": 34,
+			"author": "rextended",
+			"createdAt": "2023-02-18T02:17:56.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164329-post-0034-snippet-01.rsc"
+		},
+		{
+			"topicId": 164329,
+			"topicTitle": "Convert any text to UNICODE",
+			"postId": 914892,
+			"postNumber": 35,
+			"author": "rextended",
+			"createdAt": "2023-02-18T02:27:47.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164329-post-0035-snippet-01.rsc"
+		},
+		{
+			"topicId": 142687,
+			"topicTitle": "How to add color to output",
+			"postId": 915248,
+			"postNumber": 12,
+			"author": "rextended",
+			"createdAt": "2023-02-20T08:16:45.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-142687-post-0012-snippet-01.rsc"
+		},
+		{
+			"topicId": 142687,
+			"topicTitle": "How to add color to output",
+			"postId": 915256,
+			"postNumber": 13,
+			"author": "rextended",
+			"createdAt": "2023-02-20T08:56:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-142687-post-0013-snippet-01.rsc"
+		},
+		{
+			"topicId": 142687,
+			"topicTitle": "How to add color to output",
+			"postId": 915256,
+			"postNumber": 13,
+			"author": "rextended",
+			"createdAt": "2023-02-20T08:56:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-142687-post-0013-snippet-02.rsc"
+		},
+		{
+			"topicId": 142687,
+			"topicTitle": "How to add color to output",
+			"postId": 915256,
+			"postNumber": 13,
+			"author": "rextended",
+			"createdAt": "2023-02-20T08:56:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-142687-post-0013-snippet-03.rsc"
+		},
+		{
+			"topicId": 164889,
+			"topicTitle": "Base64 and SHA256 function for Scripting",
+			"postId": 918557,
+			"postNumber": 3,
+			"author": "rextended",
+			"createdAt": "2023-03-08T11:55:52.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164889-post-0003-snippet-01.rsc"
+		},
+		{
+			"topicId": 164889,
+			"topicTitle": "Base64 and SHA256 function for Scripting",
+			"postId": 918729,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2023-03-09T10:22:25.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164889-post-0004-snippet-01.rsc"
+		},
+		{
+			"topicId": 164889,
+			"topicTitle": "Base64 and SHA256 function for Scripting",
+			"postId": 918885,
+			"postNumber": 5,
+			"author": "rextended",
+			"createdAt": "2023-03-10T12:18:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164889-post-0005-snippet-01.rsc"
+		},
+		{
+			"topicId": 164889,
+			"topicTitle": "Base64 and SHA256 function for Scripting",
+			"postId": 918888,
+			"postNumber": 6,
+			"author": "rextended",
+			"createdAt": "2023-03-10T12:37:26.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164889-post-0006-snippet-01.rsc"
+		},
+		{
+			"topicId": 164889,
+			"topicTitle": "Base64 and SHA256 function for Scripting",
+			"postId": 918941,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2023-03-10T17:39:36.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164889-post-0007-snippet-01.rsc"
+		},
+		{
+			"topicId": 164889,
+			"topicTitle": "Base64 and SHA256 function for Scripting",
+			"postId": 918941,
+			"postNumber": 7,
+			"author": "rextended",
+			"createdAt": "2023-03-10T17:39:36.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164889-post-0007-snippet-02.rsc"
+		},
+		{
+			"topicId": 164889,
+			"topicTitle": "Base64 and SHA256 function for Scripting",
+			"postId": 918954,
+			"postNumber": 8,
+			"author": "rextended",
+			"createdAt": "2023-03-10T19:36:01.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-164889-post-0008-snippet-01.rsc"
+		},
+		{
+			"topicId": 166898,
+			"topicTitle": "Log Filter",
+			"postId": 932816,
+			"postNumber": 2,
+			"author": "rextended",
+			"createdAt": "2023-05-24T11:00:30.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-166898-post-0002-snippet-01.rsc"
+		},
+		{
+			"topicId": 166898,
+			"topicTitle": "Log Filter",
+			"postId": 933349,
+			"postNumber": 22,
+			"author": "rextended",
+			"createdAt": "2023-05-27T10:07:17.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-166898-post-0022-snippet-01.rsc"
+		},
+		{
+			"topicId": 166898,
+			"topicTitle": "Log Filter",
+			"postId": 933354,
+			"postNumber": 24,
+			"author": "rextended",
+			"createdAt": "2023-05-27T11:41:27.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-166898-post-0024-snippet-01.rsc"
+		},
+		{
+			"topicId": 166898,
+			"topicTitle": "Log Filter",
+			"postId": 937496,
+			"postNumber": 52,
+			"author": "rextended",
+			"createdAt": "2023-06-21T13:00:08.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-166898-post-0052-snippet-01.rsc"
+		},
+		{
+			"topicId": 167618,
+			"topicTitle": "prevent the script from running if it is already running",
+			"postId": 937968,
+			"postNumber": 3,
+			"author": "rextended",
+			"createdAt": "2023-06-23T20:44:31.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-167618-post-0003-snippet-01.rsc"
+		},
+		{
+			"topicId": 132192,
+			"topicTitle": "Can a script be created if a wrong login name is used",
+			"postId": 863356,
+			"postNumber": 21,
+			"author": "rextended",
+			"createdAt": "2022-04-27T00:17:06.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132192-post-0021-snippet-01.rsc"
+		},
+		{
+			"topicId": 132192,
+			"topicTitle": "Can a script be created if a wrong login name is used",
+			"postId": 863357,
+			"postNumber": 22,
+			"author": "rextended",
+			"createdAt": "2022-04-27T00:21:07.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132192-post-0022-snippet-01.rsc"
+		},
+		{
+			"topicId": 132192,
+			"topicTitle": "Can a script be created if a wrong login name is used",
+			"postId": 863357,
+			"postNumber": 22,
+			"author": "rextended",
+			"createdAt": "2022-04-27T00:21:07.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132192-post-0022-snippet-02.rsc"
+		},
+		{
+			"topicId": 132192,
+			"topicTitle": "Can a script be created if a wrong login name is used",
+			"postId": 863363,
+			"postNumber": 26,
+			"author": "rextended",
+			"createdAt": "2022-04-27T00:58:31.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132192-post-0026-snippet-01.rsc"
+		},
+		{
+			"topicId": 132192,
+			"topicTitle": "Can a script be created if a wrong login name is used",
+			"postId": 863363,
+			"postNumber": 26,
+			"author": "rextended",
+			"createdAt": "2022-04-27T00:58:31.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132192-post-0026-snippet-02.rsc"
+		},
+		{
+			"topicId": 132192,
+			"topicTitle": "Can a script be created if a wrong login name is used",
+			"postId": 863429,
+			"postNumber": 29,
+			"author": "rextended",
+			"createdAt": "2022-04-27T10:59:32.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132192-post-0029-snippet-01.rsc"
+		},
+		{
+			"topicId": 132192,
+			"topicTitle": "Can a script be created if a wrong login name is used",
+			"postId": 868678,
+			"postNumber": 39,
+			"author": "rextended",
+			"createdAt": "2022-05-25T00:02:18.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132192-post-0039-snippet-01.rsc"
+		},
+		{
+			"topicId": 132192,
+			"topicTitle": "Can a script be created if a wrong login name is used",
+			"postId": 868680,
+			"postNumber": 41,
+			"author": "rextended",
+			"createdAt": "2022-05-25T00:09:48.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132192-post-0041-snippet-01.rsc"
+		},
+		{
+			"topicId": 132192,
+			"topicTitle": "Can a script be created if a wrong login name is used",
+			"postId": 868681,
+			"postNumber": 42,
+			"author": "rextended",
+			"createdAt": "2022-05-25T00:14:55.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-132192-post-0042-snippet-01.rsc"
+		},
+		{
+			"topicId": 156344,
+			"topicTitle": "script to add ip to list based on log - help needed",
+			"postId": 852694,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2022-03-07T13:26:43.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-156344-post-0004-snippet-01.rsc"
+		},
+		{
+			"topicId": 156344,
+			"topicTitle": "script to add ip to list based on log - help needed",
+			"postId": 852694,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2022-03-07T13:26:43.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-156344-post-0004-snippet-02.rsc"
+		},
+		{
+			"topicId": 156344,
+			"topicTitle": "script to add ip to list based on log - help needed",
+			"postId": 852694,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2022-03-07T13:26:43.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-156344-post-0004-snippet-03.rsc"
+		},
+		{
+			"topicId": 156344,
+			"topicTitle": "script to add ip to list based on log - help needed",
+			"postId": 852694,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2022-03-07T13:26:43.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-156344-post-0004-snippet-04.rsc"
+		},
+		{
+			"topicId": 156344,
+			"topicTitle": "script to add ip to list based on log - help needed",
+			"postId": 852694,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2022-03-07T13:26:43.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-156344-post-0004-snippet-05.rsc"
+		},
+		{
+			"topicId": 156344,
+			"topicTitle": "script to add ip to list based on log - help needed",
+			"postId": 852694,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2022-03-07T13:26:43.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-156344-post-0004-snippet-06.rsc"
+		},
+		{
+			"topicId": 156344,
+			"topicTitle": "script to add ip to list based on log - help needed",
+			"postId": 852694,
+			"postNumber": 4,
+			"author": "rextended",
+			"createdAt": "2022-03-07T13:26:43.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-156344-post-0004-snippet-07.rsc"
+		},
+		{
+			"topicId": 166576,
+			"topicTitle": "⚠️WARNING: RouterOS v7.10+ will break all scripts based on [/system clock get date] or other date(s)",
+			"postId": 930136,
+			"postNumber": 12,
+			"author": "rextended",
+			"createdAt": "2023-05-10T11:54:51.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-166576-post-0012-snippet-01.rsc"
+		},
+		{
+			"topicId": 166576,
+			"topicTitle": "⚠️WARNING: RouterOS v7.10+ will break all scripts based on [/system clock get date] or other date(s)",
+			"postId": 930472,
+			"postNumber": 35,
+			"author": "rextended",
+			"createdAt": "2023-05-11T14:02:00.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-166576-post-0035-snippet-01.rsc"
+		},
+		{
+			"topicId": 166576,
+			"topicTitle": "⚠️WARNING: RouterOS v7.10+ will break all scripts based on [/system clock get date] or other date(s)",
+			"postId": 930472,
+			"postNumber": 35,
+			"author": "rextended",
+			"createdAt": "2023-05-11T14:02:00.000Z",
+			"sourceKind": "code-block",
+			"fileName": "topic-166576-post-0035-snippet-02.rsc"
+		}
+	]
+}

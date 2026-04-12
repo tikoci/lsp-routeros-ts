@@ -176,3 +176,37 @@ bun run server/src/capture-snapshots.ts
 ```
 
 See [`BACKLOG.md`](BACKLOG.md) for remaining testing work.
+
+### Forum Snippet Attribution
+
+`test-data/forum/rextended/` contains scripts imported from this MikroTik forum page:
+
+- https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033
+
+Thanks to [@rextended](https://forum.mikrotik.com/u/rextended/summary) for sharing and maintaining these snippets.
+
+To import snippets from a Discourse topic page (or refresh the same page), use:
+
+```bash
+bun run server/src/import-discourse-snippets.ts \
+  --url 'https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033' \
+  --author rextended \
+  --out-dir test-data/forum/rextended
+```
+
+When `--url` is a root topic URL (`/t/.../<topicId>`), the importer fetches all posts in that topic.
+When `--url` includes an explicit post number (`/t/.../<topicId>/<postNumber>`), only that Discourse window is imported.
+
+Use `--include-blockquotes` for future imports where script text is embedded in block quotes instead of fenced code blocks.
+Use `--follow-linked-pages` to crawl one level of topic links found on the seed page (no recursive crawling).
+
+For local archive imports (for example `source_name=amm0` in `mcp-discourse`), use:
+
+```bash
+bun run server/src/import-discourse-sqlite-snippets.ts \
+  --db-path /Users/amm0/Lab/mcp-discourse/discourse.sqlite \
+  --source-name amm0 \
+  --out-dir test-data/forum/amm0
+```
+
+This importer groups files under topic-based directories using topic IDs/titles from the database.

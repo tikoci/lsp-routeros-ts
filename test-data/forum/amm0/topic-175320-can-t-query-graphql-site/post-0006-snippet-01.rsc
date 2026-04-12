@@ -1,0 +1,9 @@
+# Source: https://forum.mikrotik.com/t/cant-query-graphql-site/175320/6
+# Topic: Can't Query Graphql site
+# Source archive: mcp-discourse SQLite (source_name=amm0)
+# Extracted from: code-block
+
+:put ([/tool fetch url="https://somewebsite/api/graphql" \
+  http-method=post \
+  http-header-field="Content-Type:application/json,Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNjdhYjYxOWZiMGFmODZiNDMyNTcyOTI1ODcwZGRkZTI1NTJlMGVlNzdkNjM2ZDQxNGQxYjlmOGI3NDNhNWE1MjM3MGYwZWFkNGVkN2NlNTgiLCJpYXQiOjE3MTMzNzU4MTQuMzcxNiwibmJmIjoxNzEzMzc1ODE0LjM3MTYsImV4cCI6MjE0NTkxNjgwMC4xMDM3LCJzdWIiOiIxNyIsInNjb3BlcyI6W119.XjbbSMlBYyioE4f2OLse6v5gDtfZS8SwL2hkI3tXSKZEokfZ-kbv5z4t-0901zY0ckNyXxjvPWRvnaSPTkfQSDEwoCykXE8R6S9oRb8LzZCxb1EsmGaM2wdpPwKHqqYiBsBD491rzgcWOYPAnOwx5oC7iOAKesrNsBGfRgGe1yOeN6AuzuZdF7ZicbD50y2XC4NTI69jfYKIQoFh0c1m4mcNWDynSeY6qWavi7RKoN2gzmNV8OniMIDWzOykh7_HuibosXuJ_l8MHhDQ9Py_85aWhJnZpFwCYhp2--WqMq8mZcX8QR7u54_fd20QsAQZX_DmLggeSSi_gFVhgjKnI1Hf_JcNMSpJyYpavyux4himsLtegHzcc9xlBTimvYJ0KTrBPi8i9xGe6ShdTwMHyrB68UC050dOqSm-OxxkzgLMcu2DD1PlLwoA707wIfZNT_usYrNM5ehDNqKwrUMDJ_fueqI9BwSgeuyP07QBmebj6Z99wbIkkASraxjRHDRb1YAkdNZDTNtBIsbWBKJHPXpqmQQxKF44bCux-yjGQlmY5R270H-Ru8-YbD2DQv8hj08ArqiUB2-QVx-spMoa9uoV3OhXhHor7Ot558l0J9m3ZP7cTZVlXGUjK2Dwfl5XNg1U2Kvyrgoq57vSTA8wW55kj3dCUD4fq1eIDQgLATI" \
+  http-data="{\"query\":\"query accountid {accounts(id:2){entities{name}}}\"}" output=user as-value]->"data")
