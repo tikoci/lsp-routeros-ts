@@ -38,6 +38,21 @@ description: "Use when writing or modifying tests. Covers test tiers, anchor tes
 - Auto-skips when CHR is unreachable
 - Override CHR address: `ROUTEROS_TEST_URL=http://... bun test server/src/integration.test.ts`
 
+## Assessment & Profiling Tools (not tests — standalone scripts)
+
+### Dataset assessment (`assess-dataset.ts`)
+- Runs all `test-data/**/*.rsc` files through CHR highlight API
+- Reports: timing, token quality, unknown types, error tokens, CLI prompts, data signals
+- Usage: `bun run server/src/assess-dataset.ts [--json] [--concurrency=N]`
+- JSON output: `test-data/assessment-results.json` (gitignored)
+
+### Performance profiling (`profile-timing.ts`)
+- Tests size→time relationship by truncating scripts at progressive sizes (128B → 32KB)
+- Includes synthetic controls (pure comments, simple commands, complex scripting, mixed paths)
+- Also profiles real files (eworm/global-functions.rsc, oversize-32k.rsc, complex/piano.rsc)
+- Usage: `bun run server/src/profile-timing.ts`
+- Key finding: superlinear (quadratic) scaling; sharp inflection at ~28KB; scripting syntax costs ~3× more than comments
+
 ## Test Strategy: Anchor Tests
 - Tests verify **current behavior**, not necessarily "correct" behavior
 - They catch regressions and document what the code actually does

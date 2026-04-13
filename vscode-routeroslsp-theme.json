@@ -85,6 +85,18 @@
     "syntax-noterm": {
       "foreground": "#07009B",
       "fontStyle": "strikethrough"
+    },
+    "variable-auto": {
+      "foreground": "#079B9B",
+      "fontStyle": "italic"
+    },
+    "syntax-val.dynamic": {
+      "foreground": "#9B9C00",
+      "fontStyle": "italic"
+    },
+    "syntax-val.disabled": {
+      "foreground": "#9B0100",
+      "fontStyle": "italic"
     }
   }
 }

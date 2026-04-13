@@ -17,6 +17,8 @@
 - ✅ **Watchdog error mapping tests** — `toErrorInfo`/`getTextFromError` (extracted to `watchdog-errors.ts`)
 - ✅ **Integration tests with QEMU CHR** — `inspectHighlight` for all `test-data/**/*.rsc` against live CHR (auto-skips when no CHR)
 - ✅ **Test data catalog** — `test-data/` expanded with eworm, forum, edge-case scripts + snapshot `.highlight` files
+- ✅ **Dataset assessment tool** — `assess-dataset.ts` runs all 913 .rsc files through CHR highlight API; measures timing, token quality, unknown types, data signals. Results: 912/913 OK, median 7ms, avg 30ms, max 3822ms.
+- ✅ **Performance profiling tool** — `profile-timing.ts` tests size→time relationship with progressive truncation + synthetic controls. Confirmed superlinear (quadratic) scaling across all syntax types, with a sharp inflection at ~28KB. Scripting syntax (variables, functions, control flow) costs 3× more than comments at the same size.
 - 📋 **VSCode integration tests** — boot real VS Code with `@vscode/test-electron`, install VSIX, verify semantic tokens, diagnostics, and completion work end-to-end
 - 📋 **Snapshot capture in CI** — run `capture-snapshots.ts` against CHR to regenerate `.highlight` files and detect regressions
 
@@ -29,6 +31,7 @@
 ### Code Quality
 - ✅ **Fix typo: `onComletionHandler`** → `onCompletionHandler` (already correct in code, docs were wrong)
 - ✅ **Fix typo: `inspectHighligh`** → `inspectHighlight` (routeros.ts, model.ts)
+- ✅ **Add `variable-auto`, `obj-dynamic`, `obj-disabled` to TokenTypes** — dataset assessment (913 .rsc files) found variable-auto in 167 files, obj-dynamic in 4, obj-disabled in 2. Added to tokens.ts, package.json, theme, with tests.
 - 📋 **Add `arg-scope` and `arg-dot` to TokenTypes** — snapshot tests revealed RouterOS returns these token types but they're not in `HighlightTokens.TokenTypes`; currently mapped to `?` in regexToken
 - ✅ **Clean up duplicate `test-data/eworm-de/`** — merged into `test-data/eworm/`
 - 📋 **Migrate ESLint to Biome** — align with user preference for single lint/format tool
@@ -99,8 +102,9 @@
 
 ### Performance
 - 📋 **Incremental document sync** — switch from full-document to incremental sync
-- 📋 **Debounce/throttle API calls** — avoid flooding RouterOS on rapid typing
+- 📋 **Debounce/throttle API calls** — avoid flooding RouterOS on rapid typing; profiling shows 32KB scripts take 2–6 seconds depending on syntax complexity
 - 📋 **Request cancellation** — cancel in-flight requests when document changes again
+- 📋 **Investigate 28KB inflection point** — profiling shows a sharp timing step at ~28KB for all syntax types (e.g., comments jump from 330ms at 24KB to 1494ms at 28KB). This may be a RouterOS internal buffer boundary worth reporting upstream.
 
 ### Code Organization
 - 📋 **Extract completion logic** — `controller.ts` at ~850 lines is getting large

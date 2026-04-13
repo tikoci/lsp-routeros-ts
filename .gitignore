@@ -23,6 +23,7 @@ lsp-routeros-*
 
 test-data/vscode.dev/
 test-data/Polygot.dib
+test-data/assessment-results.json
 .scratch
 .vscode-test-web
 build-standalone.sh

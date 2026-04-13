@@ -124,6 +124,11 @@
         "description": "Global variable name"
       },
       {
+        "id": "variable-auto",
+        "superType": "variable",
+        "description": "Auto-created variable (e.g. regex captures)"
+      },
+      {
         "id": "syntax-noterm",
         "description": "Missing or unterminated syntax element"
       }
@@ -160,6 +165,14 @@
       {
         "id": "error",
         "description": "Syntax or semantic error"
+      },
+      {
+        "id": "dynamic",
+        "description": "Dynamic object entry"
+      },
+      {
+        "id": "disabled",
+        "description": "Disabled object entry"
       }
     ],
     "languages": [

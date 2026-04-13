@@ -15,8 +15,8 @@ function makeTokens(text: string, highlight: string) {
 }
 
 describe('HighlightTokens.TokenTypes', () => {
-	it('has exactly 15 entries', () => {
-		expect(HighlightTokens.TokenTypes).toHaveLength(15)
+	it('has exactly 16 entries', () => {
+		expect(HighlightTokens.TokenTypes).toHaveLength(16)
 	})
 
 	it('starts with none and dir', () => {
@@ -32,16 +32,25 @@ describe('HighlightTokens.TokenTypes', () => {
 		expect(HighlightTokens.TokenTypes).toContain('variable-local')
 		expect(HighlightTokens.TokenTypes).toContain('variable-global')
 	})
+
+	it('contains variable-auto', () => {
+		expect(HighlightTokens.TokenTypes).toContain('variable-auto')
+	})
 })
 
 describe('HighlightTokens.ErrorTokenTypes', () => {
-	it('has exactly 6 entries', () => {
-		expect(HighlightTokens.ErrorTokenTypes).toHaveLength(6)
+	it('has exactly 8 entries', () => {
+		expect(HighlightTokens.ErrorTokenTypes).toHaveLength(8)
 	})
 
 	it('contains variable-undefined and error', () => {
 		expect(HighlightTokens.ErrorTokenTypes).toContain('variable-undefined')
 		expect(HighlightTokens.ErrorTokenTypes).toContain('error')
+	})
+
+	it('contains obj-dynamic and obj-disabled', () => {
+		expect(HighlightTokens.ErrorTokenTypes).toContain('obj-dynamic')
+		expect(HighlightTokens.ErrorTokenTypes).toContain('obj-disabled')
 	})
 
 	it('maps raw error tokens into semantic types and modifiers', () => {
@@ -58,8 +67,8 @@ describe('HighlightTokens.ErrorTokenTypes', () => {
 })
 
 describe('HighlightTokens.TokenModifiers', () => {
-	it('has exactly 8 entries', () => {
-		expect(HighlightTokens.TokenModifiers).toHaveLength(8)
+	it('has exactly 10 entries', () => {
+		expect(HighlightTokens.TokenModifiers).toHaveLength(10)
 	})
 
 	it('creates non-zero modifier mask for raw mapped tokens', () => {

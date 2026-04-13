@@ -67,6 +67,8 @@ export class HighlightTokens {
 					return 'V'
 				case t === 'variable-undefined':
 					return 'u'
+				case t === 'variable-auto':
+					return 'v'
 				case t === 'varname-local':
 					return 'n'
 				case t === 'varname-global':
@@ -89,6 +91,10 @@ export class HighlightTokens {
 					return '#'
 				case t === 'obj-inactive':
 					return 'I'
+				case t === 'obj-dynamic':
+					return 'D'
+				case t === 'obj-disabled':
+					return 'X'
 				case t === 'error':
 					return 'E'
 				default:
@@ -147,7 +153,7 @@ export class HighlightTokens {
 	}
 
 	// MARK: define token types
-	static ErrorTokenTypes = ['variable-undefined', 'error', 'obj-inactive', 'syntax-obsolete', 'syntax-old', 'ambiguous']
+	static ErrorTokenTypes = ['variable-undefined', 'error', 'obj-inactive', 'obj-dynamic', 'obj-disabled', 'syntax-obsolete', 'syntax-old', 'ambiguous']
 
 	static TokenTypes = [
 		'none',
@@ -162,12 +168,13 @@ export class HighlightTokens {
 		'syntax-meta',
 		'escaped',
 		'variable-global',
+		'variable-auto',
 		'comment',
 		'varname-global',
 		'syntax-noterm',
 	]
 
-	static TokenModifiers = ['scope', 'dot', 'inactive', 'obsolete', 'undefined', 'ambiguous', 'legacy', 'error']
+	static TokenModifiers = ['scope', 'dot', 'inactive', 'obsolete', 'undefined', 'ambiguous', 'legacy', 'error', 'dynamic', 'disabled']
 
 	static toSemanticToken(token: string): SemanticTokenLegendItem {
 		switch (token) {
@@ -177,6 +184,10 @@ export class HighlightTokens {
 				return { type: 'arg', modifiers: ['dot'] }
 			case 'obj-inactive':
 				return { type: 'syntax-val', modifiers: ['inactive'] }
+			case 'obj-dynamic':
+				return { type: 'syntax-val', modifiers: ['dynamic'] }
+			case 'obj-disabled':
+				return { type: 'syntax-val', modifiers: ['disabled'] }
 			case 'syntax-obsolete':
 				return { type: 'syntax-val', modifiers: ['obsolete'] }
 			case 'variable-undefined':
