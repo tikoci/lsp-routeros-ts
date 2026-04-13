@@ -177,13 +177,8 @@ bun run server/src/capture-snapshots.ts
 
 See [`BACKLOG.md`](BACKLOG.md) for remaining testing work.
 
-### Forum Snippet Attribution
 
-`test-data/forum/rextended/` contains scripts imported from this MikroTik forum page:
-
-- https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033
-
-Thanks to [@rextended](https://forum.mikrotik.com/u/rextended/summary) for sharing and maintaining these snippets.
+### Importing Scripts From `forum.mikrotik.com`
 
 To import snippets from a Discourse topic page (or refresh the same page), use:
 
@@ -210,3 +205,23 @@ bun run server/src/import-discourse-sqlite-snippets.ts \
 ```
 
 This importer groups files under topic-based directories using topic IDs/titles from the database.
+
+### Attributions
+
+### ✂ Rextended Fragments of Snippets - Scripting
+
+`test-data/forum/rextended/` contains scripts imported from this MikroTik forum page:
+
+https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033
+
+Thanks to [@rextended](https://forum.mikrotik.com/u/rextended/summary) for sharing and maintaining these snippets.
+
+#### eworm-de/routeros-scripts
+
+`test-data/forum/eworm/` contains scripts imported from this GitHub project:
+
+Scripts in this directory are from [eworm-de/routeros-scripts](https://github.com/eworm-de/routeros-scripts)
+by Christian Hesse <mail@eworm.de>, licensed under GPL.
+
+Used as test data for the RouterOS LSP integration tests.
+See https://rsc.eworm.de/COPYING.md for the full license.
