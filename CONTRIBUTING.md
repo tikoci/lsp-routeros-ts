@@ -206,9 +206,9 @@ bun run server/src/import-discourse-sqlite-snippets.ts \
 
 This importer groups files under topic-based directories using topic IDs/titles from the database.
 
-### Attributions
+## Attributions
 
-### ✂ Rextended Fragments of Snippets - Scripting
+### ✂ Rextended "Fragments of Snippets" (forum.mikrotik.com)
 
 `test-data/forum/rextended/` contains scripts imported from this MikroTik forum page:
 
@@ -216,7 +216,7 @@ https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033
 
 Thanks to [@rextended](https://forum.mikrotik.com/u/rextended/summary) for sharing and maintaining these snippets.
 
-#### eworm-de/routeros-scripts
+### eworm-de/routeros-scripts (GitHub)
 
 `test-data/forum/eworm/` contains scripts imported from this GitHub project:
 
