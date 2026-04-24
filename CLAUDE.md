@@ -4,15 +4,32 @@
 > For quick reference, see [`.github/copilot-instructions.md`](.github/copilot-instructions.md).
 > For design decisions, see [`DESIGN.md`](DESIGN.md).
 > For future work, see [`BACKLOG.md`](BACKLOG.md).
+> For deployment-context details, see [`.github/instructions/deployment.instructions.md`](.github/instructions/deployment.instructions.md).
+
+## Agent Roles
+
+**Copilot is the primary implementation agent.** It runs in-IDE and as hosted agents on github.com and does most of the routine code changes. **Claude Code is the secondary agent for design and review** — DESIGN.md authorship, architectural decisions, focused refactors, and PR code review. When in doubt, prefer pushing implementation decisions into DESIGN.md (Claude territory) and keep BACKLOG.md actionable (Copilot territory).
+
+This matters for instruction-writing: docs in this repo must be model-agnostic. Where a rule applies to only one, label it `Copilot:` or `Claude:` inline.
 
 ## What This Project Does
 
 RouterOS LSP is a Language Server Protocol server for MikroTik RouterOS scripting language (`.rsc` files). Unlike most LSPs that ship with a built-in grammar, this one queries a **live RouterOS device** via HTTP REST API to get all syntax data — meaning it automatically supports any RouterOS version without updates.
 
-Published as:
-- **VSCode Extension** on [Marketplace](https://marketplace.visualstudio.com/items?itemName=TIKOCI.lsp-routeros-ts) (~thousands of users)
-- **Standalone binary** via [GitHub Releases](https://github.com/tikoci/lsp-routeros-ts/releases) (NeoVim, other editors)
-- **Web extension** for `vscode.dev` and `github.dev` (requires CORS proxy)
+This is the **most widely used tikoci project** (thousands of VSCode Marketplace installs). Treat code quality, test coverage, and release hygiene accordingly. "Works on my VSCode Desktop" is not sufficient — changes must hold up across all five deployment contexts below.
+
+## Deployment Contexts (six, not three)
+
+The codebase compiles to three build targets, but each change must be evaluated against six **deployment contexts** where users actually hit it:
+
+1. **VSCode Desktop** (Marketplace + Open-VSX) — the largest user base; Node.js IPC.
+2. **VSCode Web** (`vscode.dev`, `github.dev`) — Web Worker; no Node APIs; needs a CORS proxy for RouterOS.
+3. **Standalone native binary** (GitHub Releases) — `bun build --compile`; for Helix and other LSP clients via `--stdio`.
+4. **npm package** `@tikoci/routeroslsp` — Node-based stdio server; the recommended non-VSCode install path because it avoids macOS quarantine and is platform-independent.
+5. **NeoVim** — consumes either the standalone binary or the npm package via stdio, but is first-class: it has its own init script (`nvim-routeros-lsp-init.lua`), its own README section, and its own `.github/instructions/neovim.instructions.md`. Changes to the standalone path must be validated against NeoVim explicitly — it's the canary for "does the stdio transport still work end-to-end outside VSCode".
+6. **GitHub Copilot CLI** — consumes the LSP via `.github/lsp.json` (repo-level) or `~/.copilot/lsp-config.json` (user-level). This is an LSP client, not an MCP server; credentials flow through `initializationOptions` because Copilot CLI does not implement `workspace/configuration`.
+
+See [`.github/instructions/deployment.instructions.md`](.github/instructions/deployment.instructions.md) for the per-context pre-release checklist.
 
 ## Repository Layout
 
@@ -33,7 +50,7 @@ client/                      # VSCode extension client (thin binding)
     watchdog-errors.test.ts  # Tests for toErrorInfo/getTextFromError
 
 server/                      # LSP server (the brain — portable across editors)
-  src/
+  src/                       # RUNTIME CODE ONLY — what ends up in dist/server.js
     server.ts                # Node.js entry point
     server.web.ts            # Browser entry point
     controller.ts            # All LSP protocol handlers (~500 lines)
@@ -41,9 +58,12 @@ server/                      # LSP server (the brain — portable across editors
     routeros.ts              # HTTP client for RouterOS REST API
     shared.ts                # Settings, logging, credential management
     tokens.ts                # Token parser for /console/inspect highlight data
-    *.test.ts                # Unit tests (co-located with source)
-    test-preload.ts          # Bun test preload — silences log output
-    capture-snapshots.ts     # CLI tool: captures .highlight files from live CHR
+    *.test.ts                # Unit tests — co-located TODAY (planned to move; see BACKLOG)
+    test-preload.ts          # Bun test preload — silences log output (planned to move with tests)
+    capture-snapshots.ts     # ⚠️ Script, not runtime. Planned to move to scripts/
+    assess-dataset.ts        # ⚠️ Script, not runtime. Planned to move to scripts/
+    profile-timing.ts        # ⚠️ Script, not runtime. Planned to move to scripts/
+    import-discourse-*.ts    # ⚠️ Scripts, not runtime. Planned to move to scripts/
     integration.test.ts      # CHR integration tests (skipped when no CHR)
     snapshot.test.ts         # Offline tests against .rsc.highlight snapshot pairs
 
@@ -58,6 +78,9 @@ bunfig.toml                  # Bun config — test preload for log silencing
 nvim-routeros-lsp-init.lua   # NeoVim LSP configuration script
 build-standalone.sh          # Cross-platform bun compile loop
 webpack.config.js            # Web target bundling only
+.scratch/                    # Gitignored — ad-hoc experiments, one-off probes
+scripts/                     # PLANNED — tooling scripts (capture, profile, assess, import)
+tests/                       # PLANNED — tests, moved out of client/src + server/src
 ```
 
 ## Architecture

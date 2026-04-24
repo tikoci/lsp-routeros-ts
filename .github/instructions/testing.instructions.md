@@ -1,16 +1,28 @@
 ---
-applyTo: "**/*.test.ts,test-data/**,bunfig.toml,**/test-preload.ts,**/capture-snapshots.ts"
-description: "Use when writing or modifying tests. Covers test tiers, anchor testing pattern, snapshot workflow, and CHR integration."
+applyTo: "**/*.test.ts,test-data/**,bunfig.toml,**/test-preload.ts,scripts/**,.scratch/**"
+description: "Use when writing or modifying tests or tooling scripts. Covers test tiers (unit, model, snapshot, smoke, integration), anchor testing pattern, snapshot workflow, CHR integration via quickchr, and where scripts vs. tests vs. experiments belong."
 ---
 
 # Testing Guidelines
 
+## Test vs. Script vs. Scratch
+
+The user's expectation is that `client/src/` and `server/src/` hold **runtime code only** — what ships in `dist/`. Three other buckets:
+
+| Kind | Lives in | Example | Notes |
+|------|----------|---------|-------|
+| Test | `tests/` (planned) or co-located `*.test.ts` (today) | `tokens.test.ts` | Deterministic, runs under `bun test`. Anchor tests preferred. |
+| Tooling script | `scripts/` (planned) — currently mixed into `server/src/` | `capture-snapshots.ts`, `profile-timing.ts`, `assess-dataset.ts`, `import-discourse-*.ts` | Run by hand or from CI; not shipped. `server/tsconfig.json` already excludes them. |
+| Experiment | `.scratch/` (gitignored) | `routeros2.js`, `parse-il-probe.ts` | For one-off probes and throwaway validation. If it survives, promote it into a script or test. |
+
+**Do not add new tests or one-off scripts to `server/src/` or `client/src/`.** See the "Repository Structure" items in [BACKLOG.md](../../BACKLOG.md) for the planned move.
+
 ## Test Runner & Config
 
-- `bun test server/src/ client/src/` runs all tests (~326 tests, <500ms without CHR)
+- `bun test server/src/ client/src/` runs all tests (~326 tests, <500ms without CHR). Once the move lands, this becomes `bun test tests/` (adjust `package.json` `test` script at that time).
 - `bunfig.toml` preloads `server/src/test-preload.ts` to silence `log.*` output
-- Test files are co-located with source: `server/src/*.test.ts`, `client/src/*.test.ts`
-- `server/tsconfig.json` excludes `*.test.ts`, `test-preload.ts`, and `capture-snapshots.ts` from compilation
+- Test files are co-located with source today: `server/src/*.test.ts`, `client/src/*.test.ts`
+- `server/tsconfig.json` excludes `*.test.ts`, `test-preload.ts`, and the tooling scripts from compilation
 
 ## Test Tiers
 
@@ -33,10 +45,16 @@ description: "Use when writing or modifying tests. Covers test tiers, anchor tes
 - `watchdog-errors.test.ts` — tests `toErrorInfo` and `getTextFromError` from `watchdog-errors.ts`
 - These are pure functions extracted from `watchdog.ts` to avoid VSCode import issues
 
+### Smoke tests (planned — not yet implemented)
+- Goal: per deployment context, verify the LSP boots and responds to `initialize` + one semantic-tokens request end-to-end. Catches transport/packaging regressions unit tests cannot.
+- Contexts that need smoke coverage: standalone binary (`--stdio`), npm package (via `npx`), web bundle (via a Worker shim). See [`deployment.instructions.md`](deployment.instructions.md#pre-release-checklist).
+- Uses a mock RouterOS — smoke tests must not depend on a live CHR. Integration tests cover the CHR side.
+
 ### Integration tests (requires live CHR)
 - `integration.test.ts` — connects to CHR, sends all `test-data/**/*.rsc` through `inspectHighlight`
 - Auto-skips when CHR is unreachable
 - Override CHR address: `ROUTEROS_TEST_URL=http://... bun test server/src/integration.test.ts`
+- **In CI, prefer [`tikoci/quickchr`](https://github.com/tikoci/quickchr)** to boot a version-pinned CHR. quickchr is the designated QEMU expert project in the tikoci stack; it handles version selection, boot-wait loops, and port forwarding so that a GitHub Actions runner gets a predictable `/console/inspect`. See 📋 "QEMU CHR in CI" in BACKLOG.
 
 ## Assessment & Profiling Tools (not tests — standalone scripts)
 
@@ -67,6 +85,7 @@ description: "Use when writing or modifying tests. Covers test tiers, anchor tes
 - `*.tikbook` — TikBook notebook format files
 
 ## Adding New Tests
-- Co-locate with the source file being tested
+- Co-locate with the source file being tested (until the `tests/` move lands — then mirror the source tree)
 - For new `.rsc` test scripts: add to `test-data/`, run `capture-snapshots.ts` to generate `.highlight`
 - For mocking `RouterRestClient`: patch the singleton instance property, not the prototype (arrow-function methods are instance-level)
+- If you're tempted to write a script to "try something out" — it belongs in `.scratch/`, not next to a `.ts` source file. Promote to `scripts/` when it's worth keeping.

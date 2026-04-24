@@ -3,6 +3,16 @@
 > Active and planned work. Items marked ✅ are done, 🔄 in progress, 📋 planned, 💡 idea stage.
 > See [`DESIGN.md`](DESIGN.md) for design rationale. See [`CLAUDE.md`](CLAUDE.md) for architecture.
 
+## Pre-release Quality Gate
+
+Goal: when a maintainer triggers a pre-release build, automated testing should give a strong signal that the extension works across **all six deployment contexts** — VSCode Desktop, VSCode Web, standalone binary, npm package (`@tikoci/routeroslsp`), NeoVim (via `nvim-routeros-lsp-init.lua`), and GitHub Copilot CLI (via `.github/lsp.json`). See [`deployment.instructions.md`](.github/instructions/deployment.instructions.md) for the matrix.
+
+- 📋 **Per-context smoke test in CI** — for each deployment context, a minimal "LSP handshake + one `highlight` request" check. Must be cheap enough to run on every pre-release build.
+- 📋 **CI-booted CHR for integration** — run `integration.test.ts` against a QEMU CHR booted in GitHub Actions using [`tikoci/quickchr`](https://github.com/tikoci/quickchr). quickchr is specifically designed for this: pins a RouterOS version, exposes `/console/inspect` predictably, and runs headless. Pairs with the 📋 "QEMU CHR in CI" item under CI/CD below.
+- 📋 **Pre-release checklist in `deployment.instructions.md`** — document what has to be green before `vsix:package:prerelease` is considered trustworthy. Keep it short enough that agents can actually follow it.
+- 📋 **npm publish audit** — `@tikoci/routeroslsp` on npmjs.org is currently at 0.7.2 (`package.json` is at 0.7.3 as the next version). Confirm the conditional `if: env.NPM_TOKEN != ''` publish step actually runs on each pre-release, and that the shebang-prepend is correct. CI is the only supported publish path; no maintainer should `npm publish` from their laptop.
+- 📋 **Copilot CLI LSP config is currently broken** — `.github/lsp.json` uses `npx --yes @tikoci/routeroslsp --stdio`, which depends on the npm package being in sync. It also ships with placeholder credentials that look real (`routeros-user`/`routeros-password`). Needs: (a) verification the command line actually launches the server under Copilot CLI, (b) clearer placeholders, (c) a README note on how to override per-user in `~/.copilot/lsp-config.json` without committing credentials.
+
 ## Quality & Infrastructure
 
 ### Testing
@@ -21,12 +31,18 @@
 - ✅ **Performance profiling tool** — `profile-timing.ts` tests size→time relationship with progressive truncation + synthetic controls. Confirmed superlinear (quadratic) scaling across all syntax types, with a sharp inflection at ~28KB. Scripting syntax (variables, functions, control flow) costs 3× more than comments at the same size.
 - 📋 **VSCode integration tests** — boot real VS Code with `@vscode/test-electron`, install VSIX, verify semantic tokens, diagnostics, and completion work end-to-end
 - 📋 **Snapshot capture in CI** — run `capture-snapshots.ts` against CHR to regenerate `.highlight` files and detect regressions
+- 📋 **Smoke test tier** — new tier between unit and integration: launches the server process (stdio), sends `initialize` + one `textDocument/didOpen` + one `textDocument/semanticTokens/full`, verifies a non-empty response. Runs against a mocked RouterOS so it needs no CHR; separate from unit tests so a smoke failure is a clear "the transport/protocol layer broke" signal. Run for both the Node-bundled `server.js` and the standalone binary; web target uses a Worker shim.
 
 ### CI/CD
 - ✅ **Add lint to CI** — `build.yaml` now runs ESLint after compile
 - ✅ **Add test step to CI** — `bun test` runs after compile in `build.yaml`
 - 📋 **QEMU CHR in CI** — like restraml, boot CHR in GitHub Actions for integration tests
 - 📋 **Automated VSIX publishing** — trigger publish on version tag
+
+### Repository Structure
+- 📋 **Move one-off scripts out of `server/src/`** — `assess-dataset.ts`, `profile-timing.ts`, `capture-snapshots.ts`, `import-discourse-snippets.ts`, and `import-discourse-sqlite-snippets.ts` are tooling, not LSP runtime code. They should live in a top-level `scripts/` directory so `server/src/` stays "only what ships in `dist/server.js`". Rationale: agents keep dumping new experimentation scripts next to runtime code because there's no other obvious home — exactly how the current clutter accumulated. `server/tsconfig.json` already has to exclude them from compilation.
+- 📋 **Move `*.test.ts` to `tests/`** — tests are co-located today; the user-stated preference is that `client/src/` and `server/src/` hold runtime code only. Consider `tests/server/*.test.ts` mirroring source layout, or `server/tests/*.test.ts`. Adjust `bunfig.toml`, `server/tsconfig.json` excludes, and the `test` script in `package.json`. Do as a single focused PR — don't mix with feature work.
+- 📋 **Use `.scratch/` for ad-hoc experiments** — `.scratch/` is already gitignored. When agents want to try something without committing it (parsing experiments, API probes, etc.), land it there, not in `server/src/`.
 
 ### Code Quality
 - ✅ **Fix typo: `onComletionHandler`** → `onCompletionHandler` (already correct in code, docs were wrong)
@@ -131,6 +147,12 @@ TikBook uses two notebook formats. Example files for both are in `test-data/tikb
 - 📋 **TikBook: LSP-based notebook diagnostics** — use LSP diagnostics for notebook cells
 - 📋 **restraml: Validate configs against schema** — use RAML/OpenAPI schemas for deeper validation
 - 📋 **QEMU CHR management** — embed or integrate with TikBook's CHR VM features for quick version switching
+
+## Research Spikes
+
+- 📋 **`[:parse <script>]` IL inspection** — RouterOS's `:parse` returns a `code`-typed internal representation (stack-based IL) of a transpiled script. Questions worth answering with a spike: (a) is parse time predictive of highlight time — i.e. could the LSP short-circuit expensive highlight requests when `:parse` returns fast? (b) does the IL expose block structure / scope info that could back folding ranges, definition/references, or more accurate diagnostics? (c) is it a useful debug surface for agents authoring RouterOS scripts? Land as a throwaway script in `.scratch/` first, write up findings in `DESIGN.md` before any production code.
+- 📋 **Integrate `tikoci/rosetta` docs** — rosetta exposes RouterOS docs as an FTS5 MCP server. Hover/completion could pull descriptions, examples, property tables, and changelog deltas from rosetta. Design question: does the LSP call rosetta directly (new dependency), or do we expose a capability and let a Copilot/TikBook layer do the joining? Decision lives in DESIGN.md once scoped.
+- 📋 **RouterOS in Markdown fenced blocks** — generalize the TikBook `.rsc.md` idea: any ` ```routeros ` fenced block inside any `.md` file should get semantic tokens, diagnostics, and completion. Requires range-mapping (document → fenced ranges → RouterOS highlight → back to document positions). Captured previously under TikBook; promoted to a first-class research spike because its scope is broader.
 
 ## Ideas (Exploratory)
 

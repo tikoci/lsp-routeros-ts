@@ -1,6 +1,15 @@
 # RouterOS LSP — Design Decisions
 
-> Design rationale and cross-project patterns. For architecture details, see [`CLAUDE.md`](CLAUDE.md).
+> Design rationale and cross-project patterns. For architecture details, see [`CLAUDE.md`](CLAUDE.md). For per-deployment-context gotchas, see [`.github/instructions/deployment.instructions.md`](.github/instructions/deployment.instructions.md).
+
+## Agent Roles (Copilot primary, Claude secondary)
+
+The project uses two agent systems. The split is deliberate:
+
+- **Copilot** handles routine implementation. It runs in-IDE and as hosted agents on github.com, so changes must not assume a local dev environment or maintainer-only context.
+- **Claude Code** handles design and review — this file, architectural decisions, focused refactors, and PR code review.
+
+The rule of thumb for where something belongs: if it's actionable next-step work, BACKLOG.md (Copilot-friendly). If it's a decision with tradeoffs worth justifying, this file (Claude-friendly). Both agents read both documents; labelling is for discipline, not access control.
 
 ## Core Design Principle: The Router IS the Grammar
 
@@ -39,9 +48,11 @@ The server must be portable across editors (VSCode, NeoVim, any LSP client). All
 | Settings/configuration | `server/src/shared.ts` + `package.json` | LSP protocol handles settings delivery |
 | New completion trigger | `server/src/controller.ts` capabilities | Must be declared in server capabilities |
 
-## The Three Build Targets
+## Three Build Targets, Five Deployment Contexts
 
-### Why Three?
+The codebase compiles to three build targets, but ships through six deployment contexts (VSCode Desktop, VSCode Web, standalone binary, npm package, NeoVim, Copilot CLI). The distinction matters: context-specific failures (shebang missing on npm, CORS on web, quarantine on standalone, NeoVim API drift in the init script, missing `workspace/configuration` support on Copilot CLI) are invisible to unit tests. See [`.github/instructions/deployment.instructions.md`](.github/instructions/deployment.instructions.md) for the matrix.
+
+### Why Three Build Targets?
 
 1. **VSCode Desktop** — Primary user base. Node.js IPC for performance.
 2. **VSCode Web** — `vscode.dev`/`github.dev` support. Requires webpack + Web Worker.
@@ -128,6 +139,18 @@ Future work on Copilot integration considerations:
 - Code actions could suggest RouterOS-specific fixes (deprecated command replacement, etc.)
 - The `/console/inspect request=syntax` TEXT field could provide LLM-consumable descriptions
 - Cross-extension with TikBook: TikBook handles notebook execution, LSP handles language intelligence
+- **Copilot CLI is already a consumer** — `.github/lsp.json` makes the LSP available to Copilot CLI as a plain LSP server (not an MCP server). The credential path (`initializationOptions` since Copilot CLI doesn't implement `workspace/configuration`) is load-bearing and must be preserved.
+- **`tikoci/rosetta` docs integration** — rosetta exposes RouterOS docs as FTS5 over MCP. Open question: does the LSP call rosetta directly, or does a higher layer (TikBook, a Copilot skill) join LSP data with rosetta data? Adding a dependency pulls rosetta into every VSCode install; keeping the LSP pure and exposing a capability lets callers decide. Leaning toward the latter.
+
+### `[:parse <script>]` as a Signal Source
+
+RouterOS exposes a `:parse` operator that returns a `code`-typed internal representation (a stack-based IL) for a script. Open questions worth a research spike before any production use:
+
+- Is parse time predictive of highlight time? The ~28KB inflection point found in `profile-timing.ts` could be avoidable if `:parse` is cheap and correlates — the LSP could defer full highlight on suspected-oversize inputs.
+- Does the IL expose scope/block boundaries useful for LSP features that `highlight` can't easily support — folding ranges, definition/references for `:local`/`:global`, control-flow-aware diagnostics?
+- Could it serve as an agent-facing debug surface (inspect the parsed form of a script under edit)?
+
+Land the probe in `.scratch/` first; promote to DESIGN if the answers are worth committing to.
 
 ### QEMU CHR for Testing
 
