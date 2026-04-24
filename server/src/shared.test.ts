@@ -59,6 +59,13 @@ describe('updateSettings', () => {
 		expect(unchanged).toBe(false)
 	})
 
+	it('accepts partial settings updates', () => {
+		const changed = updateSettings({ baseUrl: 'http://10.0.0.3' })
+		expect(changed).toBe(true)
+		expect(getSettings().baseUrl).toBe('http://10.0.0.3')
+		expect(getSettings().username).toBe(defaultSettings.username)
+	})
+
 	it('does not update to an empty string', () => {
 		// empty string is falsy — update should be ignored
 		const before = getSettings().username

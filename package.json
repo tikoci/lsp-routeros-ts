@@ -46,6 +46,7 @@
     "https://coff.ee/amm0"
   ],
   "activationEvents": [
+    "onLanguage:routeros",
     "onEmbeddedLanguage:routeros",
     "onLanguage:tikbook",
     "onNotebook:tikbook",
@@ -211,7 +212,8 @@
         "editor.insertSpaces": true,
         "editor.tabSize": 4,
         "editor.indentSize": 4,
-        "editor.detectIndentation": true
+        "editor.detectIndentation": true,
+        "github.copilot.enable": true
       }
     },
     "configuration": {

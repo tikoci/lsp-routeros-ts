@@ -48,6 +48,7 @@ export interface LspSettingsUpdate {
 	username?: string
 	password?: string
 	apiTimeout?: number
+	allowClientProvidedCredentials?: boolean
 	checkCertificates?: boolean
 }
 
@@ -92,7 +93,7 @@ export function getSettings(): LspSettings {
 /** Settable string/number fields that can be compared and updated generically */
 const mutableFields = ['baseUrl', 'username', 'password', 'apiTimeout'] as const
 
-export function updateSettings(newSettings: LspSettings): boolean {
+export function updateSettings(newSettings: LspSettingsUpdate): boolean {
 	let isDirty = false
 
 	for (const key of mutableFields) {

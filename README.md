@@ -137,9 +137,48 @@ local lspexec = {os.getenv("HOME") .. "/.bin/lsp-routeros-server-darwin-arm64", 
 
 Any editor supporting the `workspace/configuration` LSP capability works. The server binary is `routeroslsp --stdio` (npm) or `lsp-routeros-server-<platform> --stdio` (GitHub Releases). Configure your editor to pass `routeroslsp.*` settings via `workspace/configuration` — see your editor's LSP documentation for the exact format.
 
+### GitHub Copilot CLI
+
+RouterOS LSP works with [GitHub Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli), giving the AI agent code intelligence for `.rsc` files.
+
+This project integrates with Copilot CLI as a standard LSP server. RouterOS connection settings can be passed via `initializationOptions` directly in the LSP config:
+
+**Repository-level** (`.github/lsp.json` — affects everyone working in this repo):
+
+This repository ships a `.github/lsp.json` that you can copy as a starting point. Edit the `initializationOptions` block to point to your router:
+
+```json
+{
+  "lspServers": {
+    "routeroslsp": {
+      "command": "npx",
+      "args": ["--yes", "@tikoci/routeroslsp", "--stdio"],
+      "fileExtensions": {
+        ".rsc": "routeros",
+        ".routeros": "routeros"
+      },
+      "requestTimeoutMs": 90000,
+      "initializationOptions": {
+        "routeroslsp": {
+          "baseUrl": "http://192.168.88.1",
+          "username": "routeros-user",
+          "password": "routeros-password"
+        }
+      }
+    }
+  }
+}
+```
+
+**User-level** (`~/.copilot/lsp-config.json` — applies to all repos):
+
+Same format. Use `/lsp reload` in Copilot CLI after editing. Check status with `/lsp`.
+
+> ℹ️ You can also manage LSP servers interactively with the `/lsp` slash command in Copilot CLI.
+
 ## Configuration
 
-All RouterOS LSP configuration is controlled through the LSP `workspace/configuration` capability. The following settings are available:
+All RouterOS LSP configuration is controlled through the LSP `workspace/configuration` capability or `initializationOptions` (for clients that don't support `workspace/configuration`, such as Copilot CLI). The following settings are available:
 
 ### Properties
 

@@ -1,0 +1,20 @@
+{
+  "lspServers": {
+    "routeroslsp": {
+      "command": "npx",
+      "args": ["--yes", "@tikoci/routeroslsp", "--stdio"],
+      "fileExtensions": {
+        ".rsc": "routeros",
+        ".routeros": "routeros"
+      },
+      "requestTimeoutMs": 90000,
+      "initializationOptions": {
+        "routeroslsp": {
+          "baseUrl": "http://192.168.88.1",
+          "username": "routeros-user",
+          "password": "routeros-password"
+        }
+      }
+    }
+  }
+}

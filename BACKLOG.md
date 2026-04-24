@@ -74,7 +74,7 @@
 - 📋 **"Run on Router" command** — execute selected code on connected RouterOS
 - 📋 **"Show RouterOS Version" command** — display connected device version info
 - 📋 **"Export Config" command** — fetch and display running config sections
-- 📋 **Copilot integration helpers** — expose RouterOS context for AI assistants
+- 📋 **Cross-project AI tool exposure alignment** — decide how TikBook, RouterOS LSP, and Rosetta divide responsibility for agent-facing RouterOS tools (`languageModelTools`, MCP, chat participants, etc.). Keep RouterOS LSP focused on pure LSP behavior until the shared design is settled.
 
 ### UX
 - 📋 **Improve walkthrough** — `docs/walkthrough.md` is placeholder; add graphics, screenshots

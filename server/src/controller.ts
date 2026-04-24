@@ -28,7 +28,17 @@ import {
 import { type DocumentUri, TextDocument } from 'vscode-languageserver-textdocument'
 import { LspDocument } from './model'
 import { type CompletionInspectResponseItem, normalizeError, type RouterOSClientError, RouterRestClient } from './routeros'
-import { ConnectionLogger, clearConnectionUrl, getDisplayConnectionUrl, isUsingClientCredentials, log, SEMANTIC_TOKEN_REFRESH_DELAY_MS, updateSettings, useConnectionUrl } from './shared'
+import {
+	ConnectionLogger,
+	clearConnectionUrl,
+	getDisplayConnectionUrl,
+	isUsingClientCredentials,
+	type LspSettingsUpdate,
+	log,
+	SEMANTIC_TOKEN_REFRESH_DELAY_MS,
+	updateSettings,
+	useConnectionUrl,
+} from './shared'
 import { HighlightTokens } from './tokens'
 
 // MARK: LspController
@@ -120,6 +130,16 @@ export class LspController {
 			}
 			this.#hasConfigurationCapability = !!(params.capabilities.workspace && !!params.capabilities.workspace.configuration)
 			log.debug(`<server> {onInitialize} hasConfigurationCapability ${this.#hasConfigurationCapability}`)
+
+			// Apply settings from initializationOptions for non-VSCode clients (Copilot CLI, NeoVim, etc.)
+			// that pass credentials via `initializationOptions.routeroslsp.*` in their LSP config.
+			const initOpts = params.initializationOptions?.[LspController.shortid]
+			if (initOpts) {
+				updateSettings(initOpts as LspSettingsUpdate)
+				RouterRestClient.default.invalidateClient()
+				log.info(`<server> {onInitialize} applied settings from initializationOptions`)
+			}
+
 			return { capabilities: serverCapabilities }
 		})
 

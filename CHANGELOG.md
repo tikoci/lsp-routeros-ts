@@ -21,6 +21,9 @@
   * `routeroslsp.semanticColors.autoApply` (default: `true`)
   * `routeroslsp.semanticColors.enableOverrideRules` (default: `true`)
 * Semantic token mapping now uses token modifiers for RouterOS states (inactive, obsolete, undefined, ambiguous, legacy, error) to improve default theme fallback behavior
+* GitHub Copilot is now automatically enabled for RouterOS files — no manual `github.copilot.enable` setting needed
+* GitHub Copilot CLI is now supported as an LSP client — use `.github/lsp.json` or `~/.copilot/lsp-config.json` with `initializationOptions.routeroslsp` to pass RouterOS credentials; see README for config example
+* RouterOS LSP now applies settings from `initializationOptions` on startup, enabling credential configuration for any LSP client that doesn't support `workspace/configuration` (Copilot CLI, Helix, etc.)
 
 #### Fixes
 
