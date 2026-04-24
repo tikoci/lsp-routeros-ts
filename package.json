@@ -336,6 +336,18 @@
         "enablement": "false"
       },
       {
+        "command": "routeroslsp.server.router.validateScript",
+        "title": "Validate RouterOS Script with Explicit Credentials",
+        "category": "RouterOS LSP Internal",
+        "enablement": "false"
+      },
+      {
+        "command": "routeroslsp.server.router.executeScript",
+        "title": "Execute RouterOS Script with Explicit Credentials",
+        "category": "RouterOS LSP Internal",
+        "enablement": "false"
+      },
+      {
         "command": "routeroslsp.server.getConnectionUrl",
         "title": "Get Printable Connection URL",
         "category": "RouterOS LSP Internal",

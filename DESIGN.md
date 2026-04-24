@@ -66,7 +66,7 @@ Bun handles Node.js compilation and standalone binaries excellently. But it cann
 
 ### Standalone Binary Constraints
 
-The standalone binary uses `bun build --compile` targeting multiple platforms. It reads settings via LSP `workspace/configuration` protocol — not environment variables or config files. The NeoVim integration script (`nvim-routeros-lsp-init.lua`) provides the configuration handler on the client side.
+The standalone binary uses `bun build --compile` targeting multiple platforms. Ambient read-only settings can come from LSP `workspace/configuration`, `initializationOptions`, or `ROUTEROSLSP_*` environment variables. The NeoVim integration script (`nvim-routeros-lsp-init.lua`) still provides the primary `workspace/configuration` path on the client side.
 
 ### Standalone Distribution: npm vs. Native Binary
 
@@ -107,19 +107,30 @@ The theme file (`vscode-routeroslsp-theme.json`) provides RouterOS CLI-matching 
 ## Credential Flow
 
 ```
-User Settings (routeroslsp.*)
-       ↓
-  [allowClientProvidedCredentials?]
-    ↓ yes                ↓ no
-TikBook can override   Always use settings
-via executeCommand
-       ↓
-shared.ts resolves →  RouterRestClient.default
-                         ↓
-                   Axios with Basic Auth
+Ambient read path
+────────────────────────────────────────────────────────
+Defaults / env / initializationOptions / workspace config
+                          ↓
+             [allowClientProvidedCredentials?]
+               ↓ yes                    ↓ no
+    TikBook can override via       Always use ambient
+    routeroslsp.server.useConnectionUrl   settings
+                          ↓
+              shared.ts resolves ambient settings
+                          ↓
+                   RouterRestClient.default
+
+Explicit write path
+────────────────────────────────────────────────────────
+router.validateScript / router.executeScript arguments
+    { baseUrl, username, password, script, ... }
+                          ↓
+          per-call RouterRestClient.forConnection(...)
+                          ↓
+      validate first, then execute only on clean diagnostics
 ```
 
-TikBook holds credentials in `SecretStorage` and passes them to the LSP via `routeroslsp.server.useConnectionUrl` command. The LSP server stores the override in memory (not persisted).
+TikBook holds credentials in `SecretStorage` and passes them to the LSP via `routeroslsp.server.useConnectionUrl` command. The LSP server stores the override in memory (not persisted). That override applies only to the ambient read-only LSP path; explicit validate/execute commands must carry their own credentials on every call and never fall back to ambient settings.
 
 ## Future Design Considerations
 
@@ -139,7 +150,7 @@ Future work on Copilot integration considerations:
 - Code actions could suggest RouterOS-specific fixes (deprecated command replacement, etc.)
 - The `/console/inspect request=syntax` TEXT field could provide LLM-consumable descriptions
 - Cross-extension with TikBook: TikBook handles notebook execution, LSP handles language intelligence
-- **Copilot CLI is already a consumer** — `.github/lsp.json` makes the LSP available to Copilot CLI as a plain LSP server (not an MCP server). The credential path (`initializationOptions` since Copilot CLI doesn't implement `workspace/configuration`) is load-bearing and must be preserved.
+- **Copilot CLI is already a consumer** — `.github/lsp.json` makes the LSP available to Copilot CLI as a plain LSP server (not an MCP server). The ambient credential path (`initializationOptions` since Copilot CLI doesn't implement `workspace/configuration`) is load-bearing and must be preserved, but explicit RouterOS writes should continue to flow through the same LSP command interface as every other client.
 - **`tikoci/rosetta` docs integration** — rosetta exposes RouterOS docs as FTS5 over MCP. Open question: does the LSP call rosetta directly, or does a higher layer (TikBook, a Copilot skill) join LSP data with rosetta data? Adding a dependency pulls rosetta into every VSCode install; keeping the LSP pure and exposing a capability lets callers decide. Leaning toward the latter.
 
 ### `[:parse <script>]` as a Signal Source

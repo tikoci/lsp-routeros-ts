@@ -127,11 +127,7 @@ function parseDiscourseTopicUrl(sourceUrl: string): ParsedTopicUrl {
 	const postNumber = pathMatch[2] || '1'
 	const page = parsed.searchParams.get('page')
 	const segments = parsed.pathname.split('/').filter(Boolean)
-	const topicBasePath = segments[0] === 't'
-		? /^\d+$/.test(segments[1] || '')
-			? `/t/${segments[1]}`
-			: `/t/${segments[1]}/${segments[2]}`
-		: `/t/${topicId}`
+	const topicBasePath = segments[0] === 't' ? (/^\d+$/.test(segments[1] || '') ? `/t/${segments[1]}` : `/t/${segments[1]}/${segments[2]}`) : `/t/${topicId}`
 
 	const jsonUrl = `${parsed.origin}/t/${topicId}/${postNumber}.json${page ? `?page=${page}` : ''}`
 	const topicBaseUrl = `${parsed.origin}${topicBasePath}`
@@ -177,18 +173,26 @@ function extractCodeBlocks(cookedHtml: string): string[] {
 }
 
 function stripHtmlToText(html: string): string {
-	return decodeHtmlEntities(html.replace(/<br\s*\/?\s*>/gi, '\n').replace(/<\/p>/gi, '\n').replace(/<[^>]+>/g, ''))
+	return decodeHtmlEntities(
+		html
+			.replace(/<br\s*\/?\s*>/gi, '\n')
+			.replace(/<\/p>/gi, '\n')
+			.replace(/<[^>]+>/g, ''),
+	)
 		.replace(/\r\n?/g, '\n')
 		.trim()
 }
 
 function looksLikeRouterScript(text: string): boolean {
 	if (text.length < 30) return false
-	const lines = text.split('\n').map((line) => line.trim()).filter(Boolean)
+	const lines = text
+		.split('\n')
+		.map((line) => line.trim())
+		.filter(Boolean)
 	if (lines.length < 3) return false
 
 	const joined = lines.join('\n')
-	const markers = [/\:(local|global|set|if|for|foreach|while|return|put|log)\b/, /\/[a-z]+\/[a-z]+/i, /\$[a-zA-Z_]/, /\[find\b|\[:/]
+	const markers = [/:(local|global|set|if|for|foreach|while|return|put|log)\b/, /\/[a-z]+\/[a-z]+/i, /\$[a-zA-Z_]/, /\[find\b|\[:/]
 	return markers.some((regex) => regex.test(joined))
 }
 
@@ -312,17 +316,11 @@ function writeManifest(outDirAbs: string, sourceUrl: string, seedChunk: TopicChu
 			fileName: toOutputName(entry.topicId, entry.postNumber, entry.snippetIndex, includeTopicInFileName),
 		})),
 	}
-	writeFileSync(manifestPath, JSON.stringify(manifest, null, '\t') + '\n', 'utf-8')
+	writeFileSync(manifestPath, `${JSON.stringify(manifest, null, '\t')}\n`, 'utf-8')
 }
 
-function collectSnippets(
-	chunk: TopicChunk,
-	topicBaseUrl: string,
-	opts: CliOptions,
-): { snippets: ExtractedSnippet[]; outboundLinks: string[]; postCountUsed: number } {
-	const posts = chunk.post_stream.posts
-		.filter((post) => (opts.author ? post.username.toLowerCase() === opts.author.toLowerCase() : true))
-		.sort((a, b) => a.post_number - b.post_number)
+function collectSnippets(chunk: TopicChunk, topicBaseUrl: string, opts: CliOptions): { snippets: ExtractedSnippet[]; outboundLinks: string[]; postCountUsed: number } {
+	const posts = chunk.post_stream.posts.filter((post) => (opts.author ? post.username.toLowerCase() === opts.author.toLowerCase() : true)).sort((a, b) => a.post_number - b.post_number)
 
 	const snippets: ExtractedSnippet[] = []
 	const outboundLinks = new Set<string>()

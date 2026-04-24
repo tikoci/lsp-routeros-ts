@@ -11,7 +11,7 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 - 📋 **CI-booted CHR for integration** — run `integration.test.ts` against a QEMU CHR booted in GitHub Actions using [`tikoci/quickchr`](https://github.com/tikoci/quickchr). quickchr is specifically designed for this: pins a RouterOS version, exposes `/console/inspect` predictably, and runs headless. Pairs with the 📋 "QEMU CHR in CI" item under CI/CD below.
 - 📋 **Pre-release checklist in `deployment.instructions.md`** — document what has to be green before `vsix:package:prerelease` is considered trustworthy. Keep it short enough that agents can actually follow it.
 - 📋 **npm publish audit** — `@tikoci/routeroslsp` on npmjs.org is currently at 0.7.2 (`package.json` is at 0.7.3 as the next version). Confirm the conditional `if: env.NPM_TOKEN != ''` publish step actually runs on each pre-release, and that the shebang-prepend is correct. CI is the only supported publish path; no maintainer should `npm publish` from their laptop.
-- 📋 **Copilot CLI LSP config is currently broken** — `.github/lsp.json` uses `npx --yes @tikoci/routeroslsp --stdio`, which depends on the npm package being in sync. It also ships with placeholder credentials that look real (`routeros-user`/`routeros-password`). Needs: (a) verification the command line actually launches the server under Copilot CLI, (b) clearer placeholders, (c) a README note on how to override per-user in `~/.copilot/lsp-config.json` without committing credentials.
+- 📋 **Copilot CLI LSP config still needs launch verification** — `.github/lsp.json` now uses obviously fake placeholders, but the `npx --yes @tikoci/routeroslsp --stdio` path still needs a real Copilot CLI smoke check after each npm publish. README now documents per-user override in `~/.copilot/lsp-config.json`.
 
 ## Quality & Infrastructure
 
@@ -45,6 +45,7 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 - 📋 **Use `.scratch/` for ad-hoc experiments** — `.scratch/` is already gitignored. When agents want to try something without committing it (parsing experiments, API probes, etc.), land it there, not in `server/src/`.
 
 ### Code Quality
+- ✅ **Split ambient auth from explicit execute auth** — read-only LSP traffic still uses ambient settings / TikBook overrides, while internal `router.validateScript` / `router.executeScript` commands require explicit per-call credentials and validate before execution
 - ✅ **Fix typo: `onComletionHandler`** → `onCompletionHandler` (already correct in code, docs were wrong)
 - ✅ **Fix typo: `inspectHighligh`** → `inspectHighlight` (routeros.ts, model.ts)
 - ✅ **Add `variable-auto`, `obj-dynamic`, `obj-disabled` to TokenTypes** — dataset assessment (913 .rsc files) found variable-auto in 167 files, obj-dynamic in 4, obj-disabled in 2. Added to tokens.ts, package.json, theme, with tests.
@@ -87,7 +88,7 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 ## VSCode Extension
 
 ### Commands
-- 📋 **"Run on Router" command** — execute selected code on connected RouterOS
+- 📋 **"Run on Router" command** — if/when a VSCode UI command is added, it should wrap the internal `router.validateScript` / `router.executeScript` commands and keep the explicit-credential policy
 - 📋 **"Show RouterOS Version" command** — display connected device version info
 - 📋 **"Export Config" command** — fetch and display running config sections
 - 📋 **Cross-project AI tool exposure alignment** — decide how TikBook, RouterOS LSP, and Rosetta divide responsibility for agent-facing RouterOS tools (`languageModelTools`, MCP, chat participants, etc.). Keep RouterOS LSP focused on pure LSP behavior until the shared design is settled.

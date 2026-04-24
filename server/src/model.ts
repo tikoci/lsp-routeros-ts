@@ -1,8 +1,9 @@
-import { type Diagnostic, DiagnosticSeverity } from 'vscode-languageserver'
+import type { Diagnostic } from 'vscode-languageserver'
 import type { Position, Range, TextDocument } from 'vscode-languageserver-textdocument'
 import { RouterRestClient } from './routeros'
-import { log, ROUTEROS_API_MAX_BYTES } from './shared'
-import { HighlightTokens } from './tokens'
+import { log } from './shared'
+import type { HighlightTokens } from './tokens'
+import { buildDiagnosticsFromTokens, inspectHighlightTokensForDocument } from './validation'
 
 export class LspDocument {
 	#document: TextDocument
@@ -54,67 +55,15 @@ export class LspDocument {
 		log.debug(`<lspdoc> {diagnostics} called: ${this.uri}`)
 
 		const tokens = await this.highlightTokens
-		const tokenRanges = tokens.tokenRanges
-		const errors: Diagnostic[] = tokenRanges
-			.filter((tokenRange) => HighlightTokens.ErrorTokenTypes.includes(tokenRange.token))
-			.map((tokenRange) => {
-				return {
-					severity: DiagnosticSeverity.Error,
-					range: tokenRange.range,
-					message: `Script error from highlight '${tokenRange.token}'`,
-					code: `token:${tokenRange.token}`,
-					source: 'routeroslsp',
-				}
-			})
-
-		if (errors.length > 0) {
-			const lastError = errors[errors.length - 1]
-			const nextPosition = this.positionAt(this.offsetAt(lastError.range.end) + 1)
-			const endPosition = this.positionAt(tokens.tokens.length - 1)
-			if (nextPosition.line >= endPosition.line) {
-				return errors
-			}
-			return [
-				...errors,
-				{
-					severity: DiagnosticSeverity.Warning,
-					range: { start: nextPosition, end: endPosition },
-					message: 'Potential issues due to prior highlight error',
-					code: 'token:unchecked',
-					source: 'routeroslsp',
-				},
-			]
-		}
-
-		const text = this.#document.getText()
-		if (text.length >= ROUTEROS_API_MAX_BYTES + 1) {
-			errors.push({
-				severity: DiagnosticSeverity.Warning,
-				range: {
-					start: this.positionAt(ROUTEROS_API_MAX_BYTES + 1),
-					end: this.positionAt(text.length - 2),
-				},
-				message: 'Too long, only first 32K will be checked',
-				code: 'token:toolong',
-				source: 'routeroslsp',
-			})
-		}
-
-		log.info(`<lspdoc> {diagnostics} done, found ${errors.length} for ${this.uri}`)
-		return errors
+		const diagnostics = buildDiagnosticsFromTokens(this.#document, tokens)
+		log.info(`<lspdoc> {diagnostics} done, found ${diagnostics.length} for ${this.uri}`)
+		return diagnostics
 	}
 
 	async #fetchHighlightTokens(range?: Range): Promise<HighlightTokens> {
 		log.info(`<lspdoc> {#fetchHighlightTokens} started for ${this.uri}`)
 
-		let text = this.#document.getText()
-		if (range) {
-			text = text.substring(this.#document.offsetAt(range.start))
-		}
-		const highlightInspectResponse = await RouterRestClient.default.inspectHighlight(text.substring(0, ROUTEROS_API_MAX_BYTES))
-		const parsedToken = highlightInspectResponse?.[0]?.highlight.split(',')
-		log.info('<lspdoc> {#fetchHighlightTokens} got new tokens')
-
-		return new HighlightTokens(parsedToken || [], this.#document, range)
+		const { tokens } = await inspectHighlightTokensForDocument(this.#document, RouterRestClient.default.inspectHighlight, range)
+		return tokens
 	}
 }

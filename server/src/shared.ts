@@ -34,22 +34,28 @@ export const log: RemoteConsole = new Proxy({} as RemoteConsole, {
 
 // MARK: Settings
 
-export interface LspSettings {
+export interface RouterConnectionSettings {
 	baseUrl: string
 	username: string
 	password: string
 	apiTimeout: number
-	allowClientProvidedCredentials: boolean
 	checkCertificates: boolean
 }
 
-export interface LspSettingsUpdate {
+export interface LspSettings extends RouterConnectionSettings {
+	allowClientProvidedCredentials: boolean
+}
+
+export interface RouterConnectionSettingsUpdate {
 	baseUrl?: string
 	username?: string
 	password?: string
 	apiTimeout?: number
-	allowClientProvidedCredentials?: boolean
 	checkCertificates?: boolean
+}
+
+export interface LspSettingsUpdate extends RouterConnectionSettingsUpdate {
+	allowClientProvidedCredentials?: boolean
 }
 
 export const defaultSettings: LspSettings = {
@@ -62,7 +68,11 @@ export const defaultSettings: LspSettings = {
 }
 
 const routeroslspSettings: LspSettings = { ...defaultSettings }
-let clientProvidedSettings: LspSettingsUpdate = {}
+let clientProvidedSettings: RouterConnectionSettingsUpdate = {}
+
+const stringFields = ['baseUrl', 'username', 'password'] as const
+const numberFields = ['apiTimeout'] as const
+const booleanFields = ['allowClientProvidedCredentials', 'checkCertificates'] as const
 
 let _isUsingClientCredentials = false
 export function isUsingClientCredentials() {
@@ -83,22 +93,37 @@ export function getSettings(): LspSettings {
 			username: clientProvidedSettings.username || routeroslspSettings.username,
 			password: clientProvidedSettings.password || routeroslspSettings.password,
 			apiTimeout: clientProvidedSettings.apiTimeout || routeroslspSettings.apiTimeout,
+			checkCertificates: typeof clientProvidedSettings.checkCertificates === 'boolean' ? clientProvidedSettings.checkCertificates : routeroslspSettings.checkCertificates,
 			allowClientProvidedCredentials: routeroslspSettings.allowClientProvidedCredentials,
-			checkCertificates: routeroslspSettings.checkCertificates,
 		}
 	}
 	return routeroslspSettings
 }
 
-/** Settable string/number fields that can be compared and updated generically */
-const mutableFields = ['baseUrl', 'username', 'password', 'apiTimeout'] as const
+export function getAmbientConnectionSettings(): RouterConnectionSettings {
+	const settings = getSettings()
+	return {
+		baseUrl: settings.baseUrl,
+		username: settings.username,
+		password: settings.password,
+		apiTimeout: settings.apiTimeout,
+		checkCertificates: settings.checkCertificates,
+	}
+}
 
 export function updateSettings(newSettings: LspSettingsUpdate): boolean {
 	let isDirty = false
 
-	for (const key of mutableFields) {
+	for (const key of stringFields) {
 		const newVal = newSettings[key]
-		if (newVal && typeof newVal === typeof routeroslspSettings[key] && newVal !== routeroslspSettings[key]) {
+		if (typeof newVal === 'string' && newVal.length > 0 && newVal !== routeroslspSettings[key]) {
+			;(routeroslspSettings as unknown as Record<string, unknown>)[key] = newVal
+			isDirty = true
+		}
+	}
+	for (const key of numberFields) {
+		const newVal = newSettings[key]
+		if (typeof newVal === 'number' && Number.isFinite(newVal) && newVal !== routeroslspSettings[key]) {
 			;(routeroslspSettings as unknown as Record<string, unknown>)[key] = newVal
 			isDirty = true
 		}
@@ -117,16 +142,45 @@ export function updateSettings(newSettings: LspSettingsUpdate): boolean {
 	if (isDirty) {
 		const s = getSettings()
 		log.info(
-			`<settings> {update} now using ${s.baseUrl} ${s.username} ${s.password ? '***' : 'null'} timeout ${s.apiTimeout} allowClientProvidedCredentials ${s.allowClientProvidedCredentials} checkCertificates ${s.checkCertificates}`,
+			`<settings> {update} now using ${sanitizeBaseUrl(s.baseUrl)} auth ${s.password ? '***' : 'unset'} timeout ${s.apiTimeout} allowClientProvidedCredentials ${s.allowClientProvidedCredentials} checkCertificates ${s.checkCertificates}`,
 		)
 	}
 	return isDirty
 }
 
+export function getEnvironmentSettings(env = getProcessEnv()): LspSettingsUpdate {
+	if (!env) return {}
+
+	const environmentSettings: LspSettingsUpdate = {}
+	for (const key of stringFields) {
+		const envValue = env[toEnvVariableName(`routeroslsp.${key}`)]
+		if (typeof envValue === 'string' && envValue.length > 0) {
+			environmentSettings[key] = envValue
+		}
+	}
+	for (const key of numberFields) {
+		const envValue = env[toEnvVariableName(`routeroslsp.${key}`)]
+		if (typeof envValue === 'string' && envValue.length > 0) {
+			const parsed = Number(envValue)
+			if (Number.isFinite(parsed)) environmentSettings[key] = parsed
+		}
+	}
+	for (const key of booleanFields) {
+		const envValue = env[toEnvVariableName(`routeroslsp.${key}`)]
+		if (typeof envValue === 'string' && envValue.length > 0) {
+			const parsed = parseBooleanString(envValue)
+			if (typeof parsed === 'boolean') {
+				environmentSettings[key] = parsed
+			}
+		}
+	}
+	return environmentSettings
+}
+
 // MARK: Connection URL
 
-export function getDisplayConnectionUrl(withUsername = true): string | null {
-	const url = getConnectionUrl(withUsername)
+export function getDisplayConnectionUrl(withUsername = true, settings = getAmbientConnectionSettings()): string | null {
+	const url = getConnectionUrl(withUsername, settings)
 	if (url) {
 		const userPart = withUsername ? `${url.username}@` : ''
 		return `${url.protocol}//${userPart}${url.host}${url.pathname.substring(0, url.pathname.length - 1)}`
@@ -134,12 +188,12 @@ export function getDisplayConnectionUrl(withUsername = true): string | null {
 	return null
 }
 
-export function getConnectionUrl(withUsername = false): URL | null {
-	const settings = getSettings()
+export function getConnectionUrl(withUsername = false, settings = getAmbientConnectionSettings()): URL | null {
 	const url = URL.parse(settings.baseUrl)
-	if (url) {
+	if (url?.protocol && url.host) {
 		if (withUsername) {
 			url.username = settings.username
+			url.password = ''
 		}
 		if (url.pathname[url.pathname.length - 1] !== '/') {
 			url.pathname += '/'
@@ -147,6 +201,15 @@ export function getConnectionUrl(withUsername = false): URL | null {
 		return url
 	}
 	return null
+}
+
+export function sanitizeBaseUrl(baseUrl: string): string {
+	const url = URL.parse(baseUrl)
+	if (!url?.protocol || !url.host) return baseUrl
+	url.username = ''
+	url.password = ''
+	const path = url.pathname === '/' ? '' : url.pathname.replace(/\/$/, '')
+	return `${url.protocol}//${url.host}${path}`
 }
 
 // MARK: Client-provided credentials
@@ -177,7 +240,7 @@ export function useConnectionUrl(e: ExecuteCommandParams): boolean {
 		newCredentials.baseUrl = baseUrl
 		if (newCredentials.baseUrl !== getSettings().baseUrl) {
 			isDirty = true
-			log.info(`[useConnectionUrl] client provided new baseURL for ${url.protocol}//${url.host}`)
+			log.info(`[useConnectionUrl] client provided new baseURL for ${sanitizeBaseUrl(baseUrl)}`)
 		}
 	}
 	if (url && !username && url.username) username = url.username
@@ -187,7 +250,7 @@ export function useConnectionUrl(e: ExecuteCommandParams): boolean {
 		newCredentials.username = username
 		if (newCredentials.username !== getSettings().username) {
 			isDirty = true
-			log.info(`[useConnectionUrl] client provided new username: ${username}`)
+			log.info('[useConnectionUrl] client provided updated username')
 		}
 	}
 	if (password) {
@@ -204,7 +267,7 @@ export function useConnectionUrl(e: ExecuteCommandParams): boolean {
 			log.info(`[useConnectionUrl] client provided apiTimeout: ${apiTimeout}`)
 		}
 	}
-	if (checkCertificates && typeof checkCertificates === 'boolean') {
+	if (typeof checkCertificates === 'boolean') {
 		newCredentials.checkCertificates = checkCertificates
 		if (newCredentials.checkCertificates !== getSettings().checkCertificates) {
 			isDirty = true
@@ -218,7 +281,13 @@ export function useConnectionUrl(e: ExecuteCommandParams): boolean {
 }
 
 export function clearConnectionUrl(): boolean {
-	if (clientProvidedSettings.baseUrl || clientProvidedSettings.username || clientProvidedSettings.password || clientProvidedSettings.apiTimeout) {
+	if (
+		clientProvidedSettings.baseUrl ||
+		clientProvidedSettings.username ||
+		clientProvidedSettings.password ||
+		clientProvidedSettings.apiTimeout ||
+		typeof clientProvidedSettings.checkCertificates === 'boolean'
+	) {
 		clientProvidedSettings = {}
 		_isUsingClientCredentials = false
 		log.info('[clearConnectionUrl] removed client authentication cache')
@@ -227,4 +296,35 @@ export function clearConnectionUrl(): boolean {
 	log.debug('[clearConnectionUrl] no client authentication to remove')
 	_isUsingClientCredentials = false
 	return false
+}
+
+export function toEnvVariableName(settingName: string): string {
+	const suffix = settingName.replace(/^routeroslsp\./, '')
+	const normalized = suffix
+		.replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+		.replace(/[^a-zA-Z0-9]+/g, '_')
+		.toUpperCase()
+	return `ROUTEROSLSP_${normalized}`
+}
+
+function parseBooleanString(value: string): boolean | undefined {
+	switch (value.trim().toLowerCase()) {
+		case '1':
+		case 'true':
+		case 'yes':
+		case 'on':
+			return true
+		case '0':
+		case 'false':
+		case 'no':
+		case 'off':
+			return false
+		default:
+			return undefined
+	}
+}
+
+function getProcessEnv(): Record<string, string | undefined> | undefined {
+	if (typeof process === 'undefined' || !process?.env) return undefined
+	return process.env as Record<string, string | undefined>
 }

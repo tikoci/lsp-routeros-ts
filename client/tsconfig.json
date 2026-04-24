@@ -5,9 +5,10 @@
 		"lib": ["es2020", "WebWorker"],
 		"rootDir": "src",
 		"sourceMap": true,
+		"skipLibCheck": true,
 		"outDir": "dist",
 		//"composite": true
 	},
 	"include": ["src"],
-	"exclude": ["node_modules", ".vscode-test-web", ".vscode-test"],
+	"exclude": ["node_modules", ".vscode-test-web", ".vscode-test", "src/**/*.test.ts"],
 }

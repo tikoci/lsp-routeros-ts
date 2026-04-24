@@ -43,8 +43,9 @@ Both entry points share `client.ts` and `commands.ts`. Differences:
 
 ## TikBook Integration
 - `allowClientProvidedCredentials` setting controls whether TikBook can override credentials
-- TikBook calls `routeroslsp.server.useConnectionUrl` to set credentials
+- TikBook calls `routeroslsp.server.useConnectionUrl` to set ambient read-only credentials
 - Watchdog uses `routeroslsp.server.isUsingClientCredentials` to adjust error messages
+- Explicit write commands (`routeroslsp.server.router.validateScript` / `routeroslsp.server.router.executeScript`) must keep carrying their own credentials per call — they do not use the ambient TikBook override
 - Document selectors include `rscena` scheme and tikbook patterns for cross-extension support
 
 ## Rules

@@ -30,7 +30,7 @@ RouterOS LSP is a Language Server Protocol implementation for MikroTik RouterOS 
 | Server CJS | npm package `@tikoci/routeroslsp` | `server.ts` | stdio (via `routeroslsp` bin) | `server/package.json` |
 | Native binary | Standalone download (Helix, other LSP clients) | `server.ts --stdio` | stdio / `--socket=<port>` | `build-standalone.sh`, GitHub Releases |
 | Native binary / npm | **NeoVim** | `server.ts --stdio` | stdio | `nvim-routeros-lsp-init.lua` |
-| Server CJS | GitHub Copilot CLI | `server.ts` | stdio, reads `initializationOptions` | `.github/lsp.json` |
+| Server CJS | GitHub Copilot CLI | `server.ts` | stdio, reads `initializationOptions` / `ROUTEROSLSP_*` env fallback | `.github/lsp.json` |
 
 NeoVim shares the transport with "generic standalone" but has its own first-class config artifact, its own README section, and its own `neovim.instructions.md` — changes to the standalone path must be validated against NeoVim explicitly.
 
@@ -68,6 +68,7 @@ bun run bun:exe             # Build standalone binary (copies to ~/.bin/)
 | LSP controller (all handlers) | `server/src/controller.ts` |
 | RouterOS HTTP client | `server/src/routeros.ts` |
 | Document model & caching | `server/src/model.ts` |
+| Shared validation helper | `server/src/validation.ts` |
 | Token parser & highlighting | `server/src/tokens.ts` |
 | Settings & logging | `server/src/shared.ts` |
 | VSCode commands | `client/src/commands.ts` |

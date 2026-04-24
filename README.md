@@ -135,13 +135,13 @@ local lspexec = {os.getenv("HOME") .. "/.bin/lsp-routeros-server-darwin-arm64", 
 
 #### Other LSP clients (Helix, Emacs, etc.)
 
-Any editor supporting the `workspace/configuration` LSP capability works. The server binary is `routeroslsp --stdio` (npm) or `lsp-routeros-server-<platform> --stdio` (GitHub Releases). Configure your editor to pass `routeroslsp.*` settings via `workspace/configuration` — see your editor's LSP documentation for the exact format.
+Any editor supporting the `workspace/configuration` LSP capability works. The server binary is `routeroslsp --stdio` (npm) or `lsp-routeros-server-<platform> --stdio` (GitHub Releases). Configure your editor to pass `routeroslsp.*` settings via `workspace/configuration` — or set the matching `ROUTEROSLSP_*` environment variables when the client cannot send settings.
 
 ### GitHub Copilot CLI
 
 RouterOS LSP works with [GitHub Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli), giving the AI agent code intelligence for `.rsc` files.
 
-This project integrates with Copilot CLI as a standard LSP server. RouterOS connection settings can be passed via `initializationOptions` directly in the LSP config:
+This project integrates with Copilot CLI as a standard LSP server. Read-only LSP connection settings can be passed via `initializationOptions` directly in the LSP config:
 
 **Repository-level** (`.github/lsp.json` — affects everyone working in this repo):
 
@@ -160,9 +160,9 @@ This repository ships a `.github/lsp.json` that you can copy as a starting point
       "requestTimeoutMs": 90000,
       "initializationOptions": {
         "routeroslsp": {
-          "baseUrl": "http://192.168.88.1",
-          "username": "routeros-user",
-          "password": "routeros-password"
+          "baseUrl": "http://REPLACE_ME_HOST:80",
+          "username": "REPLACE_ME_USERNAME",
+          "password": "REPLACE_ME_PASSWORD"
         }
       }
     }
@@ -176,9 +176,11 @@ Same format. Use `/lsp reload` in Copilot CLI after editing. Check status with `
 
 > ℹ️ You can also manage LSP servers interactively with the `/lsp` slash command in Copilot CLI.
 
+> 🔐 Copilot CLI remains a plain LSP client here. The internal `routeroslsp.server.router.validateScript` and `routeroslsp.server.router.executeScript` commands require explicit per-call credentials and do **not** reuse the ambient `initializationOptions` credentials above.
+
 ## Configuration
 
-All RouterOS LSP configuration is controlled through the LSP `workspace/configuration` capability or `initializationOptions` (for clients that don't support `workspace/configuration`, such as Copilot CLI). The following settings are available:
+All RouterOS LSP configuration is controlled through the LSP `workspace/configuration` capability, `initializationOptions` (for clients that don't support `workspace/configuration`, such as Copilot CLI), or `ROUTEROSLSP_*` environment variables for standalone/stdio usage. The following settings are available:
 
 ### Properties
 
@@ -193,13 +195,57 @@ interface LspSettings {
 }
 ```
 
+### Environment variable mapping
+
+For standalone/native/npm usage, the server also reads these environment variables:
+
+| Setting | Environment variable |
+|---|---|
+| `routeroslsp.baseUrl` | `ROUTEROSLSP_BASE_URL` |
+| `routeroslsp.username` | `ROUTEROSLSP_USERNAME` |
+| `routeroslsp.password` | `ROUTEROSLSP_PASSWORD` |
+| `routeroslsp.apiTimeout` | `ROUTEROSLSP_API_TIMEOUT` |
+| `routeroslsp.allowClientProvidedCredentials` | `ROUTEROSLSP_ALLOW_CLIENT_PROVIDED_CREDENTIALS` |
+| `routeroslsp.checkCertificates` | `ROUTEROSLSP_CHECK_CERTIFICATES` |
+
+Ambient settings precedence is: defaults → environment variables → `initializationOptions` / `workspace/configuration` → `routeroslsp.server.useConnectionUrl` (if `allowClientProvidedCredentials` is enabled).
+
+### Validate / execute server commands
+
+RouterOS LSP now exposes two internal LSP commands for caller-controlled script validation/execution:
+
+- `routeroslsp.server.router.validateScript`
+- `routeroslsp.server.router.executeScript`
+
+Both commands accept a single object argument:
+
+```json
+{
+  "baseUrl": "http://192.168.88.1:80",
+  "username": "write-user",
+  "password": "write-password",
+  "script": "/system/identity/print",
+  "apiTimeout": 15,
+  "checkCertificates": false
+}
+```
+
+Rules for these commands:
+
+- `baseUrl` must include protocol, host, and an **explicit port**
+- credentials must be passed on **every** call
+- `baseUrl` must **not** embed credentials
+- `executeScript` always validates first and refuses to run when diagnostics are present
+- ambient LSP settings, `initializationOptions`, env vars, and `useConnectionUrl` overrides are **never** used for execution
+- supplied credentials are redacted from LSP server logs
+
 ### RouterOS Connection Setup
 
 For the LSP to function, the REST API **must** be enabled in your RouterOS device and accessible from your editor's computer.  A valid RouterOS account **must** be provided to the RouterOS LSP as well (see [Configuration](#configuration) section) .
 
 _Theoretically_, you may not need any setup in RouterOS...as by default, HTTP is enabled on port 80, and reachable from default LAN; and, any RouterOS account (with sufficient rights, like `admin` with `full` rights) can be used in RouterOS LSP for login via REST API.
 
-_However_, it recommended to use HTTPS with valid certificate, and an account with more limited rights to RouterOS configurations.  For example, `write` policy is not required for core LSP operations since only `/console/inspect` data is read.
+_However_, it recommended to use HTTPS with valid certificate, and an account with more limited rights to RouterOS configurations.  For example, `write` policy is not required for core LSP operations since only `/console/inspect` data is read. If you plan to call `routeroslsp.server.router.executeScript`, use a separate credential with the required write policy and pass it explicitly on each execute call.
 
 #### Enabling HTTPS with Let's Encrypt certificate
 

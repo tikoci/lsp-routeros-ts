@@ -35,14 +35,14 @@ const TEST_DATA_DIR = join(import.meta.dir, '../../test-data')
 
 const args = process.argv.slice(2)
 const jsonOutput = args.includes('--json')
-const concurrencyArg = args.find(a => a.startsWith('--concurrency='))
+const concurrencyArg = args.find((a) => a.startsWith('--concurrency='))
 const CONCURRENCY = concurrencyArg ? parseInt(concurrencyArg.split('=')[1], 10) : 1
 
 // MARK: Types
 
 interface FileResult {
 	relPath: string
-	collection: string  // 'amm0' | 'rextended' | 'eworm' | 'edge-cases' | 'forum-legacy' | 'tikbook' | 'complex' | 'root'
+	collection: string // 'amm0' | 'rextended' | 'eworm' | 'edge-cases' | 'forum-legacy' | 'tikbook' | 'complex' | 'root'
 	fileSize: number
 	lineCount: number
 	truncated: boolean
@@ -56,10 +56,10 @@ interface FileResult {
 	unknownTokenTypes: string[]
 	errorTokenCount: number
 	errorTokenTypes: string[]
-	hasCliPrompt: boolean      // [admin@MikroTik] > style lines
-	hasCommentHeader: boolean  // starts with # Source: or similar
+	hasCliPrompt: boolean // [admin@MikroTik] > style lines
+	hasCommentHeader: boolean // starts with # Source: or similar
 	tokenRangeCount: number
-	parseTimeMs: number        // time to construct HighlightTokens + tokenRanges
+	parseTimeMs: number // time to construct HighlightTokens + tokenRanges
 	diagnosticTokenPct: number // % of chars that are error-like tokens
 }
 
@@ -75,17 +75,17 @@ interface SummaryStats {
 	statusCounts: Record<string, number>
 	collectionCounts: Record<string, number>
 	collectionStats: Record<string, { count: number; okCount: number; avgTimeMs: number; errorCount: number }>
-	allTokenTypes: Record<string, number>  // token type → occurrence count across all files
+	allTokenTypes: Record<string, number> // token type → occurrence count across all files
 	unknownTokenTypesGlobal: string[]
 	truncatedCount: number
 	cliPromptCount: number
-	filesWithErrors: number          // files where error tokens exist
+	filesWithErrors: number // files where error tokens exist
 	totalErrorTokens: number
 	avgParseTimeMs: number
-	filesOversize: number            // files > 32KB
-	emptyFiles: number               // 0-byte files
-	tokenMismatchFiles: string[]     // files where token count != char count
-	errorFiles: string[]             // files where API returned error
+	filesOversize: number // files > 32KB
+	emptyFiles: number // 0-byte files
+	tokenMismatchFiles: string[] // files where token count != char count
+	errorFiles: string[] // files where API returned error
 	topErrorMessages: Record<string, number>
 }
 
@@ -167,13 +167,25 @@ async function processFile(filePath: string): Promise<FileResult> {
 
 	// Base result for error cases
 	const base: FileResult = {
-		relPath, collection, fileSize, lineCount, truncated,
+		relPath,
+		collection,
+		fileSize,
+		lineCount,
+		truncated,
 		requestTimeMs,
 		status: 'ok',
-		tokenCount: 0, expectedTokenCount, tokenCountMatch: false,
-		uniqueTokenTypes: [], unknownTokenTypes: [], errorTokenCount: 0, errorTokenTypes: [],
-		hasCliPrompt, hasCommentHeader,
-		tokenRangeCount: 0, parseTimeMs: 0, diagnosticTokenPct: 0,
+		tokenCount: 0,
+		expectedTokenCount,
+		tokenCountMatch: false,
+		uniqueTokenTypes: [],
+		unknownTokenTypes: [],
+		errorTokenCount: 0,
+		errorTokenTypes: [],
+		hasCliPrompt,
+		hasCommentHeader,
+		tokenRangeCount: 0,
+		parseTimeMs: 0,
+		diagnosticTokenPct: 0,
 	}
 
 	if (error) {
@@ -199,10 +211,13 @@ async function processFile(filePath: string): Promise<FileResult> {
 	}
 	const uniqueTokenTypes = [...typeCounts.keys()].sort()
 
-	const knownTypes = new Set([...HighlightTokens.TokenTypes, ...HighlightTokens.ErrorTokenTypes.map(t => {
-		// ErrorTokenTypes are also valid token types
-		return t
-	})])
+	const knownTypes = new Set([
+		...HighlightTokens.TokenTypes,
+		...HighlightTokens.ErrorTokenTypes.map((t) => {
+			// ErrorTokenTypes are also valid token types
+			return t
+		}),
+	])
 	// Add compound types that toSemanticToken handles
 	knownTypes.add('arg-scope')
 	knownTypes.add('arg-dot')
@@ -214,7 +229,7 @@ async function processFile(filePath: string): Promise<FileResult> {
 	knownTypes.add('error')
 	knownTypes.add('path')
 
-	const unknownTokenTypes = uniqueTokenTypes.filter(t => !knownTypes.has(t))
+	const unknownTokenTypes = uniqueTokenTypes.filter((t) => !knownTypes.has(t))
 
 	// Error token analysis
 	const errorTokenSet = new Set(HighlightTokens.ErrorTokenTypes)
@@ -239,7 +254,7 @@ async function processFile(filePath: string): Promise<FileResult> {
 		tokenRangeCount = ht.tokenRanges.length
 		// Also exercise regexToken to check for unknown types (the '?' fallback)
 		const regex = ht.regexToken
-		const unknownInRegex = regex.filter(r => r === '?').length
+		const unknownInRegex = regex.filter((r) => r === '?').length
 		parseTimeMs = performance.now() - parseStart
 		if (unknownInRegex > 0 && unknownTokenTypes.length === 0) {
 			// regexToken found unknowns that our known set missed — interesting
@@ -251,29 +266,44 @@ async function processFile(filePath: string): Promise<FileResult> {
 			...base,
 			status: 'error',
 			errorMessage: `Parse error: ${e instanceof Error ? e.message : String(e)}`,
-			tokenCount, expectedTokenCount, tokenCountMatch,
-			uniqueTokenTypes, unknownTokenTypes,
-			errorTokenCount, errorTokenTypes: [...errorTokenTypesFound],
+			tokenCount,
+			expectedTokenCount,
+			tokenCountMatch,
+			uniqueTokenTypes,
+			unknownTokenTypes,
+			errorTokenCount,
+			errorTokenTypes: [...errorTokenTypesFound],
 			diagnosticTokenPct,
 		}
 	}
 
 	return {
-		relPath, collection, fileSize, lineCount, truncated,
+		relPath,
+		collection,
+		fileSize,
+		lineCount,
+		truncated,
 		requestTimeMs,
 		status: parseStatus,
-		tokenCount, expectedTokenCount, tokenCountMatch,
-		uniqueTokenTypes, unknownTokenTypes,
-		errorTokenCount, errorTokenTypes: [...errorTokenTypesFound],
-		hasCliPrompt, hasCommentHeader,
-		tokenRangeCount, parseTimeMs, diagnosticTokenPct,
+		tokenCount,
+		expectedTokenCount,
+		tokenCountMatch,
+		uniqueTokenTypes,
+		unknownTokenTypes,
+		errorTokenCount,
+		errorTokenTypes: [...errorTokenTypesFound],
+		hasCliPrompt,
+		hasCommentHeader,
+		tokenRangeCount,
+		parseTimeMs,
+		diagnosticTokenPct,
 	}
 }
 
 // MARK: Summary computation
 
 function computeSummary(results: FileResult[]): SummaryStats {
-	const requestTimes = results.map(r => r.requestTimeMs)
+	const requestTimes = results.map((r) => r.requestTimeMs)
 
 	const statusCounts: Record<string, number> = {}
 	const collectionCounts: Record<string, number> = {}
@@ -331,7 +361,7 @@ function computeSummary(results: FileResult[]): SummaryStats {
 		}
 	}
 
-	const unknownTokenTypesGlobal = Object.keys(allTokenTypes).filter(t => {
+	const unknownTokenTypesGlobal = Object.keys(allTokenTypes).filter((t) => {
 		const knownTypes = new Set(HighlightTokens.TokenTypes)
 		knownTypes.add('arg-scope')
 		knownTypes.add('arg-dot')
@@ -359,13 +389,13 @@ function computeSummary(results: FileResult[]): SummaryStats {
 		collectionStats,
 		allTokenTypes,
 		unknownTokenTypesGlobal,
-		truncatedCount: results.filter(r => r.truncated).length,
-		cliPromptCount: results.filter(r => r.hasCliPrompt).length,
-		filesWithErrors: results.filter(r => r.errorTokenCount > 0).length,
+		truncatedCount: results.filter((r) => r.truncated).length,
+		cliPromptCount: results.filter((r) => r.hasCliPrompt).length,
+		filesWithErrors: results.filter((r) => r.errorTokenCount > 0).length,
 		totalErrorTokens,
 		avgParseTimeMs: results.length > 0 ? totalParseTime / results.length : 0,
-		filesOversize: results.filter(r => r.fileSize > ROUTEROS_API_MAX_BYTES).length,
-		emptyFiles: results.filter(r => r.fileSize === 0).length,
+		filesOversize: results.filter((r) => r.fileSize > ROUTEROS_API_MAX_BYTES).length,
+		emptyFiles: results.filter((r) => r.fileSize === 0).length,
 		tokenMismatchFiles,
 		errorFiles,
 		topErrorMessages,
@@ -438,7 +468,7 @@ function printReport(results: FileResult[], summary: SummaryStats) {
 
 	// Top files by error token percentage
 	const errorPctSorted = results
-		.filter(r => r.diagnosticTokenPct > 0)
+		.filter((r) => r.diagnosticTokenPct > 0)
 		.sort((a, b) => b.diagnosticTokenPct - a.diagnosticTokenPct)
 		.slice(0, 15)
 	if (errorPctSorted.length > 0) {
@@ -453,7 +483,8 @@ function printReport(results: FileResult[], summary: SummaryStats) {
 		console.log(`\n## ⚠ Token Count Mismatches (${summary.tokenMismatchFiles.length} files)`)
 		console.log(`  Token count != input character count — may indicate API issues:`)
 		for (const f of summary.tokenMismatchFiles.slice(0, 20)) {
-			const r = results.find(res => res.relPath === f)!
+			const r = results.find((res) => res.relPath === f)
+			if (!r) continue
 			console.log(`    ${f}  (got ${r.tokenCount}, expected ${r.expectedTokenCount})`)
 		}
 		if (summary.tokenMismatchFiles.length > 20) {
@@ -469,7 +500,8 @@ function printReport(results: FileResult[], summary: SummaryStats) {
 		}
 		if (summary.errorFiles.length <= 10) {
 			for (const f of summary.errorFiles) {
-				const r = results.find(res => res.relPath === f)!
+				const r = results.find((res) => res.relPath === f)
+				if (!r) continue
 				console.log(`    ${f}: ${r.errorMessage}`)
 			}
 		}
@@ -477,7 +509,7 @@ function printReport(results: FileResult[], summary: SummaryStats) {
 
 	// Files with CLI prompts (data quality signal)
 	if (summary.cliPromptCount > 0) {
-		const cliFiles = results.filter(r => r.hasCliPrompt).slice(0, 10)
+		const cliFiles = results.filter((r) => r.hasCliPrompt).slice(0, 10)
 		console.log(`\n## CLI Prompt Detection (${summary.cliPromptCount} files)`)
 		console.log(`  These files contain [admin@MikroTik] > style prompts (pasted CLI output):`)
 		for (const r of cliFiles) {
@@ -506,7 +538,7 @@ function printReport(results: FileResult[], summary: SummaryStats) {
 		{ label: '> 32KB', min: 32768, max: Infinity },
 	]
 	for (const bucket of buckets) {
-		const inBucket = results.filter(r => r.fileSize >= bucket.min && r.fileSize < bucket.max)
+		const inBucket = results.filter((r) => r.fileSize >= bucket.min && r.fileSize < bucket.max)
 		if (inBucket.length === 0) continue
 		const avgTime = inBucket.reduce((s, r) => s + r.requestTimeMs, 0) / inBucket.length
 		const avgSize = inBucket.reduce((s, r) => s + r.fileSize, 0) / inBucket.length
@@ -516,7 +548,7 @@ function printReport(results: FileResult[], summary: SummaryStats) {
 	// Parse timing (HighlightTokens construction)
 	console.log(`\n## Token Parse Timing`)
 	console.log(`  Avg parse time:  ${summary.avgParseTimeMs.toFixed(2)}ms`)
-	const parseTimes = results.filter(r => r.parseTimeMs > 0).map(r => r.parseTimeMs)
+	const parseTimes = results.filter((r) => r.parseTimeMs > 0).map((r) => r.parseTimeMs)
 	if (parseTimes.length > 0) {
 		console.log(`  Median:          ${percentile(parseTimes, 50).toFixed(2)}ms`)
 		console.log(`  P95:             ${percentile(parseTimes, 95).toFixed(2)}ms`)
@@ -600,7 +632,7 @@ async function main() {
 	printReport(results, summary)
 }
 
-main().catch(e => {
+main().catch((e) => {
 	console.error('Fatal error:', e)
 	process.exit(1)
 })

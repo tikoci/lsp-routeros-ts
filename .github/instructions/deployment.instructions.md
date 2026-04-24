@@ -13,10 +13,10 @@ The codebase has **three build targets** but ships into **six deployment context
 |---|---------|------------------|-----------|---------------------|-------|
 | 1 | **VSCode Desktop** | Marketplace / Open-VSX / VSIX | Node IPC | `workspace/configuration` (standard LSP) | Largest user base. Tested via F5 "Extension Development Host". |
 | 2 | **VSCode Web** | `vscode.dev`, `github.dev` | Web Worker | `workspace/configuration` | Requires a CORS proxy in front of RouterOS. TLS cannot be bypassed. Bundled via webpack. |
-| 3 | **Standalone native binary** | GitHub Releases (`lsp-routeros-server-*`) | stdio (default) or `--socket=<port>` (experimental) | `workspace/configuration` (if the client implements it) | `bun build --compile`. macOS binaries hit Gatekeeper quarantine — npm is preferred. Generic target: Helix and any other LSP client. |
-| 4 | **npm package `@tikoci/routeroslsp`** | `npm install -g @tikoci/routeroslsp` → `routeroslsp --stdio` | stdio | `workspace/configuration` or `initializationOptions` | Preferred non-VSCode install. Runs `server/dist/server.js` under user's Node ≥18. |
+| 3 | **Standalone native binary** | GitHub Releases (`lsp-routeros-server-*`) | stdio (default) or `--socket=<port>` (experimental) | `workspace/configuration` (if the client implements it) or `ROUTEROSLSP_*` env vars | `bun build --compile`. macOS binaries hit Gatekeeper quarantine — npm is preferred. Generic target: Helix and any other LSP client. |
+| 4 | **npm package `@tikoci/routeroslsp`** | `npm install -g @tikoci/routeroslsp` → `routeroslsp --stdio` | stdio | `workspace/configuration`, `initializationOptions`, or `ROUTEROSLSP_*` env vars | Preferred non-VSCode install. Runs `server/dist/server.js` under user's Node ≥18. |
 | 5 | **NeoVim** | Standalone binary OR npm package + `nvim-routeros-lsp-init.lua` | stdio | `workspace/configuration` handler implemented in the init script | First-class. Tracks NeoVim API changes (0.10+ required post-refactor; 0.11+ adds `vim.lsp.completion`). Treat the init script as release-blocking when the stdio transport changes. See [`neovim.instructions.md`](neovim.instructions.md). |
-| 6 | **GitHub Copilot CLI** | `.github/lsp.json` (repo-scoped) or `~/.copilot/lsp-config.json` (user-scoped) | stdio | **`initializationOptions` only** — Copilot CLI does **not** implement `workspace/configuration` | Depends on context 4 (npx). If npm publish is broken, Copilot CLI is broken. |
+| 6 | **GitHub Copilot CLI** | `.github/lsp.json` (repo-scoped) or `~/.copilot/lsp-config.json` (user-scoped) | stdio | **`initializationOptions` primary**, with `ROUTEROSLSP_*` env fallback — Copilot CLI does **not** implement `workspace/configuration` | Depends on context 4 (npx). If npm publish is broken, Copilot CLI is broken. |
 
 ## Context-Specific Gotchas
 
@@ -35,7 +35,7 @@ The codebase has **three build targets** but ships into **six deployment context
 - macOS binaries require `xattr -d com.apple.quarantine` to run. The install docs should steer users to the npm package instead.
 
 ### NeoVim
-- `nvim-routeros-lsp-init.lua` implements the `workspace/configuration` handler on the client side — removing or reorganizing it breaks settings delivery. The standalone server does not read env vars or config files.
+- `nvim-routeros-lsp-init.lua` implements the `workspace/configuration` handler on the client side — removing or reorganizing it breaks settings delivery. The standalone server now also reads `ROUTEROSLSP_*` env vars, but the init script remains the primary NeoVim path.
 - Semantic highlight colors are mapped via `@lsp.type.<tokenType>` namespace; keep aligned with `semanticTokenTypes` in the root `package.json`.
 - After changes to the stdio transport or server startup, run `bun run bun:exe` and open a `.rsc` file in NeoVim — `:LspInfo` and `:messages` should be clean.
 - 📋 lspconfig registry contribution is tracked in BACKLOG; until then, NeoVim users copy the init script manually.
@@ -47,9 +47,10 @@ The codebase has **three build targets** but ships into **six deployment context
 
 ### GitHub Copilot CLI
 - Copilot CLI is an **LSP client**, not an MCP server. It reads `.github/lsp.json` (repo) or `~/.copilot/lsp-config.json` (user). Managing the LSP interactively uses the `/lsp` slash command inside Copilot CLI.
-- Because Copilot CLI does not support `workspace/configuration`, settings must be delivered via `initializationOptions.routeroslsp.{baseUrl,username,password}`. `shared.ts` reads both paths — do not remove `initializationOptions` support.
+- Because Copilot CLI does not support `workspace/configuration`, settings are normally delivered via `initializationOptions.routeroslsp.{baseUrl,username,password}`. `shared.ts` also accepts `ROUTEROSLSP_*` env vars for standalone-style launches — do not remove `initializationOptions` support.
 - The current `.github/lsp.json` uses `npx --yes @tikoci/routeroslsp --stdio`. This works only if (a) the npm package is published with a valid shebang, and (b) Node.js is on the user's PATH. Both need to be confirmed on each pre-release.
-- Never commit real credentials in `.github/lsp.json`. Placeholders should be obviously fake (`REPLACE_ME_USER`/`REPLACE_ME_PASSWORD`), and README should point users at `~/.copilot/lsp-config.json` for their real creds.
+- Never commit real credentials in `.github/lsp.json`. Placeholders should be obviously fake (`REPLACE_ME_USERNAME`/`REPLACE_ME_PASSWORD`), and README should point users at `~/.copilot/lsp-config.json` for their real creds.
+- Internal write operations should use the server execute-command interface (`router.validateScript` / `router.executeScript`) with explicit per-call credentials; they must not rely on ambient Copilot CLI settings.
 
 ## Pre-release Checklist
 

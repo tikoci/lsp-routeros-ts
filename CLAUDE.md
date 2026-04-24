@@ -27,7 +27,7 @@ The codebase compiles to three build targets, but each change must be evaluated 
 3. **Standalone native binary** (GitHub Releases) — `bun build --compile`; for Helix and other LSP clients via `--stdio`.
 4. **npm package** `@tikoci/routeroslsp` — Node-based stdio server; the recommended non-VSCode install path because it avoids macOS quarantine and is platform-independent.
 5. **NeoVim** — consumes either the standalone binary or the npm package via stdio, but is first-class: it has its own init script (`nvim-routeros-lsp-init.lua`), its own README section, and its own `.github/instructions/neovim.instructions.md`. Changes to the standalone path must be validated against NeoVim explicitly — it's the canary for "does the stdio transport still work end-to-end outside VSCode".
-6. **GitHub Copilot CLI** — consumes the LSP via `.github/lsp.json` (repo-level) or `~/.copilot/lsp-config.json` (user-level). This is an LSP client, not an MCP server; credentials flow through `initializationOptions` because Copilot CLI does not implement `workspace/configuration`.
+6. **GitHub Copilot CLI** — consumes the LSP via `.github/lsp.json` (repo-level) or `~/.copilot/lsp-config.json` (user-level). This is an LSP client, not an MCP server; ambient credentials usually flow through `initializationOptions` because Copilot CLI does not implement `workspace/configuration`, with `ROUTEROSLSP_*` env vars as a standalone fallback.
 
 See [`.github/instructions/deployment.instructions.md`](.github/instructions/deployment.instructions.md) for the per-context pre-release checklist.
 
@@ -116,6 +116,9 @@ The client only exists for VSCode (desktop + web). Other editors use the standal
 │  model.ts (LspDocument)                                   │
 │  Wraps TextDocument + lazy async highlight tokens cache    │
 ├──────────────────────────────────────────────────────────┤
+│  validation.ts                                            │
+│  Shared highlight-based validation for docs + commands    │
+├──────────────────────────────────────────────────────────┤
 │  routeros.ts (RouterRestClient)                           │
 │  POST /rest/console/inspect {request, input, path}        │
 │  GET  /rest/system/identity                               │
@@ -169,7 +172,7 @@ The client is intentionally thin:
 
 [vscode-tikbook](https://github.com/tikoci/tikbook) is the companion extension:
 - TikBook includes this LSP in its `extensionPack`
-- When `allowClientProvidedCredentials` is `true` (default), TikBook can override credentials via `routeroslsp.server.useConnectionUrl` command
+- When `allowClientProvidedCredentials` is `true` (default), TikBook can override the ambient read-only credentials via `routeroslsp.server.useConnectionUrl`
 - The watchdog detects this and adjusts error messages accordingly
 - Document selectors include `rscena` URI scheme and tikbook file patterns for cross-extension support
 
@@ -218,7 +221,7 @@ GitHub Actions workflow (manual trigger):
 - HTTP interceptors clear document cache on errors → forces re-fetch on next request
 - `RouterOSClientError` interface (`code`, `message`, `status`) is the normalized error shape that crosses the LSP protocol boundary — avoids circular-reference crashes when serializing over JSON-RPC
 - `normalizeError()` in `routeros.ts` converts `AxiosError`/`Error`/unknown into a plain `RouterOSClientError`
-- `inspect*` and `execute` methods return `undefined` on error (graceful degradation); `getIdentity` propagates the error (watchdog needs it)
+- Ambient `inspect*` and `execute` methods return `undefined` on error (graceful degradation); the strict validation/execute path used by internal write commands propagates `RouterOSClientError` instead. `getIdentity` also propagates the error (watchdog needs it)
 - Diagnostics degrade gracefully: no tokens = empty array + log
 - Watchdog maps error codes to user-friendly messages with action buttons; `toErrorInfo()` helper safely extracts fields from any error shape
 

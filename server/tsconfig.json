@@ -6,11 +6,22 @@
 		"moduleResolution": "bundler",
 		"sourceMap": true,
 		"strict": true,
+		"skipLibCheck": true,
 		"outDir": "dist",
 		"rootDir": "src",
-		"esModuleInterop": true
+		"esModuleInterop": true,
 		// "composite": true
 	},
 	"include": ["src"],
-	"exclude": ["node_modules", ".vscode-test-web", ".vscode-test"]
+	"exclude": [
+		"node_modules",
+		".vscode-test-web",
+		".vscode-test",
+		"src/**/*.test.ts",
+		"src/test-preload.ts",
+		"src/assess-dataset.ts",
+		"src/profile-timing.ts",
+		"src/capture-snapshots.ts",
+		"src/import-discourse-*.ts"
+	]
 }

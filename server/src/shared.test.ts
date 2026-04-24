@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
 import type { ExecuteCommandParams } from 'vscode-languageserver'
-import { clearConnectionUrl, defaultSettings, getConnectionUrl, getSettings, isUsingClientCredentials, updateSettings, useConnectionUrl } from './shared'
+import { clearConnectionUrl, defaultSettings, getConnectionUrl, getEnvironmentSettings, getSettings, isUsingClientCredentials, toEnvVariableName, updateSettings, useConnectionUrl } from './shared'
 
 function makeUseConnectionUrlParams(extension: string, baseUrl: string, username: string, password: string): ExecuteCommandParams {
 	return { command: 'useConnectionUrl', arguments: [extension, baseUrl, username, password] }
@@ -78,6 +78,11 @@ describe('updateSettings', () => {
 		updateSettings({ ...defaultSettings, baseUrl: before })
 		expect(getSettings().baseUrl).toBe(before)
 	})
+
+	it('applies checkCertificates boolean updates', () => {
+		updateSettings({ checkCertificates: true })
+		expect(getSettings().checkCertificates).toBe(true)
+	})
 })
 
 describe('getConnectionUrl', () => {
@@ -133,5 +138,56 @@ describe('useConnectionUrl / isUsingClientCredentials / clearConnectionUrl', () 
 		useConnectionUrl(makeUseConnectionUrlParams('tikbook', 'http://10.0.0.1', 'admin', 'pass'))
 		clearConnectionUrl()
 		expect(getSettings().baseUrl).toBe('http://192.168.2.1')
+	})
+
+	it('getSettings reflects client-provided checkCertificates', () => {
+		useConnectionUrl({
+			command: 'useConnectionUrl',
+			arguments: ['tikbook', 'http://10.0.0.1', 'admin', 'pass', 25, true],
+		})
+		expect(getSettings().checkCertificates).toBe(true)
+	})
+
+	it('getSettings applies explicit false for client-provided checkCertificates', () => {
+		updateSettings({ checkCertificates: true })
+		useConnectionUrl({
+			command: 'useConnectionUrl',
+			arguments: ['tikbook', 'http://10.0.0.1', 'admin', 'pass', 25, false],
+		})
+		expect(getSettings().checkCertificates).toBe(false)
+	})
+})
+
+describe('environment settings', () => {
+	it('maps setting names to stable env names', () => {
+		expect(toEnvVariableName('routeroslsp.baseUrl')).toBe('ROUTEROSLSP_BASE_URL')
+		expect(toEnvVariableName('routeroslsp.allowClientProvidedCredentials')).toBe('ROUTEROSLSP_ALLOW_CLIENT_PROVIDED_CREDENTIALS')
+	})
+
+	it('parses string, number, and boolean env values', () => {
+		const envSettings = getEnvironmentSettings({
+			ROUTEROSLSP_BASE_URL: 'http://10.0.0.2',
+			ROUTEROSLSP_USERNAME: 'env-user',
+			ROUTEROSLSP_PASSWORD: 'env-pass',
+			ROUTEROSLSP_API_TIMEOUT: '30',
+			ROUTEROSLSP_ALLOW_CLIENT_PROVIDED_CREDENTIALS: 'false',
+			ROUTEROSLSP_CHECK_CERTIFICATES: 'true',
+		})
+		expect(envSettings).toEqual({
+			baseUrl: 'http://10.0.0.2',
+			username: 'env-user',
+			password: 'env-pass',
+			apiTimeout: 30,
+			allowClientProvidedCredentials: false,
+			checkCertificates: true,
+		})
+	})
+
+	it('ignores invalid boolean and number env values', () => {
+		const envSettings = getEnvironmentSettings({
+			ROUTEROSLSP_API_TIMEOUT: 'not-a-number',
+			ROUTEROSLSP_CHECK_CERTIFICATES: 'maybe',
+		})
+		expect(envSettings).toEqual({})
 	})
 })

@@ -18,6 +18,8 @@ local lspexec = {"routeroslsp", "--stdio"}
 -- local lspexec = {"node", "/path/to/lsp-routeros-ts/server/dist/server.js", "--stdio"}
 
 -- ** RouterOS connection — these MUST be valid for the LSP to work **
+-- Standalone/npm usage can also read ROUTEROSLSP_* env vars, but this
+-- workspace/configuration block remains the primary NeoVim path.
 local settings = {
     routeroslsp = {
         baseUrl = "http://192.168.88.1",  -- change to your router IP, or https://

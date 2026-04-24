@@ -10,9 +10,9 @@
       "requestTimeoutMs": 90000,
       "initializationOptions": {
         "routeroslsp": {
-          "baseUrl": "http://192.168.88.1",
-          "username": "routeros-user",
-          "password": "routeros-password"
+          "baseUrl": "http://REPLACE_ME_HOST:80",
+          "username": "REPLACE_ME_USERNAME",
+          "password": "REPLACE_ME_PASSWORD"
         }
       }
     }

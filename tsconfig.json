@@ -9,13 +9,23 @@
 		"moduleResolution": "node",
 		"sourceMap": true,
 		"strict": true,
+		"skipLibCheck": true,
 		"outDir": "dist",
 	},
-	"types": [
-		"node"
+	"types": ["node"],
+	"include": ["client/src/**/*.ts", "server/src/**/*.ts"],
+	"exclude": [
+		"node_modules",
+		".vscode-test-web",
+		".vscode-test",
+		"client/src/**/*.test.ts",
+		"server/src/**/*.test.ts",
+		"server/src/test-preload.ts",
+		"server/src/assess-dataset.ts",
+		"server/src/profile-timing.ts",
+		"server/src/capture-snapshots.ts",
+		"server/src/import-discourse-*.ts"
 	],
-	"include": ["**/src/*"],
-	"exclude": ["node_modules", ".vscode-test-web"],
 	//"references": [
 	//	{ "path": "./client"} , { "path": "./server" } 
 	//]

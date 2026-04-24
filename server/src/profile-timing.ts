@@ -30,21 +30,17 @@ const CHR_USER = process.env.ROUTEROS_TEST_USER || 'admin'
 const CHR_PASS = process.env.ROUTEROS_TEST_PASS || ''
 const TEST_DATA_DIR = join(import.meta.dir, '../../test-data')
 
-const RUNS_PER_SIZE = 3  // repeat each measurement to reduce noise
-const WARMUP_RUNS = 2    // warm up the CHR before measuring
+const RUNS_PER_SIZE = 3 // repeat each measurement to reduce noise
+const WARMUP_RUNS = 2 // warm up the CHR before measuring
 
 // Size steps to test (bytes) — logarithmic-ish spacing
-const SIZE_STEPS = [
-	128, 256, 512, 1024, 2048, 3072, 4096,
-	6144, 8192, 10240, 12288, 16384,
-	20480, 24576, 28672, ROUTEROS_API_MAX_BYTES,
-]
+const SIZE_STEPS = [128, 256, 512, 1024, 2048, 3072, 4096, 6144, 8192, 10240, 12288, 16384, 20480, 24576, 28672, ROUTEROS_API_MAX_BYTES]
 
 // MARK: Types
 
 interface TimingPoint {
 	sizeBytes: number
-	timeMs: number[]       // all runs
+	timeMs: number[] // all runs
 	avgMs: number
 	medianMs: number
 	minMs: number
@@ -54,7 +50,7 @@ interface TimingPoint {
 interface ProfileResult {
 	name: string
 	description: string
-	syntaxProfile: string  // what kind of syntax dominates
+	syntaxProfile: string // what kind of syntax dominates
 	fullSizeBytes: number
 	points: TimingPoint[]
 }
@@ -118,32 +114,35 @@ function generateComplexScripting(targetBytes: number): string {
 	const block = `:local totalCount 0
 :local resultArray [:toarray ""]
 :global globalFunc do={
-  :local input \$1
+  :local input $1
   :local output ""
-  :for i from=0 to=([:len \$input] - 1) do={
-    :local ch [:pick \$input \$i (\$i + 1)]
-    :if (\$ch = "a" || \$ch = "e" || \$ch = "i") do={
-      :set output (\$output . [:tostr \$i])
+  :for i from=0 to=([:len $input] - 1) do={
+    :local ch [:pick $input $i ($i + 1)]
+    :if ($ch = "a" || $ch = "e" || $ch = "i") do={
+      :set output ($output . [:tostr $i])
     } else={
-      :set output (\$output . \$ch)
+      :set output ($output . $ch)
     }
   }
-  :return \$output
+  :return $output
 }
 :foreach item in=[:toarray "alpha,bravo,charlie,delta,echo,foxtrot,golf,hotel"] do={
-  :local processed [\$globalFunc \$item]
-  :set (\$resultArray->[:len \$resultArray]) \$processed
-  :set totalCount (\$totalCount + 1)
-  :if (\$totalCount > 100) do={ :set totalCount 0 }
+  :local processed [$globalFunc $item]
+  :set ($resultArray->[:len $resultArray]) $processed
+  :set totalCount ($totalCount + 1)
+  :if ($totalCount > 100) do={ :set totalCount 0 }
 }
-:log info "Processed \$totalCount items"
+:log info "Processed $totalCount items"
 `
 	const lines: string[] = []
 	let size = 0
 	let iteration = 0
 	while (size < targetBytes) {
 		// Vary the block slightly each time to avoid pure repetition
-		const varied = block.replace(/globalFunc/g, `func${iteration}`).replace(/totalCount/g, `count${iteration}`).replace(/resultArray/g, `arr${iteration}`)
+		const varied = block
+			.replace(/globalFunc/g, `func${iteration}`)
+			.replace(/totalCount/g, `count${iteration}`)
+			.replace(/resultArray/g, `arr${iteration}`)
 		lines.push(varied)
 		size += varied.length
 		iteration++
@@ -174,7 +173,7 @@ function generateMixedPaths(targetBytes: number): string {
 	let size = 0
 	let i = 0
 	while (size < targetBytes) {
-		const line = paths[i % paths.length] + '\n'
+		const line = `${paths[i % paths.length]}\n`
 		lines.push(line)
 		size += line.length
 		i++
@@ -190,7 +189,7 @@ async function profileScript(name: string, description: string, syntaxProfile: s
 	const points: TimingPoint[] = []
 
 	// Determine which size steps apply (skip sizes larger than available text)
-	const applicableSteps = SIZE_STEPS.filter(s => s <= fullSizeBytes)
+	const applicableSteps = SIZE_STEPS.filter((s) => s <= fullSizeBytes)
 
 	for (const targetSize of applicableSteps) {
 		const text = getText(targetSize)
@@ -235,11 +234,11 @@ async function profileRealFile(filePath: string, description: string, syntaxProf
 
 function analyzeScaling(result: ProfileResult): { slope: number; r2: number; model: string } {
 	// Fit both linear and quadratic models, report which fits better
-	const points = result.points.filter(p => p.sizeBytes > 0)
+	const points = result.points.filter((p) => p.sizeBytes > 0)
 	if (points.length < 3) return { slope: 0, r2: 0, model: 'insufficient-data' }
 
-	const xs = points.map(p => p.sizeBytes)
-	const ys = points.map(p => p.medianMs)
+	const xs = points.map((p) => p.sizeBytes)
+	const ys = points.map((p) => p.medianMs)
 	const n = xs.length
 
 	// Linear fit: y = a + b*x
@@ -262,27 +261,19 @@ function analyzeScaling(result: ProfileResult): { slope: number; r2: number; mod
 	const sumX2Y = xs.reduce((s, x, i) => s + x ** 2 * ys[i], 0)
 
 	// Solve 3x3 system via Cramer's rule
-	const det = n * (sumX2 * sumX4 - sumX3 * sumX3) -
-		sumX * (sumX * sumX4 - sumX3 * sumX2) +
-		sumX2 * (sumX * sumX3 - sumX2 * sumX2)
+	const det = n * (sumX2 * sumX4 - sumX3 * sumX3) - sumX * (sumX * sumX4 - sumX3 * sumX2) + sumX2 * (sumX * sumX3 - sumX2 * sumX2)
 
 	let r2Quadratic = 0
 	if (Math.abs(det) > 1e-10) {
-		const aQ = (sumY * (sumX2 * sumX4 - sumX3 * sumX3) -
-			sumX * (sumXY * sumX4 - sumX2Y * sumX3) +
-			sumX2 * (sumXY * sumX3 - sumX2Y * sumX2)) / det
-		const bQ = (n * (sumXY * sumX4 - sumX2Y * sumX3) -
-			sumY * (sumX * sumX4 - sumX3 * sumX2) +
-			sumX2 * (sumX * sumX2Y - sumXY * sumX2)) / det
-		const cQ = (n * (sumX2 * sumX2Y - sumX3 * sumXY) -
-			sumX * (sumX * sumX2Y - sumXY * sumX2) +
-			sumY * (sumX * sumX3 - sumX2 * sumX2)) / det
+		const aQ = (sumY * (sumX2 * sumX4 - sumX3 * sumX3) - sumX * (sumXY * sumX4 - sumX2Y * sumX3) + sumX2 * (sumXY * sumX3 - sumX2Y * sumX2)) / det
+		const bQ = (n * (sumXY * sumX4 - sumX2Y * sumX3) - sumY * (sumX * sumX4 - sumX3 * sumX2) + sumX2 * (sumX * sumX2Y - sumXY * sumX2)) / det
+		const cQ = (n * (sumX2 * sumX2Y - sumX3 * sumXY) - sumX * (sumX * sumX2Y - sumXY * sumX2) + sumY * (sumX * sumX3 - sumX2 * sumX2)) / det
 
 		const ssResQuad = ys.reduce((s, y, i) => s + (y - (aQ + bQ * xs[i] + cQ * xs[i] ** 2)) ** 2, 0)
 		r2Quadratic = 1 - ssResQuad / ssTot
 	}
 
-	const isQuadraticBetter = r2Quadratic > r2Linear + 0.05  // need 5% improvement to justify complexity
+	const isQuadraticBetter = r2Quadratic > r2Linear + 0.05 // need 5% improvement to justify complexity
 	return {
 		slope: bLinear * 1024, // ms per KB
 		r2: isQuadraticBetter ? r2Quadratic : r2Linear,
@@ -305,7 +296,9 @@ function printReport(results: ProfileResult[]) {
 	console.log(`  ${'─'.repeat(30)} ${'─'.repeat(14)} ${'─'.repeat(26)} ${'─'.repeat(6)} ${'─'.repeat(7)}`)
 	for (const result of results) {
 		const analysis = analyzeScaling(result)
-		console.log(`  ${result.name.substring(0, 30).padEnd(30)} ${result.syntaxProfile.padEnd(14)} ${analysis.model.padEnd(26)} ${analysis.r2.toFixed(3).padStart(6)} ${analysis.slope.toFixed(1).padStart(7)}`)
+		console.log(
+			`  ${result.name.substring(0, 30).padEnd(30)} ${result.syntaxProfile.padEnd(14)} ${analysis.model.padEnd(26)} ${analysis.r2.toFixed(3).padStart(6)} ${analysis.slope.toFixed(1).padStart(7)}`,
+		)
 	}
 
 	// Detailed curves
@@ -329,7 +322,7 @@ function printReport(results: ProfileResult[]) {
 	for (const size of comparisonSizes) {
 		console.log(`\n  At ${(size / 1024).toFixed(0)}KB:`)
 		for (const result of results) {
-			const point = result.points.find(p => Math.abs(p.sizeBytes - size) < size * 0.1)
+			const point = result.points.find((p) => Math.abs(p.sizeBytes - size) < size * 0.1)
 			if (point) {
 				console.log(`    ${result.name.substring(0, 30).padEnd(30)}  ${point.medianMs.toFixed(0).padStart(5)}ms  (${result.syntaxProfile})`)
 			}
@@ -359,68 +352,36 @@ async function main() {
 
 	// 1. Synthetic: Pure comments (baseline — minimal parsing)
 	console.log(`\n▸ Profiling: synthetic-comments`)
-	results.push(await profileScript(
-		'synthetic-comments',
-		'Pure comment lines — minimal tokenization work',
-		'comments',
-		generateComments,
-	))
+	results.push(await profileScript('synthetic-comments', 'Pure comment lines — minimal tokenization work', 'comments', generateComments))
 
 	// 2. Synthetic: Simple repetitive commands (path resolution each line)
 	console.log(`\n▸ Profiling: synthetic-commands`)
-	results.push(await profileScript(
-		'synthetic-commands',
-		'Repetitive /ip firewall address-list add — same path each line',
-		'single-path',
-		generateSimpleCommands,
-	))
+	results.push(await profileScript('synthetic-commands', 'Repetitive /ip firewall address-list add — same path each line', 'single-path', generateSimpleCommands))
 
 	// 3. Synthetic: Mixed paths (breadth of path resolution)
 	console.log(`\n▸ Profiling: synthetic-mixed-paths`)
-	results.push(await profileScript(
-		'synthetic-mixed-paths',
-		'Mix of /ip, /interface, /queue, /system paths — wide path resolution',
-		'multi-path',
-		generateMixedPaths,
-	))
+	results.push(await profileScript('synthetic-mixed-paths', 'Mix of /ip, /interface, /queue, /system paths — wide path resolution', 'multi-path', generateMixedPaths))
 
 	// 4. Synthetic: Complex scripting (variables, control flow, string ops)
 	console.log(`\n▸ Profiling: synthetic-complex`)
-	results.push(await profileScript(
-		'synthetic-complex',
-		'Variables, functions, :for, :foreach, :if — heavy scripting',
-		'scripting',
-		generateComplexScripting,
-	))
+	results.push(await profileScript('synthetic-complex', 'Variables, functions, :for, :foreach, :if — heavy scripting', 'scripting', generateComplexScripting))
 
 	// 5. Real file: eworm/global-functions.rsc (the slowest from assessment, 56KB→truncated to 32KB)
 	console.log(`\n▸ Profiling: eworm/global-functions.rsc`)
-	results.push(await profileRealFile(
-		join(TEST_DATA_DIR, 'eworm/global-functions.rsc'),
-		'Eworm global functions library — dense scripting, many globals',
-		'scripting',
-	))
+	results.push(await profileRealFile(join(TEST_DATA_DIR, 'eworm/global-functions.rsc'), 'Eworm global functions library — dense scripting, many globals', 'scripting'))
 
 	// 6. Real file: edge-cases/oversize-32k.rsc (repetitive commands, was also slow)
 	console.log(`\n▸ Profiling: edge-cases/oversize-32k.rsc`)
-	results.push(await profileRealFile(
-		join(TEST_DATA_DIR, 'edge-cases/oversize-32k.rsc'),
-		'Auto-generated repetitive address-list commands, >32KB',
-		'single-path',
-	))
+	results.push(await profileRealFile(join(TEST_DATA_DIR, 'edge-cases/oversize-32k.rsc'), 'Auto-generated repetitive address-list commands, >32KB', 'single-path'))
 
 	// 7. Real file: complex/piano.rsc (known complex scripting)
 	console.log(`\n▸ Profiling: complex/piano.rsc`)
-	results.push(await profileRealFile(
-		join(TEST_DATA_DIR, 'complex/piano.rsc'),
-		'Piano player script — complex :beep, arrays, timing',
-		'scripting',
-	))
+	results.push(await profileRealFile(join(TEST_DATA_DIR, 'complex/piano.rsc'), 'Piano player script — complex :beep, arrays, timing', 'scripting'))
 
 	printReport(results)
 }
 
-main().catch(e => {
+main().catch((e) => {
 	console.error('Fatal error:', e)
 	process.exit(1)
 })

@@ -28,7 +28,7 @@ Register them in `registerLspHandlers()` using `this.#handlerName.bind(this)`.
 - Don't create additional instances
 
 ## RouterOS API Calls
-- Always go through `RouterRestClient` methods (`inspect`, `execute`)
+- Always go through `RouterRestClient` methods — `RouterRestClient.default` for ambient read-only LSP traffic, and `RouterRestClient.forConnection(...)` for explicit per-call validate/execute flows
 - The API is at `POST {baseUrl}/rest/console/inspect` with Basic Auth
 - Request body: `{ request: 'highlight'|'completion'|'syntax'|'child', input: string }`
 - Non-ASCII chars must go through `RouterScriptPreprocessor.unicodeCharReplace('?')` before sending
@@ -44,7 +44,7 @@ When adding Node.js-specific features, guard with runtime checks. The webpack co
 ## Error Handling
 - HTTP interceptors in `routeros.ts` clear document cache on errors — don't duplicate this
 - Errors are normalized to `RouterOSClientError` (`code`, `message`, `status`) via `normalizeError()` before crossing the LSP protocol boundary — avoids circular-reference JSON serialization crashes
-- `inspect*` and `execute` methods return `undefined` on error (graceful degradation)
+- Ambient `inspect*` and `execute` methods return `undefined` on error (graceful degradation); strict validate/execute command paths should use the throwing variants and return a structured error result instead
 - `getIdentity` propagates the error as `RouterOSClientError` — the watchdog needs the details
 - Never let an unhandled error crash the LSP server — it kills the user's editing experience
 

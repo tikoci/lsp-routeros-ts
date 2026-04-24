@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance, type AxiosResponse, type InternalAxiosRequestConfig, isAxiosError } from 'axios'
-import { getConnectionUrl, getSettings, log } from './shared'
+import { getAmbientConnectionSettings, getConnectionUrl, log, type RouterConnectionSettings, sanitizeBaseUrl } from './shared'
 
 // MARK: Types
 
@@ -77,6 +77,7 @@ export interface RouterOSClientError {
 
 export class RouterRestClient implements RouterApiClientInterface {
 	#abortOnDispose = new AbortController()
+	#connectionSettings?: RouterConnectionSettings
 	#httpClient: AxiosInstance | null = null
 
 	/**
@@ -94,6 +95,14 @@ export class RouterRestClient implements RouterApiClientInterface {
 		if (RouterRestClient.#default) return RouterRestClient.#default
 		RouterRestClient.#default = new RouterRestClient()
 		return RouterRestClient.#default
+	}
+
+	static forConnection(connectionSettings: RouterConnectionSettings) {
+		return new RouterRestClient(connectionSettings)
+	}
+
+	constructor(connectionSettings?: RouterConnectionSettings) {
+		this.#connectionSettings = connectionSettings
 	}
 
 	dispose() {
@@ -131,8 +140,8 @@ export class RouterRestClient implements RouterApiClientInterface {
 	}
 
 	#createAxiosInstance(): AxiosInstance {
-		const settings = getSettings()
-		const url = getConnectionUrl(false)
+		const settings = this.#connectionSettings || getAmbientConnectionSettings()
+		const url = getConnectionUrl(false, settings)
 		if (!url) log.error('ERROR <httpclient> HTTP client using invalid URL from Settings')
 		else url.pathname += 'rest'
 		const baseUrlString = url ? url.toString() : settings.baseUrl
@@ -160,11 +169,12 @@ export class RouterRestClient implements RouterApiClientInterface {
 	#onRequestError(error: unknown): never {
 		const normalized = normalizeError(error)
 		if (isAxiosError(error)) {
-			log.error(`ERROR <httpclient> |req| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
+			log.error(`ERROR <httpclient> |req| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${sanitizeBaseUrl(error.config?.baseURL || '')}`)
 		} else {
 			log.error(`ERROR <httpclient> |req| error: ${normalized.code} ${normalized.message}`)
 		}
-		RouterRestClient.onHttpError?.()
+		// Only fire cache-clearing callback for the ambient singleton — not for explicit forConnection() clients
+		if (!this.#connectionSettings) RouterRestClient.onHttpError?.()
 		throw normalized
 	}
 
@@ -185,11 +195,12 @@ export class RouterRestClient implements RouterApiClientInterface {
 	#onResponseError(error: unknown): never {
 		const normalized = normalizeError(error)
 		if (isAxiosError(error)) {
-			log.error(`ERROR <httpclient> |response| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${error.config?.baseURL} user ${error.config?.auth?.username}`)
+			log.error(`ERROR <httpclient> |response| ${error.config?.url} ${error.code} '${error.message}' baseUrl ${sanitizeBaseUrl(error.config?.baseURL || '')}`)
 		} else {
 			log.error(`ERROR <httpclient> |response| error: ${normalized.code} ${normalized.message}`)
 		}
-		RouterRestClient.onHttpError?.()
+		// Only fire cache-clearing callback for the ambient singleton — not for explicit forConnection() clients
+		if (!this.#connectionSettings) RouterRestClient.onHttpError?.()
 		throw normalized
 	}
 
@@ -199,7 +210,7 @@ export class RouterRestClient implements RouterApiClientInterface {
 	 * Execute a RouterOS script via REST. Returns the script output string,
 	 * or undefined if the request fails (graceful degradation).
 	 */
-	async _execute(cmd: string): Promise<string | undefined> {
+	async #execute(cmd: string, strict = false): Promise<string | undefined> {
 		log.info(`<httpclient> _execute() called with ${cmd.length} chars`)
 		try {
 			const resp = await this.httpClient.post<WrappedExecuteResponse>('/execute', {
@@ -207,7 +218,8 @@ export class RouterRestClient implements RouterApiClientInterface {
 				script: cmd,
 			})
 			return resp.data?.ret
-		} catch {
+		} catch (error) {
+			if (strict) throw error
 			return undefined
 		}
 	}
@@ -217,7 +229,7 @@ export class RouterRestClient implements RouterApiClientInterface {
 	 * or undefined if the request fails (graceful degradation).
 	 * Errors are already logged and caches cleared by the interceptor.
 	 */
-	async _inspect<T>(request: string, input: string, path?: string): Promise<T[] | undefined> {
+	async #inspect<T>(request: string, input: string, path?: string, strict = false): Promise<T[] | undefined> {
 		log.info(`<httpclient> _inspect(${request}) called, input len ${input.length}`)
 		try {
 			const resp = await this.httpClient.post<T[]>('/console/inspect', {
@@ -226,29 +238,42 @@ export class RouterRestClient implements RouterApiClientInterface {
 				path: path,
 			})
 			return resp.data
-		} catch {
+		} catch (error) {
+			if (strict) throw error
 			return undefined
 		}
 	}
 
 	inspectHighlight = (input: string, path?: string) => {
-		return this._inspect<HighlightInspectResponseItem>('highlight', replaceNonAscii(input, '?'), path)
+		return this.#inspect<HighlightInspectResponseItem>('highlight', replaceNonAscii(input, '?'), path)
+	}
+
+	inspectHighlightStrict = (input: string, path?: string) => {
+		return this.#inspect<HighlightInspectResponseItem>('highlight', replaceNonAscii(input, '?'), path, true) as Promise<HighlightInspectResponseItem[]>
 	}
 
 	inspectSyntax = (input: string, path?: string) => {
-		return this._inspect<SyntaxInspectResponseItem>('syntax', input, path)
+		return this.#inspect<SyntaxInspectResponseItem>('syntax', input, path)
 	}
 
 	inspectCompletion(input: string, path?: string) {
-		return this._inspect<CompletionInspectResponseItem>('completion', input, path)
+		return this.#inspect<CompletionInspectResponseItem>('completion', input, path)
 	}
 
 	inspectChild = (input: string, path?: string) => {
-		return this._inspect<ChildInspectResponseItem>('child', input, path)
+		return this.#inspect<ChildInspectResponseItem>('child', input, path)
 	}
 
 	exportConfig = (type?: RouterOSExportType) => {
-		return this._execute(`:export ${type || ''}`)
+		return this.#execute(`:export ${type || ''}`)
+	}
+
+	executeScript = (cmd: string) => {
+		return this.#execute(cmd)
+	}
+
+	executeScriptStrict = (cmd: string) => {
+		return this.#execute(cmd, true) as Promise<string | undefined>
 	}
 
 	scriptEnvironment = async () => {

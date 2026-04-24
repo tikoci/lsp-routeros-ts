@@ -31,15 +31,21 @@ import { type CompletionInspectResponseItem, normalizeError, type RouterOSClient
 import {
 	ConnectionLogger,
 	clearConnectionUrl,
+	defaultSettings,
 	getDisplayConnectionUrl,
+	getEnvironmentSettings,
 	isUsingClientCredentials,
 	type LspSettingsUpdate,
 	log,
+	ROUTEROS_API_MAX_BYTES,
+	type RouterConnectionSettings,
 	SEMANTIC_TOKEN_REFRESH_DELAY_MS,
+	sanitizeBaseUrl,
 	updateSettings,
 	useConnectionUrl,
 } from './shared'
 import { HighlightTokens } from './tokens'
+import { type RouterScriptValidationResult, validateScriptText } from './validation'
 
 // MARK: LspController
 
@@ -131,6 +137,13 @@ export class LspController {
 			this.#hasConfigurationCapability = !!(params.capabilities.workspace && !!params.capabilities.workspace.configuration)
 			log.debug(`<server> {onInitialize} hasConfigurationCapability ${this.#hasConfigurationCapability}`)
 
+			const envSettings = getEnvironmentSettings()
+			if (Object.keys(envSettings).length > 0) {
+				updateSettings(envSettings)
+				RouterRestClient.default.invalidateClient()
+				log.info(`<server> {onInitialize} applied settings from environment`)
+			}
+
 			// Apply settings from initializationOptions for non-VSCode clients (Copilot CLI, NeoVim, etc.)
 			// that pass credentials via `initializationOptions.routeroslsp.*` in their LSP config.
 			const initOpts = params.initializationOptions?.[LspController.shortid]
@@ -159,7 +172,7 @@ export class LspController {
 		connection.onDidChangeConfiguration((e: DidChangeConfigurationParams) => {
 			const cfg = e.settings?.routeroslsp
 			log.info(
-				`<server> {onDidChangeConfiguration} ${cfg?.baseUrl ?? '<unset>'} user ${cfg?.username ?? '<unset>'} apiTimeout ${cfg?.apiTimeout ?? '<unset>'} allowClientProvidedCredentials ${cfg?.allowClientProvidedCredentials ?? '<unset>'}`,
+				`<server> {onDidChangeConfiguration} ${cfg?.baseUrl ? sanitizeBaseUrl(cfg.baseUrl) : '<unset>'} apiTimeout ${cfg?.apiTimeout ?? '<unset>'} allowClientProvidedCredentials ${cfg?.allowClientProvidedCredentials ?? '<unset>'} checkCertificates ${cfg?.checkCertificates ?? '<unset>'}`,
 			)
 			if (cfg) {
 				updateSettings(cfg)
@@ -206,8 +219,7 @@ export class LspController {
 		// MARK: Execute commands
 
 		connection.onExecuteCommand(async (e) => {
-			// Redact password from logging
-			log.info(`<server> {onExecuteCommand} [${e.command}] ${JSON.stringify(e.arguments?.map((a, i) => (e.command === 'routeroslsp.server.useConnectionUrl' && i === 3 ? '***' : a)))}`)
+			log.info(`<server> {onExecuteCommand} [${e.command}] ${summarizeExecuteCommand(e)}`)
 			await this.isReady
 			switch (e.command) {
 				case 'routeroslsp.server.sendSemanticTokensRefresh':
@@ -237,6 +249,10 @@ export class LspController {
 					return isUsingClientCredentials()
 				case 'routeroslsp.server.getConnectionUrl':
 					return getDisplayConnectionUrl()
+				case 'routeroslsp.server.router.validateScript':
+					return await this.#validateScriptCommand(e)
+				case 'routeroslsp.server.router.executeScript':
+					return await this.#executeScriptCommand(e)
 			}
 		})
 
@@ -296,6 +312,8 @@ export class LspController {
 				commands: [
 					'routeroslsp.server.sendSemanticTokensRefresh',
 					'routeroslsp.server.router.getIdentity',
+					'routeroslsp.server.router.validateScript',
+					'routeroslsp.server.router.executeScript',
 					'routeroslsp.server.useConnectionUrl',
 					'routeroslsp.server.getConnectionUrl',
 					'routeroslsp.server.isUsingClientCredentials',
@@ -497,6 +515,72 @@ export class LspController {
 		log.info(`<server> {onDocumentSymbols} found ${symbolsVariableTree.length} for ${lspdoc.uri}`)
 		return symbolsVariableTree
 	}
+
+	async #validateScriptCommand(e: { arguments?: unknown[] }): Promise<RouterScriptValidationResult> {
+		const parsed = parseRouterScriptCommandRequest(e.arguments?.[0])
+		if (!parsed.ok) {
+			return {
+				ok: false,
+				message: parsed.message,
+				diagnostics: [],
+				truncated: false,
+				checkedBytes: 0,
+			}
+		}
+
+		const client = RouterRestClient.forConnection(parsed.connection)
+		try {
+			return await validateScriptText(parsed.script, client.inspectHighlightStrict)
+		} finally {
+			client.dispose()
+		}
+	}
+
+	async #executeScriptCommand(e: { arguments?: unknown[] }): Promise<RouterScriptExecutionResult> {
+		const parsed = parseRouterScriptCommandRequest(e.arguments?.[0])
+		if (!parsed.ok) {
+			return {
+				ok: false,
+				message: parsed.message,
+				diagnostics: [],
+				truncated: false,
+				checkedBytes: 0,
+				executed: false,
+			}
+		}
+
+		const client = RouterRestClient.forConnection(parsed.connection)
+		try {
+			const validation = await validateScriptText(parsed.script, client.inspectHighlightStrict, 'routeroslsp://command/execute.rsc')
+			if (!validation.ok) {
+				return {
+					...validation,
+					executed: false,
+				}
+			}
+
+			const output = await client.executeScriptStrict(parsed.script)
+			return {
+				...validation,
+				message: 'Script executed successfully',
+				output,
+				executed: true,
+			}
+		} catch (error) {
+			const normalized = normalizeError(error)
+			return {
+				ok: false,
+				message: `Execution failed: ${normalized.message}`,
+				diagnostics: [],
+				truncated: parsed.script.length > ROUTEROS_API_MAX_BYTES,
+				checkedBytes: Math.min(parsed.script.length, ROUTEROS_API_MAX_BYTES),
+				error: normalized,
+				executed: false,
+			}
+		} finally {
+			client.dispose()
+		}
+	}
 }
 
 // MARK: Helpers
@@ -517,5 +601,96 @@ function completionStyleToKind(style: CompletionInspectResponseItem['style']): C
 			return CompletionItemKind.Constant
 		default:
 			return CompletionItemKind.Text
+	}
+}
+
+interface RouterScriptCommandRequest {
+	baseUrl: string
+	username: string
+	password: string
+	script: string
+	apiTimeout?: number
+	checkCertificates?: boolean
+}
+
+interface RouterScriptExecutionResult extends RouterScriptValidationResult {
+	executed: boolean
+	output?: string
+}
+
+export function parseRouterScriptCommandRequest(input: unknown): { ok: true; connection: RouterConnectionSettings; script: string } | { ok: false; message: string } {
+	if (!input || typeof input !== 'object' || Array.isArray(input)) {
+		return { ok: false, message: 'Execute command requires a single object argument with baseUrl, username, password, and script.' }
+	}
+
+	const request = input as Partial<RouterScriptCommandRequest>
+	if (typeof request.script !== 'string' || request.script.trim().length === 0) {
+		return { ok: false, message: 'Execute command requires a non-empty script string.' }
+	}
+	if (typeof request.baseUrl !== 'string' || request.baseUrl.trim().length === 0) {
+		return { ok: false, message: 'Execute command requires a baseUrl.' }
+	}
+	if (typeof request.username !== 'string' || request.username.trim().length === 0) {
+		return { ok: false, message: 'Execute command requires a username.' }
+	}
+	if (typeof request.password !== 'string' || request.password.length === 0) {
+		return { ok: false, message: 'Execute command requires a password.' }
+	}
+
+	const url = URL.parse(request.baseUrl)
+	if (!url?.protocol || !url.host) {
+		return { ok: false, message: 'Execute command requires a valid baseUrl with protocol, host, and port.' }
+	}
+	if (url.username || url.password) {
+		return { ok: false, message: 'Execute command baseUrl must not embed credentials. Pass username and password as separate fields.' }
+	}
+	// url.port is empty for default ports (http→80, https→443) — check the original string too
+	const hasExplicitPort = url.port !== '' || /\/\/[^/]*:\d+/.test(request.baseUrl)
+	if (!hasExplicitPort) {
+		return { ok: false, message: 'Execute command requires an explicit RouterOS port in baseUrl.' }
+	}
+
+	const normalizedBaseUrl = sanitizeBaseUrl(request.baseUrl)
+	return {
+		ok: true,
+		connection: {
+			baseUrl: normalizedBaseUrl,
+			username: request.username,
+			password: request.password,
+			apiTimeout: typeof request.apiTimeout === 'number' && Number.isFinite(request.apiTimeout) ? request.apiTimeout : defaultSettings.apiTimeout,
+			checkCertificates: typeof request.checkCertificates === 'boolean' ? request.checkCertificates : defaultSettings.checkCertificates,
+		},
+		script: request.script,
+	}
+}
+
+function summarizeExecuteCommand(e: { command: string; arguments?: unknown[] }): string {
+	switch (e.command) {
+		case 'routeroslsp.server.useConnectionUrl':
+			return JSON.stringify(
+				e.arguments?.map((arg, index) => {
+					if (index === 1 && typeof arg === 'string') return sanitizeBaseUrl(arg)
+					if (index >= 2) return '***'
+					return arg
+				}) || [],
+			)
+		case 'routeroslsp.server.router.validateScript':
+		case 'routeroslsp.server.router.executeScript': {
+			const arg = e.arguments?.[0]
+			if (!arg || typeof arg !== 'object' || Array.isArray(arg)) return '[invalid arguments]'
+			const request = arg as Partial<RouterScriptCommandRequest>
+			return JSON.stringify([
+				{
+					baseUrl: typeof request.baseUrl === 'string' ? sanitizeBaseUrl(request.baseUrl) : '<invalid>',
+					scriptLength: typeof request.script === 'string' ? request.script.length : 0,
+					apiTimeout: typeof request.apiTimeout === 'number' ? request.apiTimeout : '<default>',
+					checkCertificates: typeof request.checkCertificates === 'boolean' ? request.checkCertificates : '<default>',
+					username: '***',
+					password: '***',
+				},
+			])
+		}
+		default:
+			return JSON.stringify(e.arguments || [])
 	}
 }

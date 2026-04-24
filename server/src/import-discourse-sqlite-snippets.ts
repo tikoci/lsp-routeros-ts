@@ -7,9 +7,10 @@
  *   --source-name amm0 \
  *   --out-dir test-data/forum/amm0
  */
+
+import { spawnSync } from 'node:child_process'
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
-import { spawnSync } from 'node:child_process'
 
 type CliOptions = {
 	dbPath: string
@@ -102,16 +103,14 @@ function normalizeSnippet(snippet: string): string {
 
 function looksLikeRouterScript(text: string): boolean {
 	if (text.length < 30) return false
-	const lines = text.split('\n').map((line) => line.trim()).filter(Boolean)
+	const lines = text
+		.split('\n')
+		.map((line) => line.trim())
+		.filter(Boolean)
 	if (lines.length < 3) return false
 
 	const joined = lines.join('\n')
-	const markers = [
-		/\:(local|global|set|if|for|foreach|while|return|put|log)\b/,
-		/\/[a-z]+\/[a-z]+/i,
-		/\$[a-zA-Z_]/,
-		/\[find\b|\[:/,
-	]
+	const markers = [/:(local|global|set|if|for|foreach|while|return|put|log)\b/, /\/[a-z]+\/[a-z]+/i, /\$[a-zA-Z_]/, /\[find\b|\[:/]
 	return markers.some((regex) => regex.test(joined))
 }
 
@@ -136,7 +135,10 @@ function extractCodeBlocks(cookedHtml: string): string[] {
 
 function slugify(input: string): string {
 	const ascii = input.normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
-	const stripped = ascii.replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase()
+	const stripped = ascii
+		.replace(/[^a-zA-Z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '')
+		.toLowerCase()
 	return stripped || 'untitled'
 }
 
@@ -188,13 +190,7 @@ function buildFileName(postNumber: number, snippetIndex: number): string {
 }
 
 function buildHeader(item: ExtractedSnippet): string {
-	return [
-		`# Source: ${item.url}`,
-		`# Topic: ${item.topicTitle}`,
-		`# Source archive: mcp-discourse SQLite (source_name=amm0)`,
-		`# Extracted from: ${item.sourceKind}`,
-		'',
-	].join('\n')
+	return [`# Source: ${item.url}`, `# Topic: ${item.topicTitle}`, `# Source archive: mcp-discourse SQLite (source_name=amm0)`, `# Extracted from: ${item.sourceKind}`, ''].join('\n')
 }
 
 function writeManifest(outDirAbs: string, sourceName: string, dbPath: string, snippets: ExtractedSnippet[]) {
@@ -219,7 +215,7 @@ function writeManifest(outDirAbs: string, sourceName: string, dbPath: string, sn
 		})),
 	}
 
-	writeFileSync(join(outDirAbs, 'manifest.json'), JSON.stringify(manifest, null, '\t') + '\n', 'utf-8')
+	writeFileSync(join(outDirAbs, 'manifest.json'), `${JSON.stringify(manifest, null, '\t')}\n`, 'utf-8')
 }
 
 async function main() {
