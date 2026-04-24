@@ -82,8 +82,8 @@
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "explicit"
 	},
-	"editor.defaultFormatter": "biomejs.biome",
-	"[typescript]": {
-		"editor.defaultFormatter": "biomejs.biome"
-	}
+	// Never auto-format on save — agents and humans apply formatting explicitly
+	// via `bun run format` to avoid surprise diffs during normal editing.
+	"editor.formatOnSave": false,
+	"editor.defaultFormatter": "biomejs.biome"
 }
