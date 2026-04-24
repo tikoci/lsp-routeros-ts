@@ -1,0 +1,9 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"types": ["bun", "node"]
+	},
+	"include": ["**/*.test.ts", "assess-dataset.ts", "capture-snapshots.ts", "import-discourse-*.ts", "profile-timing.ts", "test-preload.ts"],
+	"exclude": []
+}

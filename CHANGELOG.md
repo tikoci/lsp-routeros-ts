@@ -30,7 +30,6 @@
 * Added semantic handling for RouterOS highlight tokens like `arg-scope` and `arg-dot` so semantic token generation no longer drops them
 * Semantic token generation now skips unknown token types safely instead of emitting invalid indexes
 
-
 ### 0.7.2 (pre-release)
 
 #### Changes
@@ -74,7 +73,7 @@ _Promoted v0.5.4 from a `pre-release`._
 ### Fixes
 
 * Significant updates to README.md
-* Updated package dependancies to latest, like Axios, based on audit
+* Updated package dependencies to latest, like Axios, based on audit
 * Use `bun` in GitHub Action for install
 
 ### 0.5.4
@@ -223,7 +222,7 @@ _Internal test only - same changes from 0.3.10_
 
 #### Fixes
 
-* Fix vscodeserver/client NPM library to use 9.x not 8.x which [hopefully] is why previous attempts in web did not work
+* Fix `vscode-languageclient` NPM library to use 9.x not 8.x which [hopefully] is why previous attempts in web did not work
 * Revamp build system more exactly model MS's samples for a "web LSP extension", including using `webpack` to build for VSCode for Web (`bun` still used for node/"exe")
   > How LSPs function is VSCode for web it complex.  First, the IPC is JavaScript message to a JS `Worker()`.  Second, VSCode Web wants CommonJS - while the world has moved on to ESM modules.  Understanding that took a minute, with clue in the MS sample for a "web LSP" – they use `webpack` to transpile the `server.ts` into a old-school variable – something that is not supported by any modern JS/TS tooling and not documented anywhere than the sample using `webpage`.  
 * Other file cleanup to support web/node builds.

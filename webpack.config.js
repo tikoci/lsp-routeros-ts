@@ -43,6 +43,9 @@ const browserClientConfig = {
         use: [
           {
             loader: 'ts-loader',
+            options: {
+              configFile: path.join(__dirname, 'client', 'tsconfig.json'),
+            },
           },
         ],
       },
@@ -95,6 +98,9 @@ const browserServerConfig = {
         use: [
           {
             loader: 'ts-loader',
+            options: {
+              configFile: path.join(__dirname, 'server', 'tsconfig.json'),
+            },
           },
         ],
       },

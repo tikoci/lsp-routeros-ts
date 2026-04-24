@@ -290,8 +290,8 @@ export class RouterRestClient implements RouterApiClientInterface {
 	 * Throws RouterOSClientError on failure — the watchdog needs the error details
 	 * to show user-friendly messages (see watchdog.ts `getTextFromError`).
 	 */
-	getIdentity = (): Promise<string> => {
-		return this.httpClient.get('/system/identity', {}).then((resp) => resp?.data?.name)
+	getIdentity = async (): Promise<string> => {
+		return (await this.httpClient.get('/system/identity', {}))?.data?.name
 	}
 }
 

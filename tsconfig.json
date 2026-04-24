@@ -1,31 +1,15 @@
 {
 	"compilerOptions": {
-		"target": "es2020",
-		"lib": [
-			"es2020",
-			"WebWorker"
-		],
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"sourceMap": true,
-		"strict": true,
+		"allowJs": true,
+		"checkJs": true,
+		"module": "node16",
+		"moduleResolution": "node16",
+		"noEmit": true,
 		"skipLibCheck": true,
-		"outDir": "dist",
+		"types": ["node"]
 	},
-	"types": ["node"],
-	"include": ["client/src/**/*.ts", "server/src/**/*.ts"],
-	"exclude": [
-		"node_modules",
-		".vscode-test-web",
-		".vscode-test",
-		"client/src/**/*.test.ts",
-		"server/src/**/*.test.ts",
-		"server/src/test-preload.ts",
-		"server/src/assess-dataset.ts",
-		"server/src/profile-timing.ts",
-		"server/src/capture-snapshots.ts",
-		"server/src/import-discourse-*.ts"
-	],
+	"include": ["webpack.config.js"],
+	"exclude": ["node_modules"],
 	//"references": [
 	//	{ "path": "./client"} , { "path": "./server" } 
 	//]

@@ -177,7 +177,6 @@ bun run server/src/capture-snapshots.ts
 
 See [`BACKLOG.md`](BACKLOG.md) for remaining testing work.
 
-
 ### Importing Scripts From `forum.mikrotik.com`
 
 To import snippets from a Discourse topic page (or refresh the same page), use:
@@ -212,7 +211,7 @@ This importer groups files under topic-based directories using topic IDs/titles 
 
 `test-data/forum/rextended/` contains scripts imported from this MikroTik forum page:
 
-https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033
+[rextended-fragments-of-snippets](https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033)
 
 Thanks to [@rextended](https://forum.mikrotik.com/u/rextended/summary) for sharing and maintaining these snippets.
 
@@ -224,4 +223,4 @@ Scripts in this directory are from [eworm-de/routeros-scripts](https://github.co
 by Christian Hesse <mail@eworm.de>, licensed under GPL.
 
 Used as test data for the RouterOS LSP integration tests.
-See https://rsc.eworm.de/COPYING.md for the full license.
+See [rsc.eworm.de/COPYING.md](https://rsc.eworm.de/COPYING.md) for the full license.

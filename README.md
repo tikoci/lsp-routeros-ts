@@ -328,7 +328,6 @@ RouterOS LSP provides several commands accessible via the Command Palette (<kbd>
 - **Apply Semantic Color Overrides to Settings** — Adds custom semantic token color mappings to `settings.json` for further customization
 - **New RouterOS Script** — Opens a new blank `.rsc` file with the RouterOS language mode set
 
-
 ## Contributing
 
 For build instructions, project structure, and implementation details, see [CONTRIBUTING.md](CONTRIBUTING.md).

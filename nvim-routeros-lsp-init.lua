@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global -- NeoVim injects `vim` at runtime.
 -- ============================================================
 -- RouterOS LSP — NeoVim configuration
 -- Requires NeoVim 0.10+  |  https://github.com/tikoci/lsp-routeros-ts
