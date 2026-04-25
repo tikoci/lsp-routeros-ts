@@ -13,7 +13,7 @@ const REQUEST_TIMEOUT_MS = 5000
 const SHUTDOWN_GRACE_MS = 2000
 // Deliberately small: fast-fail any unintended external network call in the
 // smoke tests, while still tolerating minor CI/JIT startup variability.
-const ROUTEROSLSP_API_TIMEOUT_MS = 10
+const routerOsLspApiTimeoutMs = 10
 
 interface SmokeTarget {
 	label: string
@@ -115,7 +115,7 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 		// network round-trip so a leaked external request fails immediately, but
 		// generous enough that loaded CI runners or cold-start JIT compilation don't
 		// cause false negatives against the in-process mock.
-		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: String(ROUTEROSLSP_API_TIMEOUT_MS) },
+		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: String(routerOsLspApiTimeoutMs) },
 	})
 	const peer = new JsonRpcPeer(child, target.label)
 	let stderr = ''
@@ -264,6 +264,8 @@ class JsonRpcPeer {
 		if (this.#buffer.length === 0) {
 			this.#buffer = chunk
 		} else {
+			// allocUnsafe is safe here: every byte is immediately overwritten by the
+			// two set() calls below before this buffer is read anywhere.
 			const combined = Buffer.allocUnsafe(this.#buffer.length + chunk.length)
 			combined.set(this.#buffer, 0)
 			combined.set(chunk, this.#buffer.length)
@@ -332,7 +334,7 @@ class JsonRpcPeer {
 	}
 
 	#isPartialHeaderName(textLower: string, prefixLower: string) {
-		return textLower.length <= prefixLower.length && prefixLower.startsWith(textLower)
+		return textLower.length > 0 && textLower.length <= prefixLower.length && prefixLower.startsWith(textLower)
 	}
 
 	#isPartialContentLengthValue(text: string, textLower: string, prefix: string, prefixLower: string) {
