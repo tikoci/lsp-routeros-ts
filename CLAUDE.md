@@ -16,9 +16,9 @@ This matters for instruction-writing: docs in this repo must be model-agnostic. 
 
 RouterOS LSP is a Language Server Protocol server for MikroTik RouterOS scripting language (`.rsc` files). Unlike most LSPs that ship with a built-in grammar, this one queries a **live RouterOS device** via HTTP REST API to get all syntax data — meaning it automatically supports any RouterOS version without updates.
 
-This is the **most widely used tikoci project** (thousands of VSCode Marketplace installs). Treat code quality, test coverage, and release hygiene accordingly. "Works on my VSCode Desktop" is not sufficient — changes must hold up across all five deployment contexts below.
+This is the **most widely used tikoci project** (thousands of VSCode Marketplace installs). Treat code quality, test coverage, and release hygiene accordingly. "Works on my VSCode Desktop" is not sufficient — changes must hold up across all six deployment contexts below.
 
-## Deployment Contexts (six, not three)
+## Deployment Contexts (six deployment contexts, not three build targets)
 
 The codebase compiles to three build targets, but each change must be evaluated against six **deployment contexts** where users actually hit it:
 
@@ -269,7 +269,7 @@ Tests live in `tests/server/` and `tests/client/` (mirroring the source tree). R
 - Integration tests auto-skip when no CHR is reachable (default `http://192.168.74.150`, override via `ROUTEROS_TEST_URL`)
 - `scripts/capture-snapshots.ts` is a CLI tool (`bun run scripts/capture-snapshots.ts`) that regenerates `.highlight` snapshot files from a live CHR
 - `test-data/` is committed — snapshot `.highlight` files and scripts are available in CI for offline tests
-- Snapshot tests revealed unknown token types `arg-scope`, `arg-dot` — not yet in `HighlightTokens.TokenTypes` (see BACKLOG)
+- Snapshot-driven token gaps (`arg-scope`, `arg-dot`, `path`) have been mapped into semantic token types; see BACKLOG for any remaining follow-up items
 - See [BACKLOG.md](BACKLOG.md) for remaining testing work (VSCode integration tests, CI snapshot capture)
 
 ## CHANGELOG.md

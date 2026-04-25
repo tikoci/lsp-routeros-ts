@@ -9,6 +9,9 @@ import { fileURLToPath } from 'node:url'
 
 const moduleDir = fileURLToPath(new URL('.', import.meta.url))
 
+const REQUEST_TIMEOUT_MS = 5000
+const SHUTDOWN_GRACE_MS = 2000
+
 interface SmokeTarget {
 	label: string
 	command: string
@@ -155,7 +158,14 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 
 		await peer.request('shutdown', null)
 		peer.notify('exit', null)
-		await Promise.race([once(child, 'exit'), delay(2000)])
+		const exitOrTimeout = await Promise.race([
+			once(child, 'exit').then(() => 'exit' as const),
+			delay(SHUTDOWN_GRACE_MS).then(() => 'timeout' as const),
+		])
+		if (exitOrTimeout === 'timeout') {
+			if (!child.killed && child.exitCode === null) child.kill()
+			throw new Error(`${target.label} did not exit within ${SHUTDOWN_GRACE_MS}ms after shutdown/exit`)
+		}
 	} finally {
 		peer.dispose()
 		if (!child.killed && child.exitCode === null) child.kill()
@@ -192,7 +202,7 @@ class JsonRpcPeer {
 			const timer = setTimeout(() => {
 				this.#pending.delete(id)
 				reject(new Error(`${this.#label} timed out waiting for ${method}`))
-			}, 5000)
+			}, REQUEST_TIMEOUT_MS)
 			this.#pending.set(id, { resolve, reject, timer })
 			this.#send({ jsonrpc: '2.0', id, method, params })
 		})
@@ -251,16 +261,42 @@ class JsonRpcPeer {
 		}
 	}
 
+	// Called when the buffer holds bytes but no `\r\n\r\n` header terminator yet — i.e.
+	// we're partway through reading the first LSP frame the server has emitted. Two
+	// shapes are valid at this point (LSP header field names are case-insensitive per
+	// the JSON-RPC base protocol spec):
+	//
+	//   1. A strict prefix of "Content-Length:" — e.g. "", "Content-", "content-length"
+	//   2. The full "Content-Length:" header followed by an optional partial value:
+	//      whitespace, digits, optional `\r`, optional `\n` — e.g. "Content-Length: 123\r\n"
+	//
+	// Anything else means the server wrote non-LSP bytes (a stray console.log, a stack
+	// trace, etc.) to stdout before the first frame, which would corrupt the LSP stream.
+	// Failing fast here surfaces packaging/transport regressions that unit tests miss.
 	#assertCleanHeaderPrefix() {
 		const text = this.#buffer.toString('utf8')
 		const prefix = 'Content-Length:'
 		const prefixLower = prefix.toLowerCase()
 		const textLower = text.toLowerCase()
 
-		if (text.length <= prefix.length && textLower === prefixLower.slice(0, text.length)) return
-		if (textLower.startsWith(prefixLower) && /^[ \t]*\d*\r?\n?$/.test(text.slice(prefix.length))) return
+		// Case 1: still receiving the header name itself.
+		if (this.#isPartialContentLengthPrefix(textLower, prefixLower)) return
+		// Case 2: header name complete, partway through the value line.
+		if (this.#isPartialContentLengthValue(text, textLower, prefix, prefixLower)) return
 
 		this.#fail(new Error(`${this.#label} wrote non-LSP bytes to stdout: ${JSON.stringify(text)}`))
+	}
+
+	#isPartialContentLengthPrefix(textLower: string, prefixLower: string) {
+		return textLower.length <= prefixLower.length && prefixLower.startsWith(textLower)
+	}
+
+	#isPartialContentLengthValue(text: string, textLower: string, prefix: string, prefixLower: string) {
+		if (!textLower.startsWith(prefixLower)) return false
+		// Value portion: optional spaces/tabs, optional digits, optional `\r`, optional `\n`.
+		// Stricter than the LSP spec (which allows extra header lines like Content-Type)
+		// but matches what vscode-languageserver actually emits.
+		return /^[ \t]*\d*\r?\n?$/.test(text.slice(prefix.length))
 	}
 
 	#handleMessage(message: JsonRpcMessage) {
