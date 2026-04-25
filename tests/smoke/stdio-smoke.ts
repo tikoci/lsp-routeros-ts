@@ -251,9 +251,13 @@ class JsonRpcPeer {
 	#assertCleanHeaderPrefix() {
 		const text = this.#buffer.toString('utf8')
 		const prefix = 'Content-Length:'
-		if (text !== prefix.slice(0, text.length)) {
-			this.#fail(new Error(`${this.#label} wrote non-LSP bytes to stdout: ${JSON.stringify(text)}`))
-		}
+		const prefixLower = prefix.toLowerCase()
+		const textLower = text.toLowerCase()
+
+		if (text.length <= prefix.length && textLower === prefixLower.slice(0, text.length)) return
+		if (textLower.startsWith(prefixLower) && /^[ \t]*\d*\r?\n?$/.test(text.slice(prefix.length))) return
+
+		this.#fail(new Error(`${this.#label} wrote non-LSP bytes to stdout: ${JSON.stringify(text)}`))
 	}
 
 	#handleMessage(message: JsonRpcMessage) {

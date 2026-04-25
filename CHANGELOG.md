@@ -87,7 +87,7 @@ _Promoted v0.5.4 from a `pre-release`._
 * Updated package dependencies to latest, like Axios, based on audit
 * Use `bun` in GitHub Action for install
 
-### 0.5.4 (release)
+### 0.5.4 (pre-release)
 
 #### Changes
 
