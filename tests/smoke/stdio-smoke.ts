@@ -95,6 +95,11 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 	const child = spawn(target.command, target.args, {
 		cwd: resolve(moduleDir, '../..'),
 		stdio: ['pipe', 'pipe', 'pipe'],
+		// ROUTEROSLSP_API_TIMEOUT bounds any HTTP call the server might make at the
+		// transport layer (1ms = "fail fast"). It guards against the smoke test
+		// accidentally talking to anything other than the in-process mock router on
+		// 127.0.0.1, even before the LSP `initialize` settings have applied. The
+		// per-setting transport is then exercised via initializationOptions below.
 		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: '1' },
 	})
 	const peer = new JsonRpcPeer(child, target.label)
@@ -109,11 +114,12 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 			rootUri: null,
 			capabilities: {},
 			initializationOptions: {
+				// apiTimeout intentionally omitted — the env var above already pins it.
+				// Re-adding it here would duplicate state without exercising new code paths.
 				routeroslsp: {
 					baseUrl,
 					username: 'admin',
 					password: 'smoke-password',
-					apiTimeout: 1,
 					checkCertificates: false,
 				},
 			},
@@ -201,6 +207,7 @@ class JsonRpcPeer {
 		return new Promise<JsonRpcMessage>((resolve, reject) => {
 			const timer = setTimeout(() => {
 				this.#pending.delete(id)
+				clearTimeout(timer)
 				reject(new Error(`${this.#label} timed out waiting for ${method}`))
 			}, REQUEST_TIMEOUT_MS)
 			this.#pending.set(id, { resolve, reject, timer })
@@ -280,14 +287,14 @@ class JsonRpcPeer {
 		const textLower = text.toLowerCase()
 
 		// Case 1: still receiving the header name itself.
-		if (this.#isPartialContentLengthPrefix(textLower, prefixLower)) return
+		if (this.#isPartialHeaderName(textLower, prefixLower)) return
 		// Case 2: header name complete, partway through the value line.
 		if (this.#isPartialContentLengthValue(text, textLower, prefix, prefixLower)) return
 
 		this.#fail(new Error(`${this.#label} wrote non-LSP bytes to stdout: ${JSON.stringify(text)}`))
 	}
 
-	#isPartialContentLengthPrefix(textLower: string, prefixLower: string) {
+	#isPartialHeaderName(textLower: string, prefixLower: string) {
 		return textLower.length <= prefixLower.length && prefixLower.startsWith(textLower)
 	}
 
