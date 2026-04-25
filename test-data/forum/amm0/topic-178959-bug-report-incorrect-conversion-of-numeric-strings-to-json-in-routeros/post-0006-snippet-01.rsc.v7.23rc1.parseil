@@ -1,0 +1,1 @@
+/;(evl /globalname=$zero6str;value=0000000);(evl /putmessage=(. $zero6str   (evl (evl /typeofvalue=$zero6str))));(evl /putmessage=(evl (evl /serializeto=json;value=$zero6str)))

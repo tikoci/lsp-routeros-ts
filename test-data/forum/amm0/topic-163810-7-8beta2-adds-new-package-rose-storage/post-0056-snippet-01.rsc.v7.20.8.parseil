@@ -1,0 +1,1 @@
+/;(evl /globalname=$path;value=/nfs1/images/disk1);(<%% bad command name container (line 8 column 2) container;add;...;file=(evl (evl /pickbegin=1;counter=(. $path / $containername .tar);end=999)))

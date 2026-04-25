@@ -1,0 +1,1 @@
+/;(evl /file/printproplist=name;where=$name;$type;$size;$last-modified;$package-name;$package-version;$package-build-time;$package-architecture;$contents;$shared;$.id;$.nextid;$.dead;$.about;(~ $name .crt);5)

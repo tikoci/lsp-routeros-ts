@@ -1,0 +1,1 @@
+/;(evl /globalname=$somelansubnet;value=192.168.100.1/24);(evl /putmessage=(. typeof  (evl (evl /typeofvalue=$somelansubnet))  does work with toip:  (evl (evl /toipvalue=$somelansubnet))))

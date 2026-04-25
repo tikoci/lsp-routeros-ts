@@ -1,0 +1,10 @@
+{
+  "source": "edge-cases/comment-only.rsc",
+  "routerosVersion": "7.23rc1",
+  "chrBuildTime": "2026-04-14 11:35:26",
+  "inputBytes": 194,
+  "ilBytes": 1,
+  "parseMs": 1,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:23.850Z"
+}

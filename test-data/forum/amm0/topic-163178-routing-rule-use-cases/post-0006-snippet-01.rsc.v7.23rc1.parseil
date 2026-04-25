@@ -1,0 +1,1 @@
+/;(evl /routing/rule/ (evl /routing/rule/addaction=lookup;disabled=$norules;dst-address=10.0.0.0/8;table=main) (evl /routing/rule/addaction=lookup;disabled=$norules;dst-address=172.16.0.0/12;table=main) (evl /routing/rule/addaction=lookup;disabled=$norules;dst-address=192.168.0.0/16;table=main))

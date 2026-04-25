@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$orderedList;value=cat;dog;3;8.8.8.8) (evl /putmessage=(-> $orderedList 0)) (evl /putmessage=(-> $orderedList 1)) (evl /putmessage=(-> $orderedList 2)) (evl /putmessage=(evl (evl /typeofvalue=(-> $orderedList 3)))) (evl /putmessage=(evl (evl /typeofvalue=(-> $orderedList 4)))))

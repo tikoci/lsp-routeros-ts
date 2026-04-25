@@ -1,0 +1,10 @@
+{
+  "source": "eworm/daily-psk.template.rsc",
+  "routerosVersion": "7.20.8",
+  "chrBuildTime": "2026-01-30 09:17:54",
+  "inputBytes": 4698,
+  "ilBytes": 32,
+  "parseMs": 2,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:23.928Z"
+}

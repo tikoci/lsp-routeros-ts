@@ -1,0 +1,1 @@
+/;(evl /globalname=$count;value=0);(<%% $QKEYS (> $QKEYS);+=+1;(> (evl (evl (evl /globalname=$count) (evl /setname=$count;value=(+ $count 1)) (evl /returnvalue=$count))));-=-1;(> (evl (evl (evl /globalname=$count) (evl /setname=$count;value=(- $count 1)) (evl /returnvalue=$count)))))

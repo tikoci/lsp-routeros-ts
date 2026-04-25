@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$headers;value=(. Authorization: bearer  (evl (<%% $SECRET (> $SECRET);get;mtforumpw)))) (evl /localname=$resp;value=(evl (evl /tool/fetchas-value=user;http-data=$payload;http-header-field=$headers;http-method=$method;output=user;url=$url))) (evl /putmessage=$resp))

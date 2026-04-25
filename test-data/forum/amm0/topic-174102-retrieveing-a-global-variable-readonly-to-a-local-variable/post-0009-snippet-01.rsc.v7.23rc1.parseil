@@ -1,0 +1,1 @@
+/;(evl /system/script/adddont-require-permissions=true;name=staticUrl;source= :return "http://example.com" );(evl /putmessage=(evl (evl /system/script/runnumber=staticUrl)));(evl (evl /localname=$staticUrl;value=(evl (evl /system/script/runnumber=staticUrl))) (evl /putmessage=$staticUrl))

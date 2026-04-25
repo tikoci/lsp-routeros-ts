@@ -1,0 +1,1 @@
+/;(evl /putmessage=... or using 'terse=yes' to not output raws ...);(evl /putmessage=(evl (evl /serializeoptions=json.pretty;to=json;value=(evl (<%% $decodeDriago (> $decodeDriago);CBE90A6D019D0109E97FFF;terse=yes)))))

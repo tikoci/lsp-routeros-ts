@@ -1,0 +1,1 @@
+/;(evl /foreachcounter=$k;$v;do=;(evl / (evl /ifcondition=(= (evl (evl /typeofvalue=$v)) array);do=;(evl / (evl /ifcondition=(= (evl (evl /typeofvalue=$k)) num);do=;(evl (evl /putmessage=list));else=;(evl (evl /putmessage=map))))));in=$ar)

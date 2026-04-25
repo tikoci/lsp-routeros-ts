@@ -17,7 +17,8 @@
  *                                        wrapper).
  *   foo.v<routeros-version>.parseil.meta.json — input bytes, IL bytes, parse
  *                                        wall-time, CHR build-time, success
- *                                        flag, and any error string.
+ *                                        flag, and any error string. Written
+ *                                        for both successful and failed captures.
  *
  * The version suffix (e.g. `.v7.22.1.parseil`) lets multiple RouterOS versions
  * coexist in the corpus so IL grammar drift across releases stays diffable.
@@ -104,6 +105,30 @@ interface CollectResult {
 	error?: string
 }
 
+function writeMeta(filePath: string, version: string, buildTime: string, result: CollectResult): void {
+	const ilPath = `${filePath}.v${version}.parseil`
+	const metaPath = `${ilPath}.meta.json`
+	writeFileSync(
+		metaPath,
+		`${JSON.stringify(
+			{
+				source: result.rel,
+				routerosVersion: version,
+				chrBuildTime: buildTime,
+				inputBytes: result.inputBytes,
+				ilBytes: result.ilBytes,
+				parseMs: result.parseMs,
+				ok: result.ok,
+				error: result.error,
+				capturedAt: new Date().toISOString(),
+			},
+			null,
+			2,
+		)}\n`,
+		'utf-8',
+	)
+}
+
 async function collectOne(filePath: string, version: string, buildTime: string): Promise<CollectResult> {
 	const rel = relative(TEST_DATA_DIR, filePath)
 	const text = readFileSync(filePath, 'utf-8')
@@ -119,28 +144,11 @@ async function collectOne(filePath: string, version: string, buildTime: string):
 		result.ok = true
 
 		const ilPath = `${filePath}.v${version}.parseil`
-		const metaPath = `${ilPath}.meta.json`
 		writeFileSync(ilPath, il, 'utf-8')
-		writeFileSync(
-			metaPath,
-			`${JSON.stringify(
-				{
-					source: rel,
-					routerosVersion: version,
-					chrBuildTime: buildTime,
-					inputBytes,
-					ilBytes: result.ilBytes,
-					parseMs: result.parseMs,
-					capturedAt: new Date().toISOString(),
-				},
-				null,
-				2,
-			)}\n`,
-			'utf-8',
-		)
 	} catch (err) {
 		result.error = err instanceof Error ? err.message : String(err)
 	}
+	writeMeta(filePath, version, buildTime, result)
 	return result
 }
 

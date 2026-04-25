@@ -1,0 +1,2 @@
+/;(evl /whilecondition=1;do=;(evl / (evl /putmessage=(.  c)) (evl /interface/lte/at-chatinput=AT!GSTATUS?;number=(evl (evl /interface/lte/find))) (evl /interface/lte/at-chatinput=AT!LTEINFO?;number=(evl (evl /interface/lte/find))) (evl /putmessage=(.  
+ Use Ctrl-C to stop)) (evl /delaydelay-time=00:00:02)))

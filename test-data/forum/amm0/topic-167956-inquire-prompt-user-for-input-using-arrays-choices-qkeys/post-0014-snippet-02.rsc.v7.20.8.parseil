@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$d40;value=(evl (<%% $CHOICES (> $CHOICES);val=Yup;text=Nope))) (evl /putmessage=(. $d40  - good choice!)))

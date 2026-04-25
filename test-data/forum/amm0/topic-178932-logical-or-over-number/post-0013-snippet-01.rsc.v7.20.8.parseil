@@ -1,0 +1,1 @@
+/;(evl /globalname=$invbits;value=(evl (<%% $invBinaryString (> $invBinaryString);1010101111101)));(evl /putmessage=(-> $invbits 0))

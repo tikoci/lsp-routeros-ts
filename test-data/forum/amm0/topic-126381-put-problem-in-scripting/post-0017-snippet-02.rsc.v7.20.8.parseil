@@ -1,0 +1,1 @@
+/;(evl /globalname=$arrarr;value=a=1;b=txt);(evl /putmessage=$arrarr);(evl /putmessage=(. some text  $arrarr))

@@ -1,0 +1,1 @@
+/;(evl /foreachcounter=$item;do=;(evl / (evl /putmessage=(evl (evl /ip/service/getnumber=$item))));in=(evl (evl /ip/service/findwhere=$container;$name;$port;$proto;$address;$certificate;$tls-version;$vrf;$max-sessions;$local;$remote;$dynamic;$invalid;$connection;$disabled;$.id;$.nextid;$.dead;$.about;(= $vrf main);5)))

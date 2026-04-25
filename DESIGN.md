@@ -155,14 +155,16 @@ Future work on Copilot integration considerations:
 
 ### `[:parse <script>]` as a Signal Source — parseIL
 
-**Status:** Phases 1–3 of the spike landed against RouterOS 7.22.1. Full grammar reference, readout paths, error semantics, and feature implications are documented in **[`docs/parseil-format.md`](docs/parseil-format.md)**. The corpus harness is `scripts/collect-parseil.ts`; per-script IL snapshots live alongside their `.rsc` files as `*.v<routeros-version>.parseil`.
+**Status:** Phases 1–4 of the spike landed against RouterOS 7.20.8, 7.22.1, and 7.23rc1. Full grammar reference, readout paths, error semantics, cross-version drift notes, and feature implications are documented in **[`docs/parseil-format.md`](docs/parseil-format.md)**. The corpus harness is `scripts/collect-parseil.ts`; per-script IL snapshots live alongside their `.rsc` files as `*.v<routeros-version>.parseil`.
 
 Decisions captured from the spike:
 
 - **Use parseIL as a *supplemental* signal, not a replacement for `highlight`.** `:parse` is a hard parser (stops at the first error, no partial IL), so multi-error diagnostics still flow through `highlight`. parseIL earns its place for structure-driven features (folding, function symbols, scope-aware references) and for canonicalisation hints (`200ms` → `00:00:00.200`, `yes` → `true`) where the IL shows what RouterOS actually saw.
 - **Don't ship the IL parser in the runtime LSP yet.** The IL/path/args boundary is implicit in the grammar and depends on `/console/inspect` schema knowledge to split deterministically. Wait until `[research: inspect-shapes]` lands so we have one well-defined dependency rather than two coupled ones.
 - **Use `:parse` as a cheap pre-check.** Parse time is roughly flat in the corpus and exhibits no analogue of `highlight`'s 28 KB cliff, so a `:parse` probe before a costly highlight request is a safe optimisation once we wire it in.
+- **Treat `>` / `<%%` as real RouterOS operators.** RouterOS 7.22.1 `/console/inspect request=completion` labels `>` as `quote` and `<%%` as `activate in environment`; source-level scripts use both directly, and quoted expressions have runtime type `op`. They are not parseIL-private markers.
 - **Snapshot files are version-tagged on disk.** `<file>.rsc.v<routeros-version>.parseil` lets multiple RouterOS versions coexist in the corpus and keeps IL grammar drift visible as plain diffs across releases.
+- **Keep parseIL comparisons version-aware.** The core IL forms held steady across 7.20.8/7.22.1/7.23rc1, but 74/912 successful captures still drifted because RouterOS leaks live command schema into the IL (`findwhere=` field dumps, command-path canonicalisation like `/ping` → `/tool/ping`, and version-specific `bad parameter` / `bad command name` annotations).
 
 ### QEMU CHR for Testing
 

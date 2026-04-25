@@ -1,0 +1,1 @@
+/;(evl /globalname=$ipaddress;value=10.88.2.1/24);(<%% bad command name ... (line 16 column 1) ...;more;config);/ip/address/;(evl /ip/address/addaddress=$ipaddress;comment=defconf;interface=bridge);(<%% bad command name . (line 19 column 3) .;more;config)

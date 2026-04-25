@@ -1,0 +1,10 @@
+{
+  "source": "eworm/log-forward.rsc",
+  "routerosVersion": "7.23rc1",
+  "chrBuildTime": "2026-04-14 11:35:26",
+  "inputBytes": 4220,
+  "ilBytes": 5298,
+  "parseMs": 4,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:24.092Z"
+}

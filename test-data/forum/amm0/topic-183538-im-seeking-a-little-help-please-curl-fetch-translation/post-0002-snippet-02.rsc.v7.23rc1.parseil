@@ -1,0 +1,1 @@
+/;(evl /localname=$accountid;value=xxx);(evl /localname=$listid;value=xxx);(evl /localname=$apitoken;value=xxx);(evl /tool/fetchhttp-header-field=(, Content-Type: application/json (. Authorization: Bearer  $apitoken));http-method=delete;url=(. https://api.cloudflare.com/client/v4/accounts/ $accountid /rules/lists/ $listid /items))

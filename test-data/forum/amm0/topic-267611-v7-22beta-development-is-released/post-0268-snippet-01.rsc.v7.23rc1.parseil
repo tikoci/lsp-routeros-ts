@@ -1,0 +1,16 @@
+/;(<%% bad command name app (line 6 column 2) app;add;auto-update=yes;disabled=no;network=internal;use-https=no;yaml=
+name: cligames
+descr: Amm0's BSD games for RouterOS
+page: https://github.com/tikoci/cligames
+category: games
+icon: https://wiki.pine64.org/images/b/bc/BSD_Unix_icon.png
+default-credentials: joshua:(none)
+services:
+  cligames:
+    image: ghcr.io/tikoci/cligames:latest
+    environment:
+      TERM: screen
+    ports:
+      - 2323:23:telnet:tcp
+    restart: unless-stopped
+)

@@ -1,0 +1,10 @@
+{
+  "source": "forum/address-list-dns.rsc",
+  "routerosVersion": "7.23rc1",
+  "chrBuildTime": "2026-04-14 11:35:26",
+  "inputBytes": 780,
+  "ilBytes": 937,
+  "parseMs": 2,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:24.119Z"
+}

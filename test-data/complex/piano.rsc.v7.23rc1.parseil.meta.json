@@ -1,0 +1,10 @@
+{
+  "source": "complex/piano.rsc",
+  "routerosVersion": "7.23rc1",
+  "chrBuildTime": "2026-04-14 11:35:26",
+  "inputBytes": 11673,
+  "ilBytes": 10343,
+  "parseMs": 7,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:23.842Z"
+}

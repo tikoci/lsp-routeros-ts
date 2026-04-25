@@ -1,0 +1,10 @@
+{
+  "source": "forum/dhcp-lease-script.rsc",
+  "routerosVersion": "7.23rc1",
+  "chrBuildTime": "2026-04-14 11:35:26",
+  "inputBytes": 728,
+  "ilBytes": 1342,
+  "parseMs": 2,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:31.068Z"
+}

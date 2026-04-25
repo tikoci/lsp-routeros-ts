@@ -1,0 +1,1 @@
+/;(evl /onerrordo=;(evl (evl /putmessage=(. ignoring error:  $e)));error=$e;in=;(evl (evl /file/removenumbers=(evl (evl /file/findwhere=$name;$type;$size;$last-modified;$package-name;$package-version;$package-build-time;$package-architecture;$contents;$shared;$.id;$.nextid;$.dead;$.about;(~ $name (. $scepbase - $sysname - $clientname .mobileconfig));5)))))

@@ -1,0 +1,1 @@
+/;(evl /ifcondition=(!= (-> (evl (evl /pingaddress=192.168.88.1;as-value=192.168.88.1;count=1)) status) timeout);do=;(evl / (evl /log/infomessage=(evl (evl /interface/ethernet/cable-testas-value=00:00:03;duration=00:00:03;numbers=ether2)))))

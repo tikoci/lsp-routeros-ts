@@ -1,0 +1,10 @@
+{
+  "source": "test.rsc",
+  "routerosVersion": "7.23rc1",
+  "chrBuildTime": "2026-04-14 11:35:26",
+  "inputBytes": 9587,
+  "ilBytes": 13313,
+  "parseMs": 7,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:35.223Z"
+}

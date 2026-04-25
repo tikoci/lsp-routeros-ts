@@ -1,0 +1,6406 @@
+{
+  "routerosVersion": "7.23rc1",
+  "chrBuildTime": "2026-04-14 11:35:26",
+  "capturedAt": "2026-04-25T21:33:35.365Z",
+  "totalFiles": 913,
+  "ok": 912,
+  "failed": 1,
+  "inputBytesTotal": 1276426,
+  "ilBytesTotal": 810186,
+  "parseMsMean": 3,
+  "parseMsMax": 231,
+  "results": [
+    {
+      "rel": "complex/piano.rsc",
+      "inputBytes": 11673,
+      "ilBytes": 10343,
+      "parseMs": 7,
+      "ok": true
+    },
+    {
+      "rel": "edge-cases/comment-only.rsc",
+      "inputBytes": 194,
+      "ilBytes": 1,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "edge-cases/empty.rsc",
+      "inputBytes": 0,
+      "ilBytes": 0,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "edge-cases/oversize-32k.rsc",
+      "inputBytes": 126976,
+      "ilBytes": 0,
+      "parseMs": 0,
+      "ok": false,
+      "error": "/rest/file/add → 413 Payload Too Large"
+    },
+    {
+      "rel": "edge-cases/single-command.rsc",
+      "inputBytes": 18,
+      "ilBytes": 23,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "edge-cases/unicode-heavy.rsc",
+      "inputBytes": 519,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "eworm/backup-cloud.rsc",
+      "inputBytes": 3539,
+      "ilBytes": 4757,
+      "parseMs": 13,
+      "ok": true
+    },
+    {
+      "rel": "eworm/backup-email.rsc",
+      "inputBytes": 4644,
+      "ilBytes": 5294,
+      "parseMs": 5,
+      "ok": true
+    },
+    {
+      "rel": "eworm/capsman-download-packages.template.rsc",
+      "inputBytes": 3727,
+      "ilBytes": 32,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "eworm/check-certificates.rsc",
+      "inputBytes": 11113,
+      "ilBytes": 17538,
+      "parseMs": 13,
+      "ok": true
+    },
+    {
+      "rel": "eworm/daily-psk.template.rsc",
+      "inputBytes": 4698,
+      "ilBytes": 32,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "eworm/fw-addr-lists.rsc",
+      "inputBytes": 9303,
+      "ilBytes": 11176,
+      "parseMs": 12,
+      "ok": true
+    },
+    {
+      "rel": "eworm/global-functions.rsc",
+      "inputBytes": 56594,
+      "ilBytes": 81257,
+      "parseMs": 52,
+      "ok": true
+    },
+    {
+      "rel": "eworm/gps-track.rsc",
+      "inputBytes": 1786,
+      "ilBytes": 32,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "eworm/hotspot-to-wpa.template.rsc",
+      "inputBytes": 5722,
+      "ilBytes": 32,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "eworm/log-forward.rsc",
+      "inputBytes": 4220,
+      "ilBytes": 5298,
+      "parseMs": 4,
+      "ok": true
+    },
+    {
+      "rel": "eworm/netwatch-notify.rsc",
+      "inputBytes": 10092,
+      "ilBytes": 12149,
+      "parseMs": 8,
+      "ok": true
+    },
+    {
+      "rel": "eworm/ppp-on-up.rsc",
+      "inputBytes": 1439,
+      "ilBytes": 2286,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/address-list-dns.rsc",
+      "inputBytes": 780,
+      "ilBytes": 937,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-101313-feature-request-add-sorting/post-0010-snippet-01.rsc",
+      "inputBytes": 415,
+      "ilBytes": 357,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-106147-how-to-get-keys-of-this-array/post-0005-snippet-01.rsc",
+      "inputBytes": 296,
+      "ilBytes": 144,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-110481-dude-v6-backup-locally/post-0006-snippet-01.rsc",
+      "inputBytes": 1010,
+      "ilBytes": 32,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-117002-url-to-get-latest-versions-of-ros-branches/post-0008-snippet-01.rsc",
+      "inputBytes": 395,
+      "ilBytes": 214,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-117288-built-in-function-library/post-0106-snippet-01.rsc",
+      "inputBytes": 419,
+      "ilBytes": 319,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-117288-built-in-function-library/post-0106-snippet-02.rsc",
+      "inputBytes": 312,
+      "ilBytes": 196,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-117288-built-in-function-library/post-0125-snippet-01.rsc",
+      "inputBytes": 301,
+      "ilBytes": 162,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-120030-script-input-from-console-works/post-0007-snippet-01.rsc",
+      "inputBytes": 397,
+      "ilBytes": 249,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-120920-pushover-ready-mikrotik-script-to-send-messages/post-0016-snippet-01.rsc",
+      "inputBytes": 992,
+      "ilBytes": 1023,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-120920-pushover-ready-mikrotik-script-to-send-messages/post-0016-snippet-02.rsc",
+      "inputBytes": 549,
+      "ilBytes": 232,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-120920-pushover-ready-mikrotik-script-to-send-messages/post-0019-snippet-01.rsc",
+      "inputBytes": 576,
+      "ilBytes": 299,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-120920-pushover-ready-mikrotik-script-to-send-messages/post-0019-snippet-02.rsc",
+      "inputBytes": 579,
+      "ilBytes": 305,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-120920-pushover-ready-mikrotik-script-to-send-messages/post-0023-snippet-01.rsc",
+      "inputBytes": 586,
+      "ilBytes": 316,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-120920-pushover-ready-mikrotik-script-to-send-messages/post-0023-snippet-02.rsc",
+      "inputBytes": 708,
+      "ilBytes": 458,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-126381-put-problem-in-scripting/post-0017-snippet-01.rsc",
+      "inputBytes": 569,
+      "ilBytes": 504,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-126381-put-problem-in-scripting/post-0017-snippet-02.rsc",
+      "inputBytes": 327,
+      "ilBytes": 110,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-130860-tobool-not-working-as-expected/post-0006-snippet-01.rsc",
+      "inputBytes": 638,
+      "ilBytes": 717,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-131473-bypass-script-errors-wrong-commands/post-0018-snippet-01.rsc",
+      "inputBytes": 499,
+      "ilBytes": 640,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-131473-bypass-script-errors-wrong-commands/post-0018-snippet-02.rsc",
+      "inputBytes": 501,
+      "ilBytes": 640,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-133763-telit-lm940-and-gps-nmea/post-0002-snippet-01.rsc",
+      "inputBytes": 643,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-135789-global-environment-variable-is-disappearing-after-logout/post-0006-snippet-01.rsc",
+      "inputBytes": 345,
+      "ilBytes": 143,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-136185-sdwan-using-zerotier-solved/post-0052-snippet-01.rsc",
+      "inputBytes": 475,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-139391-cleaning-characters-from-string-for-use-in-variablename/post-0004-snippet-01.rsc",
+      "inputBytes": 530,
+      "ilBytes": 462,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-139391-cleaning-characters-from-string-for-use-in-variablename/post-0004-snippet-02.rsc",
+      "inputBytes": 520,
+      "ilBytes": 512,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-139477-colon-or-not-to-colon/post-0012-snippet-01.rsc",
+      "inputBytes": 1812,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-140040-script-automatically-change-dns-if-pi-hole-is-no-longer-working/post-0054-snippet-01.rsc",
+      "inputBytes": 528,
+      "ilBytes": 301,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-140952-at-commands-to-modem-in-mbim-mode/post-0016-snippet-01.rsc",
+      "inputBytes": 3216,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-140952-at-commands-to-modem-in-mbim-mode/post-0017-snippet-01.rsc",
+      "inputBytes": 2002,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-141645-ip-route-check-command-disappeared/post-0014-snippet-01.rsc",
+      "inputBytes": 681,
+      "ilBytes": 1003,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-141645-ip-route-check-command-disappeared/post-0022-snippet-01.rsc",
+      "inputBytes": 270,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-141645-ip-route-check-command-disappeared/post-0025-snippet-01.rsc",
+      "inputBytes": 351,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-141665-add-minutes-in-time-variable/post-0006-snippet-01.rsc",
+      "inputBytes": 496,
+      "ilBytes": 198,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-142687-how-to-add-color-to-output/post-0006-snippet-01.rsc",
+      "inputBytes": 688,
+      "ilBytes": 717,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-142687-how-to-add-color-to-output/post-0010-snippet-01.rsc",
+      "inputBytes": 1726,
+      "ilBytes": 2339,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-142949-r11e-lte-us-firmware-upgrade-failed/post-0012-snippet-01.rsc",
+      "inputBytes": 1011,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-143441-api-on-routeros-v7/post-0002-snippet-01.rsc",
+      "inputBytes": 1178,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-145326-persistent-environment-variables/post-0044-snippet-01.rsc",
+      "inputBytes": 322,
+      "ilBytes": 122,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-145326-persistent-environment-variables/post-0044-snippet-02.rsc",
+      "inputBytes": 400,
+      "ilBytes": 195,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-145326-persistent-environment-variables/post-0044-snippet-03.rsc",
+      "inputBytes": 335,
+      "ilBytes": 177,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-145326-persistent-environment-variables/post-0057-snippet-01.rsc",
+      "inputBytes": 2642,
+      "ilBytes": 2983,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-147015-append-bridge-vlan-values/post-0006-snippet-01.rsc",
+      "inputBytes": 1680,
+      "ilBytes": 2914,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149195-v7-1beta6-development-is-released/post-0217-snippet-01.rsc",
+      "inputBytes": 384,
+      "ilBytes": 182,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149195-v7-1beta6-development-is-released/post-0217-snippet-02.rsc",
+      "inputBytes": 736,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149195-v7-1beta6-development-is-released/post-0217-snippet-03.rsc",
+      "inputBytes": 975,
+      "ilBytes": 559,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149195-v7-1beta6-development-is-released/post-0217-snippet-04.rsc",
+      "inputBytes": 1583,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149195-v7-1beta6-development-is-released/post-0219-snippet-01.rsc",
+      "inputBytes": 1303,
+      "ilBytes": 30,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149195-v7-1beta6-development-is-released/post-0219-snippet-02.rsc",
+      "inputBytes": 508,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149360-feature-request-openapi-for-rest-api/post-0005-snippet-01.rsc",
+      "inputBytes": 1727,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149360-feature-request-openapi-for-rest-api/post-0009-snippet-01.rsc",
+      "inputBytes": 1057,
+      "ilBytes": 986,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149360-feature-request-openapi-for-rest-api/post-0009-snippet-02.rsc",
+      "inputBytes": 843,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149360-feature-request-openapi-for-rest-api/post-0009-snippet-03.rsc",
+      "inputBytes": 519,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149360-feature-request-openapi-for-rest-api/post-0011-snippet-01.rsc",
+      "inputBytes": 1621,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149360-feature-request-openapi-for-rest-api/post-0011-snippet-02.rsc",
+      "inputBytes": 323,
+      "ilBytes": 138,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149360-feature-request-openapi-for-rest-api/post-0011-snippet-03.rsc",
+      "inputBytes": 1928,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-149360-feature-request-openapi-for-rest-api/post-0016-snippet-01.rsc",
+      "inputBytes": 427,
+      "ilBytes": 232,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-150836-sms-lte-info/post-0013-snippet-01.rsc",
+      "inputBytes": 318,
+      "ilBytes": 204,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-150836-sms-lte-info/post-0017-snippet-01.rsc",
+      "inputBytes": 743,
+      "ilBytes": 1169,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-150836-sms-lte-info/post-0017-snippet-02.rsc",
+      "inputBytes": 2493,
+      "ilBytes": 2976,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151475-zerotier-added-to-routeros-v7-1rc2/post-0063-snippet-01.rsc",
+      "inputBytes": 1759,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151589-new-rndnum-command-doesn-t-work-guessing-it-should-generate-a-random-number/post-0001-snippet-01.rsc",
+      "inputBytes": 401,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151589-new-rndnum-command-doesn-t-work-guessing-it-should-generate-a-random-number/post-0001-snippet-02.rsc",
+      "inputBytes": 388,
+      "ilBytes": 556,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151589-new-rndnum-command-doesn-t-work-guessing-it-should-generate-a-random-number/post-0001-snippet-03.rsc",
+      "inputBytes": 623,
+      "ilBytes": 4802,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151589-new-rndnum-command-doesn-t-work-guessing-it-should-generate-a-random-number/post-0001-snippet-04.rsc",
+      "inputBytes": 716,
+      "ilBytes": 4996,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151589-new-rndnum-command-doesn-t-work-guessing-it-should-generate-a-random-number/post-0001-snippet-05.rsc",
+      "inputBytes": 469,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151589-new-rndnum-command-doesn-t-work-guessing-it-should-generate-a-random-number/post-0003-snippet-01.rsc",
+      "inputBytes": 2489,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151589-new-rndnum-command-doesn-t-work-guessing-it-should-generate-a-random-number/post-0003-snippet-02.rsc",
+      "inputBytes": 1502,
+      "ilBytes": 6841,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151589-new-rndnum-command-doesn-t-work-guessing-it-should-generate-a-random-number/post-0011-snippet-01.rsc",
+      "inputBytes": 402,
+      "ilBytes": 262,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151684-kb-lte-by-sib/post-0015-snippet-01.rsc",
+      "inputBytes": 357,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151684-kb-lte-by-sib/post-0015-snippet-02.rsc",
+      "inputBytes": 230,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151684-kb-lte-by-sib/post-0015-snippet-03.rsc",
+      "inputBytes": 904,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151684-kb-lte-by-sib/post-0016-snippet-01.rsc",
+      "inputBytes": 342,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-151712-v7-1rc3-adds-container-support/post-0171-snippet-01.rsc",
+      "inputBytes": 597,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-152405-fast-and-accurate-leap-year-calculation/post-0008-snippet-01.rsc",
+      "inputBytes": 433,
+      "ilBytes": 243,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-152405-fast-and-accurate-leap-year-calculation/post-0008-snippet-02.rsc",
+      "inputBytes": 438,
+      "ilBytes": 30,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153185-v7-1rc6-development-is-released/post-0033-snippet-01.rsc",
+      "inputBytes": 405,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153346-dyndns-netcup-script/post-0004-snippet-01.rsc",
+      "inputBytes": 1707,
+      "ilBytes": 1443,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153357-using-wifiwave2-to-bridge-two-audience-wirelessly-thoughts-4-address-mode/post-0001-snippet-01.rsc",
+      "inputBytes": 6737,
+      "ilBytes": 31,
+      "parseMs": 5,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153357-using-wifiwave2-to-bridge-two-audience-wirelessly-thoughts-4-address-mode/post-0001-snippet-02.rsc",
+      "inputBytes": 6977,
+      "ilBytes": 32,
+      "parseMs": 4,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153357-using-wifiwave2-to-bridge-two-audience-wirelessly-thoughts-4-address-mode/post-0003-snippet-01.rsc",
+      "inputBytes": 1162,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153414-socks5-not-working-in-routeros7/post-0036-snippet-01.rsc",
+      "inputBytes": 796,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153414-socks5-not-working-in-routeros7/post-0038-snippet-01.rsc",
+      "inputBytes": 414,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153414-socks5-not-working-in-routeros7/post-0068-snippet-01.rsc",
+      "inputBytes": 764,
+      "ilBytes": 203,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153617-v7-1rc7-development-is-released/post-0143-snippet-01.rsc",
+      "inputBytes": 302,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153617-v7-1rc7-development-is-released/post-0160-snippet-01.rsc",
+      "inputBytes": 545,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153617-v7-1rc7-development-is-released/post-0160-snippet-02.rsc",
+      "inputBytes": 407,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153617-v7-1rc7-development-is-released/post-0160-snippet-03.rsc",
+      "inputBytes": 374,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-153680-failover-to-lte-on-ros7-with-ping-check-to-remote-host/post-0004-snippet-01.rsc",
+      "inputBytes": 375,
+      "ilBytes": 146,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-154024-positional-arguments-in-array-function-0-vs-1/post-0001-snippet-01.rsc",
+      "inputBytes": 749,
+      "ilBytes": 571,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-154024-positional-arguments-in-array-function-0-vs-1/post-0002-snippet-01.rsc",
+      "inputBytes": 655,
+      "ilBytes": 340,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-154024-positional-arguments-in-array-function-0-vs-1/post-0002-snippet-02.rsc",
+      "inputBytes": 566,
+      "ilBytes": 254,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-154024-positional-arguments-in-array-function-0-vs-1/post-0003-snippet-01.rsc",
+      "inputBytes": 1293,
+      "ilBytes": 979,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-154185-time-parsing-in-7-1/post-0003-snippet-01.rsc",
+      "inputBytes": 476,
+      "ilBytes": 343,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-154290-multi-wan-both-on-dhcp/post-0017-snippet-01.rsc",
+      "inputBytes": 553,
+      "ilBytes": 3253,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-154686-setting-a-variable/post-0004-snippet-01.rsc",
+      "inputBytes": 1147,
+      "ilBytes": 1669,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-154710-feature-request-tool-fetch-http-post-can-send-a-file/post-0021-snippet-01.rsc",
+      "inputBytes": 1054,
+      "ilBytes": 961,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-155315-zerotier-lte/post-0007-snippet-01.rsc",
+      "inputBytes": 322,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-155394-help-chateau-lte12-how-to-dual-wan-lte/post-0062-snippet-01.rsc",
+      "inputBytes": 1049,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-155540-function-to-convert-b-kib-mib-or-gib-in-a-script/post-0009-snippet-01.rsc",
+      "inputBytes": 1250,
+      "ilBytes": 1232,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-155540-function-to-convert-b-kib-mib-or-gib-in-a-script/post-0009-snippet-02.rsc",
+      "inputBytes": 564,
+      "ilBytes": 33,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-155567-script-for-pinging-an-ip-for-24-7/post-0004-snippet-01.rsc",
+      "inputBytes": 371,
+      "ilBytes": 145,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-155978-zerotier-on-mikrotik-a-rosetta-stone-v7-1-1/post-0001-snippet-01.rsc",
+      "inputBytes": 3697,
+      "ilBytes": 1712,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-155978-zerotier-on-mikrotik-a-rosetta-stone-v7-1-1/post-0005-snippet-01.rsc",
+      "inputBytes": 383,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-155978-zerotier-on-mikrotik-a-rosetta-stone-v7-1-1/post-0005-snippet-02.rsc",
+      "inputBytes": 2039,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-155978-zerotier-on-mikrotik-a-rosetta-stone-v7-1-1/post-0008-snippet-01.rsc",
+      "inputBytes": 3614,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156055-rest-api-problems/post-0005-snippet-01.rsc",
+      "inputBytes": 747,
+      "ilBytes": 386,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156055-rest-api-problems/post-0005-snippet-02.rsc",
+      "inputBytes": 1701,
+      "ilBytes": 701,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156066-securely-storing-apikey-tokens-for-tool-fetch-approaches-secret/post-0002-snippet-01.rsc",
+      "inputBytes": 601,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156066-securely-storing-apikey-tokens-for-tool-fetch-approaches-secret/post-0002-snippet-02.rsc",
+      "inputBytes": 506,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156066-securely-storing-apikey-tokens-for-tool-fetch-approaches-secret/post-0005-snippet-01.rsc",
+      "inputBytes": 1123,
+      "ilBytes": 1173,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156066-securely-storing-apikey-tokens-for-tool-fetch-approaches-secret/post-0006-snippet-01.rsc",
+      "inputBytes": 2304,
+      "ilBytes": 3381,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156066-securely-storing-apikey-tokens-for-tool-fetch-approaches-secret/post-0006-snippet-02.rsc",
+      "inputBytes": 1145,
+      "ilBytes": 328,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156066-securely-storing-apikey-tokens-for-tool-fetch-approaches-secret/post-0006-snippet-03.rsc",
+      "inputBytes": 514,
+      "ilBytes": 291,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156111-big-problem-with-netwatch-mikrotik-loop-restart/post-0015-snippet-01.rsc",
+      "inputBytes": 339,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156147-backup-config-to-gmail-v1-7/post-0002-snippet-01.rsc",
+      "inputBytes": 382,
+      "ilBytes": 305,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156147-backup-config-to-gmail-v1-7/post-0008-snippet-01.rsc",
+      "inputBytes": 315,
+      "ilBytes": 146,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156147-backup-config-to-gmail-v1-7/post-0010-snippet-01.rsc",
+      "inputBytes": 548,
+      "ilBytes": 301,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156147-backup-config-to-gmail-v1-7/post-0010-snippet-02.rsc",
+      "inputBytes": 447,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156147-backup-config-to-gmail-v1-7/post-0018-snippet-01.rsc",
+      "inputBytes": 481,
+      "ilBytes": 392,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156350-help-me-to-write-this-script/post-0004-snippet-01.rsc",
+      "inputBytes": 374,
+      "ilBytes": 474,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156396-auto-discover-device-update/post-0015-snippet-01.rsc",
+      "inputBytes": 517,
+      "ilBytes": 619,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156539-v7-1-3-rest-api-is-it-possible-to-add-multiple-values-in-a-single-request/post-0004-snippet-01.rsc",
+      "inputBytes": 500,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156647-ltap-setup-issues-with-lte/post-0006-snippet-01.rsc",
+      "inputBytes": 13599,
+      "ilBytes": 31,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156647-ltap-setup-issues-with-lte/post-0007-snippet-01.rsc",
+      "inputBytes": 389,
+      "ilBytes": 1871,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-156661-router-os-7-on-uefi/post-0029-snippet-01.rsc",
+      "inputBytes": 1416,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-157085-lte-sim-info/post-0019-snippet-01.rsc",
+      "inputBytes": 992,
+      "ilBytes": 832,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-157085-lte-sim-info/post-0019-snippet-02.rsc",
+      "inputBytes": 612,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-157085-lte-sim-info/post-0024-snippet-01.rsc",
+      "inputBytes": 272,
+      "ilBytes": 123,
+      "parseMs": 18,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-157211-some-websites-not-reachable-mtu-size/post-0039-snippet-01.rsc",
+      "inputBytes": 529,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-157473-modbus-mqtt-2-register-formats/post-0002-snippet-01.rsc",
+      "inputBytes": 531,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-157473-modbus-mqtt-2-register-formats/post-0003-snippet-01.rsc",
+      "inputBytes": 415,
+      "ilBytes": 312,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-157594-use-global-variable-that-already-exists-in-another-script/post-0002-snippet-01.rsc",
+      "inputBytes": 336,
+      "ilBytes": 117,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-158170-mikrotik-lte-sierra-wireless-mc7455/post-0009-snippet-01.rsc",
+      "inputBytes": 388,
+      "ilBytes": 310,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-158170-mikrotik-lte-sierra-wireless-mc7455/post-0010-snippet-01.rsc",
+      "inputBytes": 460,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-158170-mikrotik-lte-sierra-wireless-mc7455/post-0010-snippet-02.rsc",
+      "inputBytes": 486,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-158170-mikrotik-lte-sierra-wireless-mc7455/post-0010-snippet-03.rsc",
+      "inputBytes": 430,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-158170-mikrotik-lte-sierra-wireless-mc7455/post-0010-snippet-04.rsc",
+      "inputBytes": 610,
+      "ilBytes": 30,
+      "parseMs": 12,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-160803-sierra-mc7354-and-mc7455-showing-up-as-ppp-out1/post-0003-snippet-01.rsc",
+      "inputBytes": 447,
+      "ilBytes": 345,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-160882-roku-the-missing-roku-tv-remote-for-routeros/post-0001-snippet-01.rsc",
+      "inputBytes": 1746,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-160882-roku-the-missing-roku-tv-remote-for-routeros/post-0001-snippet-02.rsc",
+      "inputBytes": 11687,
+      "ilBytes": 9317,
+      "parseMs": 8,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-161056-guide-running-netinstall-server-on-a-tik/post-0027-snippet-01.rsc",
+      "inputBytes": 498,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-161056-guide-running-netinstall-server-on-a-tik/post-0055-snippet-01.rsc",
+      "inputBytes": 2800,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-161056-guide-running-netinstall-server-on-a-tik/post-0055-snippet-02.rsc",
+      "inputBytes": 816,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-161807-v7-7beta-testing-is-released/post-0307-snippet-01.rsc",
+      "inputBytes": 1129,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162640-set-global-variable/post-0005-snippet-01.rsc",
+      "inputBytes": 459,
+      "ilBytes": 408,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162674-script-vs-container/post-0006-snippet-01.rsc",
+      "inputBytes": 358,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162674-script-vs-container/post-0007-snippet-01.rsc",
+      "inputBytes": 346,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162674-script-vs-container/post-0007-snippet-02.rsc",
+      "inputBytes": 392,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162709-mginx-container-reverse-proxy-for-cors-x-509-support-using-nginx/post-0001-snippet-01.rsc",
+      "inputBytes": 2794,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162709-mginx-container-reverse-proxy-for-cors-x-509-support-using-nginx/post-0001-snippet-02.rsc",
+      "inputBytes": 7858,
+      "ilBytes": 39,
+      "parseMs": 13,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162709-mginx-container-reverse-proxy-for-cors-x-509-support-using-nginx/post-0001-snippet-03.rsc",
+      "inputBytes": 6766,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162720-is-there-a-way-to-get-tool-fetch-response-time/post-0003-snippet-01.rsc",
+      "inputBytes": 390,
+      "ilBytes": 217,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162720-is-there-a-way-to-get-tool-fetch-response-time/post-0004-snippet-01.rsc",
+      "inputBytes": 492,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162737-need-some-scripting-help-bounty-available/post-0002-snippet-01.rsc",
+      "inputBytes": 3079,
+      "ilBytes": 3112,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162737-need-some-scripting-help-bounty-available/post-0004-snippet-01.rsc",
+      "inputBytes": 3841,
+      "ilBytes": 39,
+      "parseMs": 18,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162737-need-some-scripting-help-bounty-available/post-0004-snippet-02.rsc",
+      "inputBytes": 582,
+      "ilBytes": 568,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162737-need-some-scripting-help-bounty-available/post-0004-snippet-03.rsc",
+      "inputBytes": 1371,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162872-v7-7rc-is-released/post-0144-snippet-01.rsc",
+      "inputBytes": 367,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162876-how-upgrade-container/post-0008-snippet-01.rsc",
+      "inputBytes": 460,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-162942-script-help/post-0004-snippet-01.rsc",
+      "inputBytes": 316,
+      "ilBytes": 246,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163033-iterate-over-all-elements-of-an-array-of-unknown-dimension/post-0012-snippet-01.rsc",
+      "inputBytes": 671,
+      "ilBytes": 696,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163033-iterate-over-all-elements-of-an-array-of-unknown-dimension/post-0029-snippet-01.rsc",
+      "inputBytes": 467,
+      "ilBytes": 264,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163038-router-dies-after-10-exact-minutes/post-0011-snippet-01.rsc",
+      "inputBytes": 23158,
+      "ilBytes": 31,
+      "parseMs": 5,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163106-simple-failover/post-0009-snippet-01.rsc",
+      "inputBytes": 340,
+      "ilBytes": 550,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163178-routing-rule-use-cases/post-0006-snippet-01.rsc",
+      "inputBytes": 438,
+      "ilBytes": 296,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163200-missing-basic-features-on-routeros-netstat-and-nmap-nc/post-0002-snippet-01.rsc",
+      "inputBytes": 374,
+      "ilBytes": 166,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163487-mqtt-publish-on-new-device-connected/post-0003-snippet-01.rsc",
+      "inputBytes": 516,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163557-a-few-undocumented-operators-that-are-kind-of-neat/post-0011-snippet-01.rsc",
+      "inputBytes": 337,
+      "ilBytes": 172,
+      "parseMs": 9,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163557-a-few-undocumented-operators-that-are-kind-of-neat/post-0011-snippet-02.rsc",
+      "inputBytes": 474,
+      "ilBytes": 232,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163557-a-few-undocumented-operators-that-are-kind-of-neat/post-0011-snippet-03.rsc",
+      "inputBytes": 342,
+      "ilBytes": 86,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163557-a-few-undocumented-operators-that-are-kind-of-neat/post-0011-snippet-04.rsc",
+      "inputBytes": 580,
+      "ilBytes": 204,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163557-a-few-undocumented-operators-that-are-kind-of-neat/post-0012-snippet-01.rsc",
+      "inputBytes": 1295,
+      "ilBytes": 32,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163742-v7-8beta-testing-is-released/post-0207-snippet-01.rsc",
+      "inputBytes": 295,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163810-7-8beta2-adds-new-package-rose-storage/post-0029-snippet-01.rsc",
+      "inputBytes": 7251,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-163810-7-8beta2-adds-new-package-rose-storage/post-0056-snippet-01.rsc",
+      "inputBytes": 333,
+      "ilBytes": 197,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164116-odd-sip-registration-issue-on-chr-7-7-today/post-0002-snippet-01.rsc",
+      "inputBytes": 392,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164314-v7-8rc-is-released/post-0122-snippet-01.rsc",
+      "inputBytes": 301,
+      "ilBytes": 216,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164326-the-dude-devices-without-a-map/post-0006-snippet-01.rsc",
+      "inputBytes": 4603,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164329-convert-any-text-to-unicode/post-0002-snippet-01.rsc",
+      "inputBytes": 298,
+      "ilBytes": 167,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164329-convert-any-text-to-unicode/post-0003-snippet-01.rsc",
+      "inputBytes": 558,
+      "ilBytes": 423,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164329-convert-any-text-to-unicode/post-0024-snippet-01.rsc",
+      "inputBytes": 309,
+      "ilBytes": 30,
+      "parseMs": 16,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164329-convert-any-text-to-unicode/post-0027-snippet-01.rsc",
+      "inputBytes": 1088,
+      "ilBytes": 504,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164329-convert-any-text-to-unicode/post-0033-snippet-01.rsc",
+      "inputBytes": 483,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164421-chateau-5g-ax-automatic-cellular-reconnect-on-provider-disconnect/post-0004-snippet-01.rsc",
+      "inputBytes": 460,
+      "ilBytes": 350,
+      "parseMs": 22,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164421-chateau-5g-ax-automatic-cellular-reconnect-on-provider-disconnect/post-0005-snippet-01.rsc",
+      "inputBytes": 801,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164536-import-adguard-dns-container-image-problem/post-0012-snippet-01.rsc",
+      "inputBytes": 444,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164588-how-to-mass-configure-50-hap-units/post-0018-snippet-01.rsc",
+      "inputBytes": 410,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164589-serial2http-container-to-bridge-serial-to-the-routeros-cli/post-0001-snippet-01.rsc",
+      "inputBytes": 789,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164589-serial2http-container-to-bridge-serial-to-the-routeros-cli/post-0001-snippet-02.rsc",
+      "inputBytes": 413,
+      "ilBytes": 39,
+      "parseMs": 20,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164589-serial2http-container-to-bridge-serial-to-the-routeros-cli/post-0001-snippet-03.rsc",
+      "inputBytes": 1961,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164589-serial2http-container-to-bridge-serial-to-the-routeros-cli/post-0001-snippet-04.rsc",
+      "inputBytes": 1563,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164846-current-link-rate-via-rest-api/post-0005-snippet-01.rsc",
+      "inputBytes": 393,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-164846-current-link-rate-via-rest-api/post-0006-snippet-01.rsc",
+      "inputBytes": 741,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165186-routers-coming-with-default-passwords/post-0018-snippet-01.rsc",
+      "inputBytes": 351,
+      "ilBytes": 153,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165186-routers-coming-with-default-passwords/post-0018-snippet-02.rsc",
+      "inputBytes": 378,
+      "ilBytes": 221,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165210-static-dns-entries-first-adguard-second/post-0002-snippet-01.rsc",
+      "inputBytes": 313,
+      "ilBytes": 232,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165375-why-can-i-not-install-rose-storage-package/post-0008-snippet-01.rsc",
+      "inputBytes": 346,
+      "ilBytes": 194,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165419-v7-9beta-testing-is-released/post-0059-snippet-01.rsc",
+      "inputBytes": 2622,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165831-chateau-lte-12/post-0004-snippet-01.rsc",
+      "inputBytes": 317,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165849-container-traefik-on-rb5009/post-0007-snippet-01.rsc",
+      "inputBytes": 637,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165849-container-traefik-on-rb5009/post-0007-snippet-02.rsc",
+      "inputBytes": 1844,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165917-please-i-need-help-for-understanding-funcions/post-0013-snippet-01.rsc",
+      "inputBytes": 470,
+      "ilBytes": 295,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165960-a-very-simple-redirect-to-an-http-page-after-join-wifi/post-0012-snippet-01.rsc",
+      "inputBytes": 486,
+      "ilBytes": 276,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165960-a-very-simple-redirect-to-an-http-page-after-join-wifi/post-0021-snippet-01.rsc",
+      "inputBytes": 391,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-165960-a-very-simple-redirect-to-an-http-page-after-join-wifi/post-0021-snippet-02.rsc",
+      "inputBytes": 1661,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-166698-vrrp-on-wan/post-0002-snippet-01.rsc",
+      "inputBytes": 690,
+      "ilBytes": 584,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167087-can-t-turn-code-into-a-function/post-0002-snippet-01.rsc",
+      "inputBytes": 1111,
+      "ilBytes": 1253,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167087-can-t-turn-code-into-a-function/post-0004-snippet-01.rsc",
+      "inputBytes": 1193,
+      "ilBytes": 1216,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167087-can-t-turn-code-into-a-function/post-0005-snippet-01.rsc",
+      "inputBytes": 1130,
+      "ilBytes": 1071,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167087-can-t-turn-code-into-a-function/post-0005-snippet-02.rsc",
+      "inputBytes": 378,
+      "ilBytes": 310,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167095-why-isn-t-macvlan-support-a-priority-for-mikrotik/post-0008-snippet-01.rsc",
+      "inputBytes": 479,
+      "ilBytes": 42,
+      "parseMs": 15,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167253-how-to-resolve-an-interface-list/post-0019-snippet-01.rsc",
+      "inputBytes": 1438,
+      "ilBytes": 2602,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167585-v7-11beta-testing-is-released/post-0024-snippet-01.rsc",
+      "inputBytes": 459,
+      "ilBytes": 368,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167597-can-someone-give-me-the-command-line-to-delete-pppoe-out1/post-0014-snippet-01.rsc",
+      "inputBytes": 425,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167746-checking-recursive-route-values/post-0007-snippet-01.rsc",
+      "inputBytes": 591,
+      "ilBytes": 303,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167746-checking-recursive-route-values/post-0007-snippet-02.rsc",
+      "inputBytes": 511,
+      "ilBytes": 43,
+      "parseMs": 11,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167746-checking-recursive-route-values/post-0007-snippet-03.rsc",
+      "inputBytes": 353,
+      "ilBytes": 216,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167746-checking-recursive-route-values/post-0007-snippet-04.rsc",
+      "inputBytes": 747,
+      "ilBytes": 295,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167746-checking-recursive-route-values/post-0009-snippet-01.rsc",
+      "inputBytes": 545,
+      "ilBytes": 697,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167913-help-with-hashtags-how-to-replace-them/post-0005-snippet-01.rsc",
+      "inputBytes": 1464,
+      "ilBytes": 1401,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167956-inquire-prompt-user-for-input-using-arrays-choices-qkeys/post-0001-snippet-01.rsc",
+      "inputBytes": 617,
+      "ilBytes": 440,
+      "parseMs": 14,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167956-inquire-prompt-user-for-input-using-arrays-choices-qkeys/post-0001-snippet-02.rsc",
+      "inputBytes": 8958,
+      "ilBytes": 5912,
+      "parseMs": 6,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167956-inquire-prompt-user-for-input-using-arrays-choices-qkeys/post-0014-snippet-01.rsc",
+      "inputBytes": 523,
+      "ilBytes": 40,
+      "parseMs": 18,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167956-inquire-prompt-user-for-input-using-arrays-choices-qkeys/post-0014-snippet-02.rsc",
+      "inputBytes": 358,
+      "ilBytes": 132,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167956-inquire-prompt-user-for-input-using-arrays-choices-qkeys/post-0019-snippet-01.rsc",
+      "inputBytes": 1912,
+      "ilBytes": 1989,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167956-inquire-prompt-user-for-input-using-arrays-choices-qkeys/post-0027-snippet-01.rsc",
+      "inputBytes": 458,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167956-inquire-prompt-user-for-input-using-arrays-choices-qkeys/post-0029-snippet-01.rsc",
+      "inputBytes": 5817,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-167956-inquire-prompt-user-for-input-using-arrays-choices-qkeys/post-0029-snippet-02.rsc",
+      "inputBytes": 453,
+      "ilBytes": 284,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168049-frequent-empty-variables-in-scripts-turned-out-to-be-bug/post-0008-snippet-01.rsc",
+      "inputBytes": 423,
+      "ilBytes": 326,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168093-chalk-function-for-colorizing-text-output-using-ansi-codes/post-0001-snippet-01.rsc",
+      "inputBytes": 483,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168093-chalk-function-for-colorizing-text-output-using-ansi-codes/post-0001-snippet-02.rsc",
+      "inputBytes": 3746,
+      "ilBytes": 4307,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168093-chalk-function-for-colorizing-text-output-using-ansi-codes/post-0003-snippet-01.rsc",
+      "inputBytes": 422,
+      "ilBytes": 258,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168334-why-does-mikrotik-always-use-veth-in-a-bridge/post-0001-snippet-01.rsc",
+      "inputBytes": 396,
+      "ilBytes": 174,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168376-find-addresses-with-same-octets/post-0003-snippet-01.rsc",
+      "inputBytes": 278,
+      "ilBytes": 83,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168376-find-addresses-with-same-octets/post-0006-snippet-01.rsc",
+      "inputBytes": 527,
+      "ilBytes": 818,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168376-find-addresses-with-same-octets/post-0027-snippet-01.rsc",
+      "inputBytes": 1083,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168376-find-addresses-with-same-octets/post-0027-snippet-02.rsc",
+      "inputBytes": 884,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168376-find-addresses-with-same-octets/post-0027-snippet-03.rsc",
+      "inputBytes": 3199,
+      "ilBytes": 3947,
+      "parseMs": 6,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168376-find-addresses-with-same-octets/post-0027-snippet-04.rsc",
+      "inputBytes": 982,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168376-find-addresses-with-same-octets/post-0027-snippet-05.rsc",
+      "inputBytes": 465,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168376-find-addresses-with-same-octets/post-0037-snippet-01.rsc",
+      "inputBytes": 618,
+      "ilBytes": 39,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168385-how-to-completely-disable-unused-routing-protocols/post-0002-snippet-01.rsc",
+      "inputBytes": 800,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168434-new-feature-back-to-home-vpn/post-0351-snippet-01.rsc",
+      "inputBytes": 771,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168434-new-feature-back-to-home-vpn/post-0362-snippet-01.rsc",
+      "inputBytes": 416,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168494-fakeal-script-to-statistically-generate-random-ips-in-address-list/post-0001-snippet-01.rsc",
+      "inputBytes": 845,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168494-fakeal-script-to-statistically-generate-random-ips-in-address-list/post-0001-snippet-02.rsc",
+      "inputBytes": 919,
+      "ilBytes": 39,
+      "parseMs": 15,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168494-fakeal-script-to-statistically-generate-random-ips-in-address-list/post-0001-snippet-03.rsc",
+      "inputBytes": 4490,
+      "ilBytes": 5032,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168494-fakeal-script-to-statistically-generate-random-ips-in-address-list/post-0001-snippet-04.rsc",
+      "inputBytes": 574,
+      "ilBytes": 31,
+      "parseMs": 19,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168494-fakeal-script-to-statistically-generate-random-ips-in-address-list/post-0003-snippet-01.rsc",
+      "inputBytes": 6386,
+      "ilBytes": 8403,
+      "parseMs": 5,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168494-fakeal-script-to-statistically-generate-random-ips-in-address-list/post-0010-snippet-01.rsc",
+      "inputBytes": 897,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168494-fakeal-script-to-statistically-generate-random-ips-in-address-list/post-0020-snippet-01.rsc",
+      "inputBytes": 714,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168494-fakeal-script-to-statistically-generate-random-ips-in-address-list/post-0026-snippet-01.rsc",
+      "inputBytes": 640,
+      "ilBytes": 31,
+      "parseMs": 21,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168574-security-issue-changing-rights-disable-delete-the-users-has-no-effect-on-already/post-0013-snippet-01.rsc",
+      "inputBytes": 500,
+      "ilBytes": 388,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168589-simple-querys-output-to-variable/post-0002-snippet-01.rsc",
+      "inputBytes": 361,
+      "ilBytes": 245,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168589-simple-querys-output-to-variable/post-0002-snippet-02.rsc",
+      "inputBytes": 472,
+      "ilBytes": 551,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168598-how-do-i-list-items-in-the-cli-entry/post-0002-snippet-01.rsc",
+      "inputBytes": 305,
+      "ilBytes": 327,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168643-proposal-event-driven-scripting/post-0009-snippet-01.rsc",
+      "inputBytes": 326,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168802-get-public-ip-when-router-is-behind-nat-and-gets-private-ip/post-0022-snippet-01.rsc",
+      "inputBytes": 340,
+      "ilBytes": 121,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168851-v7-12beta-testing-is-released/post-0045-snippet-01.rsc",
+      "inputBytes": 358,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168851-v7-12beta-testing-is-released/post-0139-snippet-01.rsc",
+      "inputBytes": 279,
+      "ilBytes": 225,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168851-v7-12beta-testing-is-released/post-0202-snippet-01.rsc",
+      "inputBytes": 586,
+      "ilBytes": 515,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168851-v7-12beta-testing-is-released/post-0203-snippet-01.rsc",
+      "inputBytes": 269,
+      "ilBytes": 39,
+      "parseMs": 18,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168851-v7-12beta-testing-is-released/post-0211-snippet-01.rsc",
+      "inputBytes": 341,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168851-v7-12beta-testing-is-released/post-0243-snippet-01.rsc",
+      "inputBytes": 1052,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168997-how-to-check-if-special-character-is-present-in-the-message/post-0002-snippet-01.rsc",
+      "inputBytes": 404,
+      "ilBytes": 191,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-168997-how-to-check-if-special-character-is-present-in-the-message/post-0003-snippet-01.rsc",
+      "inputBytes": 457,
+      "ilBytes": 273,
+      "parseMs": 16,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169029-hap-ax3-supported-containers-docker/post-0004-snippet-01.rsc",
+      "inputBytes": 392,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169108-simpler-failover-for-two-gateways-i-found-working/post-0026-snippet-01.rsc",
+      "inputBytes": 347,
+      "ilBytes": 1347,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169176-saving-array-to-file/post-0003-snippet-01.rsc",
+      "inputBytes": 327,
+      "ilBytes": 217,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169176-saving-array-to-file/post-0003-snippet-02.rsc",
+      "inputBytes": 596,
+      "ilBytes": 622,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169189-no-lte-connection-with-sxt-nor-atl-but-within-range-of-tower-bands-13-66/post-0016-snippet-01.rsc",
+      "inputBytes": 2449,
+      "ilBytes": 2469,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169192-foreach-loop-behavior-change-in-version-7/post-0009-snippet-01.rsc",
+      "inputBytes": 332,
+      "ilBytes": 148,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0008-snippet-01.rsc",
+      "inputBytes": 324,
+      "ilBytes": 125,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0008-snippet-02.rsc",
+      "inputBytes": 337,
+      "ilBytes": 174,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0013-snippet-01.rsc",
+      "inputBytes": 324,
+      "ilBytes": 390,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0014-snippet-01.rsc",
+      "inputBytes": 360,
+      "ilBytes": 142,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0021-snippet-01.rsc",
+      "inputBytes": 486,
+      "ilBytes": 315,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0021-snippet-02.rsc",
+      "inputBytes": 449,
+      "ilBytes": 237,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-01.rsc",
+      "inputBytes": 1919,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-02.rsc",
+      "inputBytes": 1163,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-03.rsc",
+      "inputBytes": 1012,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-04.rsc",
+      "inputBytes": 636,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-05.rsc",
+      "inputBytes": 555,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-06.rsc",
+      "inputBytes": 1130,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-07.rsc",
+      "inputBytes": 1511,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-08.rsc",
+      "inputBytes": 835,
+      "ilBytes": 39,
+      "parseMs": 14,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-09.rsc",
+      "inputBytes": 2047,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-10.rsc",
+      "inputBytes": 664,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0029-snippet-11.rsc",
+      "inputBytes": 2059,
+      "ilBytes": 39,
+      "parseMs": 19,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169237-new-command-in-routeros-7/post-0036-snippet-01.rsc",
+      "inputBytes": 340,
+      "ilBytes": 142,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169248-hap-ax-lite-lte6-not-getting-assigned-an-ip-on-lte/post-0014-snippet-01.rsc",
+      "inputBytes": 385,
+      "ilBytes": 1329,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169291-adsl-pcc-and-failover-using-ip-check/post-0004-snippet-01.rsc",
+      "inputBytes": 354,
+      "ilBytes": 1329,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169308-cligames-container-with-unix-cli-games-playable-with-system-telnet/post-0003-snippet-01.rsc",
+      "inputBytes": 2356,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169456-having-the-where-filter-in-scripting-signifantly-increases-the-execution-time-an/post-0006-snippet-01.rsc",
+      "inputBytes": 1730,
+      "ilBytes": 1778,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169571-help-decimal-value-in-tool-netwatch-script/post-0003-snippet-01.rsc",
+      "inputBytes": 326,
+      "ilBytes": 133,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169590-yaml-convert-arrays-to-pretty-yaml-formated-text/post-0001-snippet-01.rsc",
+      "inputBytes": 454,
+      "ilBytes": 252,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169590-yaml-convert-arrays-to-pretty-yaml-formated-text/post-0001-snippet-02.rsc",
+      "inputBytes": 677,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169590-yaml-convert-arrays-to-pretty-yaml-formated-text/post-0001-snippet-03.rsc",
+      "inputBytes": 689,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169590-yaml-convert-arrays-to-pretty-yaml-formated-text/post-0001-snippet-04.rsc",
+      "inputBytes": 2438,
+      "ilBytes": 2614,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169590-yaml-convert-arrays-to-pretty-yaml-formated-text/post-0002-snippet-01.rsc",
+      "inputBytes": 795,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169685-regex-search-in-string-issue/post-0008-snippet-01.rsc",
+      "inputBytes": 472,
+      "ilBytes": 548,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169717-json-parsing-json-to-from-array-type/post-0001-snippet-01.rsc",
+      "inputBytes": 2180,
+      "ilBytes": 1968,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169717-json-parsing-json-to-from-array-type/post-0001-snippet-02.rsc",
+      "inputBytes": 1196,
+      "ilBytes": 1001,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169947-frustrated-trying-to-create-a-script/post-0004-snippet-01.rsc",
+      "inputBytes": 477,
+      "ilBytes": 238,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-169947-frustrated-trying-to-create-a-script/post-0005-snippet-01.rsc",
+      "inputBytes": 512,
+      "ilBytes": 258,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-170062-visual-studio-code-task-for-running-ros-scripts-remotely/post-0002-snippet-01.rsc",
+      "inputBytes": 614,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-171132-v7-13beta-testing-is-released/post-0026-snippet-01.rsc",
+      "inputBytes": 472,
+      "ilBytes": 401,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-171134-can-t-send-script-json-request/post-0003-snippet-01.rsc",
+      "inputBytes": 347,
+      "ilBytes": 1038,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-171425-searching-for-words-in-an-array/post-0006-snippet-01.rsc",
+      "inputBytes": 376,
+      "ilBytes": 254,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-171579-foreach-syntax/post-0003-snippet-01.rsc",
+      "inputBytes": 358,
+      "ilBytes": 410,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-171659-send-a-unicode-symbol-to-telegram-from-an-array-list/post-0003-snippet-01.rsc",
+      "inputBytes": 1547,
+      "ilBytes": 1169,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-171923-v7-13-5-stable-is-released/post-0878-snippet-01.rsc",
+      "inputBytes": 392,
+      "ilBytes": 268,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-172341-add-array-element-inside-for-foreach/post-0008-snippet-01.rsc",
+      "inputBytes": 454,
+      "ilBytes": 326,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-172543-conditional-not-boolean-bug-with-onerror-new-in-7-13/post-0022-snippet-01.rsc",
+      "inputBytes": 385,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-172543-conditional-not-boolean-bug-with-onerror-new-in-7-13/post-0025-snippet-01.rsc",
+      "inputBytes": 458,
+      "ilBytes": 41,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-172741-easy-container-update-script/post-0004-snippet-01.rsc",
+      "inputBytes": 14530,
+      "ilBytes": 33,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173274-routerosv7-terminal-is-substantially-worse-to-use/post-0005-snippet-01.rsc",
+      "inputBytes": 2724,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173298-how-using-query-stack-in-rest-api/post-0003-snippet-01.rsc",
+      "inputBytes": 1086,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173568-test-if-array-is-associative-multi-dimensional-or-simple-list/post-0005-snippet-01.rsc",
+      "inputBytes": 380,
+      "ilBytes": 259,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173568-test-if-array-is-associative-multi-dimensional-or-simple-list/post-0009-snippet-01.rsc",
+      "inputBytes": 386,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173568-test-if-array-is-associative-multi-dimensional-or-simple-list/post-0014-snippet-01.rsc",
+      "inputBytes": 424,
+      "ilBytes": 239,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173756-piano-interactive-player-piano-studio-quality-recorder-using-beep/post-0001-snippet-01.rsc",
+      "inputBytes": 11956,
+      "ilBytes": 10343,
+      "parseMs": 7,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173805-chr-using-apple-virtualization-qemu-via-macos-utm/post-0081-snippet-01.rsc",
+      "inputBytes": 1131,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173937-howto-import-zerotier-members-into-mikrotik-dns-using-zt2dns/post-0001-snippet-01.rsc",
+      "inputBytes": 1782,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173937-howto-import-zerotier-members-into-mikrotik-dns-using-zt2dns/post-0001-snippet-02.rsc",
+      "inputBytes": 608,
+      "ilBytes": 39,
+      "parseMs": 12,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173937-howto-import-zerotier-members-into-mikrotik-dns-using-zt2dns/post-0003-snippet-01.rsc",
+      "inputBytes": 622,
+      "ilBytes": 149,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173937-howto-import-zerotier-members-into-mikrotik-dns-using-zt2dns/post-0003-snippet-02.rsc",
+      "inputBytes": 5116,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173937-howto-import-zerotier-members-into-mikrotik-dns-using-zt2dns/post-0003-snippet-03.rsc",
+      "inputBytes": 1179,
+      "ilBytes": 293,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173937-howto-import-zerotier-members-into-mikrotik-dns-using-zt2dns/post-0004-snippet-01.rsc",
+      "inputBytes": 2368,
+      "ilBytes": 2140,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173937-howto-import-zerotier-members-into-mikrotik-dns-using-zt2dns/post-0004-snippet-02.rsc",
+      "inputBytes": 1067,
+      "ilBytes": 679,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-173937-howto-import-zerotier-members-into-mikrotik-dns-using-zt2dns/post-0004-snippet-03.rsc",
+      "inputBytes": 1587,
+      "ilBytes": 1494,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174004-fetch-seems-to-behave-different-when-called-in-function/post-0008-snippet-01.rsc",
+      "inputBytes": 363,
+      "ilBytes": 195,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174004-fetch-seems-to-behave-different-when-called-in-function/post-0008-snippet-02.rsc",
+      "inputBytes": 365,
+      "ilBytes": 197,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174102-retrieveing-a-global-variable-readonly-to-a-local-variable/post-0006-snippet-01.rsc",
+      "inputBytes": 445,
+      "ilBytes": 436,
+      "parseMs": 13,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174102-retrieveing-a-global-variable-readonly-to-a-local-variable/post-0009-snippet-01.rsc",
+      "inputBytes": 553,
+      "ilBytes": 289,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174120-v7-15beta-testing-is-released/post-0232-snippet-01.rsc",
+      "inputBytes": 351,
+      "ilBytes": 181,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174120-v7-15beta-testing-is-released/post-0266-snippet-01.rsc",
+      "inputBytes": 399,
+      "ilBytes": 258,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174145-wireguard-multi-wan-policy-routing/post-0064-snippet-01.rsc",
+      "inputBytes": 805,
+      "ilBytes": 735,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174279-how-can-i-use-rest-api-to-run-a-script/post-0002-snippet-01.rsc",
+      "inputBytes": 392,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174305-snmpwalk-snmpget-can-t-read-global-variable/post-0010-snippet-01.rsc",
+      "inputBytes": 974,
+      "ilBytes": 718,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174380-adjusting-netwatch-icmp-check-by-of-current-rtt-values-scalenetwatch/post-0001-snippet-01.rsc",
+      "inputBytes": 634,
+      "ilBytes": 933,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174380-adjusting-netwatch-icmp-check-by-of-current-rtt-values-scalenetwatch/post-0001-snippet-02.rsc",
+      "inputBytes": 714,
+      "ilBytes": 31,
+      "parseMs": 15,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174380-adjusting-netwatch-icmp-check-by-of-current-rtt-values-scalenetwatch/post-0001-snippet-03.rsc",
+      "inputBytes": 2132,
+      "ilBytes": 2454,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174380-adjusting-netwatch-icmp-check-by-of-current-rtt-values-scalenetwatch/post-0005-snippet-01.rsc",
+      "inputBytes": 503,
+      "ilBytes": 299,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174404-v7-15beta-broke-backup-file-naming/post-0032-snippet-01.rsc",
+      "inputBytes": 398,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174437-a-call-for-a-lite-version-of-routeros-7-image-size-reduction/post-0002-snippet-01.rsc",
+      "inputBytes": 2245,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174618-isolate-a-value-from-a-console-output/post-0015-snippet-01.rsc",
+      "inputBytes": 413,
+      "ilBytes": 524,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174770-convert-c-sample-to-knot-script/post-0002-snippet-01.rsc",
+      "inputBytes": 672,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174770-convert-c-sample-to-knot-script/post-0004-snippet-01.rsc",
+      "inputBytes": 446,
+      "ilBytes": 378,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174770-convert-c-sample-to-knot-script/post-0004-snippet-02.rsc",
+      "inputBytes": 410,
+      "ilBytes": 325,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174770-convert-c-sample-to-knot-script/post-0005-snippet-01.rsc",
+      "inputBytes": 662,
+      "ilBytes": 706,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174770-convert-c-sample-to-knot-script/post-0008-snippet-01.rsc",
+      "inputBytes": 1483,
+      "ilBytes": 1328,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174770-convert-c-sample-to-knot-script/post-0010-snippet-01.rsc",
+      "inputBytes": 985,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174873-multiple-wan-the-third-wan-on-sfp3/post-0022-snippet-01.rsc",
+      "inputBytes": 420,
+      "ilBytes": 1471,
+      "parseMs": 16,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174886-problem-with-pick/post-0003-snippet-01.rsc",
+      "inputBytes": 371,
+      "ilBytes": 942,
+      "parseMs": 18,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-174886-problem-with-pick/post-0003-snippet-02.rsc",
+      "inputBytes": 307,
+      "ilBytes": 831,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175320-can-t-query-graphql-site/post-0006-snippet-01.rsc",
+      "inputBytes": 1434,
+      "ilBytes": 1258,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175320-can-t-query-graphql-site/post-0012-snippet-01.rsc",
+      "inputBytes": 1113,
+      "ilBytes": 767,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175320-can-t-query-graphql-site/post-0015-snippet-01.rsc",
+      "inputBytes": 663,
+      "ilBytes": 233,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175320-can-t-query-graphql-site/post-0015-snippet-02.rsc",
+      "inputBytes": 532,
+      "ilBytes": 294,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175320-can-t-query-graphql-site/post-0016-snippet-01.rsc",
+      "inputBytes": 663,
+      "ilBytes": 233,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175320-can-t-query-graphql-site/post-0016-snippet-02.rsc",
+      "inputBytes": 532,
+      "ilBytes": 294,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175320-can-t-query-graphql-site/post-0025-snippet-01.rsc",
+      "inputBytes": 1090,
+      "ilBytes": 907,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175320-can-t-query-graphql-site/post-0027-snippet-01.rsc",
+      "inputBytes": 1031,
+      "ilBytes": 436,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175540-get-two-public-ip-on-the-same-interface/post-0009-snippet-01.rsc",
+      "inputBytes": 504,
+      "ilBytes": 333,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175543-my-script-does-not-work-in-v7-10/post-0006-snippet-01.rsc",
+      "inputBytes": 567,
+      "ilBytes": 418,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175598-unexpected-behavior-when-finding-by-variable-value/post-0005-snippet-01.rsc",
+      "inputBytes": 331,
+      "ilBytes": 124,
+      "parseMs": 12,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175598-unexpected-behavior-when-finding-by-variable-value/post-0005-snippet-02.rsc",
+      "inputBytes": 352,
+      "ilBytes": 150,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-175900-horrible-container-performance-from-7-14-up-to-7-15rc2/post-0021-snippet-01.rsc",
+      "inputBytes": 737,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176050-ready-variable-from-file-rsc/post-0008-snippet-01.rsc",
+      "inputBytes": 358,
+      "ilBytes": 245,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176103-remove-find-gets-stuck-while-executing/post-0005-snippet-01.rsc",
+      "inputBytes": 327,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176267-2fa-configuration-to-mikrotik-router-issue/post-0006-snippet-01.rsc",
+      "inputBytes": 774,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176277-update-a-variable-with-a-function/post-0002-snippet-01.rsc",
+      "inputBytes": 348,
+      "ilBytes": 215,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176277-update-a-variable-with-a-function/post-0002-snippet-02.rsc",
+      "inputBytes": 375,
+      "ilBytes": 239,
+      "parseMs": 15,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176277-update-a-variable-with-a-function/post-0002-snippet-03.rsc",
+      "inputBytes": 384,
+      "ilBytes": 249,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176277-update-a-variable-with-a-function/post-0004-snippet-01.rsc",
+      "inputBytes": 364,
+      "ilBytes": 223,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176282-mikrotik-events-script-new-abroach/post-0008-snippet-01.rsc",
+      "inputBytes": 401,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176329-mikrotik-atl-lte18-in-bridged-mode/post-0006-snippet-01.rsc",
+      "inputBytes": 545,
+      "ilBytes": 1607,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176329-mikrotik-atl-lte18-in-bridged-mode/post-0006-snippet-02.rsc",
+      "inputBytes": 392,
+      "ilBytes": 42,
+      "parseMs": 17,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176336-deserialize-json-skin-vs-api/post-0004-snippet-01.rsc",
+      "inputBytes": 412,
+      "ilBytes": 265,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176370-script-not-running/post-0003-snippet-01.rsc",
+      "inputBytes": 750,
+      "ilBytes": 357,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176370-script-not-running/post-0003-snippet-02.rsc",
+      "inputBytes": 1559,
+      "ilBytes": 32,
+      "parseMs": 21,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176376-the-issue-of-a-function-containing-variables-unsuccessfully/post-0013-snippet-01.rsc",
+      "inputBytes": 392,
+      "ilBytes": 1145,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176494-v7-16beta-testing-is-released/post-0019-snippet-01.rsc",
+      "inputBytes": 1258,
+      "ilBytes": 820,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176494-v7-16beta-testing-is-released/post-0049-snippet-01.rsc",
+      "inputBytes": 564,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176540-script-execution-error-dynu-com-7-13-was-fine-7-15-no-bueno/post-0009-snippet-01.rsc",
+      "inputBytes": 348,
+      "ilBytes": 104,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176540-script-execution-error-dynu-com-7-13-was-fine-7-15-no-bueno/post-0009-snippet-02.rsc",
+      "inputBytes": 4329,
+      "ilBytes": 4763,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176540-script-execution-error-dynu-com-7-13-was-fine-7-15-no-bueno/post-0009-snippet-03.rsc",
+      "inputBytes": 348,
+      "ilBytes": 104,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176540-script-execution-error-dynu-com-7-13-was-fine-7-15-no-bueno/post-0014-snippet-01.rsc",
+      "inputBytes": 368,
+      "ilBytes": 152,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176861-export-session-csv/post-0005-snippet-01.rsc",
+      "inputBytes": 1429,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176872-regex-format-in-conditional-dns-forwarding/post-0009-snippet-01.rsc",
+      "inputBytes": 297,
+      "ilBytes": 67,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176872-regex-format-in-conditional-dns-forwarding/post-0012-snippet-01.rsc",
+      "inputBytes": 418,
+      "ilBytes": 203,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176872-regex-format-in-conditional-dns-forwarding/post-0021-snippet-01.rsc",
+      "inputBytes": 290,
+      "ilBytes": 71,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176872-regex-format-in-conditional-dns-forwarding/post-0021-snippet-02.rsc",
+      "inputBytes": 279,
+      "ilBytes": 167,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176872-regex-format-in-conditional-dns-forwarding/post-0025-snippet-01.rsc",
+      "inputBytes": 298,
+      "ilBytes": 76,
+      "parseMs": 11,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176872-regex-format-in-conditional-dns-forwarding/post-0025-snippet-02.rsc",
+      "inputBytes": 299,
+      "ilBytes": 73,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176920-get-ip/post-0002-snippet-01.rsc",
+      "inputBytes": 282,
+      "ilBytes": 210,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-176936-lte-gw/post-0003-snippet-01.rsc",
+      "inputBytes": 636,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-177491-dos2unix-script/post-0004-snippet-01.rsc",
+      "inputBytes": 305,
+      "ilBytes": 149,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178036-reach-lan-from-zerotier-with-own-controller/post-0003-snippet-01.rsc",
+      "inputBytes": 521,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178358-winbox-4-is-here/post-3253-snippet-01.rsc",
+      "inputBytes": 13918,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178444-new-container-project-mikrotik-upgrade-server-mus/post-0004-snippet-01.rsc",
+      "inputBytes": 512,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178600-the-start-parameter-of-the-find-function/post-0006-snippet-01.rsc",
+      "inputBytes": 359,
+      "ilBytes": 242,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178801-running-node-red-on-container-which-one/post-0017-snippet-01.rsc",
+      "inputBytes": 2723,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178803-containers-wont-start-on-rb3011-uias/post-0006-snippet-01.rsc",
+      "inputBytes": 662,
+      "ilBytes": 737,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178856-find-vs-find/post-0004-snippet-01.rsc",
+      "inputBytes": 922,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178918-wishes-for-7-17-beta/post-0008-snippet-01.rsc",
+      "inputBytes": 447,
+      "ilBytes": 31,
+      "parseMs": 20,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178928-get-variables-from-file/post-0002-snippet-01.rsc",
+      "inputBytes": 987,
+      "ilBytes": 714,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178932-logical-or-over-number/post-0008-snippet-01.rsc",
+      "inputBytes": 480,
+      "ilBytes": 309,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178932-logical-or-over-number/post-0013-snippet-01.rsc",
+      "inputBytes": 312,
+      "ilBytes": 132,
+      "parseMs": 20,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178945-how-to-query-by-query-words/post-0005-snippet-01.rsc",
+      "inputBytes": 852,
+      "ilBytes": 715,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178959-bug-report-incorrect-conversion-of-numeric-strings-to-json-in-routeros/post-0006-snippet-01.rsc",
+      "inputBytes": 418,
+      "ilBytes": 176,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178987-trouble-can-t-connect-to-atl-after-update/post-0035-snippet-01.rsc",
+      "inputBytes": 457,
+      "ilBytes": 31,
+      "parseMs": 19,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178998-add-more-logged-detail-to-fetch/post-0003-snippet-01.rsc",
+      "inputBytes": 1037,
+      "ilBytes": 1024,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-178998-add-more-logged-detail-to-fetch/post-0005-snippet-01.rsc",
+      "inputBytes": 449,
+      "ilBytes": 392,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179003-v7-17beta-testing-is-released/post-0042-snippet-01.rsc",
+      "inputBytes": 316,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179003-v7-17beta-testing-is-released/post-0042-snippet-02.rsc",
+      "inputBytes": 478,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179003-v7-17beta-testing-is-released/post-0055-snippet-01.rsc",
+      "inputBytes": 613,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179003-v7-17beta-testing-is-released/post-0287-snippet-01.rsc",
+      "inputBytes": 444,
+      "ilBytes": 42,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179003-v7-17beta-testing-is-released/post-0341-snippet-01.rsc",
+      "inputBytes": 395,
+      "ilBytes": 217,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179108-ros-scripting-question/post-0005-snippet-01.rsc",
+      "inputBytes": 941,
+      "ilBytes": 532,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179108-ros-scripting-question/post-0005-snippet-02.rsc",
+      "inputBytes": 988,
+      "ilBytes": 43,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179114-the-irrationality-of-find/post-0007-snippet-01.rsc",
+      "inputBytes": 328,
+      "ilBytes": 726,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179114-the-irrationality-of-find/post-0018-snippet-01.rsc",
+      "inputBytes": 361,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179159-modify-files-inside-mikrotik/post-0014-snippet-01.rsc",
+      "inputBytes": 4285,
+      "ilBytes": 4340,
+      "parseMs": 5,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179159-modify-files-inside-mikrotik/post-0014-snippet-02.rsc",
+      "inputBytes": 569,
+      "ilBytes": 278,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179166-inconsistent-boolean-conversion/post-0002-snippet-01.rsc",
+      "inputBytes": 298,
+      "ilBytes": 153,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179268-experiments-with-convert-for-bits-bytes-csv-from-iot/post-0001-snippet-01.rsc",
+      "inputBytes": 3436,
+      "ilBytes": 3622,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179268-experiments-with-convert-for-bits-bytes-csv-from-iot/post-0001-snippet-02.rsc",
+      "inputBytes": 425,
+      "ilBytes": 194,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179268-experiments-with-convert-for-bits-bytes-csv-from-iot/post-0001-snippet-03.rsc",
+      "inputBytes": 449,
+      "ilBytes": 218,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179268-experiments-with-convert-for-bits-bytes-csv-from-iot/post-0003-snippet-01.rsc",
+      "inputBytes": 605,
+      "ilBytes": 560,
+      "parseMs": 20,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179387-project-mikrotik-proxy-manager/post-0002-snippet-01.rsc",
+      "inputBytes": 1621,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179598-how-to-access-time-with-milliseconds-in-a-script/post-0003-snippet-01.rsc",
+      "inputBytes": 340,
+      "ilBytes": 108,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179598-how-to-access-time-with-milliseconds-in-a-script/post-0003-snippet-02.rsc",
+      "inputBytes": 439,
+      "ilBytes": 242,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179893-how-to-read-line-by-line-from-a-file-using-a-script/post-0004-snippet-01.rsc",
+      "inputBytes": 768,
+      "ilBytes": 652,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-179893-how-to-read-line-by-line-from-a-file-using-a-script/post-0013-snippet-01.rsc",
+      "inputBytes": 477,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-180141-for-the-love-of-deity-of-choice-fix-your-friggen-forum-website/post-0051-snippet-01.rsc",
+      "inputBytes": 458,
+      "ilBytes": 31,
+      "parseMs": 13,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-180563-concatenate-variable-names/post-0003-snippet-01.rsc",
+      "inputBytes": 260,
+      "ilBytes": 109,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-180595-resutt-of-print-command-to-variable-adress-list/post-0009-snippet-01.rsc",
+      "inputBytes": 426,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-180659-user-manager-export-users/post-0003-snippet-01.rsc",
+      "inputBytes": 358,
+      "ilBytes": 31,
+      "parseMs": 20,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-180741-using-return-from-onerror-in-command-block/post-0008-snippet-01.rsc",
+      "inputBytes": 809,
+      "ilBytes": 595,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-180943-docker-built-containers-won-t-work-on-mikrotik/post-0010-snippet-01.rsc",
+      "inputBytes": 534,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181208-home-assistant-container-on-routeros-fails-to-extract-and-start/post-0012-snippet-01.rsc",
+      "inputBytes": 664,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181344-home-assistant-container-success-stories/post-0004-snippet-01.rsc",
+      "inputBytes": 588,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181371-v7-18beta-testing-is-released/post-0038-snippet-01.rsc",
+      "inputBytes": 526,
+      "ilBytes": 279,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181371-v7-18beta-testing-is-released/post-0050-snippet-01.rsc",
+      "inputBytes": 1603,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181371-v7-18beta-testing-is-released/post-0050-snippet-02.rsc",
+      "inputBytes": 489,
+      "ilBytes": 31,
+      "parseMs": 19,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181371-v7-18beta-testing-is-released/post-0213-snippet-01.rsc",
+      "inputBytes": 589,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181371-v7-18beta-testing-is-released/post-0278-snippet-01.rsc",
+      "inputBytes": 1112,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0001-snippet-01.rsc",
+      "inputBytes": 9896,
+      "ilBytes": 13315,
+      "parseMs": 7,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0001-snippet-02.rsc",
+      "inputBytes": 348,
+      "ilBytes": 71,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0001-snippet-03.rsc",
+      "inputBytes": 1189,
+      "ilBytes": 40,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0001-snippet-04.rsc",
+      "inputBytes": 321,
+      "ilBytes": 33,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0001-snippet-05.rsc",
+      "inputBytes": 1820,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0001-snippet-06.rsc",
+      "inputBytes": 1152,
+      "ilBytes": 43,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0001-snippet-07.rsc",
+      "inputBytes": 320,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0001-snippet-08.rsc",
+      "inputBytes": 493,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0008-snippet-01.rsc",
+      "inputBytes": 441,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0011-snippet-01.rsc",
+      "inputBytes": 387,
+      "ilBytes": 30,
+      "parseMs": 20,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0013-snippet-01.rsc",
+      "inputBytes": 565,
+      "ilBytes": 448,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0013-snippet-02.rsc",
+      "inputBytes": 1418,
+      "ilBytes": 1456,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0017-snippet-01.rsc",
+      "inputBytes": 582,
+      "ilBytes": 395,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0020-snippet-01.rsc",
+      "inputBytes": 582,
+      "ilBytes": 395,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0020-snippet-02.rsc",
+      "inputBytes": 1142,
+      "ilBytes": 528,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0024-snippet-01.rsc",
+      "inputBytes": 535,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0027-snippet-01.rsc",
+      "inputBytes": 398,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0029-snippet-01.rsc",
+      "inputBytes": 1653,
+      "ilBytes": 1668,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0029-snippet-02.rsc",
+      "inputBytes": 49697,
+      "ilBytes": 59983,
+      "parseMs": 231,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181480-example-of-automating-vlan-creation-removal-inspecting-using-mkvlan-friends/post-0032-snippet-01.rsc",
+      "inputBytes": 581,
+      "ilBytes": 244,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181654-question-on-using-the-internal-zerotier-controller/post-0011-snippet-01.rsc",
+      "inputBytes": 652,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181654-question-on-using-the-internal-zerotier-controller/post-0023-snippet-01.rsc",
+      "inputBytes": 2169,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181654-question-on-using-the-internal-zerotier-controller/post-0024-snippet-01.rsc",
+      "inputBytes": 652,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181654-question-on-using-the-internal-zerotier-controller/post-0029-snippet-01.rsc",
+      "inputBytes": 558,
+      "ilBytes": 31,
+      "parseMs": 13,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181665-error-in-gateway-non-zero-ip-address-expected-when-using-quick-set/post-0012-snippet-01.rsc",
+      "inputBytes": 1307,
+      "ilBytes": 1456,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-181789-uploading-files-from-bash-to-7-18-s-ip-cloud-file-share-feature-using-curl/post-0001-snippet-01.rsc",
+      "inputBytes": 838,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-182169-which-is-the-best-5g-modem-compatible-with-ros7/post-0017-snippet-01.rsc",
+      "inputBytes": 1614,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-182244-use-24-fw-rules-for-23-subnets/post-0021-snippet-01.rsc",
+      "inputBytes": 342,
+      "ilBytes": 305,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-182323-v7-19beta-testing-is-released/post-0157-snippet-01.rsc",
+      "inputBytes": 508,
+      "ilBytes": 375,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-182608-wgshare-using-ip-cloud-file-share-for-wg-peer-client-config-complaints/post-0001-snippet-01.rsc",
+      "inputBytes": 464,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-182608-wgshare-using-ip-cloud-file-share-for-wg-peer-client-config-complaints/post-0001-snippet-02.rsc",
+      "inputBytes": 1965,
+      "ilBytes": 32,
+      "parseMs": 20,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-182894-what-does-op-type-do/post-0003-snippet-01.rsc",
+      "inputBytes": 341,
+      "ilBytes": 223,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-182894-what-does-op-type-do/post-0003-snippet-02.rsc",
+      "inputBytes": 248,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-182894-what-does-op-type-do/post-0005-snippet-01.rsc",
+      "inputBytes": 470,
+      "ilBytes": 270,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-182894-what-does-op-type-do/post-0005-snippet-02.rsc",
+      "inputBytes": 446,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-182990-variable-names-and-where-expressions/post-0009-snippet-01.rsc",
+      "inputBytes": 272,
+      "ilBytes": 254,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183145-route-vlan-traffic-to-office-internet-using-zerotier/post-0002-snippet-01.rsc",
+      "inputBytes": 536,
+      "ilBytes": 202,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183452-using-ai-to-help-configuring-routeros-and-scripting/post-0016-snippet-01.rsc",
+      "inputBytes": 574,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183452-using-ai-to-help-configuring-routeros-and-scripting/post-0036-snippet-01.rsc",
+      "inputBytes": 666,
+      "ilBytes": 432,
+      "parseMs": 14,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183452-using-ai-to-help-configuring-routeros-and-scripting/post-0049-snippet-01.rsc",
+      "inputBytes": 16480,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183538-im-seeking-a-little-help-please-curl-fetch-translation/post-0002-snippet-01.rsc",
+      "inputBytes": 962,
+      "ilBytes": 223,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183538-im-seeking-a-little-help-please-curl-fetch-translation/post-0002-snippet-02.rsc",
+      "inputBytes": 532,
+      "ilBytes": 332,
+      "parseMs": 15,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183585-scripting-in-the-context-of-netwatch/post-0019-snippet-01.rsc",
+      "inputBytes": 415,
+      "ilBytes": 1030,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183709-ros-tesseract-open-source-routeros-monitoring/post-0002-snippet-01.rsc",
+      "inputBytes": 1062,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183944-v7-20beta-testing-is-released/post-0042-snippet-01.rsc",
+      "inputBytes": 475,
+      "ilBytes": 283,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183944-v7-20beta-testing-is-released/post-0052-snippet-01.rsc",
+      "inputBytes": 4376,
+      "ilBytes": 43,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-183944-v7-20beta-testing-is-released/post-0077-snippet-01.rsc",
+      "inputBytes": 1105,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-184067-routeros-lsp-for-better-syntax-checking-command-completion-in-editors-like-vscod/post-0001-snippet-01.rsc",
+      "inputBytes": 1475,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-184067-routeros-lsp-for-better-syntax-checking-command-completion-in-editors-like-vscod/post-0002-snippet-01.rsc",
+      "inputBytes": 1892,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-184067-routeros-lsp-for-better-syntax-checking-command-completion-in-editors-like-vscod/post-0002-snippet-02.rsc",
+      "inputBytes": 2996,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-184067-routeros-lsp-for-better-syntax-checking-command-completion-in-editors-like-vscod/post-0002-snippet-03.rsc",
+      "inputBytes": 777,
+      "ilBytes": 39,
+      "parseMs": 12,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-184067-routeros-lsp-for-better-syntax-checking-command-completion-in-editors-like-vscod/post-0002-snippet-04.rsc",
+      "inputBytes": 1336,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-184067-routeros-lsp-for-better-syntax-checking-command-completion-in-editors-like-vscod/post-0014-snippet-01.rsc",
+      "inputBytes": 524,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-184067-routeros-lsp-for-better-syntax-checking-command-completion-in-editors-like-vscod/post-0014-snippet-02.rsc",
+      "inputBytes": 738,
+      "ilBytes": 476,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-184067-routeros-lsp-for-better-syntax-checking-command-completion-in-editors-like-vscod/post-0014-snippet-03.rsc",
+      "inputBytes": 551,
+      "ilBytes": 287,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-184067-routeros-lsp-for-better-syntax-checking-command-completion-in-editors-like-vscod/post-0020-snippet-01.rsc",
+      "inputBytes": 376,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-21737-decimals/post-0010-snippet-01.rsc",
+      "inputBytes": 373,
+      "ilBytes": 31,
+      "parseMs": 19,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-21737-decimals/post-0010-snippet-02.rsc",
+      "inputBytes": 508,
+      "ilBytes": 758,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-21737-decimals/post-0011-snippet-01.rsc",
+      "inputBytes": 2927,
+      "ilBytes": 3923,
+      "parseMs": 4,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-21737-decimals/post-0011-snippet-02.rsc",
+      "inputBytes": 251,
+      "ilBytes": 172,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-21737-decimals/post-0011-snippet-03.rsc",
+      "inputBytes": 868,
+      "ilBytes": 1670,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-261562-using-caddy-server-as-cors-proxy-for-rest-api/post-0001-snippet-01.rsc",
+      "inputBytes": 920,
+      "ilBytes": 43,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-261912-amm0-s-forum-plugins-tests-routeros-graphviz-diagrams-colors/post-0001-snippet-01.rsc",
+      "inputBytes": 393,
+      "ilBytes": 123,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-261912-amm0-s-forum-plugins-tests-routeros-graphviz-diagrams-colors/post-0001-snippet-02.rsc",
+      "inputBytes": 634,
+      "ilBytes": 43,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-261912-amm0-s-forum-plugins-tests-routeros-graphviz-diagrams-colors/post-0001-snippet-03.rsc",
+      "inputBytes": 6485,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-261912-amm0-s-forum-plugins-tests-routeros-graphviz-diagrams-colors/post-0003-snippet-01.rsc",
+      "inputBytes": 720,
+      "ilBytes": 580,
+      "parseMs": 18,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-261912-amm0-s-forum-plugins-tests-routeros-graphviz-diagrams-colors/post-0008-snippet-01.rsc",
+      "inputBytes": 919,
+      "ilBytes": 889,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-261912-amm0-s-forum-plugins-tests-routeros-graphviz-diagrams-colors/post-0012-snippet-01.rsc",
+      "inputBytes": 354,
+      "ilBytes": 446,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-261912-amm0-s-forum-plugins-tests-routeros-graphviz-diagrams-colors/post-0012-snippet-02.rsc",
+      "inputBytes": 354,
+      "ilBytes": 446,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-261912-amm0-s-forum-plugins-tests-routeros-graphviz-diagrams-colors/post-0014-snippet-01.rsc",
+      "inputBytes": 11929,
+      "ilBytes": 10343,
+      "parseMs": 8,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-262235-accessing-starlink-dish-interface-192-168-100-1-with-hap-ax-lite-solved/post-0002-snippet-01.rsc",
+      "inputBytes": 348,
+      "ilBytes": 61,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-262517-create-macro-or-small-script/post-0007-snippet-01.rsc",
+      "inputBytes": 367,
+      "ilBytes": 1137,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-262517-create-macro-or-small-script/post-0007-snippet-02.rsc",
+      "inputBytes": 283,
+      "ilBytes": 125,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-262655-would-like-new-data-appended-to-file/post-0038-snippet-01.rsc",
+      "inputBytes": 326,
+      "ilBytes": 217,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-262655-would-like-new-data-appended-to-file/post-0067-snippet-01.rsc",
+      "inputBytes": 690,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-262819-inconsistence-between-config-export-from-rest-api-vs-webui/post-0004-snippet-01.rsc",
+      "inputBytes": 550,
+      "ilBytes": 307,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-262977-pretty-columns-in-put/post-0001-snippet-01.rsc",
+      "inputBytes": 431,
+      "ilBytes": 410,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-262999-export-dhcp-leases-to-csv-format/post-0007-snippet-01.rsc",
+      "inputBytes": 448,
+      "ilBytes": 270,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-263305-tikbooktm-notebook-and-tools-for-visual-studio-code-including-routeros-lsp/post-0001-snippet-01.rsc",
+      "inputBytes": 368,
+      "ilBytes": 83,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-263305-tikbooktm-notebook-and-tools-for-visual-studio-code-including-routeros-lsp/post-0001-snippet-02.rsc",
+      "inputBytes": 482,
+      "ilBytes": 199,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-263305-tikbooktm-notebook-and-tools-for-visual-studio-code-including-routeros-lsp/post-0001-snippet-03.rsc",
+      "inputBytes": 359,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-263305-tikbooktm-notebook-and-tools-for-visual-studio-code-including-routeros-lsp/post-0001-snippet-04.rsc",
+      "inputBytes": 471,
+      "ilBytes": 153,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-263305-tikbooktm-notebook-and-tools-for-visual-studio-code-including-routeros-lsp/post-0002-snippet-01.rsc",
+      "inputBytes": 378,
+      "ilBytes": 122,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-263305-tikbooktm-notebook-and-tools-for-visual-studio-code-including-routeros-lsp/post-0002-snippet-02.rsc",
+      "inputBytes": 473,
+      "ilBytes": 47,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-264179-how-to-add-2fa-to-mikrotik-logins/post-0012-snippet-01.rsc",
+      "inputBytes": 629,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-264179-how-to-add-2fa-to-mikrotik-logins/post-0012-snippet-02.rsc",
+      "inputBytes": 1125,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-264179-how-to-add-2fa-to-mikrotik-logins/post-0012-snippet-03.rsc",
+      "inputBytes": 304,
+      "ilBytes": 31,
+      "parseMs": 21,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-264287-how-to-get-value-from-json-string-using-scripts/post-0002-snippet-01.rsc",
+      "inputBytes": 699,
+      "ilBytes": 655,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-264287-how-to-get-value-from-json-string-using-scripts/post-0002-snippet-02.rsc",
+      "inputBytes": 567,
+      "ilBytes": 437,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-264287-how-to-get-value-from-json-string-using-scripts/post-0002-snippet-03.rsc",
+      "inputBytes": 453,
+      "ilBytes": 284,
+      "parseMs": 20,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-264287-how-to-get-value-from-json-string-using-scripts/post-0005-snippet-01.rsc",
+      "inputBytes": 642,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-264364-catching-debug-log/post-0003-snippet-01.rsc",
+      "inputBytes": 285,
+      "ilBytes": 386,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-264534-tik-view-a-customiezed-webfig-page/post-0041-snippet-01.rsc",
+      "inputBytes": 435,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-264534-tik-view-a-customiezed-webfig-page/post-0041-snippet-02.rsc",
+      "inputBytes": 532,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-265403-v7-21beta-testing-is-released/post-0419-snippet-01.rsc",
+      "inputBytes": 388,
+      "ilBytes": 188,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-265864-reaching-a-subnet-on-lan/post-0011-snippet-01.rsc",
+      "inputBytes": 333,
+      "ilBytes": 149,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266277-copy-firewall-rules-and-settings/post-0003-snippet-01.rsc",
+      "inputBytes": 322,
+      "ilBytes": 130,
+      "parseMs": 21,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266277-copy-firewall-rules-and-settings/post-0003-snippet-02.rsc",
+      "inputBytes": 469,
+      "ilBytes": 281,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266277-copy-firewall-rules-and-settings/post-0004-snippet-01.rsc",
+      "inputBytes": 527,
+      "ilBytes": 255,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266374-revisiting-ros-7-20-4-toip-command/post-0012-snippet-01.rsc",
+      "inputBytes": 375,
+      "ilBytes": 179,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266499-how-to-condense-variables-passed-through-to-function/post-0020-snippet-01.rsc",
+      "inputBytes": 290,
+      "ilBytes": 62,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266499-how-to-condense-variables-passed-through-to-function/post-0024-snippet-01.rsc",
+      "inputBytes": 285,
+      "ilBytes": 67,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266665-routeros-rest-api-requests-running-in-series/post-0002-snippet-01.rsc",
+      "inputBytes": 1368,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266842-v7-21rc-testing-is-released/post-0064-snippet-01.rsc",
+      "inputBytes": 1055,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266842-v7-21rc-testing-is-released/post-0064-snippet-02.rsc",
+      "inputBytes": 539,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266842-v7-21rc-testing-is-released/post-0287-snippet-01.rsc",
+      "inputBytes": 341,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266974-beginner-s-question-about-config-dual-wan-failover-warp/post-0025-snippet-01.rsc",
+      "inputBytes": 533,
+      "ilBytes": 336,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-266974-beginner-s-question-about-config-dual-wan-failover-warp/post-0045-snippet-01.rsc",
+      "inputBytes": 611,
+      "ilBytes": 421,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267329-corebit-network-topology-monitoring-tool-inspired-by-the-dude/post-0140-snippet-01.rsc",
+      "inputBytes": 7090,
+      "ilBytes": 43,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0050-snippet-01.rsc",
+      "inputBytes": 582,
+      "ilBytes": 771,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0050-snippet-02.rsc",
+      "inputBytes": 853,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0085-snippet-01.rsc",
+      "inputBytes": 661,
+      "ilBytes": 1267,
+      "parseMs": 16,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0085-snippet-02.rsc",
+      "inputBytes": 317,
+      "ilBytes": 192,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0091-snippet-01.rsc",
+      "inputBytes": 425,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0162-snippet-01.rsc",
+      "inputBytes": 1080,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0268-snippet-01.rsc",
+      "inputBytes": 664,
+      "ilBytes": 489,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0268-snippet-02.rsc",
+      "inputBytes": 317,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0312-snippet-01.rsc",
+      "inputBytes": 477,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0353-snippet-01.rsc",
+      "inputBytes": 538,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267611-v7-22beta-development-is-released/post-0353-snippet-02.rsc",
+      "inputBytes": 1152,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-01.rsc",
+      "inputBytes": 436,
+      "ilBytes": 176,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-02.rsc",
+      "inputBytes": 568,
+      "ilBytes": 370,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-03.rsc",
+      "inputBytes": 347,
+      "ilBytes": 26,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-04.rsc",
+      "inputBytes": 421,
+      "ilBytes": 723,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-05.rsc",
+      "inputBytes": 588,
+      "ilBytes": 290,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-06.rsc",
+      "inputBytes": 706,
+      "ilBytes": 389,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-07.rsc",
+      "inputBytes": 365,
+      "ilBytes": 69,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-08.rsc",
+      "inputBytes": 505,
+      "ilBytes": 863,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-09.rsc",
+      "inputBytes": 370,
+      "ilBytes": 91,
+      "parseMs": 11,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-10.rsc",
+      "inputBytes": 424,
+      "ilBytes": 737,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-11.rsc",
+      "inputBytes": 467,
+      "ilBytes": 168,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-12.rsc",
+      "inputBytes": 410,
+      "ilBytes": 132,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-13.rsc",
+      "inputBytes": 372,
+      "ilBytes": 208,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-14.rsc",
+      "inputBytes": 546,
+      "ilBytes": 342,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-15.rsc",
+      "inputBytes": 1196,
+      "ilBytes": 850,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-16.rsc",
+      "inputBytes": 2432,
+      "ilBytes": 2751,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-17.rsc",
+      "inputBytes": 450,
+      "ilBytes": 358,
+      "parseMs": 18,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-18.rsc",
+      "inputBytes": 392,
+      "ilBytes": 106,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-19.rsc",
+      "inputBytes": 381,
+      "ilBytes": 217,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-20.rsc",
+      "inputBytes": 615,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-21.rsc",
+      "inputBytes": 442,
+      "ilBytes": 319,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267709-example-creating-self-signed-certificates-including-apple-mobileconfig-using-tik/post-0001-snippet-22.rsc",
+      "inputBytes": 396,
+      "ilBytes": 94,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267735-you-ve-never-seen-a-noob-like-me/post-0004-snippet-01.rsc",
+      "inputBytes": 563,
+      "ilBytes": 391,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267809-netinstall-for-macos/post-0014-snippet-01.rsc",
+      "inputBytes": 1761,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267809-netinstall-for-macos/post-0014-snippet-02.rsc",
+      "inputBytes": 372,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-267905-problem-with-monitor-command/post-0004-snippet-01.rsc",
+      "inputBytes": 316,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0001-snippet-01.rsc",
+      "inputBytes": 653,
+      "ilBytes": 443,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0001-snippet-02.rsc",
+      "inputBytes": 291,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0001-snippet-03.rsc",
+      "inputBytes": 271,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0001-snippet-04.rsc",
+      "inputBytes": 503,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0001-snippet-05.rsc",
+      "inputBytes": 769,
+      "ilBytes": 30,
+      "parseMs": 18,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0002-snippet-01.rsc",
+      "inputBytes": 3451,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0002-snippet-02.rsc",
+      "inputBytes": 415,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0003-snippet-01.rsc",
+      "inputBytes": 663,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0003-snippet-02.rsc",
+      "inputBytes": 339,
+      "ilBytes": 30,
+      "parseMs": 16,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0003-snippet-03.rsc",
+      "inputBytes": 482,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0003-snippet-04.rsc",
+      "inputBytes": 931,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0004-snippet-01.rsc",
+      "inputBytes": 689,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0004-snippet-02.rsc",
+      "inputBytes": 485,
+      "ilBytes": 30,
+      "parseMs": 16,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268036-amm0-s-manual-for-custom-app-containers-7-22beta/post-0017-snippet-01.rsc",
+      "inputBytes": 1188,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268041-caddy-setup-via-containerized-app-where-are-site-files-located/post-0005-snippet-01.rsc",
+      "inputBytes": 391,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268041-caddy-setup-via-containerized-app-where-are-site-files-located/post-0005-snippet-02.rsc",
+      "inputBytes": 335,
+      "ilBytes": 186,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268312-app-inclusion-request-netbird/post-0005-snippet-01.rsc",
+      "inputBytes": 530,
+      "ilBytes": 30,
+      "parseMs": 16,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268312-app-inclusion-request-netbird/post-0008-snippet-01.rsc",
+      "inputBytes": 512,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268717-list-of-all-attributes-that-support-scripting/post-0001-snippet-01.rsc",
+      "inputBytes": 3317,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-268717-list-of-all-attributes-that-support-scripting/post-0008-snippet-01.rsc",
+      "inputBytes": 4471,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-37391-how-update-increase-a-variable/post-0009-snippet-01.rsc",
+      "inputBytes": 289,
+      "ilBytes": 138,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-37391-how-update-increase-a-variable/post-0014-snippet-01.rsc",
+      "inputBytes": 446,
+      "ilBytes": 458,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-37391-how-update-increase-a-variable/post-0016-snippet-01.rsc",
+      "inputBytes": 684,
+      "ilBytes": 792,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-41609-feature-requests/post-1588-snippet-01.rsc",
+      "inputBytes": 638,
+      "ilBytes": 39,
+      "parseMs": 19,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-41609-feature-requests/post-1588-snippet-02.rsc",
+      "inputBytes": 822,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-51962-pseudo-random-number-generator-script-mersenne-twister/post-0020-snippet-01.rsc",
+      "inputBytes": 1375,
+      "ilBytes": 1276,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-51962-pseudo-random-number-generator-script-mersenne-twister/post-0020-snippet-02.rsc",
+      "inputBytes": 621,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-52654-how-to-covert-int-to-hex-type-value-and-save-it-in-a-string/post-0014-snippet-01.rsc",
+      "inputBytes": 406,
+      "ilBytes": 221,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-59076-nslookup-on-mikrotik/post-0029-snippet-01.rsc",
+      "inputBytes": 402,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-68159-functions-and-function-parameters/post-0045-snippet-01.rsc",
+      "inputBytes": 603,
+      "ilBytes": 481,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-68159-functions-and-function-parameters/post-0057-snippet-01.rsc",
+      "inputBytes": 892,
+      "ilBytes": 770,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-68159-functions-and-function-parameters/post-0057-snippet-02.rsc",
+      "inputBytes": 407,
+      "ilBytes": 316,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-95593-some-music/post-0036-snippet-01.rsc",
+      "inputBytes": 687,
+      "ilBytes": 276,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-95593-some-music/post-0039-snippet-01.rsc",
+      "inputBytes": 1906,
+      "ilBytes": 1818,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-95593-some-music/post-0041-snippet-01.rsc",
+      "inputBytes": 2950,
+      "ilBytes": 2978,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/amm0/topic-95593-some-music/post-0045-snippet-01.rsc",
+      "inputBytes": 3798,
+      "ilBytes": 3961,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/bandwidth-test.rsc",
+      "inputBytes": 697,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/dhcp-lease-script.rsc",
+      "inputBytes": 728,
+      "ilBytes": 1342,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/failover-script.rsc",
+      "inputBytes": 897,
+      "ilBytes": 3084,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-103825-post-0017-snippet-01.rsc",
+      "inputBytes": 552,
+      "ilBytes": 1288,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-103825-post-0017-snippet-02.rsc",
+      "inputBytes": 717,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-103825-post-0021-snippet-01.rsc",
+      "inputBytes": 347,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-103825-post-0024-snippet-01.rsc",
+      "inputBytes": 188,
+      "ilBytes": 155,
+      "parseMs": 22,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-104992-post-0083-snippet-01.rsc",
+      "inputBytes": 210,
+      "ilBytes": 186,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-110950-post-0010-snippet-01.rsc",
+      "inputBytes": 493,
+      "ilBytes": 361,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-110950-post-0028-snippet-01.rsc",
+      "inputBytes": 4049,
+      "ilBytes": 3246,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-113429-post-0004-snippet-01.rsc",
+      "inputBytes": 1139,
+      "ilBytes": 1648,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-115644-post-0004-snippet-01.rsc",
+      "inputBytes": 879,
+      "ilBytes": 1088,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-121369-post-0013-snippet-01.rsc",
+      "inputBytes": 1649,
+      "ilBytes": 2662,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132192-post-0021-snippet-01.rsc",
+      "inputBytes": 189,
+      "ilBytes": 57,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132192-post-0022-snippet-01.rsc",
+      "inputBytes": 1069,
+      "ilBytes": 1628,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132192-post-0022-snippet-02.rsc",
+      "inputBytes": 1163,
+      "ilBytes": 1887,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132192-post-0026-snippet-01.rsc",
+      "inputBytes": 438,
+      "ilBytes": 654,
+      "parseMs": 13,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132192-post-0026-snippet-02.rsc",
+      "inputBytes": 313,
+      "ilBytes": 339,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132192-post-0029-snippet-01.rsc",
+      "inputBytes": 1440,
+      "ilBytes": 2061,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132192-post-0039-snippet-01.rsc",
+      "inputBytes": 458,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132192-post-0041-snippet-01.rsc",
+      "inputBytes": 197,
+      "ilBytes": 49,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132192-post-0042-snippet-01.rsc",
+      "inputBytes": 243,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132775-post-0017-snippet-01.rsc",
+      "inputBytes": 2306,
+      "ilBytes": 3819,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-132775-post-0017-snippet-02.rsc",
+      "inputBytes": 265,
+      "ilBytes": 160,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0087-snippet-01.rsc",
+      "inputBytes": 187,
+      "ilBytes": 19,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0088-snippet-01.rsc",
+      "inputBytes": 212,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0088-snippet-02.rsc",
+      "inputBytes": 241,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0088-snippet-03.rsc",
+      "inputBytes": 527,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0114-snippet-01.rsc",
+      "inputBytes": 382,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0114-snippet-02.rsc",
+      "inputBytes": 235,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0116-snippet-01.rsc",
+      "inputBytes": 673,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0120-snippet-01.rsc",
+      "inputBytes": 970,
+      "ilBytes": 1630,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0158-snippet-01.rsc",
+      "inputBytes": 2762,
+      "ilBytes": 3758,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0158-snippet-02.rsc",
+      "inputBytes": 565,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0158-snippet-03.rsc",
+      "inputBytes": 752,
+      "ilBytes": 599,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0182-snippet-01.rsc",
+      "inputBytes": 180,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-133640-post-0197-snippet-01.rsc",
+      "inputBytes": 197,
+      "ilBytes": 67,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-142687-post-0012-snippet-01.rsc",
+      "inputBytes": 144,
+      "ilBytes": 27,
+      "parseMs": 21,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-142687-post-0013-snippet-01.rsc",
+      "inputBytes": 178,
+      "ilBytes": 59,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-142687-post-0013-snippet-02.rsc",
+      "inputBytes": 184,
+      "ilBytes": 65,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-142687-post-0013-snippet-03.rsc",
+      "inputBytes": 211,
+      "ilBytes": 92,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-143071-post-0014-snippet-01.rsc",
+      "inputBytes": 235,
+      "ilBytes": 31,
+      "parseMs": 17,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-143071-post-0018-snippet-01.rsc",
+      "inputBytes": 845,
+      "ilBytes": 593,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-143071-post-0018-snippet-02.rsc",
+      "inputBytes": 438,
+      "ilBytes": 448,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-143071-post-0023-snippet-01.rsc",
+      "inputBytes": 3602,
+      "ilBytes": 1928,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-143071-post-0025-snippet-01.rsc",
+      "inputBytes": 2936,
+      "ilBytes": 2465,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-143071-post-0029-snippet-01.rsc",
+      "inputBytes": 1463,
+      "ilBytes": 2263,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-143071-post-0033-snippet-01.rsc",
+      "inputBytes": 502,
+      "ilBytes": 1019,
+      "parseMs": 21,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-143071-post-0052-snippet-01.rsc",
+      "inputBytes": 315,
+      "ilBytes": 331,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-145326-post-0006-snippet-01.rsc",
+      "inputBytes": 687,
+      "ilBytes": 1225,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-145326-post-0006-snippet-02.rsc",
+      "inputBytes": 1563,
+      "ilBytes": 2213,
+      "parseMs": 18,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-145326-post-0017-snippet-01.rsc",
+      "inputBytes": 265,
+      "ilBytes": 314,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-145326-post-0017-snippet-02.rsc",
+      "inputBytes": 207,
+      "ilBytes": 108,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-145326-post-0043-snippet-01.rsc",
+      "inputBytes": 159,
+      "ilBytes": 56,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-145326-post-0056-snippet-01.rsc",
+      "inputBytes": 583,
+      "ilBytes": 42,
+      "parseMs": 17,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-148996-post-0004-snippet-01.rsc",
+      "inputBytes": 2044,
+      "ilBytes": 1914,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-148996-post-0004-snippet-02.rsc",
+      "inputBytes": 4109,
+      "ilBytes": 4004,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-148996-post-0004-snippet-03.rsc",
+      "inputBytes": 2203,
+      "ilBytes": 1931,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-148996-post-0004-snippet-04.rsc",
+      "inputBytes": 4267,
+      "ilBytes": 4143,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-148996-post-0036-snippet-01.rsc",
+      "inputBytes": 814,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149116-post-0021-snippet-01.rsc",
+      "inputBytes": 329,
+      "ilBytes": 264,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149116-post-0021-snippet-02.rsc",
+      "inputBytes": 273,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149116-post-0021-snippet-03.rsc",
+      "inputBytes": 384,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149116-post-0027-snippet-01.rsc",
+      "inputBytes": 260,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149189-post-0007-snippet-01.rsc",
+      "inputBytes": 1479,
+      "ilBytes": 2073,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149189-post-0007-snippet-02.rsc",
+      "inputBytes": 373,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149189-post-0007-snippet-03.rsc",
+      "inputBytes": 368,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149189-post-0007-snippet-04.rsc",
+      "inputBytes": 345,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149189-post-0007-snippet-05.rsc",
+      "inputBytes": 534,
+      "ilBytes": 31,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149267-post-0001-snippet-01.rsc",
+      "inputBytes": 431,
+      "ilBytes": 507,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-149267-post-0001-snippet-02.rsc",
+      "inputBytes": 422,
+      "ilBytes": 483,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150050-post-0002-snippet-01.rsc",
+      "inputBytes": 254,
+      "ilBytes": 216,
+      "parseMs": 14,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150050-post-0002-snippet-02.rsc",
+      "inputBytes": 357,
+      "ilBytes": 383,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150050-post-0002-snippet-03.rsc",
+      "inputBytes": 248,
+      "ilBytes": 194,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150050-post-0004-snippet-01.rsc",
+      "inputBytes": 452,
+      "ilBytes": 582,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150066-post-0008-snippet-01.rsc",
+      "inputBytes": 471,
+      "ilBytes": 3014,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150066-post-0010-snippet-01.rsc",
+      "inputBytes": 291,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150195-post-0002-snippet-01.rsc",
+      "inputBytes": 638,
+      "ilBytes": 527,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150195-post-0008-snippet-01.rsc",
+      "inputBytes": 718,
+      "ilBytes": 607,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150195-post-0012-snippet-01.rsc",
+      "inputBytes": 268,
+      "ilBytes": 431,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150195-post-0012-snippet-02.rsc",
+      "inputBytes": 268,
+      "ilBytes": 431,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150516-post-0008-snippet-01.rsc",
+      "inputBytes": 211,
+      "ilBytes": 431,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150516-post-0008-snippet-02.rsc",
+      "inputBytes": 211,
+      "ilBytes": 431,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150516-post-0008-snippet-03.rsc",
+      "inputBytes": 502,
+      "ilBytes": 414,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150516-post-0025-snippet-01.rsc",
+      "inputBytes": 234,
+      "ilBytes": 1347,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150516-post-0025-snippet-02.rsc",
+      "inputBytes": 309,
+      "ilBytes": 1457,
+      "parseMs": 20,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150516-post-0027-snippet-01.rsc",
+      "inputBytes": 598,
+      "ilBytes": 3315,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150559-post-0002-snippet-01.rsc",
+      "inputBytes": 538,
+      "ilBytes": 41,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150559-post-0002-snippet-02.rsc",
+      "inputBytes": 900,
+      "ilBytes": 979,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-150559-post-0007-snippet-01.rsc",
+      "inputBytes": 226,
+      "ilBytes": 40,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151020-post-0001-snippet-01.rsc",
+      "inputBytes": 350,
+      "ilBytes": 235,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151020-post-0001-snippet-02.rsc",
+      "inputBytes": 1006,
+      "ilBytes": 798,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0010-snippet-01.rsc",
+      "inputBytes": 190,
+      "ilBytes": 209,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0015-snippet-01.rsc",
+      "inputBytes": 1008,
+      "ilBytes": 1344,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0015-snippet-02.rsc",
+      "inputBytes": 1021,
+      "ilBytes": 1340,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0015-snippet-03.rsc",
+      "inputBytes": 161,
+      "ilBytes": 53,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0015-snippet-04.rsc",
+      "inputBytes": 165,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0015-snippet-05.rsc",
+      "inputBytes": 172,
+      "ilBytes": 87,
+      "parseMs": 13,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0015-snippet-06.rsc",
+      "inputBytes": 165,
+      "ilBytes": 42,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0017-snippet-01.rsc",
+      "inputBytes": 653,
+      "ilBytes": 950,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0017-snippet-02.rsc",
+      "inputBytes": 819,
+      "ilBytes": 1227,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0018-snippet-01.rsc",
+      "inputBytes": 451,
+      "ilBytes": 489,
+      "parseMs": 15,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0018-snippet-02.rsc",
+      "inputBytes": 840,
+      "ilBytes": 1042,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0018-snippet-03.rsc",
+      "inputBytes": 492,
+      "ilBytes": 560,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0018-snippet-04.rsc",
+      "inputBytes": 1207,
+      "ilBytes": 1555,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0019-snippet-01.rsc",
+      "inputBytes": 173,
+      "ilBytes": 74,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0019-snippet-02.rsc",
+      "inputBytes": 333,
+      "ilBytes": 348,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0020-snippet-01.rsc",
+      "inputBytes": 3892,
+      "ilBytes": 2795,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0020-snippet-02.rsc",
+      "inputBytes": 3891,
+      "ilBytes": 3134,
+      "parseMs": 4,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0021-snippet-01.rsc",
+      "inputBytes": 494,
+      "ilBytes": 539,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0021-snippet-02.rsc",
+      "inputBytes": 658,
+      "ilBytes": 814,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0034-snippet-01.rsc",
+      "inputBytes": 3806,
+      "ilBytes": 3006,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0034-snippet-02.rsc",
+      "inputBytes": 3306,
+      "ilBytes": 2272,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0048-snippet-01.rsc",
+      "inputBytes": 3524,
+      "ilBytes": 2183,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0048-snippet-02.rsc",
+      "inputBytes": 362,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0049-snippet-01.rsc",
+      "inputBytes": 4047,
+      "ilBytes": 3271,
+      "parseMs": 4,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0049-snippet-02.rsc",
+      "inputBytes": 226,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0056-snippet-01.rsc",
+      "inputBytes": 3265,
+      "ilBytes": 4999,
+      "parseMs": 5,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0056-snippet-02.rsc",
+      "inputBytes": 277,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0057-snippet-01.rsc",
+      "inputBytes": 3838,
+      "ilBytes": 5623,
+      "parseMs": 6,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0057-snippet-02.rsc",
+      "inputBytes": 648,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0058-snippet-01.rsc",
+      "inputBytes": 181,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0070-snippet-01.rsc",
+      "inputBytes": 3903,
+      "ilBytes": 2812,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0070-snippet-02.rsc",
+      "inputBytes": 3895,
+      "ilBytes": 3143,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0071-snippet-01.rsc",
+      "inputBytes": 3800,
+      "ilBytes": 3000,
+      "parseMs": 4,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0071-snippet-02.rsc",
+      "inputBytes": 243,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0072-snippet-01.rsc",
+      "inputBytes": 3296,
+      "ilBytes": 1979,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0072-snippet-02.rsc",
+      "inputBytes": 182,
+      "ilBytes": 97,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151033-post-0072-snippet-03.rsc",
+      "inputBytes": 614,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151723-post-0005-snippet-01.rsc",
+      "inputBytes": 608,
+      "ilBytes": 43,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151723-post-0007-snippet-01.rsc",
+      "inputBytes": 948,
+      "ilBytes": 1630,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151723-post-0007-snippet-02.rsc",
+      "inputBytes": 565,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151793-post-0002-snippet-01.rsc",
+      "inputBytes": 223,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151793-post-0002-snippet-02.rsc",
+      "inputBytes": 197,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151793-post-0002-snippet-03.rsc",
+      "inputBytes": 302,
+      "ilBytes": 258,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151793-post-0009-snippet-01.rsc",
+      "inputBytes": 378,
+      "ilBytes": 253,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151793-post-0020-snippet-01.rsc",
+      "inputBytes": 187,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151870-post-0002-snippet-01.rsc",
+      "inputBytes": 1398,
+      "ilBytes": 2114,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151870-post-0010-snippet-01.rsc",
+      "inputBytes": 737,
+      "ilBytes": 1019,
+      "parseMs": 17,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151933-post-0002-snippet-01.rsc",
+      "inputBytes": 217,
+      "ilBytes": 120,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151933-post-0005-snippet-01.rsc",
+      "inputBytes": 1722,
+      "ilBytes": 2267,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151933-post-0005-snippet-02.rsc",
+      "inputBytes": 232,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-151933-post-0005-snippet-03.rsc",
+      "inputBytes": 225,
+      "ilBytes": 283,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-156344-post-0004-snippet-01.rsc",
+      "inputBytes": 233,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-156344-post-0004-snippet-02.rsc",
+      "inputBytes": 264,
+      "ilBytes": 202,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-156344-post-0004-snippet-03.rsc",
+      "inputBytes": 268,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-156344-post-0004-snippet-04.rsc",
+      "inputBytes": 342,
+      "ilBytes": 367,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-156344-post-0004-snippet-05.rsc",
+      "inputBytes": 625,
+      "ilBytes": 740,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-156344-post-0004-snippet-06.rsc",
+      "inputBytes": 925,
+      "ilBytes": 1238,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-156344-post-0004-snippet-07.rsc",
+      "inputBytes": 1348,
+      "ilBytes": 2085,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-157724-post-0005-snippet-01.rsc",
+      "inputBytes": 5180,
+      "ilBytes": 7855,
+      "parseMs": 7,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-157724-post-0012-snippet-01.rsc",
+      "inputBytes": 5266,
+      "ilBytes": 7855,
+      "parseMs": 6,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-157724-post-0020-snippet-01.rsc",
+      "inputBytes": 149,
+      "ilBytes": 33,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-157724-post-0036-snippet-01.rsc",
+      "inputBytes": 1561,
+      "ilBytes": 2059,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-157724-post-0037-snippet-01.rsc",
+      "inputBytes": 1053,
+      "ilBytes": 1480,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-157724-post-0037-snippet-02.rsc",
+      "inputBytes": 172,
+      "ilBytes": 88,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-157724-post-0037-snippet-03.rsc",
+      "inputBytes": 190,
+      "ilBytes": 136,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-157724-post-0040-snippet-01.rsc",
+      "inputBytes": 265,
+      "ilBytes": 241,
+      "parseMs": 11,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-158109-post-0005-snippet-01.rsc",
+      "inputBytes": 795,
+      "ilBytes": 900,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-158109-post-0005-snippet-02.rsc",
+      "inputBytes": 1258,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-158109-post-0015-snippet-01.rsc",
+      "inputBytes": 392,
+      "ilBytes": 159,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-158109-post-0016-snippet-01.rsc",
+      "inputBytes": 1079,
+      "ilBytes": 1138,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-158109-post-0016-snippet-02.rsc",
+      "inputBytes": 583,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-158216-post-0004-snippet-01.rsc",
+      "inputBytes": 557,
+      "ilBytes": 790,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-158216-post-0005-snippet-01.rsc",
+      "inputBytes": 515,
+      "ilBytes": 627,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-158216-post-0005-snippet-02.rsc",
+      "inputBytes": 622,
+      "ilBytes": 946,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-158216-post-0013-snippet-01.rsc",
+      "inputBytes": 867,
+      "ilBytes": 1151,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-158216-post-0013-snippet-02.rsc",
+      "inputBytes": 400,
+      "ilBytes": 650,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-160011-post-0004-snippet-01.rsc",
+      "inputBytes": 1355,
+      "ilBytes": 2430,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-160011-post-0005-snippet-01.rsc",
+      "inputBytes": 1330,
+      "ilBytes": 2449,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-160011-post-0006-snippet-01.rsc",
+      "inputBytes": 862,
+      "ilBytes": 1799,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-160011-post-0007-snippet-01.rsc",
+      "inputBytes": 2096,
+      "ilBytes": 4213,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-161897-post-0005-snippet-01.rsc",
+      "inputBytes": 354,
+      "ilBytes": 39,
+      "parseMs": 19,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-161897-post-0006-snippet-01.rsc",
+      "inputBytes": 1205,
+      "ilBytes": 1430,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-162755-post-0002-snippet-01.rsc",
+      "inputBytes": 183,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-162755-post-0006-snippet-01.rsc",
+      "inputBytes": 1404,
+      "ilBytes": 32,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-162848-post-0002-snippet-01.rsc",
+      "inputBytes": 381,
+      "ilBytes": 413,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-162848-post-0004-snippet-01.rsc",
+      "inputBytes": 2605,
+      "ilBytes": 3794,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0003-snippet-01.rsc",
+      "inputBytes": 771,
+      "ilBytes": 1052,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0006-snippet-01.rsc",
+      "inputBytes": 401,
+      "ilBytes": 264,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0015-snippet-01.rsc",
+      "inputBytes": 1677,
+      "ilBytes": 1586,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0018-snippet-01.rsc",
+      "inputBytes": 195,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0021-snippet-01.rsc",
+      "inputBytes": 1704,
+      "ilBytes": 1619,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0038-snippet-01.rsc",
+      "inputBytes": 251,
+      "ilBytes": 133,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0038-snippet-02.rsc",
+      "inputBytes": 189,
+      "ilBytes": 46,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0038-snippet-03.rsc",
+      "inputBytes": 223,
+      "ilBytes": 82,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0042-snippet-01.rsc",
+      "inputBytes": 490,
+      "ilBytes": 454,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0042-snippet-02.rsc",
+      "inputBytes": 480,
+      "ilBytes": 459,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0046-snippet-01.rsc",
+      "inputBytes": 275,
+      "ilBytes": 209,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163033-post-0046-snippet-02.rsc",
+      "inputBytes": 216,
+      "ilBytes": 85,
+      "parseMs": 18,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163067-post-0009-snippet-01.rsc",
+      "inputBytes": 290,
+      "ilBytes": 119,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163067-post-0011-snippet-01.rsc",
+      "inputBytes": 801,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163488-post-0005-snippet-01.rsc",
+      "inputBytes": 187,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163718-post-0012-snippet-01.rsc",
+      "inputBytes": 3569,
+      "ilBytes": 3049,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163850-post-0003-snippet-01.rsc",
+      "inputBytes": 650,
+      "ilBytes": 896,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-163850-post-0007-snippet-01.rsc",
+      "inputBytes": 262,
+      "ilBytes": 597,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164329-post-0017-snippet-01.rsc",
+      "inputBytes": 851,
+      "ilBytes": 32,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164329-post-0018-snippet-01.rsc",
+      "inputBytes": 2776,
+      "ilBytes": 2626,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164329-post-0025-snippet-01.rsc",
+      "inputBytes": 190,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164329-post-0025-snippet-02.rsc",
+      "inputBytes": 183,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164329-post-0025-snippet-03.rsc",
+      "inputBytes": 177,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164329-post-0026-snippet-01.rsc",
+      "inputBytes": 4391,
+      "ilBytes": 3623,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164329-post-0026-snippet-02.rsc",
+      "inputBytes": 4371,
+      "ilBytes": 3660,
+      "parseMs": 4,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164329-post-0034-snippet-01.rsc",
+      "inputBytes": 212,
+      "ilBytes": 144,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164329-post-0035-snippet-01.rsc",
+      "inputBytes": 197,
+      "ilBytes": 1,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164889-post-0003-snippet-01.rsc",
+      "inputBytes": 2155,
+      "ilBytes": 2709,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164889-post-0004-snippet-01.rsc",
+      "inputBytes": 3758,
+      "ilBytes": 4742,
+      "parseMs": 4,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164889-post-0005-snippet-01.rsc",
+      "inputBytes": 1140,
+      "ilBytes": 1478,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164889-post-0006-snippet-01.rsc",
+      "inputBytes": 1279,
+      "ilBytes": 1603,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164889-post-0007-snippet-01.rsc",
+      "inputBytes": 2620,
+      "ilBytes": 3628,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164889-post-0007-snippet-02.rsc",
+      "inputBytes": 416,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-164889-post-0008-snippet-01.rsc",
+      "inputBytes": 5087,
+      "ilBytes": 6970,
+      "parseMs": 6,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-166576-post-0012-snippet-01.rsc",
+      "inputBytes": 231,
+      "ilBytes": 65,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-166576-post-0035-snippet-01.rsc",
+      "inputBytes": 352,
+      "ilBytes": 232,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-166576-post-0035-snippet-02.rsc",
+      "inputBytes": 356,
+      "ilBytes": 232,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-166898-post-0002-snippet-01.rsc",
+      "inputBytes": 281,
+      "ilBytes": 39,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-166898-post-0022-snippet-01.rsc",
+      "inputBytes": 6052,
+      "ilBytes": 6978,
+      "parseMs": 6,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-166898-post-0024-snippet-01.rsc",
+      "inputBytes": 6121,
+      "ilBytes": 7084,
+      "parseMs": 6,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-166898-post-0052-snippet-01.rsc",
+      "inputBytes": 778,
+      "ilBytes": 1042,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-167618-post-0003-snippet-01.rsc",
+      "inputBytes": 532,
+      "ilBytes": 753,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-5183-post-0010-snippet-01.rsc",
+      "inputBytes": 973,
+      "ilBytes": 1461,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-5183-post-0010-snippet-02.rsc",
+      "inputBytes": 3036,
+      "ilBytes": 4639,
+      "parseMs": 4,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-5183-post-0017-snippet-01.rsc",
+      "inputBytes": 309,
+      "ilBytes": 283,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-5183-post-0019-snippet-01.rsc",
+      "inputBytes": 3206,
+      "ilBytes": 4937,
+      "parseMs": 5,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-5183-post-0019-snippet-02.rsc",
+      "inputBytes": 230,
+      "ilBytes": 142,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-5183-post-0022-snippet-01.rsc",
+      "inputBytes": 3943,
+      "ilBytes": 5849,
+      "parseMs": 6,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-5183-post-0022-snippet-02.rsc",
+      "inputBytes": 354,
+      "ilBytes": 299,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-5183-post-0023-snippet-01.rsc",
+      "inputBytes": 883,
+      "ilBytes": 1225,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-52654-post-0005-snippet-01.rsc",
+      "inputBytes": 198,
+      "ilBytes": 74,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-52654-post-0005-snippet-02.rsc",
+      "inputBytes": 494,
+      "ilBytes": 561,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-52654-post-0005-snippet-03.rsc",
+      "inputBytes": 169,
+      "ilBytes": 54,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-52654-post-0005-snippet-04.rsc",
+      "inputBytes": 311,
+      "ilBytes": 257,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-52654-post-0005-snippet-05.rsc",
+      "inputBytes": 578,
+      "ilBytes": 687,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-52654-post-0006-snippet-01.rsc",
+      "inputBytes": 619,
+      "ilBytes": 744,
+      "parseMs": 15,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-52654-post-0006-snippet-02.rsc",
+      "inputBytes": 399,
+      "ilBytes": 371,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-63496-post-0005-snippet-01.rsc",
+      "inputBytes": 1475,
+      "ilBytes": 2385,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-68576-post-0014-snippet-01.rsc",
+      "inputBytes": 1117,
+      "ilBytes": 1699,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-68576-post-0014-snippet-02.rsc",
+      "inputBytes": 1195,
+      "ilBytes": 1263,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-68576-post-0018-snippet-01.rsc",
+      "inputBytes": 1153,
+      "ilBytes": 1478,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-68576-post-0018-snippet-02.rsc",
+      "inputBytes": 186,
+      "ilBytes": 117,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-68576-post-0019-snippet-01.rsc",
+      "inputBytes": 1425,
+      "ilBytes": 1799,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-68576-post-0024-snippet-01.rsc",
+      "inputBytes": 1883,
+      "ilBytes": 3135,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-68576-post-0033-snippet-01.rsc",
+      "inputBytes": 169,
+      "ilBytes": 66,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-68576-post-0039-snippet-01.rsc",
+      "inputBytes": 187,
+      "ilBytes": 69,
+      "parseMs": 15,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-74610-post-0002-snippet-01.rsc",
+      "inputBytes": 369,
+      "ilBytes": 366,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-74610-post-0004-snippet-01.rsc",
+      "inputBytes": 224,
+      "ilBytes": 428,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-75450-post-0043-snippet-01.rsc",
+      "inputBytes": 172,
+      "ilBytes": 102,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-75450-post-0043-snippet-02.rsc",
+      "inputBytes": 134,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-75450-post-0110-snippet-01.rsc",
+      "inputBytes": 173,
+      "ilBytes": 102,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-75450-post-0110-snippet-02.rsc",
+      "inputBytes": 135,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-75450-post-0140-snippet-01.rsc",
+      "inputBytes": 4448,
+      "ilBytes": 30,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-77321-post-0015-snippet-01.rsc",
+      "inputBytes": 494,
+      "ilBytes": 572,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-79536-post-0006-snippet-01.rsc",
+      "inputBytes": 348,
+      "ilBytes": 419,
+      "parseMs": 3,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-97913-post-0009-snippet-01.rsc",
+      "inputBytes": 277,
+      "ilBytes": 31,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-97913-post-0011-snippet-01.rsc",
+      "inputBytes": 262,
+      "ilBytes": 202,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-97913-post-0011-snippet-02.rsc",
+      "inputBytes": 369,
+      "ilBytes": 424,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "forum/rextended/topic-97913-post-0014-snippet-01.rsc",
+      "inputBytes": 180,
+      "ilBytes": 111,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "forum/telegram-notify.rsc",
+      "inputBytes": 617,
+      "ilBytes": 630,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "global-wait.rsc",
+      "inputBytes": 430,
+      "ilBytes": 214,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "intentional-errors.rsc",
+      "inputBytes": 412,
+      "ilBytes": 160,
+      "parseMs": 17,
+      "ok": true
+    },
+    {
+      "rel": "sample.rsc",
+      "inputBytes": 627,
+      "ilBytes": 791,
+      "parseMs": 1,
+      "ok": true
+    },
+    {
+      "rel": "test.rsc",
+      "inputBytes": 9587,
+      "ilBytes": 13313,
+      "parseMs": 7,
+      "ok": true
+    },
+    {
+      "rel": "tikbook/hello.tikbook.rsc",
+      "inputBytes": 1777,
+      "ilBytes": 1596,
+      "parseMs": 2,
+      "ok": true
+    },
+    {
+      "rel": "tikbook/scep.tikbook.rsc",
+      "inputBytes": 4982,
+      "ilBytes": 33,
+      "parseMs": 3,
+      "ok": true
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+/;(evl /globalname=$lazyvar;value=FF85);(evl /setname=$lazyvar;value=(evl (evl /tonumvalue=(. 0x $lazyvar))));(evl /ifcondition=(> $lazyvar 32767);do=;(evl (evl /setname=$lazyvar;value=(- $lazyvar 65536))));(evl /putmessage=$lazyvar);(evl /setname=$lazyvar)

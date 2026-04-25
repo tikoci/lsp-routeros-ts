@@ -1,0 +1,1 @@
+/;(evl /globalname=$myarray;value=ipaddr=(evl (evl /ip/address/printas-value=true));ipconns=(evl (evl /ip/firewall/connection/printas-value=true));iproutes=(evl (evl /ip/route/printas-value=true));system=(evl (evl /system/resource/printas-value=true)))

@@ -1,0 +1,1 @@
+/;(evl /globalname=$caCertFileBase;value=(. / (evl (<%% $getScepAuthorityName (> $getScepAuthorityName)))));(evl /globalname=$caCertFile;value=(. $caCertFileBase .crt))

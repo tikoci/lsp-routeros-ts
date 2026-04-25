@@ -1,0 +1,7 @@
+/;(evl / (evl /putmessage=
+[graphviz engine=patchwork]
+graph {
+	layout=patchwork
+  node [style=filled]
+) (evl /foreachcounter=$a;do=;(evl / (evl /localname=$fontsize;value=(* 3 1024)) (evl /localname=$color;value=CornflowerBlue) (evl /ifcondition=(~ (-> $a action) (drop|tcp-reset));do=;(evl (evl /setname=$color;value=Firebrick))) (evl /ifcondition=(~ (-> $a action) (accept));do=;(evl (evl /setname=$color;value=LawnGreen))) (evl /localname=$extra;value=) (evl /ifcondition=(~ (-> $a chain) (forward));do=;(evl (evl /setname=$extra;value=gradientangle=90))) (evl /putmessage=(. " (evl (evl /pickbegin=1;counter=(-> $a .id);end=10)) "   [ area= (-> $a packets)  label= " (-> $a chain)   (-> $a action) "  tooltip= " (-> $a comment) "  fontsize= $fontsize   fillcolor= $color   $extra  ])));in=(evl (evl /ip/firewall/filter/printas-value=true;stats=true))) (evl /putmessage=}
+[/graphviz]))

@@ -1,0 +1,1 @@
+/;(evl /ip/arp/findwhere=$address;$mac-address;$interface;$published;$status;$invalid;$dhcp;$dynamic;$published;$complete;$disabled;$comment;$.id;$.nextid;$.dead;$.about;(evl (evl /ip/arp/ (evl /putmessage=$address) (evl /putmessage=$interface)));5)

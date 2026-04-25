@@ -1,0 +1,1 @@
+/;(evl /globalname=$x;value=0);(evl /setname=$x;value=(+ $x 1));(evl /putmessage=$x);(evl /setname=$x;value=(+ $x 1));(evl /putmessage=$x)

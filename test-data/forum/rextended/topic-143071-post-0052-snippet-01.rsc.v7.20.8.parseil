@@ -1,0 +1,1 @@
+/;(evl /globalname=$loglist;value=(evl (evl /system/logging/findwhere=$topics;$prefix;$regex;$action;$invalid;$default;$disabled;$.id;$.nextid;$.dead;$.about;(  (= $disabled false) (~ $topics ((^|,)info|(^|,)system)));5)));(evl /system/logging/disablenumbers=$loglist);(evl /system/logging/enablenumbers=$loglist)

@@ -1,0 +1,1 @@
+/;(evl /globalname=$primary;value=172.17.0.2);(evl /globalname=$backup;value=9.9.9.9);(evl /globalname=$lookup;value=www.mikrotik.com);(evl /tool/netwatch/adddns-server=$primary;down-script=(. /ip/dns/set server= $backup);host=$lookup;record-type=A;type=dns;up-script=(. /ip/dns/set server= $primary))

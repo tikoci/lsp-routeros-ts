@@ -1,0 +1,10 @@
+{
+  "source": "forum/amm0/topic-181665-error-in-gateway-non-zero-ip-address-expected-when-using-quick-set/post-0012-snippet-01.rsc",
+  "routerosVersion": "7.23rc1",
+  "chrBuildTime": "2026-04-14 11:35:26",
+  "inputBytes": 1307,
+  "ilBytes": 1456,
+  "parseMs": 2,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:29.384Z"
+}

@@ -1,0 +1,1 @@
+/;(evl /globalname=$shortThanToArray;value=(> ));(evl /putmessage=(. $shortThanToArray   (evl (evl /typeofvalue=$shortThanToArray))   (evl (evl /lenvalue=$shortThanToArray))));/

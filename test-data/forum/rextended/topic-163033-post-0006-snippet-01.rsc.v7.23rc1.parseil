@@ -1,0 +1,1 @@
+/;(evl /globalname=$test;value=A;D;I;P;Y;B;C;H;O;X;E;F;G;N;W;J;K;L;M;V;Q;R;S;T;U);(evl /foreachcounter=$x;do=;(evl / (evl /foreachcounter=$y;do=;(evl / (evl /putmessage=(. (evl (evl /findin=$test;key=$x)) , (evl (evl /findin=$x;key=$y))  =  $y)));in=$x));in=$test)

@@ -1,0 +1,1 @@
+/;(evl /globalname=$replacedstring;value=(evl (<%% bad command name regex (line 6 column 26) regex;find=blah;from=$mystr;replace=hello)));(evl /putmessage=(evl (evl /typeofvalue=$replacedstring)))

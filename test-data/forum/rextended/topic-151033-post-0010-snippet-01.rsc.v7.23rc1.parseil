@@ -1,0 +1,1 @@
+/;(evl /ip/address/printwhere=$address;$network;$netmask;$broadcast;$interface;$actual-interface;$vrf;$invalid;$dynamic;$slave;$disabled;$comment;$.id;$.nextid;$.dead;$.about;(= (+ $network 1) 192.168.88.1);5)

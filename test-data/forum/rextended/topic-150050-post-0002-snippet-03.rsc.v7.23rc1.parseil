@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl (evl /returnvalue=(/ (evl (evl /findfrom=-1;in=rexjanfebmaraprmayjunjulaugsepoctnovdec;key=$1)) 3)));name=$mon2num);(evl /putmessage=(evl (<%% $mon2num (> $mon2num);jul)))

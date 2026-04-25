@@ -1,0 +1,1 @@
+/;(evl /returnvalue=day=(evl (evl /tonumvalue=(evl (evl /pickbegin=4;counter=$Date;end=6))));month=(-> $Months (evl (evl /pickbegin=0;counter=$Date;end=3)));year=(evl (evl /tonumvalue=(evl (evl /pickbegin=7;counter=$Date;end=11)))))

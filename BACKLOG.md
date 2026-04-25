@@ -31,13 +31,14 @@ Goal: ground the next round of LSP feature work in measured RouterOS behavior, u
 
 ### `[research: parseil]` Decode RouterOS `:parse` IL using the script corpus
 
-✅ **Phases 1–3 complete (RouterOS 7.22.1).** Full reference: [`docs/parseil-format.md`](docs/parseil-format.md). Harness: `scripts/collect-parseil.ts`. Corpus snapshots: `test-data/**/*.v<routeros-version>.parseil` (912/913 captured against 7.22.1).
+✅ **Phases 1–4 complete (RouterOS 7.20.8 / 7.22.1 / 7.23rc1).** Full reference: [`docs/parseil-format.md`](docs/parseil-format.md). Harness: `scripts/collect-parseil.ts`. Corpus snapshots: `test-data/**/*.v<routeros-version>.parseil` (912/913 captured on each version; the missed file is the intentional oversize upload-cap case).
 
 Headline findings worth surfacing in the BACKLOG (full detail in the reference doc):
 
 - **Readout path:** only `:put [:parse $script]` reveals the IL — every other readout (`:tostr`, `:serialize`, `/environment print`, etc.) returns the literal placeholder `(code)`. Capture is `/rest/file/add` + `/rest/execute as-string=true`.
-- **IL is text, not bytecode.** Forms: `(evl <PATH><ARGS>)` for command invocation (no whitespace between path and args — splitting them needs the command schema), `(<op> …)` for prefix-S-expr operators, `(<%% …)` for dynamic dispatch / function calls, `;` for statement separation, `/` for empty/comment-only scripts.
+- **IL is text, not bytecode.** Forms: `(evl <PATH><ARGS>)` for command invocation (no whitespace between path and args — splitting them needs the command schema), `(<op> …)` for prefix-S-expr operators, `(<%% …)` for "activate in environment" / function calls, `(> …)` for `op` quoting, `;` for statement separation, `/` for empty/comment-only scripts.
 - **Parse-time canonicalisation is a goldmine.** `200ms` → `00:00:00.200`, `yes` → `true`, `:put` → `/put`, `/ip address print` → `/ip/address/print`. Excellent material for hover hints.
+- **Core IL grammar looks stable through 7.23rc1.** 838/912 successful captures are byte-identical across 7.20.8, 7.22.1, and 7.23rc1. The 74 drifts are menu-schema, path-canonicalisation, and error-string churn — no new top-level IL forms showed up.
 - **No source positions on valid IL.** `(line N column M)` only appears on errors; mapping IL nodes → source ranges still requires structural reconstruction.
 - **`:parse` is a hard parser.** Stops at the first error, emits an error string with no partial IL. **Does not** back multi-error diagnostics — highlight remains the source of truth there.
 - **Variable scope is by name.** No slot info; definition/references via IL alone requires walking the IL and reconstructing scopes from `(evl /local…)` / `(evl /global…)` / `do=` boundaries.
@@ -53,9 +54,9 @@ Concrete feature work this unblocks (filed below under their respective sections
 
 **Open follow-ups (small):**
 
-- 📋 Pin down the `(<%% …)` and `(> …)` semantics. Both leak into the RouterOS CLI as valid source-level syntax — `[(>[:put hello])]` evaluates to `hello` at the console — so they're real operators, not IL-internal markers. Working hypothesis: `(<%% …)` is "apply", `(>EXPR)` is "evaluate / dereference". Confirm via console probes (`:typeof (>[:put 1])` etc.) plus source-level examples from `mcp-discourse` once that data path is wired in. See [`docs/parseil-format.md`](docs/parseil-format.md) §3.5 + §8.
-- 📋 Re-run `scripts/collect-parseil.ts` against newer CHR releases (7.22.2, 7.23rc, …) and diff `.v<version>.parseil` files to detect IL grammar drift.
-- 📋 Measure the `/rest/file/add` upload cap; observed 413 at 126 KB, threshold unmeasured. Only matters if oversize scripts become a target.
+- ✅ Pin down the `(<%% …)` and `(> …)` semantics. `/console/inspect request=completion` labels `>` as `quote` and `<%%` as `activate in environment`; `:typeof (>[:put hello])` returns `op`; source-level forum examples use both directly. See [`docs/parseil-format.md`](docs/parseil-format.md) §3.5.
+- ✅ Re-run `scripts/collect-parseil.ts` against 7.20.8 and 7.23rc1. Core IL forms stayed stable; observed drift is version-sensitive command schema/path/error churn, not a new grammar surface. See [`docs/parseil-format.md`](docs/parseil-format.md) §5.1.
+- 📋 Measure the `/rest/file/add` upload cap; observed 413 at 126 KiB, threshold unmeasured. Only matters if oversize scripts become a target.
 
 ### `[research: inspect-shapes]` Catalog `/console/inspect` request-type responses
 

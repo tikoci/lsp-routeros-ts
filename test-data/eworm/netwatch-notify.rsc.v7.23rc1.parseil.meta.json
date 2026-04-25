@@ -1,0 +1,10 @@
+{
+  "source": "eworm/netwatch-notify.rsc",
+  "routerosVersion": "7.23rc1",
+  "chrBuildTime": "2026-04-14 11:35:26",
+  "inputBytes": 10092,
+  "ilBytes": 12149,
+  "parseMs": 8,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:24.107Z"
+}

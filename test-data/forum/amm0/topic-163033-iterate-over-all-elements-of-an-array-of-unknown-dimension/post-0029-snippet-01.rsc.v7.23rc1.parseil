@@ -1,0 +1,1 @@
+/;(evl /globalname=$a;value=a=top;child=a=inside);(evl /globalname=$b;value=$a);(evl /putmessage=(evl (evl /typeofvalue=$b)));(evl /putmessage=(-> $b child));(evl /setname=(-> $b child);value=changed);(evl /putmessage=(-> $b child));(evl /putmessage=(-> $a child))

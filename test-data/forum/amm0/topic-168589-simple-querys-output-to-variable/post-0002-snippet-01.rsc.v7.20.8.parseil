@@ -1,0 +1,5 @@
+/;(evl /globalname=$portprint;value=(evl (evl /port/printas-value=true;detail=true)));(evl /globalname=$userprint;value=(evl (evl /user/printas-value=true;detail=true)));(evl /putmessage=(.  Ports: 
+   $portprint   
+ 
+  Users: 
+   $userprint  ))

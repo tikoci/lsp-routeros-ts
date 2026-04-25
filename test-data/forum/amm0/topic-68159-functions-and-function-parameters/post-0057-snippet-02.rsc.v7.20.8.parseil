@@ -1,0 +1,1 @@
+/;(evl / (evl /localdo=;(evl (evl /putmessage=in fn1));name=$fn1) (evl /localdo=;(evl (evl /putmessage=in fn2));name=$fn2) (evl /localdo=;(evl (<%% $fn1 (> $fn1);$fn2));name=$fn12) (<%% $fn12 (> $fn12)) (evl /putmessage=(. will output nothing, since  $ fn1 and  $ fn2 are NOT available inside the  $ fn12 function)))

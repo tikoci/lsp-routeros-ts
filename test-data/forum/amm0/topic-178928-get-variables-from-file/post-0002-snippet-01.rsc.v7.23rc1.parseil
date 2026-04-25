@@ -1,0 +1,5 @@
+/;(evl / (evl /localname=$kvtxt;value=(. SCRIPT_VERSION=1.2.1  
+ REQ_ID=01J8C5ZV2AY6V6HWEB6F4HQJW5  
+ REQ_IP=172.21.104.34  
+ REQ_FAMILY=1  
+ REQ_CREATED=2024-09-22 06:16:32)) (evl /localname=$kvarray;value=(evl (evl /deserializedelimiter==;from=dsv;options=dsv.plain;value=(evl (evl /tocrlfinput=$kvtxt))))) (evl /putmessage=(evl (evl /typeofvalue=$kvarray))) (evl /putmessage=$kvarray) (evl /putmessage=(evl (evl /serializeoptions=json.pretty;to=json;value=$kvarray))) (evl /localname=$myconfig;value=(evl (evl /toarrayvalue=))) (evl /foreachcounter=$v;do=;(evl (evl /setname=(-> $myconfig (-> $v 0));value=(-> $v 1)));in=$kvarray) (evl /putmessage=$myconfig) (evl /putmessage=(-> $myconfig SCRIPT_VERSION)))

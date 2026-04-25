@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$myhelp;value=You can ask questions now!) (evl /localname=$myquestion;value=What do you want to ask?) (evl /localname=$myanswer;value=(evl (evl /terminal/askpreinput=$myhelp;prompt=$myquestion))) (evl /putmessage=$myanswer))

@@ -1,0 +1,1 @@
+/;(evl /globalname=$scepbase;value=tik.home.arpa);(evl /globalname=$sysname;value=(evl (evl /system/identity/getvalue-name=name)));(evl /putmessage=(. $scepbase  on  $sysname))

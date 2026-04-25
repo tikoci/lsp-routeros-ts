@@ -1,0 +1,33 @@
+/;(evl /localname=$ExitOK;value=false);(evl /onerrordo=;(evl / (evl /globalname=$ExitError) (<%% $ExitError (> $ExitError);$ExitOK;(evl (evl /jobname));$Err));error=$Err;in=;(evl / (evl /globalname=$GlobalConfigReady) (evl /globalname=$GlobalFunctionsReady) (evl /retrycommand=;(evl (evl /ifcondition=(or (!= $GlobalConfigReady true) (!= $GlobalFunctionsReady true));do=;(evl (evl /errormessage=Global config and/or functions not ready.) /)) /);delay=00:00:00.500;max=50) (evl /localname=$ScriptName;value=(evl (evl /jobname))) (evl /globalname=$BackupRandomDelay) (evl /globalname=$Identity) (evl /globalname=$PackagesUpdateBackupFailure) (evl /globalname=$DeviceInfo) (evl /globalname=$FormatLine) (evl /globalname=$HumanReadableNum) (evl /globalname=$LogPrint) (evl /globalname=$MkDir) (evl /globalname=$RandomDelay) (evl /globalname=$RmDir) (evl /globalname=$ScriptFromTerminal) (evl /globalname=$ScriptLock) (evl /globalname=$SendNotification2) (evl /globalname=$SymbolForNotification) (evl /globalname=$WaitForFile) (evl /globalname=$WaitFullyConnected) (evl /ifcondition=(= (evl (<%% $ScriptLock (> $ScriptLock);$ScriptName)) false);do=;(evl / (evl /setname=$PackagesUpdateBackupFailure;value=true) (evl /setname=$ExitOK;value=true) (evl /errormessage=false))) (evl /ifcondition=(> (evl (evl /lenvalue=(evl (evl /system/scheduler/findwhere=$name;$start-date;$start-time;$interval;$on-event;$owner;$policy;$run-count;$next-run;$disabled;$comment;$.id;$.nextid;$.dead;$.about;(= $name running-from-backup-partition);5)))) 0);do=;(evl / (<%% $LogPrint (> $LogPrint);warning;$ScriptName;Running from backup partition, refusing to act.) (evl /setname=$PackagesUpdateBackupFailure;value=true) (evl /setname=$ExitOK;value=true) (evl /errormessage=false))) (<%% $WaitFullyConnected (> $WaitFullyConnected)) (evl /ifcondition=(and (= (evl (<%% $ScriptFromTerminal (> $ScriptFromTerminal);$ScriptName)) false) (> $BackupRandomDelay 0));do=;(evl / (<%% $RandomDelay (> $RandomDelay);$BackupRandomDelay))) (evl /ifcondition=(= (evl (<%% $MkDir (> $MkDir);tmpfs/backup-cloud)) false);do=;(evl / (<%% $LogPrint (> $LogPrint);error;$ScriptName;Failed creating directory!) (evl /setname=$ExitOK;value=true) (evl /errormessage=false))) (evl /localname=$I;value=5) (evl /docommand=;(evl / (evl /executeas-string=
+      :global BackupPassword;
+
+      :local Backup ([ /system/backup/cloud/find ]->0);
+      :if ([ :typeof $Backup ] = "id") do={
+        /system/backup/cloud/upload-file action=create-and-upload \
+            password=$BackupPassword replace=$Backup;
+      } else={
+        /system/backup/cloud/upload-file action=create-and-upload \
+            password=$BackupPassword;
+      }
+      /file/add name="tmpfs/backup-cloud/done";
+    ;script=
+      :global BackupPassword;
+
+      :local Backup ([ /system/backup/cloud/find ]->0);
+      :if ([ :typeof $Backup ] = "id") do={
+        /system/backup/cloud/upload-file action=create-and-upload \
+            password=$BackupPassword replace=$Backup;
+      } else={
+        /system/backup/cloud/upload-file action=create-and-upload \
+            password=$BackupPassword;
+      }
+      /file/add name="tmpfs/backup-cloud/done";
+    ) (evl /setname=$I;value=(- $I 1)));while=(and (= (evl (<%% $WaitForFile (> $WaitForFile);tmpfs/backup-cloud/done;200ms)) false) (> $I 0))) (evl /ifcondition=(= (evl (<%% $WaitForFile (> $WaitForFile);tmpfs/backup-cloud/done)) true);do=;(evl / (evl /ifcondition=(< $I 4);do=;(evl / (evl /log/warningmessage=(. $ScriptName : Retry successful, please discard previous connection errors.)))) (evl /localname=$Cloud;value=(evl (evl /system/backup/cloud/getnumber=(-> (evl (evl /system/backup/cloud/find)) 0)))) (<%% $SendNotification2 (> $SendNotification2);message=(. Uploaded backup for  $Identity  to cloud. 
+ 
+ (evl (<%% $DeviceInfo (> $DeviceInfo))) 
+ 
+ (evl (<%% $FormatLine (> $FormatLine);Name;(-> $Cloud name))) 
+ (evl (<%% $FormatLine (> $FormatLine);Size;(. (evl (<%% $HumanReadableNum (> $HumanReadableNum);(-> $Cloud size);1024)) B))) 
+ (evl (<%% $FormatLine (> $FormatLine);Download key;(-> $Cloud secret-download-key))));origin=$ScriptName;silent=true;subject=(. (evl (<%% $SymbolForNotification (> $SymbolForNotification);floppy-disk,cloud)) Cloud backup)));else=;(evl / (<%% $SendNotification2 (> $SendNotification2);message=(. Failed uploading backup for  $Identity  to cloud! 
+ 
+ (evl (<%% $DeviceInfo (> $DeviceInfo))));origin=$ScriptName;subject=(. (evl (<%% $SymbolForNotification (> $SymbolForNotification);floppy-disk,warning-sign)) Cloud backup failed)) (<%% $LogPrint (> $LogPrint);error;$ScriptName;(. Failed uploading backup for  $Identity  to cloud!)) (evl /setname=$PackagesUpdateBackupFailure;value=true))) (<%% $RmDir (> $RmDir);tmpfs/backup-cloud)))

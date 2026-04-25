@@ -1,0 +1,1 @@
+/;(evl /retrycommand=;(evl (evl /putmessage=(evl (evl /system/identity/getvalue-name=name))));delay=00:00:01;max=3;on-error=;(evl (evl /putmessage=got an error)));(evl /retrycommand=;(evl (evl /putmessage=trying...) (evl /errormessage=cause error));delay=00:00:01;max=3;on-error=;(evl (evl /putmessage=I give up!)))

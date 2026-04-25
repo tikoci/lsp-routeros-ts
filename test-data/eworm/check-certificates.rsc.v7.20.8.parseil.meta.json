@@ -1,0 +1,10 @@
+{
+  "source": "eworm/check-certificates.rsc",
+  "routerosVersion": "7.20.8",
+  "chrBuildTime": "2026-01-30 09:17:54",
+  "inputBytes": 11113,
+  "ilBytes": 17141,
+  "parseMs": 12,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:23.920Z"
+}

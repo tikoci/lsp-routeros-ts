@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl / (evl /localname=$firstEven;value=(evl (evl /nothing))) (evl /foreachcounter=$i;do=;(evl / (evl /ifcondition=(= (% $i 2) 0);do=;(evl (evl /setname=$firstEven;value=$i))));in=$1;on-error=;(evl / /)) (evl /returnvalue=$firstEven));name=$findFirstEvenNumber);(evl /putmessage=(evl (<%% $findFirstEvenNumber (> $findFirstEvenNumber);1;1;2;1;1;1;1;1;1;4)))

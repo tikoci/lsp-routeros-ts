@@ -1,0 +1,1 @@
+/;(evl /globalname=$myjson;value=(. { " data " :{ " inventory_model_field_data " :{ " entities " :[{ " id " : " 833 " }]}}}));(evl /globalname=$myarray;value=(evl (evl /deserializefrom=json;value=$myjson)));(evl /putmessage=$myarray)

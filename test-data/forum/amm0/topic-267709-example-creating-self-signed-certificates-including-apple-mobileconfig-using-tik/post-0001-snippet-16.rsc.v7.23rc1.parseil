@@ -1,0 +1,89 @@
+/;(evl /globaldo=;(evl / (evl /globalname=$getScepAuthorityName) (evl /globalname=$caDownloadUrl) (evl /globalname=$UUIDv4) (evl /globalname=$scepserverhost) (evl /globalname=$scepserverport) (evl /globalname=$keyUsage) (evl /globalname=$certkeysize) (evl /globalname=$retries) (evl /globalname=$retryDelay) (evl /globalname=$clientname) (evl /globalname=$scepbase) (evl /globalname=$caCertFile) (evl /globalname=$sysname) (evl /localname=$caPayloadId;value=(evl (<%% $UUIDv4 (> $UUIDv4)))) (evl /localname=$scepPayloadId;value=(evl (<%% $UUIDv4 (> $UUIDv4)))) (evl /localname=$profilePayloadId;value=(evl (<%% $UUIDv4 (> $UUIDv4)))) (evl /localname=$keyUsageNumber;value=0) (evl /localname=$keyUsageEnum;value=all=5;key encipherment=4;none=0;signature=1) (evl /ifcondition=(-> $keyUsageEnum $keyUsage);do=;(evl (evl /setname=$keyUsageNumber;value=(-> $keyUsageEnum $keyUsage)))) (evl /localname=$xml;value=(. <?xml version=  " 1.0 "  encoding=  " UTF-8 " ?>
+
+<!DOCTYPE plist PUBLIC  " -//Apple//DTD PLIST 1.0//EN "   " http://www.apple.com/DTDs/PropertyList-1.0.dtd " >
+
+<plist version= " 1.0 " >
+
+<dict>
+
+<key>PayloadContent</key>
+
+<array>
+
+<dict>
+
+<key>PayloadCertificateFileName</key>
+
+<string>routeros-ca.crt</string>
+
+<key>PayloadContent</key>
+
+<data>
+
+ (evl (evl /convertto=base64;value=(evl (evl /file/getnumber=(evl (evl /file/findwhere=$name;$type;$size;$last-modified;$package-name;$package-version;$package-build-time;$package-architecture;$contents;$shared;$.id;$.nextid;$.dead;$.about;(  (= $name (evl (evl /pickbegin=1;counter=$caCertFile;end=1024))) $contents);65541)))))) 
+
+</data>
+
+<key>PayloadDescription</key>
+
+<string>Adds a CA root certificate</string>
+
+<key>PayloadDisplayName</key>
+
+<string> (evl (evl /converttransform=uc;value=$scepbase))  Authority ( $sysname )</string>
+
+<key>PayloadIdentifier</key>
+
+<string>com.apple.security.root. $caPayloadId </string>
+
+<key>PayloadType</key>
+
+<string>com.apple.security.root</string>
+
+<key>PayloadUUID</key>
+
+<string> $caPayloadId </string>
+
+<key>PayloadVersion</key>
+
+<integer>1</integer>
+
+</dict>
+
+</array>
+
+<key>PayloadDescription</key>
+
+<string>Adds certificate authority using RouterOS ' $sysname ' from ' $scepbase ' organization</string>
+
+<key>PayloadDisplayName</key>
+
+<string>Certificates from  $scepbase - $sysname </string>
+
+<key>PayloadIdentifier</key>
+
+<string>routeros.scepclient. $sysname . $profilePayloadId </string>
+
+<key>PayloadOrganization</key>
+
+<string> $scepbase </string>
+
+<key>PayloadRemovalDisallowed</key>
+
+<false />
+
+<key>PayloadType</key>
+
+<string>Configuration</string>
+
+<key>PayloadUUID</key>
+
+<string> $profilePayloadId </string>
+
+<key>PayloadVersion</key>
+
+<integer>1</integer>
+
+</dict>
+
+</plist>)) (evl /returnvalue=$xml));name=$makeAppleProfileFile)

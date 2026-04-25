@@ -1,0 +1,1 @@
+/;(evl /foreachcounter=$k;$v;do=;(evl / (evl /ifcondition=(~ $k rtt-avg|rtt-jitter|rtt-max|rtt-stdev);do=;(evl / (evl /ifcondition=(= $ldenom 0);do=;(evl (<%% $setchg (> $setchg);$1;$k;$v));else=;(evl (<%% $setchg (> $setchg);$1;$k;(evl (<%% $scaletime (> $scaletime);$v;$ldenom))))))));in=$nwattrs)

@@ -1,0 +1,1 @@
+(<%% (evl /;(evl /globalname=$wan1;value=1);(evl /globalname=$variablename;value=(. wanSta $wan1));(evl /parsevalue=(. :global  $variablename   " 10 "))) );(evl /putmessage=(evl (evl /system/script/environment/getnumber=$variablename;value-name=value)))

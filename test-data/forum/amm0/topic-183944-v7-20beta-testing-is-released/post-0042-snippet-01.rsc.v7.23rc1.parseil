@@ -1,0 +1,1 @@
+/;(evl /interface/list/addname=REQUIRE_PROXY);(evl /interface/list/member/addinterface=<what-interface-to-force-sock-proxy>;list=REQUIRE_PROXY);(evl /ip/firewall/nat/addaction=socksify;chain=<input-or-srcnat>;in-interface-list=;REQUIRE_PROXY;socks5-port=1080;socks5-server=127.0.0.1)

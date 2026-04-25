@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl / (evl /localname=$input;value=(evl (evl /tonumvalue=$1))) (evl /localname=$hexchars;value=0123456789ABCDEF) (evl /localname=$convert;value=(evl (evl /pickbegin=(& (>> $input 4) 15);counter=$hexchars))) (evl /setname=$convert;value=(. $convert (evl (evl /pickbegin=(& $input 15);counter=$hexchars)))) (evl /returnvalue=$convert));name=$numbyte2hex)

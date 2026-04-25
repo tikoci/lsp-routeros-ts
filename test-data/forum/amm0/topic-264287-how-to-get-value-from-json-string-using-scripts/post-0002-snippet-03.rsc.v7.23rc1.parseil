@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$mySunriseSunset;value=(evl (<%% $getSunriseSunset (> $getSunriseSunset);latitude=54.3520;longitude=18.6464))) (evl /putmessage=(. sunrise:  (-> (-> $mySunriseSunset results) sunrise))) (evl /putmessage=(. sunset:  (-> (-> $mySunriseSunset results) sunset))))

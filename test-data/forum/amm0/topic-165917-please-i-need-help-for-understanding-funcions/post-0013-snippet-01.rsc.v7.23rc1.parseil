@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl / (evl /localname=$logftp;value=(. ftp/ $aID _ftp.log)) (evl /executefile=$logftp;script=(. /tool fetch upload=yes url= " sftp:// $aIP /dude_rsa.pub "  src-path= " server.pub "  user= " admin-ssh "  keep-result=no)));name=$UPL);(<%% $UPL (> $UPL);aID=Test;aIP=10.50.0.191)

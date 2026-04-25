@@ -1,0 +1,11 @@
+/;(evl /globalname=$teststr;value=(. # Generated 2021-08-10 12:01:25.213173 
+ 2.84.0.0/14 
+ 5.54.0.0/15 
+ 5.144.192.0/18 
+ 5.172.192.0/20 
+ 5.203.0.0/32 
+ 31.14.168.0/0 
+ 31.14.208.0/00 
+));(evl /globalname=$addlist;value=test);(evl /globalname=$keep;value=true);(evl /globalname=$head;value=
+);(evl /globalname=$tail;value=
+);(evl /globalname=$regexipwithsubnet;value=(. ((25[0-5]|(2[0-4]|[01] ? [0-9] ? )[0-9]) \ .){3}(25[0-5]|(2[0-4]|[01] ? [0-9] ? )[0-9]) \ /(3[0-2]|[0-2] ? [0-9])));(evl /globalname=$lenght;value=(evl (evl /lenvalue=$teststr)));(evl /globalname=$offset;value=(evl (evl /lenvalue=$head)));(evl /globalname=$actualhead;value=-1);(evl /globalname=$actualtail;value=-1);(evl /globalname=$testip;value=);/ip/firewall/address-list/;(evl /ifcondition=(! $keep);do=;(evl (evl /ip/firewall/address-list/removenumbers=(evl (evl /ip/firewall/address-list/findwhere=$list;$address;$creation-time;$timeout;$dynamic;$dynamic;$disabled;$comment;$.id;$.nextid;$.dead;$.about;(= $list $addlist);5)))));(evl /whilecondition=(!= (evl (evl /typeofvalue=$actualtail)) nil);do=;(evl /ip/firewall/address-list/ (evl /setname=$actualhead;value=(+ (evl (evl /findfrom=$actualtail;in=$teststr;key=$head)) $offset)) (evl /setname=$actualtail;value=(evl (evl /findfrom=$actualhead;in=$teststr;key=$tail))) (evl /ifcondition=(!= (evl (evl /typeofvalue=$actualtail)) nil);do=;(evl /ip/firewall/address-list/ (evl /setname=$testip;value=(evl (evl /pickbegin=$actualhead;counter=$teststr;end=$actualtail))) (evl /ifcondition=(~ $testip $regexipwithsubnet);do=;(evl /ip/firewall/address-list/ (evl /ifcondition=(~ $testip (. \ /0(0| $ )));do=;(evl /ip/firewall/address-list/ (evl /log/warningmessage=(. Invalid IP-prefix > $testip <)));else=;(evl /ip/firewall/address-list/ (evl /ifcondition=(~ $testip (. \ /32));do=;(evl (evl /setname=$testip;value=(evl (evl /pickbegin=0;counter=$testip;end=(evl (evl /findfrom=-1;in=$testip;key=/32))))))) (evl /ifcondition=(= (evl (evl /lenvalue=(evl (evl /ip/firewall/address-list/findwhere=$list;$address;$creation-time;$timeout;$dynamic;$dynamic;$disabled;$comment;$.id;$.nextid;$.dead;$.about;(and (= $list $addlist) (= $address $testip));5)))) 0);do=;(evl (evl /ip/firewall/address-list/addaddress=$testip;list=$addlist)))))))))))

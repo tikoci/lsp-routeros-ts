@@ -1,0 +1,1 @@
+/;(evl /setname=(-> $ar1 2);value=(-> $ar2 2))

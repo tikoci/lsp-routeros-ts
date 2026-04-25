@@ -1,0 +1,1 @@
+/;(evl /ip/service/setcertificate=(. $scepbase - $sysname -router);numbers=reverse-proxy);(evl /ip/service/printwhere=$container;$name;$port;$proto;$address;$certificate;$tls-version;$vrf;$max-sessions;$local;$remote;$dynamic;$invalid;$connection;$disabled;$.id;$.nextid;$.dead;$.about;(= $name reverse-proxy);5)

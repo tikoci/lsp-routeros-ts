@@ -1,0 +1,1 @@
+/;(evl (evl /foreachcounter=$h;do=;(evl /ip/dns/static/ (evl /putmessage=(. (evl (evl /ip/dns/static/getnumber=$h;value-name=address))   (evl (evl /ip/dns/static/getnumber=$h;value-name=name)))));in=(evl (evl /ip/dns/static/find))))

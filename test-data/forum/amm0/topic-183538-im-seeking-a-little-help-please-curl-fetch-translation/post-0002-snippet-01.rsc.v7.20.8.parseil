@@ -1,0 +1,1 @@
+/;(evl /tool/fetchhttp-header-field=(, Content-Type: application/json (. Authorization: Bearer  $ apitoken));http-method=delete;url=(. https://api.cloudflare.com/client/v4/accounts/ $ accountid/rules/lists/ $ listid/items))

@@ -1,0 +1,4 @@
+/;/system/script/;(evl /system/script/addname=config.json;source=(. {  
+ " myname " :  " amm0 " ,  
+ " branding " :  " mariokart "  
+ }));(evl /putmessage=(evl (evl /deserializefrom=json;value=(evl (evl /system/script/getnumber=config.json;value-name=source)))))

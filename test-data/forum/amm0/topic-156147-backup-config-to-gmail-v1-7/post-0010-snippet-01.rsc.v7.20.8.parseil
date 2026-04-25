@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl (evl /putmessage=blah));name=$x);(evl /system/script/environment/printdetail=true;where=$name;$value;$comment;$.id;$.nextid;$.dead;$.about;(= $name x);5);/;(evl /system/script/environment/printdetail=true;where=$name;$value;$comment;$.id;$.nextid;$.dead;$.about;(= $name x);5);/

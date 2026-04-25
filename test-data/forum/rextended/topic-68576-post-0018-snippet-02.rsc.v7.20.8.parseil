@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (<%% $chr2lcase (> $chr2lcase);A)));(evl /putmessage=(evl (<%% $chr2ucase (> $chr2ucase);a)))

@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl (evl /putmessage=(. $1   $2)));name=$fn);(evl /putmessage=$fn);(evl /putmessage=(evl (evl /typeofvalue=$fn)));(evl /putmessage=(evl (evl /lenvalue=$fn)));(evl /putmessage=(evl (evl /typeofvalue=(-> $fn 1))));/

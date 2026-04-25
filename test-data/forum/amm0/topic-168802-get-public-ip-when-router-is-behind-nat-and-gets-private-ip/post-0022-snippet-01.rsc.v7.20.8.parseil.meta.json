@@ -1,0 +1,10 @@
+{
+  "source": "forum/amm0/topic-168802-get-public-ip-when-router-is-behind-nat-and-gets-private-ip/post-0022-snippet-01.rsc",
+  "routerosVersion": "7.20.8",
+  "chrBuildTime": "2026-01-30 09:17:54",
+  "inputBytes": 340,
+  "ilBytes": 121,
+  "parseMs": 1,
+  "ok": true,
+  "capturedAt": "2026-04-25T21:33:26.510Z"
+}
