@@ -163,12 +163,11 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 			position: { line: 0, character: 4 },
 			context: { triggerKind: 1 },
 		})
-		// Validate the response shape at runtime before casting — matches the pattern
-		// used for semanticTokens (line ~141) and diagnostics (line ~158) above.
-		const completionResult = completions.result as unknown
+		// Direct cast then runtime check — matches the pattern used for semanticTokens
+		// (line ~141) and diagnostics (line ~158) above.
+		const completionResult = completions.result as Array<{ label?: string }>
 		assert(Array.isArray(completionResult), 'completion response was not an array')
-		const completionItems = completionResult as Array<{ label?: string }>
-		assert(completionItems.some((item) => item.label === 'address'), 'completion response did not include mocked address item')
+		assert(completionResult.some((item) => item.label === 'address'), 'completion response did not include mocked address item')
 
 		await peer.request('shutdown', null)
 		peer.notify('exit', null)
@@ -307,10 +306,24 @@ class JsonRpcPeer {
 
 	#isPartialContentLengthValue(text: string, textLower: string, prefix: string, prefixLower: string) {
 		if (!textLower.startsWith(prefixLower)) return false
-		// Value portion: optional spaces/tabs, optional digits, optional `\r`, optional `\n`.
-		// Stricter than the LSP spec (which allows extra header lines like Content-Type)
-		// but matches what vscode-languageserver actually emits.
-		return /^[ \t]*\d*\r?\n?$/.test(text.slice(prefix.length))
+		// Value portion while streaming. Enumerate the valid intermediate states
+		// rather than collapsing them into a single permissive regex — the previous
+		// `/^[ \t]*\d*\r?\n?$/` accidentally matched `\r\n` with no digits, which
+		// would correspond to an invalid `Content-Length: \r\n` line. The four
+		// alternatives below all REQUIRE digits before any line terminator:
+		//   - whitespace + optional digits, no terminator yet (chunk landed mid-value)
+		//   - digits + `\r` only (waiting for `\n`)
+		//   - digits + `\n` only (waiting for next header line / end-of-headers)
+		//   - digits + `\r\n` complete (waiting for next header or end-of-headers)
+		// This is stricter than the LSP spec (which allows extra header lines like
+		// Content-Type) but matches what vscode-languageserver actually emits.
+		const tail = text.slice(prefix.length)
+		return (
+			/^[ \t]*\d*$/.test(tail) ||
+			/^[ \t]*\d+\r$/.test(tail) ||
+			/^[ \t]*\d+\n$/.test(tail) ||
+			/^[ \t]*\d+\r\n$/.test(tail)
+		)
 	}
 
 	#handleMessage(message: JsonRpcMessage) {
