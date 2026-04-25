@@ -24,6 +24,8 @@
 * GitHub Copilot is now automatically enabled for RouterOS files — no manual `github.copilot.enable` setting needed
 * GitHub Copilot CLI is now supported as an LSP client — use `.github/lsp.json` or `~/.copilot/lsp-config.json` with `initializationOptions.routeroslsp` to pass RouterOS credentials; see README for config example
 * RouterOS LSP now applies settings from `initializationOptions` on startup, enabling credential configuration for any LSP client that doesn't support `workspace/configuration` (Copilot CLI, Helix, etc.)
+* Added `routeroslsp.server.router.validateScript` and `routeroslsp.server.router.executeScript` commands for clients that need explicit RouterOS script validation or execution with per-call credentials
+* Moved tests and tooling scripts out of runtime source folders so `server/src/` and `client/src/` contain only code shipped with the LSP
 
 #### Fixes
 

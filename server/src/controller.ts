@@ -613,7 +613,7 @@ interface RouterScriptCommandRequest {
 	checkCertificates?: boolean
 }
 
-interface RouterScriptExecutionResult extends RouterScriptValidationResult {
+export interface RouterScriptExecutionResult extends RouterScriptValidationResult {
 	executed: boolean
 	output?: string
 }
