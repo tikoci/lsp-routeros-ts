@@ -30,7 +30,7 @@ interface JsonRpcMessage {
 interface PendingRequest {
 	resolve: (message: JsonRpcMessage) => void
 	reject: (error: Error) => void
-	timer: number | NodeJS.Timeout
+	timer: NodeJS.Timeout
 }
 
 const smokeDocumentText = '/ip address print\n'
@@ -207,7 +207,6 @@ class JsonRpcPeer {
 		return new Promise<JsonRpcMessage>((resolve, reject) => {
 			const timer = setTimeout(() => {
 				this.#pending.delete(id)
-				clearTimeout(timer)
 				reject(new Error(`${this.#label} timed out waiting for ${method}`))
 			}, REQUEST_TIMEOUT_MS)
 			this.#pending.set(id, { resolve, reject, timer })
