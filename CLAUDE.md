@@ -35,7 +35,7 @@ The codebase compiles to three build targets, but each change must be evaluated 
 2. **VSCode Web** (`vscode.dev`, `github.dev`) — Web Worker; no Node APIs; needs a CORS proxy for RouterOS.
 3. **Standalone native binary** (GitHub Releases) — `bun build --compile`; for Helix and other LSP clients via `--stdio`.
 4. **npm package** `@tikoci/routeroslsp` — Node-based stdio server; the recommended non-VSCode install path because it avoids macOS quarantine and is platform-independent.
-5. **NeoVim** — consumes either the standalone binary or the npm package via stdio, but is first-class: it has its own init script (`nvim-routeros-lsp-init.lua`), its own README section, and its own `.github/instructions/neovim.instructions.md`. Changes to the standalone path must be validated against NeoVim explicitly — it's the canary for "does the stdio transport still work end-to-end outside VSCode".
+5. **NeoVim** — consumes either the standalone binary or the npm package via stdio. It is first-class: it has its own init script (`nvim-routeros-lsp-init.lua`), its own README section, and its own `.github/instructions/neovim.instructions.md`. Changes to the standalone path must be validated against NeoVim explicitly. It's the canary for "does the stdio transport still work end-to-end outside VSCode".
 6. **GitHub Copilot CLI** — consumes the LSP via `.github/lsp.json` (repo-level) or `~/.copilot/lsp-config.json` (user-level). This is an LSP client, not an MCP server; ambient credentials usually flow through `initializationOptions` because Copilot CLI does not implement `workspace/configuration`, with `ROUTEROSLSP_*` env vars as a standalone fallback.
 
 See [`.github/instructions/deployment.instructions.md`](.github/instructions/deployment.instructions.md) for the per-context pre-release checklist.
@@ -168,7 +168,7 @@ All data comes from `POST /rest/console/inspect`:
 | `child` | Child nodes of a path | Not yet used |
 
 **Key gotchas:**
-- RouterOS uses Windows-1252 encoding; the LSP converts non-ASCII (>127) to `?` before querying
+- RouterOS uses Windows-1252 encoding; before querying, the LSP **replaces** all non-ASCII characters (>127) with `?`
 - Documents >32KB are truncated (RouterOS API limit)
 - Adding a fake space or `=` after input can expose arg completions or value definitions (see README "Implementation Tips")
 - Response format varies significantly between `request` types — `highlight` is comma-delimited, others are structured JSON
@@ -308,7 +308,7 @@ See [BACKLOG.md](BACKLOG.md) for planned LSP feature additions.
 
 1. **Handler naming**: Handlers are private class methods (`#onCompletion`, `#onHover`, etc.) — not public or arrow-function properties. Don't reference old names like `onCompletionHandler`.
 2. **32KB document limit**: RouterOS API truncates large scripts. The LSP silently truncates at this boundary.
-3. **Unicode → underscore replacement**: Non-ASCII characters replaced with `?` before sending to RouterOS. Character indexes must be preserved carefully.
+3. **Unicode → `?` replacement**: Non-ASCII characters (>127) are replaced with `?` before sending to RouterOS. Character indexes must be preserved carefully. (`replaceNonAscii` defaults to `_` if no replacement is passed, but every caller passes `'?'` — the underscore default is dead.)
 4. **Self-signed TLS**: Node.js uses `rejectUnauthorized: false` by default. Web target cannot bypass certificate checks — requires CORS proxy.
 5. **Full document sync**: Every keystroke sends the full document to RouterOS for re-highlighting. No incremental sync.
 6. **No offline mode**: Without a RouterOS connection, the LSP does nothing. Don't try to add fallback syntax — it would be version-specific and wrong.

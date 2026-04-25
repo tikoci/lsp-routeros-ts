@@ -96,11 +96,16 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 		cwd: resolve(moduleDir, '../..'),
 		stdio: ['pipe', 'pipe', 'pipe'],
 		// ROUTEROSLSP_API_TIMEOUT bounds any HTTP call the server might make at the
-		// transport layer (1ms = "fail fast"). It guards against the smoke test
-		// accidentally talking to anything other than the in-process mock router on
-		// 127.0.0.1, even before the LSP `initialize` settings have applied. The
-		// per-setting transport is then exercised via initializationOptions below.
-		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: '1' },
+		// transport layer ("fail fast"). It guards against the smoke test accidentally
+		// talking to anything other than the in-process mock router on 127.0.0.1, even
+		// before the LSP `initialize` settings have applied. The per-setting transport
+		// is then exercised via initializationOptions below.
+		//
+		// 10ms (not 1ms) is chosen as a deliberate floor: still well under any real
+		// network round-trip so a leaked external request fails immediately, but
+		// generous enough that loaded CI runners or cold-start JIT compilation don't
+		// cause false negatives against the in-process mock.
+		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: '10' },
 	})
 	const peer = new JsonRpcPeer(child, target.label)
 	let stderr = ''
@@ -158,8 +163,11 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 			position: { line: 0, character: 4 },
 			context: { triggerKind: 1 },
 		})
-		const completionItems = completions.result as Array<{ label?: string }>
-		assert(Array.isArray(completionItems), 'completion response was not an array')
+		// Validate the response shape at runtime before casting — matches the pattern
+		// used for semanticTokens (line ~141) and diagnostics (line ~158) above.
+		const completionResult = completions.result as unknown
+		assert(Array.isArray(completionResult), 'completion response was not an array')
+		const completionItems = completionResult as Array<{ label?: string }>
 		assert(completionItems.some((item) => item.label === 'address'), 'completion response did not include mocked address item')
 
 		await peer.request('shutdown', null)
