@@ -11,6 +11,8 @@ const moduleDir = fileURLToPath(new URL('.', import.meta.url))
 
 const REQUEST_TIMEOUT_MS = 5000
 const SHUTDOWN_GRACE_MS = 2000
+const TEST_ROUTEROS_USERNAME = process.env.TEST_ROUTEROS_USERNAME ?? 'TEST_ADMIN'
+const TEST_ROUTEROS_PASSWORD = process.env.TEST_ROUTEROS_PASSWORD ?? 'TEST_SMOKE_PASSWORD'
 // Deliberately small: fast-fail any unintended external network call in the
 // smoke tests, while still tolerating minor CI/JIT startup variability.
 const ROUTEROS_LSP_API_TIMEOUT_MS = 10
@@ -133,8 +135,8 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 				// Re-adding it here would duplicate state without exercising new code paths.
 				routeroslsp: {
 					baseUrl,
-					username: 'admin',
-					password: 'smoke-password',
+					username: TEST_ROUTEROS_USERNAME,
+					password: TEST_ROUTEROS_PASSWORD,
 					checkCertificates: false,
 				},
 			},
