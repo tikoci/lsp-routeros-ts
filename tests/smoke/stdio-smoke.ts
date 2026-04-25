@@ -264,10 +264,7 @@ class JsonRpcPeer {
 		if (this.#buffer.length === 0) {
 			this.#buffer = chunk
 		} else {
-			const combined = new Uint8Array(this.#buffer.length + chunk.length)
-			combined.set(this.#buffer)
-			combined.set(chunk, this.#buffer.length)
-			this.#buffer = Buffer.from(combined)
+			this.#buffer = Buffer.concat([this.#buffer, chunk])
 		}
 
 		while (this.#buffer.length > 0) {
