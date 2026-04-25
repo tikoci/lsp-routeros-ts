@@ -215,18 +215,22 @@ class JsonRpcPeer {
 		this.#label = label
 		child.stdout.on('data', (chunk: Buffer) => this.#onData(chunk))
 		child.on('exit', (code, signal) => {
-			if (this.#pending.size > 0) {
+			if (!this.#failed && this.#pending.size > 0) {
 				this.#fail(new Error(`${this.#label} exited before responding (code=${code ?? 'null'}, signal=${signal ?? 'null'})`))
 			}
 		})
-		child.on('error', (error) => this.#fail(error))
+		child.on('error', (error) => {
+			if (!this.#failed) {
+				this.#fail(error)
+			}
+		})
 	}
 
 	request(method: string, params: unknown): Promise<JsonRpcMessage> {
 		const id = this.#nextId++
 		return new Promise<JsonRpcMessage>((resolve, reject) => {
 			const timer = setTimeout(() => {
-				this.#pending.delete(id)
+				if (!this.#pending.delete(id)) return
 				reject(new Error(`${this.#label} timed out waiting for ${method}`))
 			}, REQUEST_TIMEOUT_MS)
 			this.#pending.set(id, { resolve, reject, timer })
@@ -353,7 +357,22 @@ class JsonRpcPeer {
 
 	#handleMessage(message: JsonRpcMessage) {
 		if (message.id !== undefined && message.method) {
-			this.#send({ jsonrpc: '2.0', id: message.id, result: null })
+			switch (message.method) {
+				case 'window/workDoneProgress/create':
+				case 'workspace/configuration':
+					this.#send({ jsonrpc: '2.0', id: message.id, result: null })
+					break
+				default:
+					this.#send({
+						jsonrpc: '2.0',
+						id: message.id,
+						error: {
+							code: -32601,
+							message: `${this.#label} does not handle server request: ${message.method}`,
+						},
+					})
+					break
+			}
 			return
 		}
 
@@ -371,6 +390,7 @@ class JsonRpcPeer {
 	}
 
 	#fail(error: Error) {
+		if (this.#failed) return
 		this.#failed = true
 		for (const [id, pending] of Array.from(this.#pending.entries())) {
 			clearTimeout(pending.timer)
