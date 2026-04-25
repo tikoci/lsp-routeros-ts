@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"target": "es2020",
+		"lib": ["es2020", "WebWorker"],
+		"module": "es2022",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"skipLibCheck": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"types": ["bun", "node"],
+		"baseUrl": ".",
+		"paths": {
+			"vscode-languageserver": ["../server/node_modules/vscode-languageserver"],
+			"vscode-languageserver-textdocument": ["../server/node_modules/vscode-languageserver-textdocument"],
+			"vscode-languageserver-protocol": ["../server/node_modules/vscode-languageserver-protocol"],
+			"vscode-languageserver-types": ["../server/node_modules/vscode-languageserver-types"]
+		}
+	},
+	"include": ["./**/*.ts"]
+}
