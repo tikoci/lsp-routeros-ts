@@ -12,6 +12,13 @@
 
 ## Changelog
 
+### 0.7.4 (pre-release)
+
+#### Changes
+
+#### Fixes
+
+
 ### 0.7.3 (pre-release)
 
 #### Changes
