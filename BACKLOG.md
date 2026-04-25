@@ -58,6 +58,16 @@ Concrete feature work this unblocks (filed below under their respective sections
 - ✅ Re-run `scripts/collect-parseil.ts` against 7.20.8 and 7.23rc1. Core IL forms stayed stable; observed drift is version-sensitive command schema/path/error churn, not a new grammar surface. See [`docs/parseil-format.md`](docs/parseil-format.md) §5.1.
 - 📋 Measure the `/rest/file/add` upload cap; observed 413 at 126 KiB, threshold unmeasured. Only matters if oversize scripts become a target.
 
+### `[research: required-args]` Build a version-tagged required-argument map
+
+**Motivation:** The parseIL `findwhere=` drift study (see [`docs/parseil-format.md`](docs/parseil-format.md) §5.2) confirmed that neither the `findwhere=` field list nor `/console/inspect` completion data has a structural signal that distinguishes required from optional arguments. However, a deterministic required-arg signal does exist at execute time: running `{menu} add` with no arguments returns `"Script Error: missing value(s) of argument(s) <arg1> <arg2> … (<path>/add; line 1)"`, which is machine-parseable.
+
+**Spike scope:** Write `scripts/collect-required-args.ts`. For every menu path in `deep-inspect.json` that has an `add` command, issue `/rest/execute` with `{menu} add` and no other args. Parse the error for `missing value(s)`, handle the `certificate`-style custom messages, and handle `bad command name add` for read-only menus. Emit a version-tagged JSON summary `test-data/required-args.v<version>.json` with shape `{path: string, required: string[], hasAdd: boolean, rawError: string}[]`. Run on 7.20.8, 7.22.1, and 7.23rc1 (already available in quickchr). Cross-check the drift against the `findwhere=` field-set changes to confirm no required arg appeared or disappeared without also changing the `findwhere=` dump.
+
+**For the LSP:** A required-arg map (keyed by `{menuPath}/{version}`) allows a new diagnostic — "add command is missing required argument(s): `chain`" — without any change to the RouterOS inspect API or a live connection.
+
+**Caveat — conditional args:** Some menus have args that are conditionally required depending on another arg's value (e.g., `/disk add type=iscsi` additionally requires `iscsi-address`, `iscsi-iqn`). The single-pass `add` probe only reveals the top-level discriminator (`type`). A follow-up that iterates over each discriminator value would complete the picture, but is a separate spike.
+
 ### `[research: inspect-shapes]` Catalog `/console/inspect` request-type responses
 
 We use `request=highlight` heavily, `request=completion` lightly, and have not characterized `syntax` or `child` against the corpus at all — yet feature items below assume their shape. Build a small harness in `scripts/inspect-catalog.ts` that, for a representative subset of `test-data/**/*.rsc` (and a fixed set of cursor positions per file), captures all four request types and saves them as `.inspect.<request>.json` snapshots. Document the schemas in `DESIGN.md` (one section per request type) so feature work can target the actual response shape, not what we remember from README. Pairs with the fake-space / fake-equals validation below.

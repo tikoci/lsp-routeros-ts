@@ -406,6 +406,67 @@ delimiters or forms appeared; statement sequencing still uses `;`, commands
 still lower to `(evl …)`, prefix operators still use `(<op> …)`, and quoted /
 activated function values still use `(> …)` and `(<%% …)`.
 
+### 5.2 `findwhere=` field lists and required-attribute discovery
+
+**Context:** The cross-version drift study exposed that `findwhere=` field dumps change as RouterOS adds or removes menu properties. The natural question is whether the list of fields present in a dump encodes any "required vs optional" signal for the LSP.
+
+**What `findwhere=` actually contains.** When RouterOS compiles a `find where …` expression it emits a dump of every property of the target menu, not just the ones referenced in the filter. For example, `[/ip/address find]` produces `findwhere=$address;$actual-interface;$disabled;$dynamic;$interface;$invalid;$network;…` — that is all 15+ properties of `/ip/address`, whether readable/writable or read-only.
+
+From the corpus (7.22.1, 56 distinct paths with `findwhere=` observed):
+
+| Category | Contents | Present in `findwhere=`? |
+| -------- | -------- | --- |
+| Read-write (settable via `add`/`set`) | `chain`, `dst-address`, `interface`, `comment`, … | ✓ always |
+| Read-only / computed | `.id`, `.dead`, `.about`, `active`, `running`, `dynamic`, … | ✓ always |
+| Required args (confirmed empirically) | `chain` (filter), `interface` (dhcp-client), `address`+`interface` (ip/address), … | ✓ always |
+| Optional args | everything else in `add` | ✓ (indistinguishable from required) |
+| Positional-insertion args | `place-before` (firewall/filter/nat/mangle, bridge/port, wireguard/peers) | ✗ never |
+
+The last row is the only structural asymmetry: `place-before` appears in `add` args from `/console/inspect` but is **never present** in the `findwhere=` dump, because it controls insertion position at creation time and is not stored as a property of the row.
+
+**No required-arg signal in `findwhere=` or the inspect API.** Cross-referencing the full 24-path drift table against confirmed required args (sourced below) shows:
+
+- Every confirmed required arg appears in `findwhere=` ✓ — but so do all the optional args.
+- Every confirmed required arg appears in `deep-inspect.json` under `add` ✓ — but again, so do all optional args.
+- `/console/inspect request=completion` returns every `add` arg with identical metadata: `preference=96`, `show=true`, `style=arg`. There is no `required`, `mandatory`, or priority-differentiated field in the completion payload.
+- `deep-inspect.json` arg nodes carry only `_type: arg`, optional `desc` (human-readable type hint like `"string value"`), and optional `_completion` (enumerated values). No `required` field.
+
+The `findwhere=` field dump therefore tells us *which properties exist for a menu in a given RouterOS version* — valuable for version-aware property enumeration — but it cannot distinguish required from optional.
+
+**The execute-error technique: the one reliable required-arg signal.** Running `{menu} add` with no arguments causes RouterOS to produce a structured error:
+
+```text
+Script Error: missing value(s) of argument(s) <arg1> <arg2> … (<path>/add; line 1)
+```
+
+This error is exact and machine-parseable. Tested against 18 menus on 7.22.1:
+
+| Menu | Required args (from error) |
+| ---- | ------------------------- |
+| `/ip/firewall/filter` | `chain` |
+| `/ip/firewall/nat` | `chain` |
+| `/ip/firewall/mangle` | `chain` |
+| `/interface/vlan` | `interface`, `vlan-id` |
+| `/interface/wireguard/peers` | `allowed-address`, `interface` |
+| `/interface/bridge/port` | `bridge`, `interface` |
+| `/interface/bridge/vlan` | `bridge`, `vlan-ids` |
+| `/ip/hotspot/user` | `name` |
+| `/ip/dhcp-server` | `interface` |
+| `/ip/dhcp-client` | `interface` |
+| `/system/logging/action` | `name`, `target` |
+| `/ip/address` | `address`, `interface` |
+| `/disk` | `type` |
+| `/ip/route` | *(none — creates a blank route)* |
+| `/interface/bridge` | *(none)* |
+| `/interface/wireguard` | *(none)* |
+| `/system/logging` | *(none)* |
+
+Caveats: (a) `certificate` uses a non-standard error format ("At least one field specifying certificate name must be set!"), so not every menu follows the `missing value(s)` pattern; (b) `/disk` only exposes the top-level `type` requirement — conditional args like `iscsi-address` (required when `type=iscsi`) need a second pass after providing the discriminator; (c) `add` commands that don't exist (e.g. `/ip/service`) return `bad command name add` instead.
+
+**Implications for the LSP.** The execute-error technique is an empirical, per-version probe — a good candidate for a dedicated capture harness similar to `scripts/collect-parseil.ts`. A version-tagged required-arg map would let the LSP emit a "missing required argument" diagnostic today, without any structural change to the RouterOS inspect API. See `[research: required-args]` in `BACKLOG.md`.
+
+The `findwhere=` cross-version drift (§5.1) pairs with this: when a property disappears from the drift (e.g. `suppress-hw-offload` gone from `/ip/route` on 7.22.1), confirming it was optional avoids a false-positive required-arg diagnostic on the older version's corpus.
+
 ## 6. What parseIL does and doesn't give us
 
 ### Useful for
