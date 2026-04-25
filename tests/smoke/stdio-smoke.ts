@@ -5,6 +5,9 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { type AddressInfo } from 'node:net'
 import { basename, resolve } from 'node:path'
 import { setTimeout as delay } from 'node:timers/promises'
+import { fileURLToPath } from 'node:url'
+
+const moduleDir = fileURLToPath(new URL('.', import.meta.url))
 
 interface SmokeTarget {
 	label: string
@@ -24,7 +27,7 @@ interface JsonRpcMessage {
 interface PendingRequest {
 	resolve: (message: JsonRpcMessage) => void
 	reject: (error: Error) => void
-	timer: ReturnType<typeof setTimeout>
+	timer: number | NodeJS.Timeout
 }
 
 const smokeDocumentText = '/ip address print\n'
@@ -69,9 +72,10 @@ function parseTargets(args: string[]): SmokeTarget[] {
 		)
 	}
 
+	const repoRoot = resolve(moduleDir, '../..')
 	for (const target of targets) {
 		const executablePath = target.command === 'node' ? target.args[0] : target.command
-		if (!existsSync(resolve(executablePath))) {
+		if (!existsSync(resolve(repoRoot, executablePath))) {
 			throw new Error(`Smoke target is missing: ${executablePath}. Run bun run compile first.`)
 		}
 	}
@@ -86,7 +90,7 @@ function requireNextArg(args: string[], index: number, flag: string): string {
 
 async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 	const child = spawn(target.command, target.args, {
-		cwd: resolve(import.meta.dir, '../..'),
+		cwd: resolve(moduleDir, '../..'),
 		stdio: ['pipe', 'pipe', 'pipe'],
 		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: '1' },
 	})
@@ -213,6 +217,8 @@ class JsonRpcPeer {
 
 	#onData(chunk: Buffer) {
 		if (this.#failed) return
+		// Uint8Array.from coerces to Uint8Array<ArrayBuffer>, avoiding a TS strict-mode
+		// incompatibility between Buffer<ArrayBuffer> and Buffer<ArrayBufferLike> on assignment.
 		this.#buffer = Buffer.concat([Uint8Array.from(this.#buffer), Uint8Array.from(chunk)])
 		while (this.#buffer.length > 0) {
 			const headerEnd = this.#buffer.indexOf('\r\n\r\n')
@@ -248,9 +254,13 @@ class JsonRpcPeer {
 	#assertCleanHeaderPrefix() {
 		const text = this.#buffer.toString('utf8')
 		const prefix = 'Content-Length:'
-		if (!prefix.startsWith(text) && !text.startsWith(prefix)) {
-			this.#fail(new Error(`${this.#label} wrote non-LSP bytes to stdout: ${JSON.stringify(text)}`))
-		}
+		const prefixLower = prefix.toLowerCase()
+		const textLower = text.toLowerCase()
+
+		if (text.length <= prefix.length && textLower === prefixLower.slice(0, text.length)) return
+		if (textLower.startsWith(prefixLower) && /^[ \t]*\d*\r?\n?$/.test(text.slice(prefix.length))) return
+
+		this.#fail(new Error(`${this.#label} wrote non-LSP bytes to stdout: ${JSON.stringify(text)}`))
 	}
 
 	#handleMessage(message: JsonRpcMessage) {
