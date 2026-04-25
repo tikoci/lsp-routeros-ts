@@ -2,7 +2,7 @@
  * Bun test preload — silences log output during tests.
  * Replaces ConnectionLogger.console with a no-op so test output is clean.
  */
-import { ConnectionLogger } from './shared'
+import { ConnectionLogger } from '../server/src/shared'
 
 const noop = () => {}
 ConnectionLogger.console = {

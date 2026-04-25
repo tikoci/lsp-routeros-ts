@@ -9,15 +9,15 @@
  * 2. Generating synthetic scripts (pure comments, simple commands, complex scripting)
  * 3. Comparing timing curves across different syntax profiles
  *
- * Usage: bun run server/src/profile-timing.ts
+ * Usage: bun run scripts/profile-timing.ts
  *
  * Override CHR:
- *   ROUTEROS_TEST_URL=http://... bun run server/src/profile-timing.ts
+ *   ROUTEROS_TEST_URL=http://... bun run scripts/profile-timing.ts
  */
 import { readFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
-import { replaceNonAscii } from './routeros'
-import { ConnectionLogger, ROUTEROS_API_MAX_BYTES } from './shared'
+import { replaceNonAscii } from '../server/src/routeros'
+import { ConnectionLogger, ROUTEROS_API_MAX_BYTES } from '../server/src/shared'
 
 // Silence logging
 const noop = () => {}
@@ -28,7 +28,7 @@ ConnectionLogger.console = { log: noop, info: noop, warn: noop, error: noop, deb
 const CHR_URL = process.env.ROUTEROS_TEST_URL || 'http://192.168.74.150'
 const CHR_USER = process.env.ROUTEROS_TEST_USER || 'admin'
 const CHR_PASS = process.env.ROUTEROS_TEST_PASS || ''
-const TEST_DATA_DIR = join(import.meta.dir, '../../test-data')
+const TEST_DATA_DIR = join(import.meta.dir, '../test-data')
 
 const RUNS_PER_SIZE = 3 // repeat each measurement to reduce noise
 const WARMUP_RUNS = 2 // warm up the CHR before measuring

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import { HighlightTokens } from './tokens'
+import { HighlightTokens } from '../../server/src/tokens'
 
 // helpers
 function doc(text: string) {

@@ -1,14 +1,14 @@
 /**
  * Snapshot capture utility — run against a live CHR to save highlight responses.
  *
- * Usage: bun run server/src/capture-snapshots.ts
+ * Usage: bun run scripts/capture-snapshots.ts
  *
  * Saves .highlight files alongside .rsc files in test-data/ for offline testing.
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
-import { replaceNonAscii } from './routeros'
-import { ConnectionLogger, ROUTEROS_API_MAX_BYTES } from './shared'
+import { replaceNonAscii } from '../server/src/routeros'
+import { ConnectionLogger, ROUTEROS_API_MAX_BYTES } from '../server/src/shared'
 
 // Silence logging — must be set before any module imports that use log
 const noop = () => {}
@@ -17,7 +17,7 @@ ConnectionLogger.console = { log: noop, info: noop, warn: noop, error: noop, deb
 const CHR_URL = process.env.ROUTEROS_TEST_URL || 'http://192.168.74.150'
 const CHR_USER = process.env.ROUTEROS_TEST_USER || 'admin'
 const CHR_PASS = process.env.ROUTEROS_TEST_PASS || ''
-const TEST_DATA_DIR = join(import.meta.dir, '../../test-data')
+const TEST_DATA_DIR = join(import.meta.dir, '../test-data')
 
 /** Direct HTTP highlight request — avoids RouterRestClient singleton issues */
 async function fetchHighlight(input: string): Promise<string | null> {

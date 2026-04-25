@@ -2,7 +2,7 @@
  * Import script-like snippets from a local mcp-discourse SQLite archive.
  *
  * Usage:
- * bun run server/src/import-discourse-sqlite-snippets.ts \
+ * bun run scripts/import-discourse-sqlite-snippets.ts \
  *   --db-path /Users/amm0/Lab/mcp-discourse/discourse.sqlite \
  *   --source-name amm0 \
  *   --out-dir test-data/forum/amm0

@@ -4,6 +4,6 @@
 		"noEmit": true,
 		"types": ["bun", "vscode"]
 	},
-	"include": ["**/*.test.ts"],
+	"include": ["*.ts"],
 	"exclude": []
 }

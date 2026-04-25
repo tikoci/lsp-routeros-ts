@@ -2,10 +2,10 @@
  * Dataset assessment script — runs all .rsc files through RouterOS /console/inspect
  * to evaluate highlight response quality, token parsing, and timing.
  *
- * Usage: bun run server/src/assess-dataset.ts
+ * Usage: bun run scripts/assess-dataset.ts
  *
  * Override CHR address:
- *   ROUTEROS_TEST_URL=http://... bun run server/src/assess-dataset.ts
+ *   ROUTEROS_TEST_URL=http://... bun run scripts/assess-dataset.ts
  *
  * Options:
  *   --json          Output results as JSON (for later analysis)
@@ -18,9 +18,9 @@
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import { replaceNonAscii } from './routeros'
-import { ConnectionLogger, ROUTEROS_API_MAX_BYTES } from './shared'
-import { HighlightTokens } from './tokens'
+import { replaceNonAscii } from '../server/src/routeros'
+import { ConnectionLogger, ROUTEROS_API_MAX_BYTES } from '../server/src/shared'
+import { HighlightTokens } from '../server/src/tokens'
 
 // Silence logging
 const noop = () => {}
@@ -31,7 +31,7 @@ ConnectionLogger.console = { log: noop, info: noop, warn: noop, error: noop, deb
 const CHR_URL = process.env.ROUTEROS_TEST_URL || 'http://192.168.74.150'
 const CHR_USER = process.env.ROUTEROS_TEST_USER || 'admin'
 const CHR_PASS = process.env.ROUTEROS_TEST_PASS || ''
-const TEST_DATA_DIR = join(import.meta.dir, '../../test-data')
+const TEST_DATA_DIR = join(import.meta.dir, '../test-data')
 
 const args = process.argv.slice(2)
 const jsonOutput = args.includes('--json')

@@ -6,4 +6,4 @@ https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033
 Thanks to [@rextended](https://forum.mikrotik.com/u/rextended/summary) for sharing these snippets.
 
 Imported with:
-`bun run server/src/import-discourse-snippets.ts --url 'https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033' --author rextended --follow-linked-pages --out-dir test-data/forum/rextended`
+`bun run scripts/import-discourse-snippets.ts --url 'https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033' --author rextended --follow-linked-pages --out-dir test-data/forum/rextended`

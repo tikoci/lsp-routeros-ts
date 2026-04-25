@@ -8,7 +8,7 @@ import { describe, expect, it } from 'bun:test'
 import { readdirSync, readFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import { HighlightTokens } from './tokens'
+import { HighlightTokens } from '../../server/src/tokens'
 
 const TEST_DATA_DIR = join(import.meta.dir, '../../test-data')
 

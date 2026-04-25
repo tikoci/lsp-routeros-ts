@@ -11,18 +11,18 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 
 | Kind | Lives in | Example | Notes |
 |------|----------|---------|-------|
-| Test | `tests/` (planned) or co-located `*.test.ts` (today) | `tokens.test.ts` | Deterministic, runs under `bun test`. Anchor tests preferred. |
-| Tooling script | `scripts/` (planned) — currently mixed into `server/src/` | `capture-snapshots.ts`, `profile-timing.ts`, `assess-dataset.ts`, `import-discourse-*.ts` | Run by hand or from CI; not shipped. `server/tsconfig.json` already excludes them. |
+| Test | `tests/server/` or `tests/client/` | `tokens.test.ts` | Deterministic, runs under `bun test`. Anchor tests preferred. |
+| Tooling script | `scripts/` | `capture-snapshots.ts`, `profile-timing.ts`, `assess-dataset.ts`, `import-discourse-*.ts` | Run by hand or from CI; not shipped. |
 | Experiment | `.scratch/` (gitignored) | `routeros2.js`, `parse-il-probe.ts` | For one-off probes and throwaway validation. If it survives, promote it into a script or test. |
 
-**Do not add new tests or one-off scripts to `server/src/` or `client/src/`.** See the "Repository Structure" items in [BACKLOG.md](../../BACKLOG.md) for the planned move.
+**Do not add new tests or one-off scripts to `server/src/` or `client/src/`.**
 
 ## Test Runner & Config
 
-- `bun test server/src/ client/src/` runs all tests (~326 tests, <500ms without CHR). Once the move lands, this becomes `bun test tests/` (adjust `package.json` `test` script at that time).
-- `bunfig.toml` preloads `server/src/test-preload.ts` to silence `log.*` output
-- Test files are co-located with source today: `server/src/*.test.ts`, `client/src/*.test.ts`
-- `server/tsconfig.json` excludes `*.test.ts`, `test-preload.ts`, and the tooling scripts from compilation
+- `bun test tests/` runs all tests (~3866 tests, <600ms without CHR).
+- `bunfig.toml` preloads `tests/test-preload.ts` to silence `log.*` output
+- Test files live in `tests/server/` (server tests) and `tests/client/` (client tests)
+- `server/tsconfig.json` and `client/tsconfig.json` compile only runtime code — tests have their own `tests/tsconfig.json`
 
 ## Test Tiers
 
@@ -39,7 +39,7 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 ### Snapshot tests (offline, uses .highlight files)
 - `snapshot.test.ts` — parses `.rsc.highlight` files alongside `.rsc` scripts
 - Validates: token count matches char count, all types known, contiguous ranges, regexToken length
-- Generate snapshots: `bun run server/src/capture-snapshots.ts` (requires live CHR)
+- Generate snapshots: `bun run scripts/capture-snapshots.ts` (requires live CHR)
 
 ### Client tests (no VSCode dependency)
 - `watchdog-errors.test.ts` — tests `toErrorInfo` and `getTextFromError` from `watchdog-errors.ts`
@@ -53,7 +53,7 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 ### Integration tests (requires live CHR)
 - `integration.test.ts` — connects to CHR, sends all `test-data/**/*.rsc` through `inspectHighlight`
 - Auto-skips when CHR is unreachable
-- Override CHR address: `ROUTEROS_TEST_URL=http://... bun test server/src/integration.test.ts`
+- Override CHR address: `ROUTEROS_TEST_URL=http://... bun test tests/server/integration.test.ts`
 - **In CI, prefer [`tikoci/quickchr`](https://github.com/tikoci/quickchr)** to boot a version-pinned CHR. quickchr is the designated QEMU expert project in the tikoci stack; it handles version selection, boot-wait loops, and port forwarding so that a GitHub Actions runner gets a predictable `/console/inspect`. See 📋 "QEMU CHR in CI" in BACKLOG.
 
 ## Assessment & Profiling Tools (not tests — standalone scripts)
@@ -61,14 +61,14 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 ### Dataset assessment (`assess-dataset.ts`)
 - Runs all `test-data/**/*.rsc` files through CHR highlight API
 - Reports: timing, token quality, unknown types, error tokens, CLI prompts, data signals
-- Usage: `bun run server/src/assess-dataset.ts [--json] [--concurrency=N]`
+- Usage: `bun run scripts/assess-dataset.ts [--json] [--concurrency=N]`
 - JSON output: `test-data/assessment-results.json` (gitignored)
 
 ### Performance profiling (`profile-timing.ts`)
 - Tests size→time relationship by truncating scripts at progressive sizes (128B → 32KB)
 - Includes synthetic controls (pure comments, simple commands, complex scripting, mixed paths)
 - Also profiles real files (eworm/global-functions.rsc, oversize-32k.rsc, complex/piano.rsc)
-- Usage: `bun run server/src/profile-timing.ts`
+- Usage: `bun run scripts/profile-timing.ts`
 - Key finding: superlinear (quadratic) scaling; sharp inflection at ~28KB; scripting syntax costs ~3× more than comments
 
 ## Test Strategy: Anchor Tests
@@ -85,7 +85,7 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 - `*.tikbook` — TikBook notebook format files
 
 ## Adding New Tests
-- Co-locate with the source file being tested (until the `tests/` move lands — then mirror the source tree)
-- For new `.rsc` test scripts: add to `test-data/`, run `capture-snapshots.ts` to generate `.highlight`
+- Place tests in `tests/server/` (for server code) or `tests/client/` (for client code), mirroring the source tree
+- For new `.rsc` test scripts: add to `test-data/`, run `scripts/capture-snapshots.ts` to generate `.highlight`
 - For mocking `RouterRestClient`: patch the singleton instance property, not the prototype (arrow-function methods are instance-level)
 - If you're tempted to write a script to "try something out" — it belongs in `.scratch/`, not next to a `.ts` source file. Promote to `scripts/` when it's worth keeping.

@@ -30,7 +30,7 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 - ✅ **Dataset assessment tool** — `assess-dataset.ts` runs all 913 .rsc files through CHR highlight API; measures timing, token quality, unknown types, data signals. Results: 912/913 OK, median 7ms, avg 30ms, max 3822ms.
 - ✅ **Performance profiling tool** — `profile-timing.ts` tests size→time relationship with progressive truncation + synthetic controls. Confirmed superlinear (quadratic) scaling across all syntax types, with a sharp inflection at ~28KB. Scripting syntax (variables, functions, control flow) costs 3× more than comments at the same size.
 - 📋 **VSCode integration tests** — boot real VS Code with `@vscode/test-electron`, install VSIX, verify semantic tokens, diagnostics, and completion work end-to-end
-- 📋 **Snapshot capture in CI** — run `capture-snapshots.ts` against CHR to regenerate `.highlight` files and detect regressions
+- 📋 **Snapshot capture in CI** — run `scripts/capture-snapshots.ts` against CHR to regenerate `.highlight` files and detect regressions
 - 📋 **Smoke test tier** — new tier between unit and integration: launches the server process (stdio), sends `initialize` + one `textDocument/didOpen` + one `textDocument/semanticTokens/full`, verifies a non-empty response. Runs against a mocked RouterOS so it needs no CHR; separate from unit tests so a smoke failure is a clear "the transport/protocol layer broke" signal. Run for both the Node-bundled `server.js` and the standalone binary; web target uses a Worker shim.
 
 ### CI/CD
@@ -40,9 +40,9 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 - 📋 **Automated VSIX publishing** — trigger publish on version tag
 
 ### Repository Structure
-- 📋 **Move one-off scripts out of `server/src/`** — `assess-dataset.ts`, `profile-timing.ts`, `capture-snapshots.ts`, `import-discourse-snippets.ts`, and `import-discourse-sqlite-snippets.ts` are tooling, not LSP runtime code. They should live in a top-level `scripts/` directory so `server/src/` stays "only what ships in `dist/server.js`". Rationale: agents keep dumping new experimentation scripts next to runtime code because there's no other obvious home — exactly how the current clutter accumulated. `server/tsconfig.json` already has to exclude them from compilation.
-- 📋 **Move `*.test.ts` to `tests/`** — tests are co-located today; the user-stated preference is that `client/src/` and `server/src/` hold runtime code only. Consider `tests/server/*.test.ts` mirroring source layout, or `server/tests/*.test.ts`. Adjust `bunfig.toml`, `server/tsconfig.json` excludes, and the `test` script in `package.json`. Do as a single focused PR — don't mix with feature work.
-- 📋 **Use `.scratch/` for ad-hoc experiments** — `.scratch/` is already gitignored. When agents want to try something without committing it (parsing experiments, API probes, etc.), land it there, not in `server/src/`.
+- ✅ **Move one-off scripts out of `server/src/`** — `assess-dataset.ts`, `profile-timing.ts`, `capture-snapshots.ts`, `import-discourse-snippets.ts`, and `import-discourse-sqlite-snippets.ts` moved to top-level `scripts/`. `server/src/` now contains only runtime code that ships in `dist/server.js`.
+- ✅ **Move `*.test.ts` to `tests/`** — tests moved to `tests/server/` and `tests/client/` mirroring the source tree. `bunfig.toml`, `server/tsconfig.json`, `client/tsconfig.json` excludes all updated. `bun test tests/` is the new command. `tests/tsconfig.json` added with `paths` for `vscode-languageserver*` packages.
+- ✅ **Use `.scratch/` for ad-hoc experiments** — `.scratch/` is gitignored. When agents want to try something without committing it (parsing experiments, API probes, etc.), land it there, not in `server/src/`.
 
 ### Code Quality
 - ✅ **Split ambient auth from explicit execute auth** — read-only LSP traffic still uses ambient settings / TikBook overrides, while internal `router.validateScript` / `router.executeScript` commands require explicit per-call credentials and validate before execution

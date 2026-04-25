@@ -172,7 +172,7 @@ bun run test    # unit + snapshot tests (no device needed)
 Integration tests against a live RouterOS device (CHR) are skipped automatically when no device is reachable. Set `ROUTEROS_TEST_URL` to override the default `http://192.168.74.150`. To regenerate snapshot files from a live device:
 
 ```bash
-bun run server/src/capture-snapshots.ts
+bun run scripts/capture-snapshots.ts
 ```
 
 See [`BACKLOG.md`](BACKLOG.md) for remaining testing work.
@@ -182,7 +182,7 @@ See [`BACKLOG.md`](BACKLOG.md) for remaining testing work.
 To import snippets from a Discourse topic page (or refresh the same page), use:
 
 ```bash
-bun run server/src/import-discourse-snippets.ts \
+bun run scripts/import-discourse-snippets.ts \
   --url 'https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033' \
   --author rextended \
   --out-dir test-data/forum/rextended
@@ -197,7 +197,7 @@ Use `--follow-linked-pages` to crawl one level of topic links found on the seed 
 For local archive imports (for example `source_name=amm0` in `mcp-discourse`), use:
 
 ```bash
-bun run server/src/import-discourse-sqlite-snippets.ts \
+bun run scripts/import-discourse-sqlite-snippets.ts \
   --db-path /Users/amm0/Lab/mcp-discourse/discourse.sqlite \
   --source-name amm0 \
   --out-dir test-data/forum/amm0

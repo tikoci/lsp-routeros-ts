@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { normalizeError, replaceNonAscii } from './routeros'
+import { normalizeError, replaceNonAscii } from '../../server/src/routeros'
 
 describe('replaceNonAscii', () => {
 	it('leaves pure ASCII text unchanged', () => {

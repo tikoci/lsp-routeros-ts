@@ -3,7 +3,7 @@
  * These are pure functions extracted from watchdog.ts — no VSCode dependency.
  */
 import { describe, expect, it } from 'bun:test'
-import { getTextFromError, toErrorInfo } from './watchdog-errors'
+import { getTextFromError, toErrorInfo } from '../../client/src/watchdog-errors'
 
 // MARK: toErrorInfo
 

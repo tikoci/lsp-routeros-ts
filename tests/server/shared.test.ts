@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
 import type { ExecuteCommandParams } from 'vscode-languageserver'
-import { clearConnectionUrl, defaultSettings, getConnectionUrl, getEnvironmentSettings, getSettings, isUsingClientCredentials, toEnvVariableName, updateSettings, useConnectionUrl } from './shared'
+import { clearConnectionUrl, defaultSettings, getConnectionUrl, getEnvironmentSettings, getSettings, isUsingClientCredentials, toEnvVariableName, updateSettings, useConnectionUrl } from '../../server/src/shared'
 
 function makeUseConnectionUrlParams(extension: string, baseUrl: string, username: string, password: string): ExecuteCommandParams {
 	return { command: 'useConnectionUrl', arguments: [extension, baseUrl, username, password] }

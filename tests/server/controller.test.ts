@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import type { InitializeParams } from 'vscode-languageserver'
-import { LspController, parseRouterScriptCommandRequest } from './controller'
-import { HighlightTokens } from './tokens'
+import { LspController, parseRouterScriptCommandRequest } from '../../server/src/controller'
+import { HighlightTokens } from '../../server/src/tokens'
 
 const minimalParams: InitializeParams = {
 	processId: null,

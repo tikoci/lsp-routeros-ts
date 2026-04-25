@@ -4,16 +4,16 @@
  * Connects to a live RouterOS CHR and validates inspectHighlight responses
  * for all .rsc test data files. Skips automatically when no CHR is reachable.
  *
- * Run: ROUTEROS_TEST_URL=http://192.168.74.150 bun test server/src/integration.test.ts
- *   or: bun test server/src/integration.test.ts  (uses default CHR address)
+ * Run: ROUTEROS_TEST_URL=http://192.168.74.150 bun test tests/server/integration.test.ts
+ *   or: bun test tests/server/integration.test.ts  (uses default CHR address)
  */
 import { afterAll, beforeAll, describe, expect, it } from 'bun:test'
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import { RouterRestClient, replaceNonAscii } from './routeros'
-import { defaultSettings, ROUTEROS_API_MAX_BYTES, updateSettings } from './shared'
-import { HighlightTokens } from './tokens'
+import { RouterRestClient, replaceNonAscii } from '../../server/src/routeros'
+import { defaultSettings, ROUTEROS_API_MAX_BYTES, updateSettings } from '../../server/src/shared'
+import { HighlightTokens } from '../../server/src/tokens'
 
 // MARK: Configuration
 

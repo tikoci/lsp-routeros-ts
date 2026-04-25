@@ -2,7 +2,7 @@
  * Import RouterOS snippets from a Discourse topic page JSON endpoint.
  *
  * Usage:
- * bun run server/src/import-discourse-snippets.ts \
+ * bun run scripts/import-discourse-snippets.ts \
  *   --url 'https://forum.mikrotik.com/t/rextended-fragments-of-snippets/151033/20?page=6' \
  *   --author rextended \
  *   --out-dir test-data/forum/rextended
@@ -448,7 +448,7 @@ async function main() {
 
 	if (!opts.dryRun) {
 		writeManifest(outDirAbs, opts.url, seedChunk, allSnippets)
-		const readme = `# Discourse Snippet Import\n\nSource page: ${opts.url}\nSeed topic: ${seed.topicBaseUrl}\nOne-level topic link following: ${opts.followLinkedPages ? 'enabled' : 'disabled'}\n\nGenerated files in this directory were extracted from Discourse post code blocks.\nUse server/src/import-discourse-snippets.ts to refresh or import another page.\n`
+		const readme = `# Discourse Snippet Import\n\nSource page: ${opts.url}\nSeed topic: ${seed.topicBaseUrl}\nOne-level topic link following: ${opts.followLinkedPages ? 'enabled' : 'disabled'}\n\nGenerated files in this directory were extracted from Discourse post code blocks.\nUse scripts/import-discourse-snippets.ts to refresh or import another page.\n`
 		writeFileSync(join(outDirAbs, 'README.md'), readme, 'utf-8')
 	}
 

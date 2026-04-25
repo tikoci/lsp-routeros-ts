@@ -9,8 +9,8 @@ webpack.config.js
 
 # ── Test artifacts (compiled test files that end up in dist/) ────────────────
 **/*.test.js
-server/dist/test-preload.js
-server/dist/capture-snapshots.js
+tests/
+scripts/
 test-data/
 
 # ── Build & developer tooling ────────────────────────────────────────────────

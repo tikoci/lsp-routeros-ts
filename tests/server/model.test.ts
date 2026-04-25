@@ -7,9 +7,9 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, mock } from 'bun:test'
 import { DiagnosticSeverity } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import { LspDocument } from './model'
-import { RouterRestClient } from './routeros'
-import { ROUTEROS_API_MAX_BYTES } from './shared'
+import { LspDocument } from '../../server/src/model'
+import { RouterRestClient } from '../../server/src/routeros'
+import { ROUTEROS_API_MAX_BYTES } from '../../server/src/shared'
 
 // MARK: Mock setup
 

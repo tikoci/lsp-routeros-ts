@@ -58,12 +58,6 @@ server/                      # LSP server (the brain — portable across editors
     routeros.ts              # HTTP client for RouterOS REST API
     shared.ts                # Settings, logging, credential management
     tokens.ts                # Token parser for /console/inspect highlight data
-    *.test.ts                # Unit tests — co-located TODAY (planned to move; see BACKLOG)
-    test-preload.ts          # Bun test preload — silences log output (planned to move with tests)
-    capture-snapshots.ts     # ⚠️ Script, not runtime. Planned to move to scripts/
-    assess-dataset.ts        # ⚠️ Script, not runtime. Planned to move to scripts/
-    profile-timing.ts        # ⚠️ Script, not runtime. Planned to move to scripts/
-    import-discourse-*.ts    # ⚠️ Scripts, not runtime. Planned to move to scripts/
     integration.test.ts      # CHR integration tests (skipped when no CHR)
     snapshot.test.ts         # Offline tests against .rsc.highlight snapshot pairs
 
@@ -74,13 +68,22 @@ test-data/                   # .rsc scripts + .highlight snapshots for testing
   *.rsc.highlight            # Saved highlight responses for offline snapshot tests
 docs/                        # User-facing docs (walkthrough, CORS guide)
 
+tests/                       # All *.test.ts files (mirrors source tree)
+  server/                    # Server tests: controller, model, routeros, shared, tokens, validation, snapshot, integration
+  client/                    # Client tests: watchdog-errors
+  test-preload.ts            # Bun test preload — silences log.*  output during tests
+  tsconfig.json              # Typecheck config with paths for vscode-languageserver* packages
+scripts/                     # Tooling scripts (run by hand or CI; not shipped)
+  capture-snapshots.ts       # Regenerate .highlight snapshot files from a live CHR
+  assess-dataset.ts          # Batch highlight quality assessment
+  profile-timing.ts          # Size→time profiling
+  import-discourse-*.ts      # Forum snippet import tools
+  tsconfig.json              # Typecheck config with paths for vscode-languageserver* packages
 bunfig.toml                  # Bun config — test preload for log silencing
 nvim-routeros-lsp-init.lua   # NeoVim LSP configuration script
 build-standalone.sh          # Cross-platform bun compile loop
 webpack.config.js            # Web target bundling only
 .scratch/                    # Gitignored — ad-hoc experiments, one-off probes
-scripts/                     # PLANNED — tooling scripts (capture, profile, assess, import)
-tests/                       # PLANNED — tests, moved out of client/src + server/src
 ```
 
 ## Architecture
@@ -199,7 +202,7 @@ The client is intentionally thin:
 | `vsix:package:prerelease` | Package .vsix as pre-release (`--pre-release`) |
 | `bun:exe` | Same as compile:exe + copies to ~/.bin/ |
 | `lint` | `bun audit` + Biome check on server + client |
-| `test` | `bun test server/src/ client/src/` |
+| `test` | `bun test tests/` |
 | `bump:patch` | Sync patch version across root + server + client package.json |
 | `bump:minor` | Sync minor version across root + server + client package.json |
 | `npm:publish` | `compile:server` + prepend shebang + `npm publish` from server/ |
@@ -237,7 +240,7 @@ GitHub Actions workflow (manual trigger):
 
 ## Testing
 
-Tests use `bun test` with co-located `*.test.ts` files. Run with `bun test server/src/ client/src/` or `bun run test`.
+Tests live in `tests/server/` and `tests/client/` (mirroring the source tree). Run with `bun run test` or `bun test tests/`.
 
 ### Test tiers
 
@@ -251,9 +254,9 @@ Tests use `bun test` with co-located `*.test.ts` files. Run with `bun test serve
 
 ### Key details
 
-- `bunfig.toml` configures a preload (`test-preload.ts`) that silences `log.*` output during tests
+- `bunfig.toml` configures a preload (`tests/test-preload.ts`) that silences `log.*` output during tests
 - Integration tests auto-skip when no CHR is reachable (default `http://192.168.74.150`, override via `ROUTEROS_TEST_URL`)
-- `capture-snapshots.ts` is a CLI tool (`bun run server/src/capture-snapshots.ts`) that regenerates `.highlight` snapshot files from a live CHR
+- `scripts/capture-snapshots.ts` is a CLI tool (`bun run scripts/capture-snapshots.ts`) that regenerates `.highlight` snapshot files from a live CHR
 - `test-data/` is committed — snapshot `.highlight` files and scripts are available in CI for offline tests
 - Snapshot tests revealed unknown token types `arg-scope`, `arg-dot` — not yet in `HighlightTokens.TokenTypes` (see BACKLOG)
 - See [BACKLOG.md](BACKLOG.md) for remaining testing work (VSCode integration tests, CI snapshot capture)

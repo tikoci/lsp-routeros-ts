@@ -58,7 +58,7 @@ bun run bun:exe             # Build standalone binary (copies to ~/.bin/)
 - **Server is the brain** — LSP features belong in `server/`, not `client/`. The client is a thin VSCode binding that proxies to the server. Don't replace LSP protocol with VSCode-specific APIs.
 - **All syntax data comes from RouterOS** — the LSP has no built-in grammar. Every completion, diagnostic, and token comes from querying a live device's `/console/inspect` endpoint.
 - **Three ID conventions**: `lsp-routeros-ts` (project), `routeroslsp` (settings/config namespace), `lsp-routeros-server-*` (standalone binaries)
-- **`client/src/` and `server/src/` hold runtime code only** — what ships in `dist/`. Tests (`*.test.ts`) are co-located today for historical reasons but are planned to move; **do not add new tests or one-off scripts to `server/src/`**. New tooling scripts go in a top-level `scripts/` directory (create it if needed); ad-hoc experimentation goes in `.scratch/` (gitignored). See the "Repository Structure" items in [BACKLOG.md](../BACKLOG.md).
+- **`client/src/` and `server/src/` hold runtime code only** — what ships in `dist/`. Tests live in `tests/server/` and `tests/client/`; tooling scripts live in `scripts/`; ad-hoc experiments go in `.scratch/` (gitignored). Do not add tests, scripts, or experiments to `server/src/` or `client/src/`.
 - **Pre-release quality gate** — before `vsix:package:prerelease` or an npm publish can be trusted, the five deployment contexts above all need at least a smoke check green. See [`deployment.instructions.md`](instructions/deployment.instructions.md#pre-release-checklist).
 
 ## Key Files

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { ROUTEROS_API_MAX_BYTES } from './shared'
-import { validateScriptText } from './validation'
+import { ROUTEROS_API_MAX_BYTES } from '../../server/src/shared'
+import { validateScriptText } from '../../server/src/validation'
 
 describe('validateScriptText', () => {
 	it('passes clean scripts with no diagnostics', async () => {
