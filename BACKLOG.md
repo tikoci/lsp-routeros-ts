@@ -53,7 +53,7 @@ Concrete feature work this unblocks (filed below under their respective sections
 
 **Open follow-ups (small):**
 
-- 📋 Pin down the `(<%% …)` `(> $f)` inner form semantics via a focused probe (`:local f do={…}; [$f a=1]` vs `[$f 1]`).
+- 📋 Pin down the `(<%% …)` and `(> …)` semantics. Both leak into the RouterOS CLI as valid source-level syntax — `[(>[:put hello])]` evaluates to `hello` at the console — so they're real operators, not IL-internal markers. Working hypothesis: `(<%% …)` is "apply", `(>EXPR)` is "evaluate / dereference". Confirm via console probes (`:typeof (>[:put 1])` etc.) plus source-level examples from `mcp-discourse` once that data path is wired in. See [`docs/parseil-format.md`](docs/parseil-format.md) §3.5 + §8.
 - 📋 Re-run `scripts/collect-parseil.ts` against newer CHR releases (7.22.2, 7.23rc, …) and diff `.v<version>.parseil` files to detect IL grammar drift.
 - 📋 Measure the `/rest/file/add` upload cap; observed 413 at 126 KB, threshold unmeasured. Only matters if oversize scripts become a target.
 

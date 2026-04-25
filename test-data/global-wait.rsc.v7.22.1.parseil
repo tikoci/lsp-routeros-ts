@@ -1,0 +1,1 @@
+/;(evl /globalname=$GlobalConfigReady);(evl /globalname=$GlobalFunctionsReady);(evl /whilecondition=(or (!= $GlobalConfigReady true) (!= $GlobalFunctionsReady true));do=;(evl / (evl /delaydelay-time=00:00:00.500)))

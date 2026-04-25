@@ -209,13 +209,31 @@ becomes (whitespace adjusted for readability):
 ```
 
 The inner `(<%% $f (> $f);world)` is the actual call: `$f` is the callee, and
-the `(> $f)` form appears to be a marker for "binding context for `$f`'s
-formals" — its precise semantics need more probing on a follow-up spike, but it
-appears consistently before positional/named args in calls.
+the `(> $f)` form appears before positional/named args in every call we've
+seen. Working hypothesis: `(<%% …)` is "apply" and `(> …)` is "evaluate / force
+this expression to its value before binding."
+
+> **Note (user-supplied grounding):** the `(> …)` form **is not a parseIL-only
+> artifact** — it leaks into the RouterOS CLI as a valid expression. From the
+> live console:
+>
+> ```text
+> [skyfi@bigdude] > [(>[:put hello])]
+> hello
+> ```
+>
+> So `(>EXPR)` is a real, evaluable form in the RouterOS scripting grammar (an
+> "evaluate / dereference" operator), and the IL is using the same surface
+> syntax that the language permits at the source level. By the same logic
+> `(<%% …)` is plausibly the runtime "apply" operator. Confirming this against
+> the corpus requires examples that exercise both forms at the source level —
+> there are several in `mcp-discourse` (forum.mikrotik.com archive) that we
+> can pull in once that data path is wired up.
 
 The outer `(<%% …)` wraps any IL that contains a function-call expression at
-the script root, even when there is no explicit function definition. It seems
-to be the IL's "evaluable wrapper" for code that uses dynamic dispatch.
+the script root, even when there is no explicit function definition. Under the
+"apply" hypothesis above, that's consistent with "wrap the whole script in an
+apply-frame so dynamic dispatch resolves at the right scope."
 
 ### 3.6 Variable references and literals
 
@@ -372,11 +390,16 @@ backlog items once the spike is closed:
 
 ## 8. Open questions for follow-up spikes
 
-- **The `(<%% …)` and `(> $f)` forms.** Confirmed to mark dynamic dispatch,
-  but the inner `(> $f)` semantics are only partially understood. A tiny
-  follow-up probe with `:local f do={:put $a}; [$f a=1]` vs `[$f 1]` should
-  pin down whether `(>` carries the formal-parameter list or the binding
-  context.
+- **The `(<%% …)` and `(> …)` forms.** Both leak into the RouterOS CLI as
+  valid source-level syntax (see §3.5 — `[(>[:put hello])]` evaluates to
+  `hello` at the console), so they're real RouterOS operators, not
+  IL-internal markers. Working hypothesis: `(<%% …)` is "apply" and `(>EXPR)`
+  is "evaluate / dereference this expression." Pin down by (a) probing the
+  console with `:typeof (>[:put 1])` and similar to confirm what `(>…)`
+  evaluates to, (b) pulling source-level examples of both operators from
+  `mcp-discourse` (forum corpus) once that data path is wired in, (c) running
+  `:local f do={:put $a}; [$f a=1]` vs `[$f 1]` to see whether `(>` always
+  appears in the same position relative to the call's args.
 - **`/file/add` upload limit.** 413 at 126 KB; threshold unmeasured. Worth a
   one-off binary search if oversize scripts become a target.
 - **Parse-time vs highlight-time correlation.** Captured in
