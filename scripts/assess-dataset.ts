@@ -260,8 +260,6 @@ async function processFile(filePath: string): Promise<FileResult> {
 			// regexToken found unknowns that our known set missed — interesting
 		}
 	} catch (e) {
-		parseTimeMs = performance.now()
-		parseStatus = 'error'
 		return {
 			...base,
 			status: 'error',

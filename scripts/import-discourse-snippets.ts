@@ -172,13 +172,64 @@ function extractCodeBlocks(cookedHtml: string): string[] {
 	return snippets
 }
 
+function looksLikeHtmlTagStart(input: string, nextIndex: number): boolean {
+	const nextChar = input[nextIndex]
+	return nextChar === '/' || nextChar === '!' || /[A-Za-z]/.test(nextChar || '')
+}
+
+function appendHtmlTagBoundary(output: string[], rawTag: string) {
+	const trimmed = rawTag.trimStart()
+	const isClosingTag = trimmed.startsWith('/')
+	const tagName = (isClosingTag ? trimmed.slice(1) : trimmed).match(/^[A-Za-z0-9-]+/)?.[0]?.toLowerCase()
+	if (tagName === 'br' || (isClosingTag && tagName === 'p')) {
+		output.push('\n')
+	}
+}
+
 function stripHtmlToText(html: string): string {
-	return decodeHtmlEntities(
-		html
-			.replace(/<br\s*\/?\s*>/gi, '\n')
-			.replace(/<\/p>/gi, '\n')
-			.replace(/<[^>]+>/g, ''),
-	)
+	const output: string[] = []
+	let tagBuffer = ''
+	let activeQuote: '"' | "'" | null = null
+	let insideTag = false
+
+	for (let i = 0; i < html.length; i++) {
+		const char = html[i]
+		if (!insideTag) {
+			if (char === '<' && looksLikeHtmlTagStart(html, i + 1)) {
+				insideTag = true
+				tagBuffer = ''
+				activeQuote = null
+				continue
+			}
+			output.push(char)
+			continue
+		}
+
+		if (activeQuote) {
+			if (char === activeQuote) activeQuote = null
+			tagBuffer += char
+			continue
+		}
+
+		if (char === '"' || char === "'") {
+			activeQuote = char
+			tagBuffer += char
+			continue
+		}
+
+		if (char === '>') {
+			appendHtmlTagBoundary(output, tagBuffer)
+			insideTag = false
+			tagBuffer = ''
+			continue
+		}
+
+		tagBuffer += char
+	}
+
+	if (insideTag) output.push(`<${tagBuffer}`)
+
+	return decodeHtmlEntities(output.join(''))
 		.replace(/\r\n?/g, '\n')
 		.trim()
 }

@@ -74,9 +74,8 @@ export class LspController {
 		return LspController.#default
 	}
 
-	static start(connection: Connection, nodeHttpsAgent?: object) {
+	static start(connection: Connection) {
 		ConnectionLogger.console = connection.console
-		if (nodeHttpsAgent) RouterRestClient.nodeHttpsAllowAllAgent = nodeHttpsAgent
 		log.debug('<server> start()')
 		LspController.#default = new LspController(connection)
 		return LspController.#default

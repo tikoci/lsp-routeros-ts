@@ -73,6 +73,8 @@ export interface RouterOSClientError {
 	status?: number
 }
 
+export type NodeHttpsAgentFactory = (checkCertificates: boolean) => object | undefined
+
 // MARK: RouterRestClient
 
 export class RouterRestClient implements RouterApiClientInterface {
@@ -87,8 +89,8 @@ export class RouterRestClient implements RouterApiClientInterface {
 	 */
 	static onHttpError: (() => void) | null = null
 
-	/** HTTPS agent for self-signed certs — injected from server.ts (Node only) */
-	static nodeHttpsAllowAllAgent: object | undefined
+	/** Node-only HTTPS agent factory; web builds leave this unset because browsers enforce TLS. */
+	static nodeHttpsAgentFactory: NodeHttpsAgentFactory | undefined
 
 	static #default: RouterRestClient | undefined = undefined
 	static get default() {
@@ -145,12 +147,13 @@ export class RouterRestClient implements RouterApiClientInterface {
 		if (!url) log.error('ERROR <httpclient> HTTP client using invalid URL from Settings')
 		else url.pathname += 'rest'
 		const baseUrlString = url ? url.toString() : settings.baseUrl
+		const httpsAgent = RouterRestClient.nodeHttpsAgentFactory?.(settings.checkCertificates)
 		return axios.create({
 			baseURL: baseUrlString,
 			timeout: settings.apiTimeout * 1000,
 			headers: { 'Content-Type': 'application/json' },
 			withCredentials: true,
-			httpsAgent: settings.checkCertificates ? undefined : RouterRestClient.nodeHttpsAllowAllAgent,
+			httpsAgent,
 			auth: {
 				username: settings.username,
 				password: settings.password,

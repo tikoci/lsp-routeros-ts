@@ -6,7 +6,6 @@
 // @ts-check
 'use strict'
 
-// @ts-check
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -31,7 +30,7 @@ const browserClientConfig = {
     extensions: ['.ts', '.js'], // support ts-files and js-files
     alias: {},
     fallback: {
-      util: require.resolve('util/'),
+      util: require.resolve('util'),
       path: require.resolve('path-browserify'),
     },
   },
