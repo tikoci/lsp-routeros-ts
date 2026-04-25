@@ -31,7 +31,7 @@
     "vscode-languageserver-textdocument": "^1.0.12"
   },
   "devDependencies": {
-    "@vscode/test-web": "^0.0.79"
+    "@vscode/test-web": "^0.0.80"
   },
   "peerDependencies": {
     "vscode-languageserver-types": "^3.17.5"
