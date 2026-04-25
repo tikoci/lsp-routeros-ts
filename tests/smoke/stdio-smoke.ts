@@ -13,7 +13,7 @@ const REQUEST_TIMEOUT_MS = 5000
 const SHUTDOWN_GRACE_MS = 2000
 // Deliberately small: fast-fail any unintended external network call in the
 // smoke tests, while still tolerating minor CI/JIT startup variability.
-const routerOsLspApiTimeoutMs = 10
+const routerOSLspApiTimeoutMs = 10
 
 interface SmokeTarget {
 	label: string
@@ -115,7 +115,7 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 		// network round-trip so a leaked external request fails immediately, but
 		// generous enough that loaded CI runners or cold-start JIT compilation don't
 		// cause false negatives against the in-process mock.
-		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: String(routerOsLspApiTimeoutMs) },
+		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: String(routerOSLspApiTimeoutMs) },
 	})
 	const peer = new JsonRpcPeer(child, target.label)
 	let stderr = ''
@@ -264,12 +264,10 @@ class JsonRpcPeer {
 		if (this.#buffer.length === 0) {
 			this.#buffer = chunk
 		} else {
-			// allocUnsafe is safe here: every byte is immediately overwritten by the
-			// two set() calls below before this buffer is read anywhere.
-			const combined = Buffer.allocUnsafe(this.#buffer.length + chunk.length)
-			combined.set(this.#buffer, 0)
+			const combined = new Uint8Array(this.#buffer.length + chunk.length)
+			combined.set(this.#buffer)
 			combined.set(chunk, this.#buffer.length)
-			this.#buffer = combined
+			this.#buffer = Buffer.from(combined)
 		}
 
 		while (this.#buffer.length > 0) {
@@ -398,7 +396,7 @@ class JsonRpcPeer {
 	#fail(error: Error) {
 		if (this.#failed) return
 		this.#failed = true
-		for (const [id, pending] of Array.from(this.#pending.entries())) {
+		for (const [id, pending] of this.#pending.entries()) {
 			clearTimeout(pending.timer)
 			pending.reject(error)
 			this.#pending.delete(id)
