@@ -11,6 +11,9 @@ const moduleDir = fileURLToPath(new URL('.', import.meta.url))
 
 const REQUEST_TIMEOUT_MS = 5000
 const SHUTDOWN_GRACE_MS = 2000
+// Credentials used only in initializationOptions sent to the mock server — never a real router.
+const SMOKE_ROUTEROS_USERNAME = process.env.TEST_ROUTEROS_USERNAME ?? 'admin'
+const SMOKE_ROUTEROS_PASSWORD = process.env.TEST_ROUTEROS_PASSWORD ?? 'smoke-password'
 // Deliberately small: fast-fail any unintended external network call in the
 // smoke tests, while still tolerating minor CI/JIT startup variability.
 const ROUTEROS_LSP_API_TIMEOUT_MS = 10
@@ -133,8 +136,8 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 				// Re-adding it here would duplicate state without exercising new code paths.
 				routeroslsp: {
 					baseUrl,
-					username: 'admin',
-					password: 'smoke-password',
+					username: SMOKE_ROUTEROS_USERNAME,
+					password: SMOKE_ROUTEROS_PASSWORD,
 					checkCertificates: false,
 				},
 			},
@@ -264,10 +267,10 @@ class JsonRpcPeer {
 		if (this.#buffer.length === 0) {
 			this.#buffer = chunk
 		} else {
-			const combined = new Uint8Array(this.#buffer.length + chunk.length)
-			combined.set(this.#buffer)
-			combined.set(chunk, this.#buffer.length)
-			this.#buffer = Buffer.from(combined)
+			// @ts-expect-error -- Buffer is not assignable to Uint8Array<ArrayBufferLike> under
+			// Bun's bun-types + TypeScript 6 due to an ArrayBuffer.resize extension conflict;
+			// Buffer.concat is correct at runtime and preferred over allocUnsafe.
+			this.#buffer = Buffer.concat([this.#buffer, chunk])
 		}
 
 		while (this.#buffer.length > 0) {
@@ -461,7 +464,18 @@ function writeJson(res: ServerResponse, value: unknown) {
 }
 
 function highlightFor(input: string): HighlightToken[] {
-	const tokens = Array<HighlightToken>(input.length).fill('none')
+	const chars = Array.from(input)
+	const tokens = Array<HighlightToken>(chars.length).fill('none')
+
+	// Map UTF-16 code unit offsets (used by String.matchAll) to Unicode character indices.
+	const codeUnitToCharIndex: number[] = []
+	let codeUnitOffset = 0
+	for (let i = 0; i < chars.length; i++) {
+		codeUnitToCharIndex[codeUnitOffset] = i
+		codeUnitOffset += chars[i].length
+	}
+	codeUnitToCharIndex[codeUnitOffset] = chars.length
+
 	for (const match of input.matchAll(/\S+/g)) {
 		const word = match[0]
 		const start = match.index
@@ -474,7 +488,11 @@ function highlightFor(input: string): HighlightToken[] {
 			token = 'dir'
 		}
 
-		for (let i = start; i < start + word.length; i++) {
+		const startChar = codeUnitToCharIndex[start] ?? chars.length
+		const endCodeUnit = start + word.length
+		const endChar = codeUnitToCharIndex[endCodeUnit] ?? chars.length
+
+		for (let i = startChar; i < endChar; i++) {
 			tokens[i] = token
 		}
 	}
