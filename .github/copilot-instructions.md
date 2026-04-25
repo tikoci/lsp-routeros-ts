@@ -50,6 +50,15 @@ bun run bun:exe             # Build standalone binary (copies to ~/.bin/)
 
 **F5** in VSCode launches the Extension Development Host (preLaunchTask: `compile`).
 
+### CI vs Release
+
+Two workflows in `.github/workflows/`:
+
+- **`ci.yaml`** — runs on every push to `main` and on pull requests. Does install → compile → test → lint → smoke. **No release artifacts, no publish.** This is the gate that catches regressions between releases. If it goes red, fix it before more changes pile on.
+- **`build.yaml`** — manual `workflow_dispatch` only. Re-runs the same gate, then cross-compiles the 8 standalone binaries, packages VSIX, creates the GitHub Release, and publishes to Marketplace + Open-VSX + npm. Releasing stays an explicit human action.
+
+When changing build scripts, lint config, the test runner, or the smoke harness, update both workflows so the CI gate matches the release gate.
+
 ## Critical Conventions
 
 - **Bun over Node.js** — `bun install`, `bun run`, `bun build`, `bun test`

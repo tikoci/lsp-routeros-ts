@@ -45,10 +45,13 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 - `watchdog-errors.test.ts` — tests `toErrorInfo` and `getTextFromError` from `watchdog-errors.ts`
 - These are pure functions extracted from `watchdog.ts` to avoid VSCode import issues
 
-### Smoke tests (planned — not yet implemented)
-- Goal: per deployment context, verify the LSP boots and responds to `initialize` + one semantic-tokens request end-to-end. Catches transport/packaging regressions unit tests cannot.
-- Contexts that need smoke coverage: standalone binary (`--stdio`), npm package (via `npx`), web bundle (via a Worker shim). See [`deployment.instructions.md`](deployment.instructions.md#pre-release-checklist).
-- Uses a mock RouterOS — smoke tests must not depend on a live CHR. Integration tests cover the CHR side.
+### Smoke tests (`tests/smoke/stdio-smoke.ts`)
+- Goal: per deployment context, verify the LSP boots and responds to `initialize`, `textDocument/didOpen`, semantic tokens, diagnostics, and completion end-to-end against a mocked RouterOS HTTP server. Catches transport/packaging regressions unit tests cannot.
+- Currently covers two stdio contexts: the Node-bundled `server/dist/server.js` and the standalone `bun build --compile` binary. Run via `bun run test:smoke` (also runs in `ci.yaml` on every push/PR and in `build.yaml` before release).
+- Uses a mock RouterOS over `http://127.0.0.1:<random-port>` — smoke tests must not depend on a live CHR. Integration tests cover the CHR side.
+- **Path resolution**: file/spawn paths are resolved against the module-derived repo root (`fileURLToPath(new URL('.', import.meta.url))` → `../..`), not the runtime cwd. If you add new targets or path checks, follow the same pattern so the harness can be invoked from any cwd.
+- **TS types around `Buffer.concat`**: keep the `Uint8Array.from()` wrapping. Under TS 5.7+ with current `@types/node`, `Buffer.alloc(0)` is `Buffer<ArrayBuffer>` while `Buffer.concat(Buffer[])` returns `Buffer<ArrayBufferLike>` — the assignment fails strict typecheck. The wrapping is a deliberate coercion, not dead code; CodeQL has flagged it as "unnecessary" before.
+- Remaining contexts to add: web bundle (via a Worker shim), npm-installed bin (`npx --yes @tikoci/routeroslsp --stdio` from a clean node_modules). See [`deployment.instructions.md`](deployment.instructions.md#pre-release-checklist).
 
 ### Integration tests (requires live CHR)
 - `integration.test.ts` — connects to CHR, sends all `test-data/**/*.rsc` through `inspectHighlight`

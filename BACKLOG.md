@@ -7,7 +7,7 @@
 
 Goal: when a maintainer triggers a pre-release build, automated testing should give a strong signal that the extension works across **all six deployment contexts** — VSCode Desktop, VSCode Web, standalone binary, npm package (`@tikoci/routeroslsp`), NeoVim (via `nvim-routeros-lsp-init.lua`), and GitHub Copilot CLI (via `.github/lsp.json`). See [`deployment.instructions.md`](.github/instructions/deployment.instructions.md) for the matrix.
 
-- 🔄 **Per-context smoke test in CI** — stdio smoke now covers the bundled Node server and standalone binary with a mocked RouterOS; VSCode Desktop/Web, npm-installed bin, NeoVim, and Copilot CLI still need fuller per-context automation.
+- 🔄 **Per-context smoke test in CI** — stdio smoke now covers the bundled Node server and standalone binary with a mocked RouterOS, running in `ci.yaml` on every push/PR (not just at release time). VSCode Desktop/Web, npm-installed bin, NeoVim, and Copilot CLI still need fuller per-context automation.
 - 📋 **CI-booted CHR for integration** — run `integration.test.ts` against a QEMU CHR booted in GitHub Actions using [`tikoci/quickchr`](https://github.com/tikoci/quickchr). quickchr is specifically designed for this: pins a RouterOS version, exposes `/console/inspect` predictably, and runs headless. Pairs with the 📋 "QEMU CHR in CI" item under CI/CD below.
 - 📋 **Pre-release checklist in `deployment.instructions.md`** — document what has to be green before `vsix:package:prerelease` is considered trustworthy. Keep it short enough that agents can actually follow it.
 - 📋 **npm publish audit** — `@tikoci/routeroslsp` on npmjs.org is currently at 0.7.2 (`package.json` is at 0.7.3 as the next version). Confirm the conditional `if: env.NPM_TOKEN != ''` publish step actually runs on each pre-release, and that the shebang-prepend is correct. CI is the only supported publish path; no maintainer should `npm publish` from their laptop.
@@ -38,6 +38,7 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 - ✅ **Add test step to CI** — `bun test` runs after compile in `build.yaml`
 - ✅ **Add stdio smoke test step to CI** — `bun run test:smoke` runs after compile/unit tests and before publish/package steps
 - ✅ **Make typecheck non-emitting** — `bun run lint` validates TypeScript without overwriting Bun-built `dist/` artifacts
+- ✅ **Split CI from Release workflow** — `ci.yaml` runs compile/test/lint/smoke on every push to `main` and on PRs (no packaging, no publish). `build.yaml` stays `workflow_dispatch`-only for releases. Closes the gap where typecheck regressions could land on `main` and only surface at release time.
 - 📋 **QEMU CHR in CI** — like restraml, boot CHR in GitHub Actions for integration tests
 - 📋 **Automated VSIX publishing** — trigger publish on version tag
 

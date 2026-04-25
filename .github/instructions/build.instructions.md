@@ -60,6 +60,17 @@ CI's `build.yaml` has a `prerelease` boolean input that selects between them.
 - `bump:minor` — syncs minor version across all three `package.json` files
 - Version bumps are not user-visible changes — don't add them to CHANGELOG.md
 
+## CI vs Release Workflows
+
+Two GitHub Actions workflows split validation from publishing:
+
+- **`.github/workflows/ci.yaml`** — runs on `push` to `main` and `pull_request`. Steps: install → `bun run compile` → `bun run test` → `bun run lint` → `bun run test:smoke`. Stops there. No packaging, no `gh release`, no npm publish. This is the regression gate.
+- **`.github/workflows/build.yaml`** — `workflow_dispatch` only. Replays the same gate (test, lint, smoke), then packages VSIX, cross-compiles 8 standalone binaries, creates the GitHub Release, publishes to VSCode Marketplace + Open-VSX + npm, and bumps versions for the next cycle.
+
+**Keep the gate steps in sync.** If you add a step to `ci.yaml` (e.g., a new test tier), add the same step to `build.yaml` so a green release implies a green CI. Don't let `build.yaml` drift looser than `ci.yaml` — that re-creates the original problem (typecheck regressions only surfacing at release time).
+
+`ci.yaml` uses `concurrency: cancel-in-progress` so a new push to a branch supersedes any in-flight run on the same ref. `build.yaml` does **not** cancel in-progress runs (a half-cancelled release is worse than waiting).
+
 ## CHANGELOG.md
 
 `CHANGELOG.md` is shown as "Release Notes" in the VSCode extension UI — write for users, not developers. See `changelog.instructions.md` for full conventions. Key points:

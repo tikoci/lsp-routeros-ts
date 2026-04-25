@@ -37,7 +37,8 @@ See [`.github/instructions/deployment.instructions.md`](.github/instructions/dep
 .github/
   copilot-instructions.md   # Copilot workspace instructions (read first)
   instructions/              # File-scoped Copilot instructions (applyTo globs)
-  workflows/build.yaml       # CI: build + cross-platform release
+  workflows/ci.yaml          # CI: compile + lint + test + smoke (push + PR)
+  workflows/build.yaml       # Release: cross-platform binaries + publish (manual only)
 
 client/                      # VSCode extension client (thin binding)
   src/
@@ -207,9 +208,17 @@ The client is intentionally thin:
 | `bump:minor` | Sync minor version across root + server + client package.json |
 | `npm:publish` | `compile:server` + prepend shebang + `npm publish` from server/ |
 
-### CI (`build.yaml`)
+### CI / Release split (two workflows)
 
-GitHub Actions workflow (manual trigger):
+| Workflow | File | Trigger | Purpose |
+|----------|------|---------|---------|
+| **CI** | `.github/workflows/ci.yaml` | `push` to `main`, `pull_request` to `main`, manual | Validation only: install → compile → test → lint → smoke. No packaging, no publish, no release. The "did we break the LSP?" signal between releases. |
+| **Build and Release** | `.github/workflows/build.yaml` | `workflow_dispatch` (manual) | Release path: re-runs the CI gate, then packages VSIX, cross-compiles 8 standalone binaries, creates the GitHub Release, publishes to VSCode Marketplace + Open-VSX + npm, then bumps versions. |
+
+The split exists because **releasing is a deliberate human action** — we don't want every push to ship — but **knowing the build/lint/test/smoke gate is green** matters between releases too. Before this split (`build.yaml` was workflow_dispatch-only), it was possible for a typecheck regression to land on `main` and only surface at release time. Now CI catches it on the push or PR.
+
+`build.yaml` steps:
+
 1. Setup Node 22 + Bun (with `registry-url` set for npm auth)
 2. Install, build, lint
 3. Package VSIX
@@ -217,6 +226,8 @@ GitHub Actions workflow (manual trigger):
 5. Create GitHub Release with all artifacts
 6. Publish VSIX to VSCode Marketplace and Open-VSX
 7. Publish server package to npm as `@tikoci/routeroslsp` (if `NPM_TOKEN` secret is set)
+
+If you change build/lint/test scripts or the smoke harness, **update both workflows** so the CI gate stays consistent with the release gate.
 
 ## Code Patterns
 

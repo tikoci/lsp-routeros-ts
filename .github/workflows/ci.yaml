@@ -1,0 +1,55 @@
+name: CI
+
+# Runs on every push to main and on pull requests. Same compile/lint/test/smoke
+# steps as the Build and Release workflow, but stops before packaging or
+# publishing — release remains a deliberate human action via workflow_dispatch
+# in build.yaml. This is the "did we break the LSP?" signal between releases.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Cancel any in-flight CI runs for the same ref when a new commit lands; only
+# the latest commit's signal is interesting.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        # node is needed for the smoke test's `--node server/dist/server.js` target
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Install `bun`
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build project
+        # `compile` chains client + server + exe + web. The standalone exe is
+        # required by the stdio smoke test's `--standalone` target.
+        run: bun run compile
+
+      - name: Test (unit)
+        run: bun run test
+
+      - name: Lint (typecheck + biome)
+        run: bun run lint
+
+      - name: Test (stdio smoke)
+        run: bun run test:smoke
