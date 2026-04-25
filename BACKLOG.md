@@ -3,6 +3,18 @@
 > Active and planned work. Items marked ✅ are done, 🔄 in progress, 📋 planned, 💡 idea stage.
 > See [`DESIGN.md`](DESIGN.md) for design rationale. See [`CLAUDE.md`](CLAUDE.md) for architecture.
 
+## Working Order: Research Before Features
+
+Several feature items below (especially under **LSP Feature Improvements**) are sketched from a thin slice of `/console/inspect` evidence and reasonable assumptions about how RouterOS represents scripts internally. Before extending core LSP logic further, we want a more complete empirical picture of RouterOS scripting so the next round of feature work isn't surprised by responses, encodings, or scopes that don't match our assumptions.
+
+The triage rule for new work:
+
+1. If a feature touches `controller.ts`/`model.ts`/`tokens.ts` and depends on RouterOS behavior we haven't measured against the corpus, it goes through **Research & Experiments** first — collect data, write up findings in [`DESIGN.md`](DESIGN.md), then build.
+2. Items already grounded by snapshots, integration tests, or dataset assessment can proceed normally.
+3. Spikes land harnesses in `scripts/` (not `server/src/`), throwaway probes in `.scratch/`, snapshots under `test-data/`, and conclusions in `DESIGN.md`.
+
+Cross-references in feature sections use the tag `[research: <spike-id>]` to point at the blocking experiment.
+
 ## Pre-release Quality Gate
 
 Goal: when a maintainer triggers a pre-release build, automated testing should give a strong signal that the extension works across **all six deployment contexts** — VSCode Desktop, VSCode Web, standalone binary, npm package (`@tikoci/routeroslsp`), NeoVim (via `nvim-routeros-lsp-init.lua`), and GitHub Copilot CLI (via `.github/lsp.json`). See [`deployment.instructions.md`](.github/instructions/deployment.instructions.md) for the matrix.
@@ -12,6 +24,62 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 - 📋 **Pre-release checklist in `deployment.instructions.md`** — document what has to be green before `vsix:package:prerelease` is considered trustworthy. Keep it short enough that agents can actually follow it.
 - 📋 **npm publish audit** — `@tikoci/routeroslsp` on npmjs.org is currently at 0.7.2 (`package.json` is at 0.7.3 as the next version). Confirm the conditional `if: env.NPM_TOKEN != ''` publish step actually runs on each pre-release, and that the shebang-prepend is correct. CI is the only supported publish path; no maintainer should `npm publish` from their laptop.
 - 📋 **Copilot CLI LSP config still needs launch verification** — `.github/lsp.json` now uses obviously fake placeholders, but the `npx --yes @tikoci/routeroslsp --stdio` path still needs a real Copilot CLI smoke check after each npm publish. README now documents per-user override in `~/.copilot/lsp-config.json`.
+
+## Research & Experiments (Pre-Feature Work)
+
+Goal: ground the next round of LSP feature work in measured RouterOS behavior, using the 913-script corpus already in `test-data/` plus a [`tikoci/quickchr`](https://github.com/tikoci/quickchr)-booted CHR. Each spike produces (a) a reusable harness in `scripts/`, (b) snapshots/artifacts under `test-data/` (or a sibling dir), (c) a write-up in `DESIGN.md` answering specific questions. **Production code waits.**
+
+### `[research: parseil]` Decode RouterOS `:parse` IL using the script corpus
+
+`:parse <script>` returns a `code`-typed value — a stack-based intermediate representation that RouterOS's scripting engine actually executes. This IL is also what gets serialized into `/system/script/environment` when a parsed script is bound to a global (so it crosses RouterOS's internal process boundary as an env var). If we can read it, we get a second, independent grounding for *what RouterOS thinks a script is*, beyond the per-character `highlight` stream we use today.
+
+Documented surface (from the [Scripting page](https://help.mikrotik.com/docs/spaces/ROS/pages/47579229/Scripting#Scripting-Commands)):
+
+- `:parse < expression >` — *"parse the string and return parsed console commands. Can be used as a function."* Example: `:global myFunc [:parse ":put hello!"]; $myFunc;`
+- `/system/script/environment` (alias `/environment`) holds parsed values per global, exposed as `name` / `user` / `value`.
+- `:serialize ... to=json` and `:tostr` are candidate read-out paths for the `code` value; `/file/print` against an exported global is another.
+
+**Why it's worth a spike:**
+
+- **Block / scope structure.** The IL almost certainly encodes `:if` / `:for` / `:foreach` / function bodies as nested call frames. That would back **Folding Ranges**, **Document Symbols** (functions, not just variables), and a real **Definition/References** for `:local`/`:global` — all currently blocked on parsing rsc ourselves.
+- **Independent diagnostics.** `:parse` errors include line/column today (`bad command name this (line 1 column 1)`); the IL may carry source-position metadata at finer granularity than `highlight`, which would let us report multi-error and severity-tiered diagnostics without inventing our own parser.
+- **Parse-time as a budget oracle.** Highlight is superlinear and hits a ~28KB cliff (see profiling). If `:parse` is faster and predictive of highlight cost, it's a cheap pre-check that lets the LSP short-circuit doomed highlight requests.
+- **Debug surface.** A "Show parseIL" command in VSCode (and a hover supplement) gives users — and especially LLM agents — a view of *what RouterOS actually saw*, which is the most useful debugging signal we could ship.
+
+**Plan (phased, each phase lands before the next starts):**
+
+1. **Probe (`.scratch/`)** — write `parse-probe.ts` that, against a quickchr CHR, runs `[:parse "…"]` on ~10 hand-picked scripts (one each: comment-only, single-command, `:if`, `:foreach`, function definition, function call, `:local` chain, `:global` chain, error script, oversize) and tries every plausible read-out path: `:put`, `:tostr`, `:typeof`, `:serialize to=json`, assigning to `:global` then `/environment print`, `/file/print`. Goal: identify which read-out path returns the richest, most stable text; document gotchas (truncation, encoding, escaping).
+2. **Collect (`scripts/collect-parseil.ts`)** — productionize the winning read-out path into a corpus harness mirroring `capture-snapshots.ts`. For each `test-data/**/*.rsc`, save `<file>.rsc.parseil` next to the existing `.rsc.highlight`. Skip oversize files past whatever `:parse` truncates at; record skips. Keep harness stdio-friendly so it can run in CI behind the same CHR-required flag as integration tests.
+3. **Decode (write-up in `DESIGN.md`)** — manual + scripted analysis of the corpus to answer:
+   - What's the IL's lexical surface? (Opcodes? S-expressions? A textual command tree?) Worth comparing against a couple of known scripts to reverse-engineer instruction names.
+   - Does each IL element carry source line/column? If yes, can we map IL nodes → document ranges deterministically?
+   - How are `:local`/`:global` resolved — by name, by slot index, by enclosing-scope reference? This is the gating question for definition/references.
+   - How are blocks delimited (`{ … }`, `do={…}`) — flat sequence with markers, or nested?
+   - How does the IL serialize when bound to a global (env-var path) vs printed directly? Are they the same bytes, or does the env-var path strip metadata?
+   - Compare `:parse` time vs `highlight` time per script. Is parse-time a useful cheap pre-check?
+4. **Decide & document.** Land findings in a new `DESIGN.md` section "RouterOS parseIL"; from there, open targeted feature backlog items (folding, doc-symbols-from-functions, scope-aware references, "Show parseIL" command). Do **not** wire IL into the production LSP path during the spike — keep it under `scripts/` until the design is settled.
+
+**Out of scope for this spike:** building a full IL→AST converter, shipping any feature, or adding IL as a runtime dependency of `controller.ts`. Those are follow-ups gated on the write-up.
+
+### `[research: inspect-shapes]` Catalog `/console/inspect` request-type responses
+
+We use `request=highlight` heavily, `request=completion` lightly, and have not characterized `syntax` or `child` against the corpus at all — yet feature items below assume their shape. Build a small harness in `scripts/inspect-catalog.ts` that, for a representative subset of `test-data/**/*.rsc` (and a fixed set of cursor positions per file), captures all four request types and saves them as `.inspect.<request>.json` snapshots. Document the schemas in `DESIGN.md` (one section per request type) so feature work can target the actual response shape, not what we remember from README. Pairs with the fake-space / fake-equals validation below.
+
+### `[research: completion-tricks]` Validate fake-space / fake-equals heuristics across the corpus
+
+The fake-space / fake-equals tricks are documented as folklore in README. Before wiring them into completion, run them through the corpus on a CHR: pick N positions from each script (start of token, mid-token, after `=`, after space), append the trick character, query `request=completion`, and record (a) when the trick yields strictly more results, (b) when it yields *different* (wrong) results, (c) when it errors. Output: a confidence table by context, and a recommendation on when each trick is safe to apply.
+
+### `[research: 28kb]` Investigate the 28KB highlight inflection point
+
+Profiling shows a sharp timing cliff at ~28KB across all syntax types. Spike: instrument the harness from `[research: inspect-shapes]` to sweep document size in 1KB increments around the cliff, vary syntax composition (pure comments, pure scripting, mixed), and try non-`highlight` request types to see if the cliff is endpoint-specific or process-wide. Goal: a write-up that's specific enough to file an upstream report at MikroTik, plus an LSP-side mitigation recommendation (truncate-with-warning vs split-and-stitch vs degrade-gracefully).
+
+### `[research: rosetta-join]` Integrate `tikoci/rosetta` docs into hover / completion
+
+[rosetta](https://github.com/tikoci/rosetta) exposes RouterOS docs as an FTS5 MCP server. Hover/completion could pull descriptions, examples, property tables, and changelog deltas from rosetta. Design questions worth answering before any code: does the LSP call rosetta directly (new dependency on the user having an MCP-capable client; doesn't work in VSCode Web), or do we expose a capability and let a Copilot/TikBook layer do the joining? How does this interact with `[research: inspect-shapes]`'s `request=syntax` data — overlap, complement, or redundant? Decision lives in `DESIGN.md` once scoped.
+
+### `[research: md-embedded]` RouterOS in Markdown fenced blocks
+
+Generalize the TikBook `.rsc.md` idea: any ` ```routeros ` fenced block inside any `.md` file should get semantic tokens, diagnostics, and completion. Requires range-mapping (document → fenced ranges → RouterOS highlight → back to document positions). Spike: prove out the offset-remapping in `.scratch/` against a hand-built `.md` fixture before deciding whether to do this in the LSP server or as a pre-processing step in the client.
 
 ## Quality & Infrastructure
 
@@ -60,33 +128,35 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 ## LSP Feature Improvements
 
 ### Completion
-- 📋 **Use `request=syntax` for richer completions** — get descriptions, type info, value enums
-- 📋 **Fake-space trick for arg completions** — append space to input for argument-level completions
-- 📋 **Fake-equals trick for value completions** — append `=` to get value definitions
-- 📋 **Completion item detail/documentation** — populate `CompletionItem.detail` and `documentation` from syntax TEXT
+- 📋 **Use `request=syntax` for richer completions** — get descriptions, type info, value enums. *[research: inspect-shapes]*
+- 📋 **Fake-space trick for arg completions** — append space to input for argument-level completions. *[research: completion-tricks]*
+- 📋 **Fake-equals trick for value completions** — append `=` to get value definitions. *[research: completion-tricks]*
+- 📋 **Completion item detail/documentation** — populate `CompletionItem.detail` and `documentation` from syntax TEXT. *[research: inspect-shapes, optionally rosetta-join]*
 - 📋 **Make trigger characters configurable** — currently hardcoded `:=/ $[`
 
 ### Hover
-- 📋 **Show command/argument descriptions** — use `request=syntax` TEXT field
-- 📋 **Show type information** — detect `Num`, `IP`, enum types from syntax responses
-- 📋 **Show value ranges** — parse "1..65535 (integer number)" format from syntax TEXT
-- 📋 **Improve beyond debug info** — current hover shows token type regex, not user-friendly help
+- 📋 **Show command/argument descriptions** — use `request=syntax` TEXT field. *[research: inspect-shapes]*
+- 📋 **Show type information** — detect `Num`, `IP`, enum types from syntax responses. *[research: inspect-shapes]*
+- 📋 **Show value ranges** — parse "1..65535 (integer number)" format from syntax TEXT. *[research: inspect-shapes]*
+- 📋 **Improve beyond debug info** — current hover shows token type regex, not user-friendly help. *[research: rosetta-join]*
+- 📋 **"Show parseIL" hover supplement / command** — surface the `:parse` IL for the current script (or selection) as a debug view. *[research: parseil]*
 
 ### Diagnostics
-- 📋 **Detect RouterOS data types** — flag type mismatches for `ip`, `num`, etc.
-- 📋 **Multi-error reporting** — currently stops at first error token
+- 📋 **Detect RouterOS data types** — flag type mismatches for `ip`, `num`, etc. *[research: inspect-shapes]*
+- 📋 **Multi-error reporting** — currently stops at first error token. *[research: parseil]* — `:parse` reports multiple errors with line/col; may be a better source than `highlight` for this.
 - 📋 **Severity levels** — differentiate errors, warnings (deprecated), info (old syntax)
 - 📋 **Map `syntax-obsolete` to warnings** — flag deprecated commands
 
 ### New LSP Features
-- 📋 **Signature Help** — show argument list and descriptions when typing commands
+- 📋 **Signature Help** — show argument list and descriptions when typing commands. *[research: inspect-shapes]*
 - 📋 **Code Actions** — suggest fixes for deprecated commands, old syntax
 - 📋 **Formatting** — basic RouterOS script formatting
-- 📋 **Folding Ranges** — fold blocks (`:if`, `:for`, `:foreach`, etc.)
-- 📋 **Definition/References** — variable scope tracking (complex; requires parsing `:local`/`:global`)
-- 📋 **Inlay Hints** — re-enable disabled `inlayHintProvider`; show type info inline
+- 📋 **Folding Ranges** — fold blocks (`:if`, `:for`, `:foreach`, etc.). *[research: parseil]* — IL block delimiters are the natural source.
+- 📋 **Definition/References** — variable scope tracking. *[research: parseil]* — gating question is whether the IL resolves `:local`/`:global` by name or slot.
+- 📋 **Inlay Hints** — re-enable disabled `inlayHintProvider`; show type info inline. *[research: inspect-shapes]*
 - 📋 **Code Lens** — show RouterOS path context above blocks
 - 📋 **Document Links** — detect and link RouterOS paths (e.g., `/ip/firewall/filter`)
+- 📋 **Document Symbols: functions, not just variables** — extract function definitions in addition to `:local`/`:global`. *[research: parseil]*
 
 ## VSCode Extension
 
@@ -124,7 +194,7 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 - 📋 **Incremental document sync** — switch from full-document to incremental sync
 - 📋 **Debounce/throttle API calls** — avoid flooding RouterOS on rapid typing; profiling shows 32KB scripts take 2–6 seconds depending on syntax complexity
 - 📋 **Request cancellation** — cancel in-flight requests when document changes again
-- 📋 **Investigate 28KB inflection point** — profiling shows a sharp timing step at ~28KB for all syntax types (e.g., comments jump from 330ms at 24KB to 1494ms at 28KB). This may be a RouterOS internal buffer boundary worth reporting upstream.
+- 📋 **Mitigate the 28KB highlight cliff** — production-side fix (truncate-with-warning vs split-and-stitch vs degrade) once `[research: 28kb]` lands a recommendation.
 
 ### Code Organization
 - 📋 **Extract completion logic** — `controller.ts` at ~850 lines is getting large
@@ -146,17 +216,11 @@ TikBook uses two notebook formats. Example files for both are in `test-data/tikb
 
 **Markdown-first** (`.tikbook.rsc.md` / `.rsc.md`): `[//]: #!tikbook` marker at top; ` ```routeros ` fenced code blocks are executable cells; regular Markdown for prose between cells.
 
-- 📋 **TikBook: Semantic highlighting in `routeros` fenced blocks in `.rsc.md`** — parse `.rsc.md` files and apply RouterOS LSP semantic tokens inside ` ```routeros ` fenced code blocks. This should generalize to any `.md` file, not just TikBook notebooks — similar to embedded-language LSP features. Requires splitting the document into RouterOS ranges before querying `/console/inspect`, and remapping token offsets back to document positions.
+- 📋 **TikBook: Semantic highlighting in `routeros` fenced blocks in `.rsc.md`** — parse `.rsc.md` files and apply RouterOS LSP semantic tokens inside ` ```routeros ` fenced code blocks. This should generalize to any `.md` file, not just TikBook notebooks — similar to embedded-language LSP features. Requires splitting the document into RouterOS ranges before querying `/console/inspect`, and remapping token offsets back to document positions. *[research: md-embedded]* covers the offset-remapping spike.
 - 📋 **TikBook: Move cell execution to LSP** — currently in TikBook, should be LSP feature
 - 📋 **TikBook: LSP-based notebook diagnostics** — use LSP diagnostics for notebook cells
 - 📋 **restraml: Validate configs against schema** — use RAML/OpenAPI schemas for deeper validation
 - 📋 **QEMU CHR management** — embed or integrate with TikBook's CHR VM features for quick version switching
-
-## Research Spikes
-
-- 📋 **`[:parse <script>]` IL inspection** — RouterOS's `:parse` returns a `code`-typed internal representation (stack-based IL) of a transpiled script. Questions worth answering with a spike: (a) is parse time predictive of highlight time — i.e. could the LSP short-circuit expensive highlight requests when `:parse` returns fast? (b) does the IL expose block structure / scope info that could back folding ranges, definition/references, or more accurate diagnostics? (c) is it a useful debug surface for agents authoring RouterOS scripts? Land as a throwaway script in `.scratch/` first, write up findings in `DESIGN.md` before any production code.
-- 📋 **Integrate `tikoci/rosetta` docs** — rosetta exposes RouterOS docs as an FTS5 MCP server. Hover/completion could pull descriptions, examples, property tables, and changelog deltas from rosetta. Design question: does the LSP call rosetta directly (new dependency), or do we expose a capability and let a Copilot/TikBook layer do the joining? Decision lives in DESIGN.md once scoped.
-- 📋 **RouterOS in Markdown fenced blocks** — generalize the TikBook `.rsc.md` idea: any ` ```routeros ` fenced block inside any `.md` file should get semantic tokens, diagnostics, and completion. Requires range-mapping (document → fenced ranges → RouterOS highlight → back to document positions). Captured previously under TikBook; promoted to a first-class research spike because its scope is broader.
 
 ## Ideas (Exploratory)
 
