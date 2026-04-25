@@ -33,6 +33,12 @@ interface PendingRequest {
 	timer: NodeJS.Timeout
 }
 
+interface CompletionItemLike {
+	label?: string
+}
+
+type HighlightToken = 'none' | 'cmd' | 'dir' | 'arg'
+
 const smokeDocumentText = '/ip address print\n'
 const smokeDocumentUri = 'file:///routeroslsp-smoke.rsc'
 
@@ -40,7 +46,8 @@ async function main() {
 	const targets = parseTargets(process.argv.slice(2))
 	const mockRouter = createMockRouterServer()
 	await new Promise<void>((resolveListen) => mockRouter.listen(0, '127.0.0.1', resolveListen))
-	const address = mockRouter.address() as AddressInfo
+	const address = mockRouter.address()
+	assert(isAddressInfo(address), 'mock router did not bind to a TCP address')
 	const baseUrl = `http://127.0.0.1:${address.port}`
 
 	try {
@@ -129,7 +136,8 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 				},
 			},
 		})
-		const capabilities = (initialize.result as { capabilities?: Record<string, unknown> }).capabilities
+		const initializeResult = requireRecord(initialize.result, 'initialize response result was not an object')
+		const capabilities = requireRecord(initializeResult.capabilities, 'initialize response is missing capabilities')
 		assert(capabilities?.semanticTokensProvider, 'initialize response is missing semanticTokensProvider')
 		assert(capabilities?.completionProvider, 'initialize response is missing completionProvider')
 		assert(capabilities?.diagnosticProvider, 'initialize response is missing diagnosticProvider')
@@ -147,14 +155,16 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 		const semanticTokens = await peer.request('textDocument/semanticTokens/full', {
 			textDocument: { uri: smokeDocumentUri },
 		})
-		const semanticData = (semanticTokens.result as { data?: number[] }).data
-		assert(Array.isArray(semanticData), 'semantic tokens response did not include a data array')
+		const semanticTokensResult = requireRecord(semanticTokens.result, 'semantic tokens response result was not an object')
+		const semanticData = semanticTokensResult.data
+		assert(isNumberArray(semanticData), 'semantic tokens response did not include a numeric data array')
 		assert(semanticData.length > 0, 'semantic tokens response was empty')
 
 		const diagnostics = await peer.request('textDocument/diagnostic', {
 			textDocument: { uri: smokeDocumentUri },
 		})
-		const diagnosticItems = (diagnostics.result as { items?: unknown[] }).items
+		const diagnosticsResult = requireRecord(diagnostics.result, 'diagnostic response result was not an object')
+		const diagnosticItems = diagnosticsResult.items
 		assert(Array.isArray(diagnosticItems), 'diagnostic response did not include items')
 		assert(diagnosticItems.length === 0, 'smoke document should not produce diagnostics')
 
@@ -163,11 +173,14 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 			position: { line: 0, character: 4 },
 			context: { triggerKind: 1 },
 		})
-		// Direct cast then runtime check — matches the pattern used for semanticTokens
-		// (line ~141) and diagnostics (line ~158) above.
-		const completionResult = completions.result as Array<{ label?: string }>
+		const completionResult = completions.result
 		assert(Array.isArray(completionResult), 'completion response was not an array')
-		assert(completionResult.some((item) => item.label === 'address'), 'completion response did not include mocked address item')
+		const completionItems = completionResult.filter(isCompletionItemLike)
+		assert(
+			completionItems.length === completionResult.length,
+			'completion response items had unexpected shape',
+		)
+		assert(completionItems.some((item) => item.label === 'address'), 'completion response did not include mocked address item')
 
 		await peer.request('shutdown', null)
 		peer.notify('exit', null)
@@ -269,7 +282,11 @@ class JsonRpcPeer {
 
 			const rawBody = this.#buffer.subarray(bodyStart, bodyEnd).toString('utf8')
 			this.#buffer = this.#buffer.subarray(bodyEnd)
-			const message = JSON.parse(rawBody) as JsonRpcMessage
+			const message: unknown = JSON.parse(rawBody)
+			if (!isJsonRpcMessage(message)) {
+				this.#fail(new Error(`${this.#label} wrote an invalid JSON-RPC message: ${rawBody}`))
+				return
+			}
 			this.#handleMessage(message)
 		}
 	}
@@ -364,9 +381,9 @@ function createMockRouterServer() {
 			}
 
 			if (req.method === 'POST' && req.url === '/rest/console/inspect') {
-				const body = (await readJson(req)) as { request?: string; input?: string }
+				const body = requireRecord(await readJson(req), 'mock inspect request body was not an object')
 				if (body.request === 'highlight') {
-					const input = body.input || ''
+					const input = typeof body.input === 'string' ? body.input : ''
 					writeJson(res, [{ type: 'highlight', highlight: highlightFor(input).join(',') }])
 					return
 				}
@@ -391,8 +408,9 @@ function createMockRouterServer() {
 			res.writeHead(404, { 'Content-Type': 'application/json' })
 			res.end(JSON.stringify({ error: 'not found' }))
 		} catch (error) {
+			console.error(error instanceof Error ? error.message : String(error))
 			res.writeHead(500, { 'Content-Type': 'application/json' })
-			res.end(JSON.stringify({ error: error instanceof Error ? error.message : String(error) }))
+			res.end(JSON.stringify({ error: 'mock router request failed' }))
 		}
 	})
 }
@@ -410,18 +428,60 @@ function writeJson(res: ServerResponse, value: unknown) {
 	res.end(JSON.stringify(value))
 }
 
-function highlightFor(input: string): string[] {
-	const tokens = Array<string>(input.length).fill('none')
+function highlightFor(input: string): HighlightToken[] {
+	const tokens = Array<HighlightToken>(input.length).fill('none')
 	for (const match of input.matchAll(/\S+/g)) {
 		const word = match[0]
 		const start = match.index
 		if (start === undefined) continue
-		const token = word === 'print' ? 'cmd' : word.startsWith('/') || word === 'address' ? 'dir' : 'arg'
+
+		let token: HighlightToken = 'arg'
+		if (word === 'print') {
+			token = 'cmd'
+		} else if (word.startsWith('/') || word === 'address') {
+			token = 'dir'
+		}
+
 		for (let i = start; i < start + word.length; i++) {
 			tokens[i] = token
 		}
 	}
 	return tokens
+}
+
+function requireRecord(value: unknown, message: string): Record<string, unknown> {
+	assert(isRecord(value), message)
+	return value
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function isNumberArray(value: unknown): value is number[] {
+	return Array.isArray(value) && value.every((item) => typeof item === 'number')
+}
+
+function isAddressInfo(value: unknown): value is AddressInfo {
+	return (
+		isRecord(value) &&
+		typeof value.address === 'string' &&
+		typeof value.family === 'string' &&
+		typeof value.port === 'number'
+	)
+}
+
+function isJsonRpcMessage(value: unknown): value is JsonRpcMessage {
+	if (!isRecord(value) || value.jsonrpc !== '2.0') return false
+	if (value.id !== undefined && typeof value.id !== 'number' && typeof value.id !== 'string') return false
+	if (value.method !== undefined && typeof value.method !== 'string') return false
+	return true
+}
+
+function isCompletionItemLike(value: unknown): value is CompletionItemLike {
+	if (!isRecord(value)) return false
+	const label = value.label
+	return label === undefined || typeof label === 'string'
 }
 
 function assert(condition: unknown, message: string): asserts condition {
