@@ -1,0 +1,8 @@
+/;(evl /system/script/removenumbers=(evl (evl /system/script/findwhere=$name;$owner;$policy;$dont-require-permissions;$last-started;$run-count;$source;$invalid;$comment;$.id;$.nextid;$.dead;$.about;(= $name setvar);5)));(evl /system/script/addname=setvar;source=
+/system/note set note="
+time: $[:tostr $time]\r\n
+topics: $topics\r\n
+message: $message\r\n
+extra-info: $[:tostr $"extra-info"]\r\n
+buffer: $buffer"
+);(evl /system/logging/action/removenumbers=(evl (evl /system/logging/action/findwhere=$name;$target;$memory-lines;$memory-stop-on-full;$disk-file-name;$disk-lines-per-file;$disk-file-count;$disk-stop-on-full;$remote;$remote-port;$src-address;$remote-log-format;$remote-protocol;$cef-event-delimiter;$syslog-time-format;$syslog-facility;$syslog-severity;$email-to;$email-start-tls;$remember;$add-topics-string;$script;$vrf;$default;$comment;$.id;$.nextid;$.dead;$.about;(= $name setvar);5)));(evl /system/logging/action/addname=setvar;script=setvar;target=script);(evl /system/logging/removenumbers=(evl (evl /system/logging/findwhere=$topics;$prefix;$regex;$action;$invalid;$default;$disabled;$comment;$.id;$.nextid;$.dead;$.about;(= $action setvar);5)));(evl /system/logging/addaction=setvar;topics=script)

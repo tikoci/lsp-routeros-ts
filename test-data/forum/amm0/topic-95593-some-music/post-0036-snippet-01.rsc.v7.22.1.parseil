@@ -1,0 +1,1 @@
+/;(evl /globalname=$musicGuidoList;value=(, B3/4 B3/8));(evl /globalname=$musicBeepTupleList;value=(, 123 231);(, 123 115));(evl /foreachcounter=$i;do=;(evl (evl /beepfrequency=(-> $i 0);length=(. (-> $i 1) ms)) (evl /delaydelay-time=(. (-> $i 1) ms)));in=$musicBeepTupleList)

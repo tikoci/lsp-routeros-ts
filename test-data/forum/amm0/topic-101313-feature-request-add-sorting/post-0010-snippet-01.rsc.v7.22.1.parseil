@@ -1,0 +1,1 @@
+/;(evl /interface/ (evl /localname=$sortby;value=name) (evl /localname=$arr;value=(evl (evl /toarrayvalue=))) (evl /foreachcounter=$k;$v;do=;(evl /interface/ (evl /setname=(-> $arr (-> $v $sortby));value=$v));in=(evl (evl /interface/printas-value=true))) (evl /foreachcounter=$k;$v;do=;(evl (evl /putmessage=(. $k   	 (evl (evl /tostrvalue=$v)))));in=$arr))

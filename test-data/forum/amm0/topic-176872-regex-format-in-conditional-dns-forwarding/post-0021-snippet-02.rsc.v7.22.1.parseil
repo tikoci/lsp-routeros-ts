@@ -1,0 +1,1 @@
+/;(evl /putmessage=(~ a (. \ w)));(<%% bad command name true (line 7 column 1) true);(evl /putmessage=(~ a (. \ D)));(<%% bad command name true (line 9 column 1) true)

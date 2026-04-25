@@ -1,0 +1,1 @@
+/;(evl / (evl /localdo=;(evl / (evl /globalname=$CHALK) (evl /putmessage=(. (evl (<%% $CHALK (> $CHALK);yellow)) Hello  (evl (<%% $CHALK (> $CHALK);yellow;inverse=yes)) Kentzo (evl (<%% $CHALK (> $CHALK);reset)))));name=$myprint) (<%% $myprint (> $myprint)))

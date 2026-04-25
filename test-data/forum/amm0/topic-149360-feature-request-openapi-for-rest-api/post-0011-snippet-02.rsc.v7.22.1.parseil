@@ -1,0 +1,1 @@
+/;(evl /docommand=;(evl / (evl /console/inspectpath=ip;address;add;interface;request=syntax));on-error=;(evl (evl /putmessage=got error)))

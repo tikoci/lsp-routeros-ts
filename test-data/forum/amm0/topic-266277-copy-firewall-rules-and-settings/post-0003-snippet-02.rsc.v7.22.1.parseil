@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl / (evl /ifcondition=(> $position 0);do=;(evl / (evl /ip/firewall/filter/addaction=accept;chain=input;dst-address=$address;place-before=$position));else=;(evl / (evl /ip/firewall/filter/addaction=accept;chain=input;dst-address=$address))));name=$allowAddress)

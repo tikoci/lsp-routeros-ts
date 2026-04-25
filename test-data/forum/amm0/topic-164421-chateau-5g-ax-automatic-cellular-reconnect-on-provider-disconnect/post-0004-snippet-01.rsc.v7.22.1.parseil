@@ -1,0 +1,1 @@
+/;(evl /system/logging/action/addmemory-lines=16384;name=support;target=memory);(evl /system/logging/removenumbers=(evl (evl /system/logging/findwhere=$topics;$prefix;$regex;$action;$invalid;$default;$disabled;$comment;$.id;$.nextid;$.dead;$.about;(~ $topics lte);5)));(evl /system/logging/addaction=support;topics=;lte;true;raw;true;packet)

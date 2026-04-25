@@ -1,0 +1,1 @@
+/;(evl /log/printwhere=$buffer;$time;$topics;$message;$extra-info;$.id;$.nextid;$.dead;$.about;(~ $message (. ((25[0-5]|(2[0-4]|[01] ? [0-9] ? )[0-9]) \ .){3}(25[0-5]|(2[0-4]|[01] ? [0-9] ? )[0-9])));5)

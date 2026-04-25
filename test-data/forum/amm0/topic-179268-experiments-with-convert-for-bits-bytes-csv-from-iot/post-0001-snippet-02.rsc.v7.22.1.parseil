@@ -1,0 +1,1 @@
+/;(evl /globalname=$myDriagoData;value=(evl (<%% $decodeDriago (> $decodeDriago);CBE90A6D019D0109E97FFF)));(evl /putmessage=(evl (evl /serializeoptions=json.pretty;to=json;value=$myDriagoData)))

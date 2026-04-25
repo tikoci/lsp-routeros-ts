@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl (evl /returnvalue=(evl (evl /pickbegin=(* $1 3);counter=REXJANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC;end=(+ (* $1 3) 3)))));name=$num2month);(evl /putmessage=(evl (<%% $num2month (> $num2month);7)))

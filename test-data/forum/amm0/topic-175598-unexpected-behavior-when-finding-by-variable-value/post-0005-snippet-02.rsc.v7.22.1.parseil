@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl / (evl /localname=$address) (evl /returnvalue=$address));name=$fn2);(evl /putmessage=(evl (<%% $fn2 (> $fn2);address=1.1.1.1)))

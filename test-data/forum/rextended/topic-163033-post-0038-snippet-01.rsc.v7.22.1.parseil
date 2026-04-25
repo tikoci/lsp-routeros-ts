@@ -1,0 +1,1 @@
+/;(evl /forcounter=$i;do=;(evl / (evl /ifcondition=(= $i 2);do=;(evl / (evl /setname=(-> $ar1 $i);value=(-> $ar2 $i)))));from=0;to=2)

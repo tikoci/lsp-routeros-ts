@@ -1,0 +1,9 @@
+/;(evl /globaldo=;(evl / (evl /localname=$urlf;value=$url) (evl /localname=$formFieldName;value=$field) (evl /localname=$fileName;value=$file) (evl /localname=$mimeSeperator;value=(. -- (evl (evl /rndstr)))) (evl /localname=$contentType;value=(. Content-Type: multipart/form-data; boundary= $mimeSeperator)) (evl /localname=$fileMimeType;value=application/octet-stream) (evl /localname=$formdataMime;value=(. $mimeSeperator 
+ Content-Disposition: form-data; name= " $formFieldName " ; filename= " $formName " 
+ Content-Type:  $fileMimeType 
+ Content-Transfer-Encoding: base64 
+ 
+ (evl (evl /convertfrom=raw;to=base64;value=(evl (evl /file/getnumber=$fileName;value-name=content)))) 
+ 
+ $mimeSeperator -- 
+)) (evl /tool/fetchhttp-data=$formdataMime;http-header-field=$contentType;http-method=post;output=user;url=$urlf));name=$sendFormDataFile);(<%% $sendFormDataFile (> $sendFormDataFile);field=formfieldname;file=myrouterfile;url=http://192.168.88.1:80/upload)

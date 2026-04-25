@@ -1,0 +1,1 @@
+/;(evl /localname=$hostname;value=(evl (evl /system/identity/getvalue-name=name)));(evl /localname=$date;value=(evl (evl /system/clock/getvalue-name=date)));(evl /localname=$localfilename;value=(. $hostname -Backup-Daily));(evl /localname=$remotefilename;value=(. $hostname - $date))

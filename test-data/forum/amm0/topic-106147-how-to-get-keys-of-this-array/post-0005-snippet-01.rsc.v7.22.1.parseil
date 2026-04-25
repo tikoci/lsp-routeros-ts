@@ -1,0 +1,1 @@
+/;(evl /globalname=$rot13;value=);(evl /setname=(-> $rot13 a);value=n);(evl /setname=(-> $rot13 b);value=o);(evl /setname=(-> $rot13 c);value=p)

@@ -153,15 +153,16 @@ Future work on Copilot integration considerations:
 - **Copilot CLI is already a consumer** — `.github/lsp.json` makes the LSP available to Copilot CLI as a plain LSP server (not an MCP server). The ambient credential path (`initializationOptions` since Copilot CLI doesn't implement `workspace/configuration`) is load-bearing and must be preserved, but explicit RouterOS writes should continue to flow through the same LSP command interface as every other client.
 - **`tikoci/rosetta` docs integration** — rosetta exposes RouterOS docs as FTS5 over MCP. Open question: does the LSP call rosetta directly, or does a higher layer (TikBook, a Copilot skill) join LSP data with rosetta data? Adding a dependency pulls rosetta into every VSCode install; keeping the LSP pure and exposing a capability lets callers decide. Leaning toward the latter.
 
-### `[:parse <script>]` as a Signal Source
+### `[:parse <script>]` as a Signal Source — parseIL
 
-RouterOS exposes a `:parse` operator that returns a `code`-typed internal representation (a stack-based IL) for a script. Open questions worth a research spike before any production use:
+**Status:** Phases 1–3 of the spike landed against RouterOS 7.22.1. Full grammar reference, readout paths, error semantics, and feature implications are documented in **[`docs/parseil-format.md`](docs/parseil-format.md)**. The corpus harness is `scripts/collect-parseil.ts`; per-script IL snapshots live alongside their `.rsc` files as `*.v<routeros-version>.parseil`.
 
-- Is parse time predictive of highlight time? The ~28KB inflection point found in `profile-timing.ts` could be avoidable if `:parse` is cheap and correlates — the LSP could defer full highlight on suspected-oversize inputs.
-- Does the IL expose scope/block boundaries useful for LSP features that `highlight` can't easily support — folding ranges, definition/references for `:local`/`:global`, control-flow-aware diagnostics?
-- Could it serve as an agent-facing debug surface (inspect the parsed form of a script under edit)?
+Decisions captured from the spike:
 
-Land the probe in `.scratch/` first; promote to DESIGN if the answers are worth committing to.
+- **Use parseIL as a *supplemental* signal, not a replacement for `highlight`.** `:parse` is a hard parser (stops at the first error, no partial IL), so multi-error diagnostics still flow through `highlight`. parseIL earns its place for structure-driven features (folding, function symbols, scope-aware references) and for canonicalisation hints (`200ms` → `00:00:00.200`, `yes` → `true`) where the IL shows what RouterOS actually saw.
+- **Don't ship the IL parser in the runtime LSP yet.** The IL/path/args boundary is implicit in the grammar and depends on `/console/inspect` schema knowledge to split deterministically. Wait until `[research: inspect-shapes]` lands so we have one well-defined dependency rather than two coupled ones.
+- **Use `:parse` as a cheap pre-check.** Parse time is roughly flat in the corpus and exhibits no analogue of `highlight`'s 28 KB cliff, so a `:parse` probe before a costly highlight request is a safe optimisation once we wire it in.
+- **Snapshot files are version-tagged on disk.** `<file>.rsc.v<routeros-version>.parseil` lets multiple RouterOS versions coexist in the corpus and keeps IL grammar drift visible as plain diffs across releases.
 
 ### QEMU CHR for Testing
 

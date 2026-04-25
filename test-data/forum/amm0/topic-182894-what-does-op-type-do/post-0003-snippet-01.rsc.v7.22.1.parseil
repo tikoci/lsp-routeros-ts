@@ -1,0 +1,1 @@
+/;(evl /localname=$newarray;value=(evl (evl /toarrayvalue=)));(evl /setname=(-> $newarray var1);value=data);(evl /setname=(-> $newarray var2);value=2);(evl /setdo=;(evl (evl /returnvalue=something));name=(-> $newarray fn1))

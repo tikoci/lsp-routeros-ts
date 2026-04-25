@@ -1,0 +1,1 @@
+/;(evl /globalname=$keyUsage;value=signature);(evl /globalname=$retries;value=8);(evl /globalname=$retryDelay;value=15);(evl /globalname=$clientname;value=(. client (evl (evl /tonumvalue=(evl (evl /timestamp))))));(evl /globalname=$exportfilename;value=(. / $scepbase - $sysname - $clientname .mobileconfig));(evl /putmessage=$exportfilename)

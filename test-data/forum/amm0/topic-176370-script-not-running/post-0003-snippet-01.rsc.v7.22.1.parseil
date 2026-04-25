@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$semi;value=mateo;mateo@example.com;sofia;sofia@example.com) (evl /putmessage=$semi) (evl /localname=$comma;value=(, mateo;mateo@example.com sofia;sofia@example.com)) (evl /putmessage=$comma) (evl /putmessage=(-> (-> $semi 1) 1)) (evl /putmessage=(-> (-> $comma 1) 1)) (evl /putmessage=(-> $semi 3)) (evl /putmessage=(-> $comma 3)))

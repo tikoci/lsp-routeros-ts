@@ -1,0 +1,1 @@
+/;(evl /interface/wifi/ (evl /interface/wifi/setnumbers=$ifcId;security.authentication-types=wpa2-psk;wpa3-psk;security.passphrase=$defconfWifiPassword))

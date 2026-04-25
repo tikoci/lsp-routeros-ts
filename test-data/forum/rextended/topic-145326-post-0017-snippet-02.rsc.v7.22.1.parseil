@@ -1,0 +1,1 @@
+/;(evl /ifcondition=(= $vtype bool);do=;(evl (evl /executescript=(. :global  $vname  [:tobool  $vvalue ]))))

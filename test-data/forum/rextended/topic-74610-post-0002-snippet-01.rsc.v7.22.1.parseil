@@ -1,0 +1,1 @@
+/;/ip/route/;(evl /foreachcounter=$route;do=;(evl /ip/route/ (evl /localname=$mark;value=(evl (evl /ip/route/getnumber=$route;value-name=routing-mark))) (evl /ifcondition=(= (evl (evl /typeofvalue=$mark)) nil);do=;(evl /ip/route/ (evl /putmessage=no routing-mark));else=;(evl /ip/route/ (evl /putmessage=(. has routing-mark  $mark)))));in=(evl (evl /ip/route/find)))

@@ -1,0 +1,1 @@
+(<%% (evl /;(<%% (evl /parsevalue=(. :global  (evl (evl /pickbegin=(+ (evl (evl /findfrom=-1;in=$lpath;key=$)) 1);counter=$lpath;end=(evl (evl /findfrom=-1;in=$lpath;key=-)))) ; :set ( $lpath )  " new ")) )) )

@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$myPublic;value=(evl (evl /ip/cloud/getvalue-name=public-address))) (evl /putmessage=$myPublic))

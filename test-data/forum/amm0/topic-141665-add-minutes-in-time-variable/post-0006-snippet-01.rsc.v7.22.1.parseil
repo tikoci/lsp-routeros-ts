@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$start;value=(evl (evl /timestamp))) (evl /delaydelay-time=00:00:05) (evl /putmessage=(- (evl (evl /timestamp)) $start)) (evl /putmessage=(> (evl (evl /timestamp)) $start)))

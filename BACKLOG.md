@@ -31,35 +31,31 @@ Goal: ground the next round of LSP feature work in measured RouterOS behavior, u
 
 ### `[research: parseil]` Decode RouterOS `:parse` IL using the script corpus
 
-`:parse <script>` returns a `code`-typed value — a stack-based intermediate representation that RouterOS's scripting engine actually executes. This IL is also what gets serialized into `/system/script/environment` when a parsed script is bound to a global (so it crosses RouterOS's internal process boundary as an env var). If we can read it, we get a second, independent grounding for *what RouterOS thinks a script is*, beyond the per-character `highlight` stream we use today.
+✅ **Phases 1–3 complete (RouterOS 7.22.1).** Full reference: [`docs/parseil-format.md`](docs/parseil-format.md). Harness: `scripts/collect-parseil.ts`. Corpus snapshots: `test-data/**/*.v<routeros-version>.parseil` (912/913 captured against 7.22.1).
 
-Documented surface (from the [Scripting page](https://help.mikrotik.com/docs/spaces/ROS/pages/47579229/Scripting#Scripting-Commands)):
+Headline findings worth surfacing in the BACKLOG (full detail in the reference doc):
 
-- `:parse < expression >` — *"parse the string and return parsed console commands. Can be used as a function."* Example: `:global myFunc [:parse ":put hello!"]; $myFunc;`
-- `/system/script/environment` (alias `/environment`) holds parsed values per global, exposed as `name` / `user` / `value`.
-- `:serialize ... to=json` and `:tostr` are candidate read-out paths for the `code` value; `/file/print` against an exported global is another.
+- **Readout path:** only `:put [:parse $script]` reveals the IL — every other readout (`:tostr`, `:serialize`, `/environment print`, etc.) returns the literal placeholder `(code)`. Capture is `/rest/file/add` + `/rest/execute as-string=true`.
+- **IL is text, not bytecode.** Forms: `(evl <PATH><ARGS>)` for command invocation (no whitespace between path and args — splitting them needs the command schema), `(<op> …)` for prefix-S-expr operators, `(<%% …)` for dynamic dispatch / function calls, `;` for statement separation, `/` for empty/comment-only scripts.
+- **Parse-time canonicalisation is a goldmine.** `200ms` → `00:00:00.200`, `yes` → `true`, `:put` → `/put`, `/ip address print` → `/ip/address/print`. Excellent material for hover hints.
+- **No source positions on valid IL.** `(line N column M)` only appears on errors; mapping IL nodes → source ranges still requires structural reconstruction.
+- **`:parse` is a hard parser.** Stops at the first error, emits an error string with no partial IL. **Does not** back multi-error diagnostics — highlight remains the source of truth there.
+- **Variable scope is by name.** No slot info; definition/references via IL alone requires walking the IL and reconstructing scopes from `(evl /local…)` / `(evl /global…)` / `do=` boundaries.
+- **Parse is fast and has no 28 KB cliff.** Mean 9 ms across 912 scripts; max 1361 ms on a 56 KB script. Useful as a cheap pre-check for highlight.
 
-**Why it's worth a spike:**
+Concrete feature work this unblocks (filed below under their respective sections):
 
-- **Block / scope structure.** The IL almost certainly encodes `:if` / `:for` / `:foreach` / function bodies as nested call frames. That would back **Folding Ranges**, **Document Symbols** (functions, not just variables), and a real **Definition/References** for `:local`/`:global` — all currently blocked on parsing rsc ourselves.
-- **Independent diagnostics.** `:parse` errors include line/column today (`bad command name this (line 1 column 1)`); the IL may carry source-position metadata at finer granularity than `highlight`, which would let us report multi-error and severity-tiered diagnostics without inventing our own parser.
-- **Parse-time as a budget oracle.** Highlight is superlinear and hits a ~28KB cliff (see profiling). If `:parse` is faster and predictive of highlight cost, it's a cheap pre-check that lets the LSP short-circuit doomed highlight requests.
-- **Debug surface.** A "Show parseIL" command in VSCode (and a hover supplement) gives users — and especially LLM agents — a view of *what RouterOS actually saw*, which is the most useful debugging signal we could ship.
+- **Folding Ranges** off `do=;(evl …)` boundaries.
+- **Document Symbols: functions** detection from `(evl /localdo=…;name=$f)`.
+- **"Show parseIL" command + hover supplement** for canonicalised view.
+- **`:parse` short-circuit before `highlight`** — skip a doomed highlight when parse already failed; surface line/col directly.
+- **Definition / References (gated)** — feasible via IL scope reconstruction; not free.
 
-**Plan (phased, each phase lands before the next starts):**
+**Open follow-ups (small):**
 
-1. **Probe (`.scratch/`)** — write `parse-probe.ts` that, against a quickchr CHR, runs `[:parse "…"]` on ~10 hand-picked scripts (one each: comment-only, single-command, `:if`, `:foreach`, function definition, function call, `:local` chain, `:global` chain, error script, oversize) and tries every plausible read-out path: `:put`, `:tostr`, `:typeof`, `:serialize to=json`, assigning to `:global` then `/environment print`, `/file/print`. Goal: identify which read-out path returns the richest, most stable text; document gotchas (truncation, encoding, escaping).
-2. **Collect (`scripts/collect-parseil.ts`)** — productionize the winning read-out path into a corpus harness mirroring `capture-snapshots.ts`. For each `test-data/**/*.rsc`, save `<file>.rsc.parseil` next to the existing `.rsc.highlight`. Skip oversize files past whatever `:parse` truncates at; record skips. Keep harness stdio-friendly so it can run in CI behind the same CHR-required flag as integration tests.
-3. **Decode (write-up in `DESIGN.md`)** — manual + scripted analysis of the corpus to answer:
-   - What's the IL's lexical surface? (Opcodes? S-expressions? A textual command tree?) Worth comparing against a couple of known scripts to reverse-engineer instruction names.
-   - Does each IL element carry source line/column? If yes, can we map IL nodes → document ranges deterministically?
-   - How are `:local`/`:global` resolved — by name, by slot index, by enclosing-scope reference? This is the gating question for definition/references.
-   - How are blocks delimited (`{ … }`, `do={…}`) — flat sequence with markers, or nested?
-   - How does the IL serialize when bound to a global (env-var path) vs printed directly? Are they the same bytes, or does the env-var path strip metadata?
-   - Compare `:parse` time vs `highlight` time per script. Is parse-time a useful cheap pre-check?
-4. **Decide & document.** Land findings in a new `DESIGN.md` section "RouterOS parseIL"; from there, open targeted feature backlog items (folding, doc-symbols-from-functions, scope-aware references, "Show parseIL" command). Do **not** wire IL into the production LSP path during the spike — keep it under `scripts/` until the design is settled.
-
-**Out of scope for this spike:** building a full IL→AST converter, shipping any feature, or adding IL as a runtime dependency of `controller.ts`. Those are follow-ups gated on the write-up.
+- 📋 Pin down the `(<%% …)` `(> $f)` inner form semantics via a focused probe (`:local f do={…}; [$f a=1]` vs `[$f 1]`).
+- 📋 Re-run `scripts/collect-parseil.ts` against newer CHR releases (7.22.2, 7.23rc, …) and diff `.v<version>.parseil` files to detect IL grammar drift.
+- 📋 Measure the `/rest/file/add` upload cap; observed 413 at 126 KB, threshold unmeasured. Only matters if oversize scripts become a target.
 
 ### `[research: inspect-shapes]` Catalog `/console/inspect` request-type responses
 

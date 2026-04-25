@@ -1,0 +1,1 @@
+/;(evl /ifcondition=(= $1 HH:mm);do=;(evl (evl /returnvalue=(. $HH : $mm))));(evl /ifcondition=(= $1 Unix);do=;(evl (evl /returnvalue=$Unix)))

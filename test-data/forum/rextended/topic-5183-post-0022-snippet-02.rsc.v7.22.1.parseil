@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$x;value=(evl (<%% $currdatetimestrArr (> $currdatetimestrArr)))) (evl /localname=$str;value=Current Unix time is: %Unix%, so now are %HH%:%mm%) (evl /foreachcounter=$name;$item;do=;(evl / (evl /putmessage=(. Search in the string % $name % and replace with  $item)));in=$x))

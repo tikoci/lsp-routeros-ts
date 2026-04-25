@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$net;value=ebe7fbd445a53215) (evl /putmessage=(evl (<%% (^ (evl (evl /tonumvalue=(. 0x (evl (evl /pickbegin=8;counter=$net;end=16))))) (evl (evl /tonumvalue=(. 0x (evl (evl /pickbegin=0;counter=$net;end=8)))))) ))) (evl /putmessage=(evl (evl /tonumvalue=0xae42c9c1))))

@@ -1,0 +1,1 @@
+/;(evl /globalname=$oldprefix);(evl /setname=$oldprefix;value=0.0.0.0/0);(evl /globalname=$newprefix);(evl /setname=$newprefix;value=0.0.0.0/0)
