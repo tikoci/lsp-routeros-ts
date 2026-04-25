@@ -11,6 +11,9 @@ const moduleDir = fileURLToPath(new URL('.', import.meta.url))
 
 const REQUEST_TIMEOUT_MS = 5000
 const SHUTDOWN_GRACE_MS = 2000
+// Deliberately small: fast-fail any unintended external network call in the
+// smoke tests, while still tolerating minor CI/JIT startup variability.
+const ROUTEROSLSP_API_TIMEOUT_MS = 10
 
 interface SmokeTarget {
 	label: string
@@ -112,7 +115,7 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 		// network round-trip so a leaked external request fails immediately, but
 		// generous enough that loaded CI runners or cold-start JIT compilation don't
 		// cause false negatives against the in-process mock.
-		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: '10' },
+		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: String(ROUTEROSLSP_API_TIMEOUT_MS) },
 	})
 	const peer = new JsonRpcPeer(child, target.label)
 	let stderr = ''
@@ -258,15 +261,14 @@ class JsonRpcPeer {
 	#onData(chunk: Buffer) {
 		if (this.#failed) return
 
-		const chunks: Uint8Array[] = []
-		let totalLength = 0
-		if (this.#buffer.length > 0) {
-			chunks.push(Uint8Array.from(this.#buffer))
-			totalLength += this.#buffer.length
+		if (this.#buffer.length === 0) {
+			this.#buffer = chunk
+		} else {
+			const combined = Buffer.allocUnsafe(this.#buffer.length + chunk.length)
+			combined.set(this.#buffer, 0)
+			combined.set(chunk, this.#buffer.length)
+			this.#buffer = combined
 		}
-		chunks.push(Uint8Array.from(chunk))
-		totalLength += chunk.length
-		this.#buffer = Buffer.concat(chunks, totalLength)
 
 		while (this.#buffer.length > 0) {
 			const headerEnd = this.#buffer.indexOf('\r\n\r\n')
@@ -338,8 +340,10 @@ class JsonRpcPeer {
 		// Value portion while streaming. Enumerate the valid intermediate states
 		// rather than collapsing them into a single permissive regex — the previous
 		// `/^[ \t]*\d*\r?\n?$/` accidentally matched `\r\n` with no digits, which
-		// would correspond to an invalid `Content-Length: \r\n` line. The four
-		// alternatives below all REQUIRE digits before any line terminator:
+		// would correspond to an invalid `Content-Length: \r\n` line.
+		// The no-terminator state intentionally allows whitespace with zero or more
+		// digits while chunks are still arriving; once any line terminator appears,
+		// at least one digit is required before it:
 		//   - whitespace + optional digits, no terminator yet (chunk landed mid-value)
 		//   - digits + `\r` only (waiting for `\n`)
 		//   - digits + `\n` only (waiting for next header line / end-of-headers)
