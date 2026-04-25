@@ -85,6 +85,10 @@ When changing build scripts, lint config, the test runner, or the smoke harness,
 | Watchdog error mapping (pure) | `client/src/watchdog-errors.ts` |
 | NeoVim integration | `nvim-routeros-lsp-init.lua` |
 
+## Security badge: keep it at 0
+
+Public-facing thoroughness signal — steady-state goal is **0 open findings** on the GitHub Security tab (CodeQL alerts + Code Quality AI findings). If you push a fix that the AI later flags again on a different line, fix that too — don't try to second-guess what the next round will say. Real findings get code fixes; genuinely low-value findings get dismissed with a written justification via the GitHub UI (the audit log is the contract — never silently disable a rule). CI's "AI findings probe" step (`ci.yaml`) is the forward-compat gate for when GitHub ships a real API. See `tikoci-crossref` for the org-wide version.
+
 ## Cross-Project Context
 
 - **[vscode-tikbook](https://github.com/tikoci/tikbook)** — companion extension providing notebooks; shares credentials via `allowClientProvidedCredentials`

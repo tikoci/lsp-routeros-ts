@@ -18,6 +18,15 @@ RouterOS LSP is a Language Server Protocol server for MikroTik RouterOS scriptin
 
 This is the **most widely used tikoci project** (thousands of VSCode Marketplace installs). Treat code quality, test coverage, and release hygiene accordingly. "Works on my VSCode Desktop" is not sufficient — changes must hold up across all six deployment contexts below.
 
+## Security badge: keep it at 0
+
+We mediate network-router config; users care that we look thorough. The Security tab badge (CodeQL alerts + Code Quality AI findings) is the public-facing thoroughness signal — **steady-state goal is 0 open findings**.
+
+- Don't cheat the rule. If a finding is real, fix the code. Lint + smoke green is the bar before closing.
+- Dismissal with justification is fine for findings that are genuinely low-value in context (test fixtures, defensive code, well-understood false positives). Use the GitHub UI's dismiss flow with a short written reason — the audit log is the contract.
+- AI findings are noisy and self-contradicting. A fix can surface a downstream finding, and the AI sometimes walks back a previous suggestion. Apply each round on its merits; don't try to predict the next one. The CI probe in `.github/workflows/ci.yaml` ("AI findings probe") tracks the API surface so future findings show up in CI Annotations.
+- See `tikoci-crossref` skill ("Security signal: keep the badge at 0") for the org-wide version of this policy.
+
 ## Deployment Contexts (six deployment contexts, not three build targets)
 
 The codebase compiles to three build targets, but each change must be evaluated against six **deployment contexts** where users actually hit it:
