@@ -461,7 +461,18 @@ function writeJson(res: ServerResponse, value: unknown) {
 }
 
 function highlightFor(input: string): HighlightToken[] {
-	const tokens = Array<HighlightToken>(input.length).fill('none')
+	const chars = Array.from(input)
+	const tokens = Array<HighlightToken>(chars.length).fill('none')
+
+	// Map UTF-16 code unit offsets to Unicode character indices.
+	const codeUnitToCharIndex: number[] = []
+	let codeUnitOffset = 0
+	for (let i = 0; i < chars.length; i++) {
+		codeUnitToCharIndex[codeUnitOffset] = i
+		codeUnitOffset += chars[i].length
+	}
+	codeUnitToCharIndex[codeUnitOffset] = chars.length
+
 	for (const match of input.matchAll(/\S+/g)) {
 		const word = match[0]
 		const start = match.index
@@ -474,7 +485,11 @@ function highlightFor(input: string): HighlightToken[] {
 			token = 'dir'
 		}
 
-		for (let i = start; i < start + word.length; i++) {
+		const startChar = codeUnitToCharIndex[start] ?? chars.length
+		const endCodeUnit = start + word.length
+		const endChar = codeUnitToCharIndex[endCodeUnit] ?? chars.length
+
+		for (let i = startChar; i < endChar; i++) {
 			tokens[i] = token
 		}
 	}
