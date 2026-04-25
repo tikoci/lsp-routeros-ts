@@ -109,7 +109,7 @@ const browserServerConfig = {
   },
   externals: {
     vscode: 'commonjs vscode', // ignored because it doesn't exist
-    fs: 'commonjs',
+    fs: 'commonjs fs', // excluded because fs is not available in Web Worker context
   },
   performance: {
     hints: false,
