@@ -205,7 +205,7 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 class JsonRpcPeer {
 	#child: ChildProcessWithoutNullStreams
 	#label: string
-	#buffer = Buffer.alloc(0)
+	#buffer: Buffer = Buffer.alloc(0)
 	#nextId = 1
 	#pending = new Map<number | string, PendingRequest>()
 	#failed = false
@@ -253,9 +253,17 @@ class JsonRpcPeer {
 
 	#onData(chunk: Buffer) {
 		if (this.#failed) return
-		// Uint8Array.from coerces to Uint8Array<ArrayBuffer>, avoiding a TS strict-mode
-		// incompatibility between Buffer<ArrayBuffer> and Buffer<ArrayBufferLike> on assignment.
-		this.#buffer = Buffer.concat([Uint8Array.from(this.#buffer), Uint8Array.from(chunk)])
+
+		const chunks: Uint8Array[] = []
+		let totalLength = 0
+		if (this.#buffer.length > 0) {
+			chunks.push(Uint8Array.from(this.#buffer))
+			totalLength += this.#buffer.length
+		}
+		chunks.push(Uint8Array.from(chunk))
+		totalLength += chunk.length
+		this.#buffer = Buffer.concat(chunks, totalLength)
+
 		while (this.#buffer.length > 0) {
 			const headerEnd = this.#buffer.indexOf('\r\n\r\n')
 			if (headerEnd < 0) {
@@ -364,7 +372,7 @@ class JsonRpcPeer {
 
 	#fail(error: Error) {
 		this.#failed = true
-		for (const [id, pending] of this.#pending) {
+		for (const [id, pending] of Array.from(this.#pending.entries())) {
 			clearTimeout(pending.timer)
 			pending.reject(error)
 			this.#pending.delete(id)
