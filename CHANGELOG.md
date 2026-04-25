@@ -77,19 +77,19 @@
 
 ### 0.6.0 (release)
 
-### Changes
+#### Changes
 
 _Promoted v0.5.4 from a `pre-release`._
 
-### Fixes
+#### Fixes
 
 * Significant updates to README.md
 * Updated package dependencies to latest, like Axios, based on audit
 * Use `bun` in GitHub Action for install
 
-### 0.5.4
+### 0.5.4 (release)
 
-### Changes
+#### Changes
 
 * Settings now use "application" scope (i.e. user)
 * VS Code for Web support verified in 0.5.3 (previously failed 0.5.2). CORS proxy still required to use VSCode Web
@@ -100,7 +100,7 @@ _Promoted v0.5.4 from a `pre-release`._
 * Set default for `.rsc` to be spaces for indentation with tabstop of 4
 * New LSP commands to get the connection URL (without password) and "using client credentials" status for display/use by clients
 
-### Fixes
+#### Fixes
 
 * Redact passwords introduced by exception from HTTP client library (axios-http) [GH issue #3](https://github.com/tikoci/lsp-routeros-ts/issues/3)
 * Logging cleanup, minor re-arrangement of commands handlers
@@ -113,11 +113,11 @@ _Promoted v0.5.4 from a `pre-release`._
 
 ### 0.5.3
 
-### Changes
+#### Changes
 
 * Relaxed VS Code minimum version requirements accidentally increased in LSP v0.5.1 that required the very latest stable version.  Versions as old as 1.78 (April 2023) should work fine (and was used previously).  However, only version 1.101 (May 2025) has been tested and thus recommended to use the latest version of VS Code.
 
-### Fixes
+#### Fixes
 
 * Change `engine` for `vscode` to use `^1.78.2` instead of `^1.101` in `package.json`
 * Small fix in log message with an `undefined` instead of `username`

@@ -5,6 +5,9 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { type AddressInfo } from 'node:net'
 import { basename, resolve } from 'node:path'
 import { setTimeout as delay } from 'node:timers/promises'
+import { fileURLToPath } from 'node:url'
+
+const moduleDir = fileURLToPath(new URL('.', import.meta.url))
 
 interface SmokeTarget {
 	label: string
@@ -24,7 +27,7 @@ interface JsonRpcMessage {
 interface PendingRequest {
 	resolve: (message: JsonRpcMessage) => void
 	reject: (error: Error) => void
-	timer: ReturnType<typeof setTimeout>
+	timer: number | NodeJS.Timeout
 }
 
 const smokeDocumentText = '/ip address print\n'
@@ -86,7 +89,7 @@ function requireNextArg(args: string[], index: number, flag: string): string {
 
 async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 	const child = spawn(target.command, target.args, {
-		cwd: resolve(import.meta.dir, '../..'),
+		cwd: resolve(moduleDir, '../..'),
 		stdio: ['pipe', 'pipe', 'pipe'],
 		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: '1' },
 	})
@@ -213,7 +216,7 @@ class JsonRpcPeer {
 
 	#onData(chunk: Buffer) {
 		if (this.#failed) return
-		this.#buffer = Buffer.concat([Uint8Array.from(this.#buffer), Uint8Array.from(chunk)])
+		this.#buffer = Buffer.concat([this.#buffer, chunk])
 		while (this.#buffer.length > 0) {
 			const headerEnd = this.#buffer.indexOf('\r\n\r\n')
 			if (headerEnd < 0) {
@@ -248,7 +251,7 @@ class JsonRpcPeer {
 	#assertCleanHeaderPrefix() {
 		const text = this.#buffer.toString('utf8')
 		const prefix = 'Content-Length:'
-		if (!prefix.startsWith(text) && !text.startsWith(prefix)) {
+		if (text !== prefix.slice(0, text.length)) {
 			this.#fail(new Error(`${this.#label} wrote non-LSP bytes to stdout: ${JSON.stringify(text)}`))
 		}
 	}
