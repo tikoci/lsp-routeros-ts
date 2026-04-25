@@ -72,9 +72,10 @@ function parseTargets(args: string[]): SmokeTarget[] {
 		)
 	}
 
+	const repoRoot = resolve(moduleDir, '../..')
 	for (const target of targets) {
 		const executablePath = target.command === 'node' ? target.args[0] : target.command
-		if (!existsSync(resolve(executablePath))) {
+		if (!existsSync(resolve(repoRoot, executablePath))) {
 			throw new Error(`Smoke target is missing: ${executablePath}. Run bun run compile first.`)
 		}
 	}
@@ -216,7 +217,9 @@ class JsonRpcPeer {
 
 	#onData(chunk: Buffer) {
 		if (this.#failed) return
-		this.#buffer = Buffer.concat([this.#buffer, chunk])
+		// Uint8Array.from coerces to Uint8Array<ArrayBuffer>, avoiding a TS strict-mode
+		// incompatibility between Buffer<ArrayBuffer> and Buffer<ArrayBufferLike> on assignment.
+		this.#buffer = Buffer.concat([Uint8Array.from(this.#buffer), Uint8Array.from(chunk)])
 		while (this.#buffer.length > 0) {
 			const headerEnd = this.#buffer.indexOf('\r\n\r\n')
 			if (headerEnd < 0) {
