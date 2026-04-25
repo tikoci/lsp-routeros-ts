@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es2020",
-		"lib": ["es2020", "WebWorker"],
+		"lib": ["es2020", "ES2024.Promise", "WebWorker"],
 		"module": "es2022",
 		"moduleResolution": "bundler",
 		"strict": true,
@@ -10,6 +10,7 @@
 		"esModuleInterop": true,
 		"types": ["bun", "node"],
 		"baseUrl": ".",
+		"ignoreDeprecations": "6.0",
 		"paths": {
 			"vscode-languageserver": ["../server/node_modules/vscode-languageserver"],
 			"vscode-languageserver-textdocument": ["../server/node_modules/vscode-languageserver-textdocument"],
