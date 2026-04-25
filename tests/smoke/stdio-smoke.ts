@@ -13,7 +13,7 @@ const REQUEST_TIMEOUT_MS = 5000
 const SHUTDOWN_GRACE_MS = 2000
 // Deliberately small: fast-fail any unintended external network call in the
 // smoke tests, while still tolerating minor CI/JIT startup variability.
-const routerOSLspApiTimeoutMs = 10
+const ROUTEROS_LSP_API_TIMEOUT_MS = 10
 
 interface SmokeTarget {
 	label: string
@@ -115,7 +115,7 @@ async function runSmokeTarget(target: SmokeTarget, baseUrl: string) {
 		// network round-trip so a leaked external request fails immediately, but
 		// generous enough that loaded CI runners or cold-start JIT compilation don't
 		// cause false negatives against the in-process mock.
-		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: String(routerOSLspApiTimeoutMs) },
+		env: { ...process.env, ROUTEROSLSP_API_TIMEOUT: String(ROUTEROS_LSP_API_TIMEOUT_MS) },
 	})
 	const peer = new JsonRpcPeer(child, target.label)
 	let stderr = ''
