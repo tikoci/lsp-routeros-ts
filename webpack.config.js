@@ -70,7 +70,7 @@ const browserServerConfig = {
   output: {
     filename: '[name].js',
     path: path.join(__dirname, 'server', 'dist'),
-    libraryTarget: 'var',
+    libraryTarget: 'self', // 'self' is the recommended replacement for deprecated 'var' in webpack 5 webworker targets
     library: 'serverExportVar',
     devtoolModuleFilenameTemplate: '../[resource-path]',
   },
@@ -79,14 +79,16 @@ const browserServerConfig = {
     extensions: ['.ts', '.js'], // support ts-files and js-files
     alias: {},
     fallback: {
-      path: false, // require.resolve("path-browserify"),
-      util: false, // require.resolve("util/"),
-      stream: false, // require.resolve("stream-browserify"),
-      https: false, // require.resolve("https-browserify") ,
-      http: false, // require.resolve("stream-http"),
-      url: false, // require.resolve("url/"),
-      buffer: false, // require.resolve("buffer/"),
-      // fs: require.resolve("fs/"),
+      // Intentionally disable Node.js core-module polyfills for the webworker/browser target.
+      // These modules are not available or not needed in a Web Worker context and must not be bundled.
+      // fs is handled via the externals block below.
+      path: false,
+      util: false,
+      stream: false,
+      https: false,
+      http: false,
+      url: false,
+      buffer: false,
     },
   },
   module: {
