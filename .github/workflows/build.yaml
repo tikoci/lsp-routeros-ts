@@ -27,10 +27,10 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
@@ -55,7 +55,7 @@ jobs:
         run: bun run lint
 
       - name: Upload JavaScript .map files for symbols
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: debug-lsp-routeros-ts-maps
           path: |
@@ -97,61 +97,61 @@ jobs:
           zip ./lsp-routeros-server-windows-arm64.zip ./lsp-routeros-server-windows-arm64.exe
 
       - name: Upload VSIX artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lsp-routeros-ts.vsix
           path: lsp-routeros-ts.vsix
 
       - name: Upload NeoVim Lua script artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nvim-routeros-lsp-init.lua
           path: nvim-routeros-lsp-init.lua
 
       - name: Upload lsp-routeros-server artifact for bun-linux-x64
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lsp-routeros-server-linux-x64
           path: lsp-routeros-server-linux-x64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-linux-arm64
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lsp-routeros-server-linux-arm64
           path: lsp-routeros-server-linux-arm64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-windows-x64
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lsp-routeros-server-windows-x64
           path: lsp-routeros-server-windows-x64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-windows-arm64
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lsp-routeros-server-windows-arm64
           path: lsp-routeros-server-windows-arm64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-darwin-x64
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lsp-routeros-server-darwin-x64
           path: lsp-routeros-server-darwin-x64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-darwin-arm64
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lsp-routeros-server-darwin-arm64
           path: lsp-routeros-server-darwin-arm64.zip
 
       - name: Upload lsp-routeros-server artifact for bun-linux-x64-musl
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lsp-routeros-server-linux-x64-musl
           path: lsp-routeros-server-linux-x64-musl.zip
 
       - name: Upload lsp-routeros-server artifact for bun-linux-arm64-musl
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lsp-routeros-server-linux-arm64-musl
           path: lsp-routeros-server-linux-arm64-musl.zip
