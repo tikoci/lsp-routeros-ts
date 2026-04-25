@@ -17,8 +17,6 @@ RouterRestClient.nodeHttpsAgentFactory = (checkCertificates) => {
 	return agent
 }
 
-console.log('RouterOS LSP server worker loaded')
-
 const connection = createConnection(ProposedFeatures.all)
 connection.console.info('RouterOS LSP server connection to client created')
 

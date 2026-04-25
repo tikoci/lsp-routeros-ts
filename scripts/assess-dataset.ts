@@ -211,25 +211,7 @@ async function processFile(filePath: string): Promise<FileResult> {
 	}
 	const uniqueTokenTypes = [...typeCounts.keys()].sort()
 
-	const knownTypes = new Set([
-		...HighlightTokens.TokenTypes,
-		...HighlightTokens.ErrorTokenTypes.map((t) => {
-			// ErrorTokenTypes are also valid token types
-			return t
-		}),
-	])
-	// Add compound types that toSemanticToken handles
-	knownTypes.add('arg-scope')
-	knownTypes.add('arg-dot')
-	knownTypes.add('obj-inactive')
-	knownTypes.add('syntax-obsolete')
-	knownTypes.add('syntax-old')
-	knownTypes.add('variable-undefined')
-	knownTypes.add('ambiguous')
-	knownTypes.add('error')
-	knownTypes.add('path')
-
-	const unknownTokenTypes = uniqueTokenTypes.filter((t) => !knownTypes.has(t))
+	const unknownTokenTypes = uniqueTokenTypes.filter((t) => HighlightTokens.getTokenTypeIndex(t) < 0)
 
 	// Error token analysis
 	const errorTokenSet = new Set(HighlightTokens.ErrorTokenTypes)

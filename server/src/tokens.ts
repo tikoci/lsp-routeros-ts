@@ -178,6 +178,8 @@ export class HighlightTokens {
 
 	static toSemanticToken(token: string): SemanticTokenLegendItem {
 		switch (token) {
+			case 'path':
+				return { type: 'dir', modifiers: [] }
 			case 'arg-scope':
 				return { type: 'arg', modifiers: ['scope'] }
 			case 'arg-dot':

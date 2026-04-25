@@ -63,6 +63,14 @@ describe('LspController.getServerCapabilities', () => {
 		expect(legend.legend.tokenModifiers).toEqual(HighlightTokens.TokenModifiers)
 	})
 
+	it('uses normal slash glob patterns in semantic token document selectors', () => {
+		const caps = LspController.getServerCapabilities(minimalParams)
+		const provider = caps.semanticTokensProvider as { documentSelector: { scheme?: string; pattern?: string }[] }
+		const filePatterns = provider.documentSelector.filter((selector) => selector.scheme === 'file').map((selector) => selector.pattern)
+		expect(filePatterns).toContain('**/*.rsc')
+		expect(filePatterns).not.toContain('**∕*.rsc')
+	})
+
 	it('includes executeCommandProvider with 8 commands', () => {
 		const caps = LspController.getServerCapabilities(minimalParams)
 		expect(caps.executeCommandProvider?.commands).toHaveLength(8)

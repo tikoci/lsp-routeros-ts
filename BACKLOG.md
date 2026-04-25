@@ -7,7 +7,7 @@
 
 Goal: when a maintainer triggers a pre-release build, automated testing should give a strong signal that the extension works across **all six deployment contexts** — VSCode Desktop, VSCode Web, standalone binary, npm package (`@tikoci/routeroslsp`), NeoVim (via `nvim-routeros-lsp-init.lua`), and GitHub Copilot CLI (via `.github/lsp.json`). See [`deployment.instructions.md`](.github/instructions/deployment.instructions.md) for the matrix.
 
-- 📋 **Per-context smoke test in CI** — for each deployment context, a minimal "LSP handshake + one `highlight` request" check. Must be cheap enough to run on every pre-release build.
+- 🔄 **Per-context smoke test in CI** — stdio smoke now covers the bundled Node server and standalone binary with a mocked RouterOS; VSCode Desktop/Web, npm-installed bin, NeoVim, and Copilot CLI still need fuller per-context automation.
 - 📋 **CI-booted CHR for integration** — run `integration.test.ts` against a QEMU CHR booted in GitHub Actions using [`tikoci/quickchr`](https://github.com/tikoci/quickchr). quickchr is specifically designed for this: pins a RouterOS version, exposes `/console/inspect` predictably, and runs headless. Pairs with the 📋 "QEMU CHR in CI" item under CI/CD below.
 - 📋 **Pre-release checklist in `deployment.instructions.md`** — document what has to be green before `vsix:package:prerelease` is considered trustworthy. Keep it short enough that agents can actually follow it.
 - 📋 **npm publish audit** — `@tikoci/routeroslsp` on npmjs.org is currently at 0.7.2 (`package.json` is at 0.7.3 as the next version). Confirm the conditional `if: env.NPM_TOKEN != ''` publish step actually runs on each pre-release, and that the shebang-prepend is correct. CI is the only supported publish path; no maintainer should `npm publish` from their laptop.
@@ -16,7 +16,7 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 ## Quality & Infrastructure
 
 ### Testing
-- 📋 **Update oversize integration test to use `oversize-32k.rsc`** — `export.rsc` was removed from test-data root; the `export.rsc — oversize file handling` describe in `integration.test.ts` now silently no-ops (`if (!exportFile) return`). Should be updated to find `edge-cases/oversize-32k.rsc` instead.
+- ✅ **Update oversize integration test to use `oversize-32k.rsc`** — `integration.test.ts` now asserts `edge-cases/oversize-32k.rsc` exists and exercises truncation instead of silently no-oping against removed `export.rsc`.
 - ✅ **Set up `bun test` runner** — configured with `bunfig.toml` preload for log silencing
 - ✅ **Anchor tests for tokens.ts** — `HighlightTokens` parsing, `tokenRanges`, `atPosition`, `regexToken`
 - ✅ **Anchor tests for routeros.ts** — `replaceNonAscii`, `normalizeError`
@@ -31,11 +31,13 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 - ✅ **Performance profiling tool** — `profile-timing.ts` tests size→time relationship with progressive truncation + synthetic controls. Confirmed superlinear (quadratic) scaling across all syntax types, with a sharp inflection at ~28KB. Scripting syntax (variables, functions, control flow) costs 3× more than comments at the same size.
 - 📋 **VSCode integration tests** — boot real VS Code with `@vscode/test-electron`, install VSIX, verify semantic tokens, diagnostics, and completion work end-to-end
 - 📋 **Snapshot capture in CI** — run `scripts/capture-snapshots.ts` against CHR to regenerate `.highlight` files and detect regressions
-- 📋 **Smoke test tier** — new tier between unit and integration: launches the server process (stdio), sends `initialize` + one `textDocument/didOpen` + one `textDocument/semanticTokens/full`, verifies a non-empty response. Runs against a mocked RouterOS so it needs no CHR; separate from unit tests so a smoke failure is a clear "the transport/protocol layer broke" signal. Run for both the Node-bundled `server.js` and the standalone binary; web target uses a Worker shim.
+- 🔄 **Smoke test tier** — stdio smoke tier launches the Node-bundled `server.js` and standalone binary, sends `initialize` + `textDocument/didOpen` + semantic tokens + diagnostics + completion, and verifies responses against a mocked RouterOS. Remaining: web target Worker shim and package-manager-installed npm bin smoke.
 
 ### CI/CD
 - ✅ **Add lint to CI** — `build.yaml` now runs ESLint after compile
 - ✅ **Add test step to CI** — `bun test` runs after compile in `build.yaml`
+- ✅ **Add stdio smoke test step to CI** — `bun run test:smoke` runs after compile/unit tests and before publish/package steps
+- ✅ **Make typecheck non-emitting** — `bun run lint` validates TypeScript without overwriting Bun-built `dist/` artifacts
 - 📋 **QEMU CHR in CI** — like restraml, boot CHR in GitHub Actions for integration tests
 - 📋 **Automated VSIX publishing** — trigger publish on version tag
 
@@ -49,7 +51,7 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 - ✅ **Fix typo: `onComletionHandler`** → `onCompletionHandler` (already correct in code, docs were wrong)
 - ✅ **Fix typo: `inspectHighligh`** → `inspectHighlight` (routeros.ts, model.ts)
 - ✅ **Add `variable-auto`, `obj-dynamic`, `obj-disabled` to TokenTypes** — dataset assessment (913 .rsc files) found variable-auto in 167 files, obj-dynamic in 4, obj-disabled in 2. Added to tokens.ts, package.json, theme, with tests.
-- 📋 **Add `arg-scope` and `arg-dot` to TokenTypes** — snapshot tests revealed RouterOS returns these token types but they're not in `HighlightTokens.TokenTypes`; currently mapped to `?` in regexToken
+- ✅ **Map raw RouterOS token aliases into semantic token types** — `arg-scope`, `arg-dot`, and `path` now map into the existing semantic legend, and dataset/integration checks use the same mapper as semantic token generation
 - ✅ **Clean up duplicate `test-data/eworm-de/`** — merged into `test-data/eworm/`
 - 📋 **Migrate ESLint to Biome** — align with user preference for single lint/format tool
 - 📋 **Add `no-console` ESLint rule** — enforce `log.*` usage over `console.log`

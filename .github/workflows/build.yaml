@@ -54,6 +54,9 @@ jobs:
       - name: Lint
         run: bun run lint
 
+      - name: Test (stdio smoke)
+        run: bun run test:smoke
+
       - name: Upload JavaScript .map files for symbols
         uses: actions/upload-artifact@v7
         with:

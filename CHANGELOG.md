@@ -29,7 +29,9 @@
 
 #### Fixes
 
-* Added semantic handling for RouterOS highlight tokens like `arg-scope` and `arg-dot` so semantic token generation no longer drops them
+* Fixed standalone/npm stdio startup so NeoVim, Copilot CLI, and other stdio LSP clients no longer receive non-LSP log text before the `initialize` response
+* Fixed semantic token document selector globs for file-based `.rsc`, `.tikbook`, and `.md.rsc` documents
+* Added semantic handling for RouterOS highlight tokens like `arg-scope`, `arg-dot`, and `path` so semantic token generation no longer drops them
 * Semantic token generation now skips unknown token types safely instead of emitting invalid indexes
 
 ### 0.7.2 (pre-release)

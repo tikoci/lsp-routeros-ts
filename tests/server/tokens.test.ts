@@ -76,6 +76,15 @@ describe('HighlightTokens.TokenModifiers', () => {
 		expect(HighlightTokens.getTokenModifierMask('arg-scope')).toBeGreaterThan(0)
 		expect(HighlightTokens.getTokenModifierMask('arg-dot')).toBeGreaterThan(0)
 	})
+
+	it('maps raw RouterOS-only token names into legend token types', () => {
+		expect(HighlightTokens.toSemanticToken('path')).toEqual({ type: 'dir', modifiers: [] })
+		expect(HighlightTokens.toSemanticToken('arg-scope')).toEqual({ type: 'arg', modifiers: ['scope'] })
+		expect(HighlightTokens.toSemanticToken('arg-dot')).toEqual({ type: 'arg', modifiers: ['dot'] })
+		expect(HighlightTokens.getTokenTypeIndex('path')).toBeGreaterThanOrEqual(0)
+		expect(HighlightTokens.getTokenTypeIndex('arg-scope')).toBeGreaterThanOrEqual(0)
+		expect(HighlightTokens.getTokenTypeIndex('arg-dot')).toBeGreaterThanOrEqual(0)
+	})
 })
 
 describe('HighlightTokens constructor and tokenRanges', () => {

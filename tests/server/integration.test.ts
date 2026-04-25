@@ -149,14 +149,14 @@ describe('inspectHighlight for test-data/**/*.rsc', () => {
 				if (!response?.[0]?.highlight) return
 
 				const tokens = response[0].highlight.split(',')
-				const knownTypes = new Set(HighlightTokens.TokenTypes)
-				const unknownTypes = tokens.filter((t) => !knownTypes.has(t))
-				// All tokens should be known types (or at least not completely alien)
+				const unknownTypes = tokens.filter((t) => HighlightTokens.getTokenTypeIndex(t) < 0)
+				// All raw RouterOS tokens should map into a known semantic token type.
 				// Note: RouterOS may introduce new token types in future versions
 				if (unknownTypes.length > 0) {
 					const unique = [...new Set(unknownTypes)]
 					console.warn(`  ${relPath}: unknown token types: ${unique.join(', ')}`)
 				}
+				expect([...new Set(unknownTypes)]).toEqual([])
 			})
 
 			it('HighlightTokens parses without throwing', async () => {
@@ -245,23 +245,26 @@ describe('known-good scripts — no error tokens', () => {
 	}
 })
 
-describe('export.rsc — oversize file handling', () => {
+describe('edge-cases/oversize-32k.rsc — oversize file handling', () => {
 	it('file exceeds 32KB API limit', () => {
-		const exportFile = allRscFiles.find((f) => f.endsWith('export.rsc') && !f.includes('eworm'))
-		if (!exportFile) return
-		const { text } = loadScript(exportFile)
+		const oversizeFile = allRscFiles.find((f) => f.endsWith('edge-cases/oversize-32k.rsc'))
+		expect(oversizeFile).toBeDefined()
+		if (!oversizeFile) return
+		const { text } = loadScript(oversizeFile)
 		expect(text.length).toBeGreaterThan(ROUTEROS_API_MAX_BYTES)
 	})
 
 	it('returns valid tokens for truncated content', async () => {
 		if (!chrAvailable) return
-		const exportFile = allRscFiles.find((f) => f.endsWith('export.rsc') && !f.includes('eworm'))
-		if (!exportFile) return
-		const { text } = loadScript(exportFile)
+		const oversizeFile = allRscFiles.find((f) => f.endsWith('edge-cases/oversize-32k.rsc'))
+		expect(oversizeFile).toBeDefined()
+		if (!oversizeFile) return
+		const { text } = loadScript(oversizeFile)
 		const truncated = text.substring(0, ROUTEROS_API_MAX_BYTES)
 		const input = replaceNonAscii(truncated, '?')
 		const response = await client.inspectHighlight(input)
-		if (!response?.[0]?.highlight) return
+		expect(response?.[0]?.highlight).toBeTruthy()
+		if (!response?.[0]?.highlight) throw new Error('CHR returned no highlight tokens for oversize file')
 		const tokens = response[0].highlight.split(',')
 		expect(tokens.length).toBe(input.length)
 	})
