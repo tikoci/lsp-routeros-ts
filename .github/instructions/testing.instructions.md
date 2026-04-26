@@ -67,6 +67,13 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 - Usage: `bun run scripts/assess-dataset.ts [--json] [--concurrency=N]`
 - JSON output: `test-data/assessment-results.json` (gitignored)
 
+### Corpus datastore (`build-corpus-db.ts`)
+- Rebuilds the checked-in SQLite corpus database at `test-data/corpus.sqlite` from committed `.rsc` files and sidecars
+- Imports script metadata, FTS text, `.rsc.highlight` snapshots, parseIL `.parseil`/`.parseil.meta.json` captures, artifact provenance, and forward-compatible tables for inspect-shapes/completion-tricks research
+- Usage: `bun run corpus:db` or `bun run scripts/build-corpus-db.ts [--db test-data/corpus.sqlite]`
+- Because `corpus.sqlite` is checked in, rebuilds must be deterministic from committed inputs; prefer corpus fingerprints and source capture timestamps over wall-clock import timestamps
+- Future research harnesses should write normalized rows to this DB first; export JSON/Markdown only when a reviewer needs a textual diff or docs need a curated excerpt
+
 ### Performance profiling (`profile-timing.ts`)
 - Tests size→time relationship by truncating scripts at progressive sizes (128B → 32KB)
 - Includes synthetic controls (pure comments, simple commands, complex scripting, mixed paths)
@@ -79,16 +86,18 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 - They catch regressions and document what the code actually does
 - Makes it safer for LLMs to refactor code by establishing behavioral baselines
 
-## Test Data (`test-data/`, gitignored)
+## Test Data (`test-data/`, committed)
 - `*.rsc` — RouterOS script samples at various complexity levels
 - `*.rsc.highlight` — saved CHR highlight responses for offline snapshot tests
 - `edge-cases/` — targeted: empty, comment-only, single-command, oversize-32k, unicode-heavy
 - `eworm/` — scripts from eworm-de/routeros-scripts (GPL, see ATTRIBUTION.md)
 - `forum/` — scripts from forum.mikrotik.com
 - `*.tikbook` — TikBook notebook format files
+- `corpus.sqlite` — checked-in SQLite datastore rebuilt by `scripts/build-corpus-db.ts`; excluded from VSIX because `.vscodeignore` excludes all `test-data/`
 
 ## Adding New Tests
 - Place tests in `tests/server/` (for server code) or `tests/client/` (for client code), mirroring the source tree
 - For new `.rsc` test scripts: add to `test-data/`, run `scripts/capture-snapshots.ts` to generate `.highlight`
+- After adding scripts or research sidecars, run `bun run corpus:db` so `test-data/corpus.sqlite` reflects the corpus.
 - For mocking `RouterRestClient`: patch the singleton instance property, not the prototype (arrow-function methods are instance-level)
 - If you're tempted to write a script to "try something out" — it belongs in `.scratch/`, not next to a `.ts` source file. Promote to `scripts/` when it's worth keeping.

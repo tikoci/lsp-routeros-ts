@@ -442,6 +442,7 @@
     "lint": "bun run typecheck && bunx @biomejs/biome lint ./server/src/ ./client/src/",
     "format": "bunx @biomejs/biome format --write ./server/src/ ./client/src/",
     "test": "bun test tests/",
+    "corpus:db": "bun run scripts/build-corpus-db.ts",
     "test:smoke": "bun tests/smoke/stdio-smoke.ts --node server/dist/server.js --standalone ./lsp-routeros-server",
     "audit": "bun audit && cd server && bun audit && cd ../client && bun audit && cd ..",
     "clean": "rm -rf package-lock.json && rm -rf .*.bun-build && rm -rf ./server/dist && rm -rf ./client/dist && rm -rf ./server/out && rm -rf ./client/out && rm -f lsp-routeros-server* && rm -f *.vsix && rm -rf ./dist",

@@ -27,7 +27,11 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 
 ## Research & Experiments (Pre-Feature Work)
 
-Goal: ground the next round of LSP feature work in measured RouterOS behavior, using the 913-script corpus already in `test-data/` plus a [`tikoci/quickchr`](https://github.com/tikoci/quickchr)-booted CHR. Each spike produces (a) a reusable harness in `scripts/`, (b) snapshots/artifacts under `test-data/` (or a sibling dir), (c) a write-up in `DESIGN.md` or a dedicated `docs/` reference page answering specific questions. **Production code waits.**
+Goal: ground the next round of LSP feature work in measured RouterOS behavior, using the 913-script corpus already in `test-data/` plus a [`tikoci/quickchr`](https://github.com/tikoci/quickchr)-booted CHR. Each spike produces (a) a reusable harness in `scripts/`, (b) normalized rows in `test-data/corpus.sqlite` (raw/export sidecars only when reviewable diffs are needed), (c) a write-up in `DESIGN.md` or a dedicated `docs/` reference page answering specific questions. **Production code waits.**
+
+### Test corpus SQLite datastore
+
+✅ **Initial framework complete.** `scripts/build-corpus-db.ts` rebuilds `test-data/corpus.sqlite` from committed scripts and sidecars, with FTS over source scripts, artifact provenance, parseIL/highlight imports, and empty normalized tables for `[research: inspect-shapes]` and `[research: completion-tricks]`. Future research harnesses should write normalized rows to the DB first and export JSON/Markdown only for human-review diffs or curated docs.
 
 ### `[research: parseil]` Decode RouterOS `:parse` IL using the script corpus
 
@@ -70,11 +74,11 @@ Concrete feature work this unblocks (filed below under their respective sections
 
 ### `[research: inspect-shapes]` Catalog `/console/inspect` request-type responses
 
-We use `request=highlight` heavily, `request=completion` lightly, and have not characterized `syntax` or `child` against the corpus at all — yet feature items below assume their shape. Build a small harness in `scripts/inspect-catalog.ts` that, for a representative subset of `test-data/**/*.rsc` (and a fixed set of cursor positions per file), captures all four request types and saves them as `.inspect.<request>.json` snapshots. Document the schemas in `DESIGN.md` (one section per request type) so feature work can target the actual response shape, not what we remember from README. Pairs with the fake-space / fake-equals validation below.
+We use `request=highlight` heavily, `request=completion` lightly, and have not characterized `syntax` or `child` against the corpus at all — yet feature items below assume their shape. Build a small harness in `scripts/inspect-catalog.ts` that, for a representative subset of `test-data/**/*.rsc` (and a fixed set of cursor positions per file), captures all four request types into normalized `inspect_responses` rows in `test-data/corpus.sqlite`. Store raw response JSON in the DB or `artifact_files`; export `.inspect.<request>.json` snapshots only when a reviewable diff is needed. Document the schemas in `DESIGN.md` (one section per request type) so feature work can target the actual response shape, not what we remember from README. Pairs with the fake-space / fake-equals validation below.
 
 ### `[research: completion-tricks]` Validate fake-space / fake-equals heuristics across the corpus
 
-The fake-space / fake-equals tricks are documented as folklore in README. Before wiring them into completion, run them through the corpus on a CHR: pick N positions from each script (start of token, mid-token, after `=`, after space), append the trick character, query `request=completion`, and record (a) when the trick yields strictly more results, (b) when it yields *different* (wrong) results, (c) when it errors. Output: a confidence table by context, and a recommendation on when each trick is safe to apply.
+The fake-space / fake-equals tricks are documented as folklore in README. Before wiring them into completion, run them through the corpus on a CHR: pick N positions from each script (start of token, mid-token, after `=`, after space), append the trick character, query `request=completion`, and record normalized `completion_trick_results` rows in `test-data/corpus.sqlite`: (a) when the trick yields strictly more results, (b) when it yields *different* (wrong) results, (c) when it errors. Output only the summarized confidence table and recommendation on when each trick is safe to apply.
 
 ### `[research: 28kb]` Investigate the 28KB highlight inflection point
 
@@ -125,6 +129,7 @@ Generalize the TikBook `.rsc.md` idea: any ` ```routeros ` fenced block inside a
 - ✅ **Integration tests with QEMU CHR** — `inspectHighlight` for all `test-data/**/*.rsc` against live CHR (auto-skips when no CHR)
 - ✅ **Test data catalog** — `test-data/` expanded with eworm, forum, edge-case scripts + snapshot `.highlight` files
 - ✅ **Dataset assessment tool** — `assess-dataset.ts` runs all 913 .rsc files through CHR highlight API; measures timing, token quality, unknown types, data signals. Results: 912/913 OK, median 7ms, avg 30ms, max 3822ms.
+- ✅ **Corpus SQLite datastore** — `scripts/build-corpus-db.ts` rebuilds `test-data/corpus.sqlite` from scripts and sidecars; future research spikes store normalized data there instead of scattering one-off JSON/Markdown sidecars.
 - ✅ **Performance profiling tool** — `profile-timing.ts` tests size→time relationship with progressive truncation + synthetic controls. Confirmed superlinear (quadratic) scaling across all syntax types, with a sharp inflection at ~28KB. Scripting syntax (variables, functions, control flow) costs 3× more than comments at the same size.
 - 📋 **VSCode integration tests** — boot real VS Code with `@vscode/test-electron`, install VSIX, verify semantic tokens, diagnostics, and completion work end-to-end
 - 📋 **Snapshot capture in CI** — run `scripts/capture-snapshots.ts` against CHR to regenerate `.highlight` files and detect regressions

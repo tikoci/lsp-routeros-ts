@@ -166,6 +166,42 @@ Decisions captured from the spike:
 - **Snapshot files are version-tagged on disk.** `<file>.rsc.v<routeros-version>.parseil` lets multiple RouterOS versions coexist in the corpus and keeps IL grammar drift visible as plain diffs across releases.
 - **Keep parseIL comparisons version-aware.** The core IL forms held steady across 7.20.8/7.22.1/7.23rc1, but 74/912 successful captures still drifted because RouterOS leaks live command schema into the IL (`findwhere=` field dumps, command-path canonicalisation like `/ping` → `/tool/ping`, and version-specific `bad parameter` / `bad command name` annotations).
 
+### Test Corpus SQLite Database
+
+`test-data/corpus.sqlite` is the checked-in datastore for corpus research. It is rebuilt with `bun run corpus:db` (or `bun run scripts/build-corpus-db.ts --db test-data/corpus.sqlite`) from committed `test-data/**/*.rsc` scripts and existing sidecars. `test-data/` is already excluded from the VSIX, so the DB is available to tests and research harnesses without becoming extension runtime payload. Because the DB itself is checked in, rebuilds must be deterministic from corpus inputs instead of baking in wall-clock import timestamps.
+
+**Why SQLite:** corpus spikes were starting to produce many Markdown/JSON sidecars. SQLite gives us one durable, queryable place for script metadata, FTS search, raw artifact provenance, and normalized result tables while still allowing export files when a human-reviewable diff is needed.
+
+**Schema shape:**
+
+- `corpus_metadata` — schema version, generator, corpus input fingerprint, and constants used during import.
+- `source_scripts` + `source_scripts_fts` — one row per `.rsc`, collection classification, size/line/hash flags, text, and BM25/FTS search.
+- `artifact_files` — raw sidecar provenance (`.rsc.highlight`, `.parseil`, `.parseil.meta.json`, summaries, notebooks, manifests), linked to a script when possible.
+- `analysis_runs` — versioned runs such as `parseil`, future `inspect-shapes`, and future `completion-tricks`.
+- `parseil_results` and `highlight_snapshots` — normalized imports of the current sidecars.
+- `inspect_responses` and `completion_trick_results` — empty forward-compatible tables for the next research spikes.
+- Views: `v_script_summary`, `v_parseil_by_version`, `v_parseil_drift`, and `v_analysis_overview`.
+
+**Future spike pattern:** write the reusable harness in `scripts/`, insert normalized rows into `corpus.sqlite`, and add/update an `analysis_runs` row with RouterOS version/build metadata. Keep the checked-in DB reproducible from committed inputs: use corpus fingerprints plus source-side `capturedAt` metadata, not fresh import timestamps. Keep large raw responses in `artifact_files` or the purpose-built result table. Export JSON/Markdown only when reviewers need a stable textual diff or a doc page needs a curated excerpt.
+
+Example queries:
+
+```sql
+-- Find scripts likely to stress highlight timing or truncation
+SELECT path, bytes FROM source_scripts WHERE is_oversize_32k = 1 OR bytes > 28000 ORDER BY bytes DESC;
+
+-- Full-text search the corpus
+SELECT path, bm25(source_scripts_fts) AS rank
+FROM source_scripts_fts
+WHERE source_scripts_fts MATCH 'certificate mobileconfig'
+-- best match first; FTS5 bm25() returns smaller (often negative) scores for better matches
+ORDER BY rank
+LIMIT 10;
+
+-- See parseIL drift across RouterOS versions
+SELECT * FROM v_parseil_drift ORDER BY path;
+```
+
 ### QEMU CHR for Testing
 
 For automated testing, a temporary RouterOS CHR instance can be booted via QEMU:
