@@ -31,7 +31,7 @@ Goal: ground the next round of LSP feature work in measured RouterOS behavior, u
 
 ### Test corpus SQLite datastore
 
-✅ **Initial framework complete.** `scripts/build-corpus-db.ts` rebuilds `test-data/corpus.sqlite` from committed scripts and sidecars, with FTS over source scripts, artifact provenance, parseIL/highlight imports, and empty normalized tables for `[research: inspect-shapes]` and `[research: completion-tricks]`. Future research harnesses should write normalized rows to the DB first and export JSON/Markdown only for human-review diffs or curated docs.
+✅ **Initial framework complete.** `scripts/build-corpus-db.ts` rebuilds `test-data/corpus.sqlite` from committed scripts and sidecars, with FTS over source scripts, artifact provenance, parseIL/highlight imports, and normalized `required_arg_results` rows plus forward-compatible tables for `[research: inspect-shapes]` and `[research: completion-tricks]`. Future research harnesses should write normalized rows to the DB first and export JSON/Markdown only for human-review diffs or curated docs.
 
 ### `[research: parseil]` Decode RouterOS `:parse` IL using the script corpus
 
@@ -64,13 +64,25 @@ Concrete feature work this unblocks (filed below under their respective sections
 
 ### `[research: required-args]` Build a version-tagged required-argument map
 
-**Motivation:** The parseIL `findwhere=` drift study (see [`docs/parseil-format.md`](docs/parseil-format.md) §5.2) confirmed that neither the `findwhere=` field list nor `/console/inspect` completion data has a structural signal that distinguishes required from optional arguments. However, a deterministic required-arg signal does exist at execute time: running `{menu} add` with no arguments returns `"Script Error: missing value(s) of argument(s) <arg1> <arg2> … (<path>/add; line 1)"`, which is machine-parseable.
+✅ **Complete (RouterOS 7.20.8 / 7.22.1 / 7.23rc1).** Full reference:
+[`docs/required-args.md`](docs/required-args.md). Harness:
+`scripts/collect-required-args.ts`. Artifacts:
+`test-data/required-args.v<routeros-version>.json` +
+`test-data/required-args.v<routeros-version>.meta.json`. Corpus DB import:
+`required_arg_results`, `v_required_args_by_version`, `v_required_arg_drift`.
 
-**Spike scope:** Write `scripts/collect-required-args.ts`. For every menu path in `deep-inspect.json` that has an `add` command, issue `/rest/execute` with `{menu} add` and no other args. Parse the error for `missing value(s)`, handle the `certificate`-style custom messages, and handle `bad command name add` for read-only menus. Emit a version-tagged JSON summary `test-data/required-args.v<version>.json` with shape `{path: string, required: string[], hasAdd: boolean, rawError: string}[]`. Run on 7.20.8, 7.22.1, and 7.23rc1 (already available in quickchr). Cross-check the drift against the `findwhere=` field-set changes to confirm no required arg appeared or disappeared without also changing the `findwhere=` dump.
+Headline findings worth surfacing here:
 
-**For the LSP:** A required-arg map (keyed by `{menuPath}/{version}`) allows a new diagnostic — "add command is missing required argument(s): `chain`" — without any change to the RouterOS inspect API or a live connection.
+- **The execute-time signal is real and stable.** Exact `missing value(s) of argument(s) …` responses covered 146 paths on 7.20.8 and 149 paths on both 7.22.1 and 7.23rc1.
+- **The add probe can be side-effect free.** `:local id [<menu> add]; :put $id; <menu> remove $id` cleanly distinguishes "missing args" from "no required args" without leaving junk rows behind.
+- **Custom messages are usable but weaker.** 20/20/21 paths per version expose requirements only via human text (`certificate name must be set`, `address or mac-address is required`, `must specify exactly one of …`). The JSON export preserves `rawError`; `required[]` for those rows is a candidate-arg set, not a stronger structural signal than the text itself.
+- **Only six existing paths drifted across the three versions.** `/interface/macsec/profile`, `/interface/wifi`, `/ip/dhcp-server/lease`, `/ipv6/pool`, `/routing/bgp/connection`, and `/system/package/local-update/update-package-source`.
+- **For the menus that support `find where`, required-arg drift tracked `findwhere=` drift.** The live cross-check in [`docs/required-args.md`](docs/required-args.md#findwhere-cross-check) found no case where a required arg appeared/disappeared while the synthesized `findwhere=` field dump stayed unchanged.
+- **A small unresolved tail remains.** Stateful/validation-heavy menus like `/interface/macvlan`, `/ip/dns/adlist`, `/ipv6/nd`, `/user/group`, plus a handful of RouterOS-support errors, need a second-stage probe or deliberate exclusion before shipping diagnostics.
 
-**Caveat — conditional args:** Some menus have args that are conditionally required depending on another arg's value (e.g., `/disk add type=iscsi` additionally requires `iscsi-address`, `iscsi-iqn`). The single-pass `add` probe only reveals the top-level discriminator (`type`). A follow-up that iterates over each discriminator value would complete the picture, but is a separate spike.
+**For the LSP:** The exact-pattern subset is already strong enough for an offline, version-tagged diagnostic map keyed by `{menuPath}/{version}`.
+
+**Caveat — conditional args:** The single-pass `add` probe only reveals top-level requirements. Cases like `/disk add type=iscsi …` still need a discriminator-aware follow-up if we want full conditional-arg coverage.
 
 ### `[research: inspect-shapes]` Catalog `/console/inspect` request-type responses
 

@@ -177,10 +177,10 @@ Decisions captured from the spike:
 - `corpus_metadata` — schema version, generator, corpus input fingerprint, and constants used during import.
 - `source_scripts` + `source_scripts_fts` — one row per `.rsc`, collection classification, size/line/hash flags, text, and BM25/FTS search.
 - `artifact_files` — raw sidecar provenance (`.rsc.highlight`, `.parseil`, `.parseil.meta.json`, summaries, notebooks, manifests), linked to a script when possible.
-- `analysis_runs` — versioned runs such as `parseil`, future `inspect-shapes`, and future `completion-tricks`.
-- `parseil_results` and `highlight_snapshots` — normalized imports of the current sidecars.
-- `inspect_responses` and `completion_trick_results` — empty forward-compatible tables for the next research spikes.
-- Views: `v_script_summary`, `v_parseil_by_version`, `v_parseil_drift`, and `v_analysis_overview`.
+- `analysis_runs` — versioned runs such as `parseil`, `required-args`, and future `inspect-shapes` / `completion-tricks`.
+- `parseil_results`, `highlight_snapshots`, and `required_arg_results` — normalized imports of the current sidecars.
+- `inspect_responses` and `completion_trick_results` — forward-compatible tables for the next research spikes.
+- Views: `v_script_summary`, `v_parseil_by_version`, `v_parseil_drift`, `v_required_args_by_version`, `v_required_arg_drift`, and `v_analysis_overview`.
 
 **Future spike pattern:** write the reusable harness in `scripts/`, insert normalized rows into `corpus.sqlite`, and add/update an `analysis_runs` row with RouterOS version/build metadata. Keep the checked-in DB reproducible from committed inputs: use corpus fingerprints plus source-side `capturedAt` metadata, not fresh import timestamps. Keep large raw responses in `artifact_files` or the purpose-built result table. Export JSON/Markdown only when reviewers need a stable textual diff or a doc page needs a curated excerpt.
 

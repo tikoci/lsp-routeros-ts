@@ -21,7 +21,7 @@ ConnectionLogger.console = { log: noop, info: noop, warn: noop, error: noop, deb
 
 const TEST_DATA_DIR = resolve(import.meta.dir, '../test-data')
 const REPO_ROOT = resolve(import.meta.dir, '..')
-const SCHEMA_VERSION = '1'
+const SCHEMA_VERSION = '2'
 const DEFAULT_DB = join(TEST_DATA_DIR, 'corpus.sqlite')
 
 interface ParseIlMeta {
@@ -48,6 +48,30 @@ interface ParseIlSummary {
 	parseMsMean?: number
 	parseMsMax?: number
 	results?: unknown[]
+}
+
+interface RequiredArgSummaryEntry {
+	path?: string
+	required?: unknown
+	hasAdd?: boolean
+	rawError?: string
+}
+
+interface RequiredArgMeta {
+	routerosVersion?: string
+	chrBuildTime?: string
+	schemaPath?: string
+	schemaSha256?: string
+	totalMenus?: number
+	requiredMenus?: number
+	okCount?: number
+	missingValueCount?: number
+	customRequiredCount?: number
+	badCommandCount?: number
+	probeErrorCount?: number
+	capturedAt?: string
+	target?: string
+	limit?: number
 }
 
 interface ArtifactInfo {
@@ -146,6 +170,23 @@ function parseSummaryVersion(relPath: string): string | null {
 	return relPath.match(/^parseil-summary\.v(.+)\.json$/)?.[1] ?? null
 }
 
+function parseRequiredArgsVersion(relPath: string): string | null {
+	return relPath.match(/^required-args\.v(.+?)\.(?:meta\.)?json$/)?.[1] ?? null
+}
+
+function analysisRunKey(analysisName: string, version: string): string {
+	return `${analysisName}\0${version}`
+}
+
+function classifyRequiredArgError(hasAdd: boolean, requiredCount: number, rawError: string): string {
+	if (!hasAdd) return 'bad-command'
+	if (!rawError) return 'ok'
+	if (rawError.includes('missing value(s) of argument(s)')) return 'missing-values'
+	if (requiredCount > 0) return 'custom-required'
+	if (rawError.includes('contact MikroTik support')) return 'routeros-bug'
+	return 'probe-error'
+}
+
 function artifactInfo(filePath: string): ArtifactInfo {
 	const relPath = rel(filePath)
 	const parsedParseIl = parseVersionedParseIlPath(relPath)
@@ -193,6 +234,31 @@ function artifactInfo(filePath: string): ArtifactInfo {
 			scriptPath: null,
 			contentType: 'application/json',
 			capturedAt: value?.capturedAt ?? null,
+			jsonValid: valid,
+		}
+	}
+
+	const requiredArgsVersion = parseRequiredArgsVersion(relPath)
+	if (requiredArgsVersion && relPath.endsWith('.meta.json')) {
+		const { value, valid } = readJson<RequiredArgMeta>(filePath)
+		return {
+			artifactKind: 'required_args_meta',
+			routerosVersion: value?.routerosVersion ?? requiredArgsVersion,
+			scriptPath: null,
+			contentType: 'application/json',
+			capturedAt: value?.capturedAt ?? null,
+			jsonValid: valid,
+		}
+	}
+
+	if (requiredArgsVersion) {
+		const { valid } = readJson<RequiredArgSummaryEntry[]>(filePath)
+		return {
+			artifactKind: 'required_args_summary',
+			routerosVersion: requiredArgsVersion,
+			scriptPath: null,
+			contentType: 'application/json',
+			capturedAt: null,
 			jsonValid: valid,
 		}
 	}
@@ -356,6 +422,19 @@ response_json TEXT,
 captured_at TEXT
 );
 
+CREATE TABLE required_arg_results (
+run_id INTEGER NOT NULL REFERENCES analysis_runs(id) ON DELETE CASCADE,
+routeros_version TEXT NOT NULL,
+path TEXT NOT NULL,
+has_add INTEGER NOT NULL,
+required_json TEXT NOT NULL,
+required_count INTEGER NOT NULL,
+raw_error TEXT NOT NULL,
+error_kind TEXT NOT NULL,
+captured_at TEXT,
+PRIMARY KEY (run_id, path)
+);
+
 CREATE INDEX idx_source_scripts_collection ON source_scripts(collection);
 CREATE INDEX idx_artifact_files_script ON artifact_files(script_id);
 CREATE INDEX idx_artifact_files_kind ON artifact_files(artifact_kind);
@@ -363,6 +442,7 @@ CREATE INDEX idx_parseil_results_version ON parseil_results(routeros_version);
 CREATE INDEX idx_highlight_snapshots_script ON highlight_snapshots(script_id);
 CREATE INDEX idx_inspect_responses_request ON inspect_responses(request_type);
 CREATE INDEX idx_completion_trick_results_trick ON completion_trick_results(trick);
+CREATE INDEX idx_required_arg_results_version ON required_arg_results(routeros_version);
 
 CREATE VIEW v_script_summary AS
 SELECT
@@ -420,11 +500,33 @@ a.source_path,
 a.captured_at,
 CASE
 WHEN a.analysis_name = 'parseil' THEN (SELECT COUNT(*) FROM parseil_results p WHERE p.run_id = a.id)
+WHEN a.analysis_name = 'required-args' THEN (SELECT COUNT(*) FROM required_arg_results r WHERE r.run_id = a.id)
 WHEN a.analysis_name = 'inspect-shapes' THEN (SELECT COUNT(*) FROM inspect_responses i WHERE i.run_id = a.id)
 WHEN a.analysis_name = 'completion-tricks' THEN (SELECT COUNT(*) FROM completion_trick_results c WHERE c.run_id = a.id)
 ELSE 0
 END AS result_count
 FROM analysis_runs a;
+
+CREATE VIEW v_required_args_by_version AS
+SELECT
+routeros_version,
+COUNT(*) AS result_count,
+SUM(CASE WHEN has_add = 1 THEN 1 ELSE 0 END) AS has_add_count,
+SUM(CASE WHEN required_count > 0 THEN 1 ELSE 0 END) AS required_path_count,
+SUM(CASE WHEN error_kind = 'probe-error' THEN 1 ELSE 0 END) AS probe_error_count,
+SUM(CASE WHEN error_kind = 'routeros-bug' THEN 1 ELSE 0 END) AS routeros_bug_count
+FROM required_arg_results
+GROUP BY routeros_version;
+
+CREATE VIEW v_required_arg_drift AS
+SELECT
+path,
+COUNT(routeros_version) AS versions,
+COUNT(DISTINCT (CASE WHEN has_add = 1 THEN '1' ELSE '0' END) || ':' || required_json) AS distinct_results,
+GROUP_CONCAT(routeros_version || ':' || (CASE WHEN has_add = 1 THEN 'add' ELSE 'no-add' END) || ':' || required_json, ', ') AS version_signatures
+FROM required_arg_results
+GROUP BY path
+HAVING distinct_results > 1;
 	`)
 }
 
@@ -517,7 +619,7 @@ INSERT INTO analysis_runs (
 analysis_name, routeros_version, chr_build_time, source_path, captured_at, summary_json
 ) VALUES (?, ?, ?, ?, ?, ?)
 `)
-	const byVersion = new Map<string, number>()
+	const byKey = new Map<string, number>()
 
 	const summaryFiles = files.filter((f) => parseSummaryVersion(rel(f))).sort((a, b) => rel(a).localeCompare(rel(b)))
 	for (const filePath of summaryFiles) {
@@ -527,7 +629,7 @@ analysis_name, routeros_version, chr_build_time, source_path, captured_at, summa
 		const version = value?.routerosVersion ?? fallbackVersion ?? 'unknown'
 		const summaryJson = readFileSync(filePath, 'utf-8')
 		const result = insert.run('parseil', version, value?.chrBuildTime ?? null, relPath, value?.capturedAt ?? null, summaryJson)
-		byVersion.set(version, Number(result.lastInsertRowid))
+		byKey.set(analysisRunKey('parseil', version), Number(result.lastInsertRowid))
 	}
 
 	const metaFiles = files.filter((f) => f.endsWith('.parseil.meta.json')).sort((a, b) => rel(a).localeCompare(rel(b)))
@@ -535,13 +637,44 @@ analysis_name, routeros_version, chr_build_time, source_path, captured_at, summa
 		const parsedPath = parseVersionedParseIlPath(rel(filePath))
 		const { value } = readJson<ParseIlMeta>(filePath)
 		const version = value?.routerosVersion ?? parsedPath?.version ?? 'unknown'
-		if (byVersion.has(version)) continue
+		const key = analysisRunKey('parseil', version)
+		if (byKey.has(key)) continue
 
 		const result = insert.run('parseil', version, value?.chrBuildTime ?? null, null, value?.capturedAt ?? null, null)
-		byVersion.set(version, Number(result.lastInsertRowid))
+		byKey.set(key, Number(result.lastInsertRowid))
 	}
 
-	return byVersion
+	const requiredMetaFiles = files.filter((f) => rel(f).endsWith('.meta.json') && parseRequiredArgsVersion(rel(f))).sort((a, b) => rel(a).localeCompare(rel(b)))
+	for (const filePath of requiredMetaFiles) {
+		const relPath = rel(filePath)
+		const { value } = readJson<RequiredArgMeta>(filePath)
+		const version = value?.routerosVersion ?? parseRequiredArgsVersion(relPath) ?? 'unknown'
+		const key = analysisRunKey('required-args', version)
+		if (byKey.has(key)) continue
+
+		const summaryPath = `required-args.v${version}.json`
+		const sourcePath = files.some((candidate) => rel(candidate) === summaryPath) ? summaryPath : relPath
+		const result = insert.run('required-args', version, value?.chrBuildTime ?? null, sourcePath, value?.capturedAt ?? null, readFileSync(filePath, 'utf-8'))
+		byKey.set(key, Number(result.lastInsertRowid))
+	}
+
+	const requiredSummaryFiles = files
+		.filter((f) => {
+			const relPath = rel(f)
+			return parseRequiredArgsVersion(relPath) !== null && !relPath.endsWith('.meta.json')
+		})
+		.sort((a, b) => rel(a).localeCompare(rel(b)))
+	for (const filePath of requiredSummaryFiles) {
+		const relPath = rel(filePath)
+		const version = parseRequiredArgsVersion(relPath) ?? 'unknown'
+		const key = analysisRunKey('required-args', version)
+		if (byKey.has(key)) continue
+
+		const result = insert.run('required-args', version, null, relPath, null, null)
+		byKey.set(key, Number(result.lastInsertRowid))
+	}
+
+	return byKey
 }
 
 function insertParseIlResults(db: Database, files: string[], scriptIds: Map<string, number>, runIds: Map<string, number>): void {
@@ -565,7 +698,7 @@ error, il_path, il_sha256, meta_path, captured_at, il_text
 		if (!scriptId) continue
 
 		const version = meta?.routerosVersion ?? parsedPath?.version ?? 'unknown'
-		const runId = runIds.get(version)
+		const runId = runIds.get(analysisRunKey('parseil', version))
 		if (!runId) continue
 
 		const ilRelPath = parsedPath ? `${parsedPath.scriptPath}.v${version}.parseil` : relMetaPath.replace(/\.meta\.json$/, '')
@@ -618,6 +751,54 @@ token_count_match, unique_token_types_json, error_token_count, captured_at
 	}
 }
 
+function insertRequiredArgResults(db: Database, files: string[], runIds: Map<string, number>): void {
+	const insert = db.prepare(`
+INSERT OR REPLACE INTO required_arg_results (
+run_id, routeros_version, path, has_add, required_json, required_count, raw_error, error_kind, captured_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+`)
+
+	const summaryFiles = files
+		.filter((f) => {
+			const relPath = rel(f)
+			return parseRequiredArgsVersion(relPath) !== null && !relPath.endsWith('.meta.json')
+		})
+		.sort((a, b) => rel(a).localeCompare(rel(b)))
+
+	for (const filePath of summaryFiles) {
+		const relPath = rel(filePath)
+		const version = parseRequiredArgsVersion(relPath)
+		if (!version) continue
+
+		const runId = runIds.get(analysisRunKey('required-args', version))
+		if (!runId) continue
+
+		const metaPath = join(TEST_DATA_DIR, `required-args.v${version}.meta.json`)
+		const metaRead = existsSync(metaPath) ? readJson<RequiredArgMeta>(metaPath) : { value: null }
+		const meta = metaRead.value
+		const { value, valid } = readJson<RequiredArgSummaryEntry[]>(filePath)
+		if (!valid || !Array.isArray(value)) continue
+
+		for (const row of value) {
+			if (!row || typeof row.path !== 'string') continue
+			const required = Array.isArray(row.required) ? row.required.filter((item): item is string => typeof item === 'string') : []
+			const hasAdd = typeof row.hasAdd === 'boolean' ? row.hasAdd : true
+			const rawError = typeof row.rawError === 'string' ? row.rawError : ''
+			insert.run(
+				runId,
+				version,
+				row.path,
+				hasAdd ? 1 : 0,
+				JSON.stringify(required),
+				required.length,
+				rawError,
+				classifyRequiredArgError(hasAdd, required.length, rawError),
+				meta?.capturedAt ?? null,
+			)
+		}
+	}
+}
+
 function printSummary(db: Database, dbPath: string): void {
 	const row = db
 		.query(
@@ -628,9 +809,10 @@ SELECT
 (SELECT COUNT(*) FROM analysis_runs) AS analysis_runs,
 (SELECT COUNT(*) FROM parseil_results) AS parseil_results,
 (SELECT COUNT(*) FROM highlight_snapshots) AS highlight_snapshots,
+(SELECT COUNT(*) FROM required_arg_results) AS required_arg_results,
 (SELECT COUNT(*) FROM inspect_responses) AS inspect_responses,
 (SELECT COUNT(*) FROM completion_trick_results) AS completion_trick_results
-`,
+ `,
 		)
 		.get() as Record<string, number>
 
@@ -642,6 +824,7 @@ SELECT
 			`analysis_runs=${row.analysis_runs}`,
 			`parseil=${row.parseil_results}`,
 			`highlights=${row.highlight_snapshots}`,
+			`required_args=${row.required_arg_results}`,
 			`inspect=${row.inspect_responses}`,
 			`completion_tricks=${row.completion_trick_results}`,
 		].join('  '),
@@ -668,6 +851,7 @@ function main(): void {
 		const runIds = insertAnalysisRuns(db, files)
 		insertParseIlResults(db, files, scriptIds, runIds)
 		insertHighlightSnapshots(db, files, scriptIds, artifactIds)
+		insertRequiredArgResults(db, files, runIds)
 	})
 
 	tx()

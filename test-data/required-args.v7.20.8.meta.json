@@ -1,0 +1,16 @@
+{
+  "routerosVersion": "7.20.8",
+  "chrBuildTime": "2026-01-30 09:17:54",
+  "schemaPath": "../restraml/docs/7.20.8/deep-inspect.json",
+  "schemaSha256": "61dc6ac957464c878ecac464a848fd0578d663cdf63367284eb80cfbeaab4a0f",
+  "totalMenus": 230,
+  "requiredMenus": 166,
+  "okCount": 52,
+  "missingValueCount": 146,
+  "customRequiredCount": 20,
+  "badCommandCount": 0,
+  "probeErrorCount": 12,
+  "capturedAt": "2026-04-26T02:59:55.999Z",
+  "target": "",
+  "limit": 0
+}

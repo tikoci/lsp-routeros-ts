@@ -1,0 +1,1833 @@
+[
+  {
+    "path": "/certificate",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: At least one field specifying certificate name must be set! (/certificate/add; line 1)"
+  },
+  {
+    "path": "/certificate/crl",
+    "required": [
+      "url"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) url (/certificate/crl/add; line 1)"
+  },
+  {
+    "path": "/certificate/scep-server",
+    "required": [
+      "ca-cert",
+      "path"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) ca-cert path (/certificate/scep-server/add; line 1)"
+  },
+  {
+    "path": "/certificate/scep-server/ra",
+    "required": [
+      "name",
+      "server-url",
+      "template"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name server-url template (/certificate/scep-server/ra/add; line 1)"
+  },
+  {
+    "path": "/disk",
+    "required": [
+      "type"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) type (/disk/add; line 1)"
+  },
+  {
+    "path": "/file",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/file/add; line 1)"
+  },
+  {
+    "path": "/interface/6to4",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/interface/bonding",
+    "required": [
+      "slaves"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: need at least one slave interface (/interface/bonding/add; line 1)"
+  },
+  {
+    "path": "/interface/bridge",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/interface/bridge/calea",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/interface/bridge/calea/add; line 1)"
+  },
+  {
+    "path": "/interface/bridge/filter",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/interface/bridge/filter/add; line 1)"
+  },
+  {
+    "path": "/interface/bridge/host",
+    "required": [
+      "bridge",
+      "interface",
+      "mac-address"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) mac-address interface bridge (/interface/bridge/host/add; line 1)"
+  },
+  {
+    "path": "/interface/bridge/mdb",
+    "required": [
+      "bridge",
+      "group",
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) group interface bridge (/interface/bridge/mdb/add; line 1)"
+  },
+  {
+    "path": "/interface/bridge/msti",
+    "required": [
+      "bridge",
+      "identifier",
+      "vlan-mapping"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) identifier bridge vlan-mapping (/interface/bridge/msti/add; line 1)"
+  },
+  {
+    "path": "/interface/bridge/nat",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/interface/bridge/nat/add; line 1)"
+  },
+  {
+    "path": "/interface/bridge/port",
+    "required": [
+      "bridge",
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface bridge (/interface/bridge/port/add; line 1)"
+  },
+  {
+    "path": "/interface/bridge/port/mst-override",
+    "required": [
+      "identifier",
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface identifier (/interface/bridge/port/mst-override/add; line 1)"
+  },
+  {
+    "path": "/interface/bridge/vlan",
+    "required": [
+      "bridge",
+      "vlan-ids"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) bridge vlan-ids (/interface/bridge/vlan/add; line 1)"
+  },
+  {
+    "path": "/interface/dot1x/client",
+    "required": [
+      "eap-methods",
+      "identity",
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface eap-methods identity (/interface/dot1x/client/add; line 1)"
+  },
+  {
+    "path": "/interface/dot1x/server",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/interface/dot1x/server/add; line 1)"
+  },
+  {
+    "path": "/interface/dot1x/server/active",
+    "required": [],
+    "hasAdd": true,
+    "rawError": "error - contact MikroTik support and send a supout file (3) (/interface/dot1x/server/active/add; line 1)"
+  },
+  {
+    "path": "/interface/eoip",
+    "required": [
+      "remote-address",
+      "tunnel-id"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) remote-address tunnel-id (/interface/eoip/add; line 1)"
+  },
+  {
+    "path": "/interface/eoipv6",
+    "required": [
+      "remote-address",
+      "tunnel-id"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) remote-address tunnel-id (/interface/eoipv6/add; line 1)"
+  },
+  {
+    "path": "/interface/gre",
+    "required": [
+      "remote-address"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) remote-address (/interface/gre/add; line 1)"
+  },
+  {
+    "path": "/interface/gre6",
+    "required": [
+      "remote-address"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) remote-address (/interface/gre6/add; line 1)"
+  },
+  {
+    "path": "/interface/ipip",
+    "required": [
+      "remote-address"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) remote-address (/interface/ipip/add; line 1)"
+  },
+  {
+    "path": "/interface/ipipv6",
+    "required": [
+      "remote-address"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) remote-address (/interface/ipipv6/add; line 1)"
+  },
+  {
+    "path": "/interface/l2tp-client",
+    "required": [
+      "connect-to",
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) connect-to user (/interface/l2tp-client/add; line 1)"
+  },
+  {
+    "path": "/interface/l2tp-ether",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/interface/l2tp-server",
+    "required": [
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) user (/interface/l2tp-server/add; line 1)"
+  },
+  {
+    "path": "/interface/list",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/interface/list/add; line 1)"
+  },
+  {
+    "path": "/interface/list/member",
+    "required": [
+      "interface",
+      "list"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) list interface (/interface/list/member/add; line 1)"
+  },
+  {
+    "path": "/interface/lte/apn",
+    "required": [
+      "apn"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) apn (/interface/lte/apn/add; line 1)"
+  },
+  {
+    "path": "/interface/macsec",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/interface/macsec/add; line 1)"
+  },
+  {
+    "path": "/interface/macsec/profile",
+    "required": [
+      "ciphers",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name ciphers (/interface/macsec/profile/add; line 1)"
+  },
+  {
+    "path": "/interface/macvlan",
+    "required": [],
+    "hasAdd": true,
+    "rawError": "failure: parent not found (/interface/macvlan/add; line 1)"
+  },
+  {
+    "path": "/interface/mesh",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/interface/mesh/port",
+    "required": [
+      "interface",
+      "mesh"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface mesh (/interface/mesh/port/add; line 1)"
+  },
+  {
+    "path": "/interface/ovpn-client",
+    "required": [
+      "connect-to",
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) connect-to user (/interface/ovpn-client/add; line 1)"
+  },
+  {
+    "path": "/interface/ovpn-server",
+    "required": [
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) user (/interface/ovpn-server/add; line 1)"
+  },
+  {
+    "path": "/interface/ovpn-server/server",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: server name cannot be empty (/interface/ovpn-server/server/add; line 1)"
+  },
+  {
+    "path": "/interface/ppp-client",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/interface/ppp-server",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/interface/pppoe-client",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: no interfaces provided (/interface/pppoe-client/add; line 1)"
+  },
+  {
+    "path": "/interface/pppoe-server",
+    "required": [
+      "service",
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) user service (/interface/pppoe-server/add; line 1)"
+  },
+  {
+    "path": "/interface/pppoe-server/server",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/interface/pppoe-server/server/add; line 1)"
+  },
+  {
+    "path": "/interface/pptp-client",
+    "required": [
+      "connect-to",
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) connect-to user (/interface/pptp-client/add; line 1)"
+  },
+  {
+    "path": "/interface/pptp-server",
+    "required": [
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) user (/interface/pptp-server/add; line 1)"
+  },
+  {
+    "path": "/interface/sstp-client",
+    "required": [
+      "connect-to",
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) connect-to user (/interface/sstp-client/add; line 1)"
+  },
+  {
+    "path": "/interface/sstp-server",
+    "required": [
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) user (/interface/sstp-server/add; line 1)"
+  },
+  {
+    "path": "/interface/vlan",
+    "required": [
+      "interface",
+      "vlan-id"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) vlan-id interface (/interface/vlan/add; line 1)"
+  },
+  {
+    "path": "/interface/vpls",
+    "required": [
+      "peer"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) peer (/interface/vpls/add; line 1)"
+  },
+  {
+    "path": "/interface/vrrp",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/interface/vrrp/add; line 1)"
+  },
+  {
+    "path": "/interface/vxlan",
+    "required": [
+      "vni"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) vni (/interface/vxlan/add; line 1)"
+  },
+  {
+    "path": "/interface/vxlan/vteps",
+    "required": [
+      "interface",
+      "remote-ip"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface remote-ip (/interface/vxlan/vteps/add; line 1)"
+  },
+  {
+    "path": "/interface/wifi",
+    "required": [
+      "master-interface",
+      "mld-name",
+      "radio-mac"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: must specify exactly one of radio-mac, master-interface or mld-name (/interface/wifi/add; line 1)"
+  },
+  {
+    "path": "/interface/wifi/aaa",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/interface/wifi/aaa/add; line 1)"
+  },
+  {
+    "path": "/interface/wifi/access-list",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/interface/wifi/channel",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/interface/wifi/channel/add; line 1)"
+  },
+  {
+    "path": "/interface/wifi/configuration",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/interface/wifi/configuration/add; line 1)"
+  },
+  {
+    "path": "/interface/wifi/datapath",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/interface/wifi/datapath/add; line 1)"
+  },
+  {
+    "path": "/interface/wifi/interworking",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/interface/wifi/interworking/add; line 1)"
+  },
+  {
+    "path": "/interface/wifi/network",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/interface/wifi/network/radio",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/interface/wifi/provisioning",
+    "required": [
+      "action"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) action (/interface/wifi/provisioning/add; line 1)"
+  },
+  {
+    "path": "/interface/wifi/security",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/interface/wifi/security/add; line 1)"
+  },
+  {
+    "path": "/interface/wifi/security/multi-passphrase",
+    "required": [
+      "group",
+      "passphrase"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) group passphrase (/interface/wifi/security/multi-passphrase/add; line 1)"
+  },
+  {
+    "path": "/interface/wifi/steering",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/interface/wifi/steering/add; line 1)"
+  },
+  {
+    "path": "/interface/wireguard",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/interface/wireguard/peers",
+    "required": [
+      "allowed-address",
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface allowed-address (/interface/wireguard/peers/add; line 1)"
+  },
+  {
+    "path": "/ip/address",
+    "required": [
+      "address",
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) address interface (/ip/address/add; line 1)"
+  },
+  {
+    "path": "/ip/arp",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/ip/arp/add; line 1)"
+  },
+  {
+    "path": "/ip/dhcp-client",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/ip/dhcp-client/add; line 1)"
+  },
+  {
+    "path": "/ip/dhcp-client/option",
+    "required": [
+      "code",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name code (/ip/dhcp-client/option/add; line 1)"
+  },
+  {
+    "path": "/ip/dhcp-relay",
+    "required": [
+      "dhcp-server",
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface dhcp-server (/ip/dhcp-relay/add; line 1)"
+  },
+  {
+    "path": "/ip/dhcp-server",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/ip/dhcp-server/add; line 1)"
+  },
+  {
+    "path": "/ip/dhcp-server/alert",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/ip/dhcp-server/alert/add; line 1)"
+  },
+  {
+    "path": "/ip/dhcp-server/lease",
+    "required": [
+      "agent-circuit-id",
+      "agent-remote-id",
+      "client-id",
+      "mac-address"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: mac-address or client-id or agent-remote-id or agent-circuit-id must be present (/ip/dhcp-server/lease/add; line 1)"
+  },
+  {
+    "path": "/ip/dhcp-server/matcher",
+    "required": [
+      "code",
+      "matching-type",
+      "name",
+      "server",
+      "value"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name server code value matching-type (/ip/dhcp-server/matcher/add; line 1)"
+  },
+  {
+    "path": "/ip/dhcp-server/network",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/dhcp-server/option",
+    "required": [
+      "code",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name code (/ip/dhcp-server/option/add; line 1)"
+  },
+  {
+    "path": "/ip/dhcp-server/option/sets",
+    "required": [
+      "name",
+      "options"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name options (/ip/dhcp-server/option/sets/add; line 1)"
+  },
+  {
+    "path": "/ip/dns/adlist",
+    "required": [],
+    "hasAdd": true,
+    "rawError": "failure: error adding adlist source (/ip/dns/adlist/add; line 1)"
+  },
+  {
+    "path": "/ip/dns/forwarders",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: name is empty (/ip/dns/forwarders/add; line 1)"
+  },
+  {
+    "path": "/ip/dns/static",
+    "required": [
+      "name",
+      "regexp"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: name or regexp required (/ip/dns/static/add; line 1)"
+  },
+  {
+    "path": "/ip/firewall/address-list",
+    "required": [
+      "list"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) list (/ip/firewall/address-list/add; line 1)"
+  },
+  {
+    "path": "/ip/firewall/calea",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/ip/firewall/calea/add; line 1)"
+  },
+  {
+    "path": "/ip/firewall/filter",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/ip/firewall/filter/add; line 1)"
+  },
+  {
+    "path": "/ip/firewall/layer7-protocol",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/firewall/mangle",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/ip/firewall/mangle/add; line 1)"
+  },
+  {
+    "path": "/ip/firewall/nat",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/ip/firewall/nat/add; line 1)"
+  },
+  {
+    "path": "/ip/firewall/raw",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/ip/firewall/raw/add; line 1)"
+  },
+  {
+    "path": "/ip/hotspot",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/ip/hotspot/add; line 1)"
+  },
+  {
+    "path": "/ip/hotspot/ip-binding",
+    "required": [
+      "address",
+      "mac-address"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: address or mac-address is required (/ip/hotspot/ip-binding/add; line 1)"
+  },
+  {
+    "path": "/ip/hotspot/profile",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/hotspot/user",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/ip/hotspot/user/add; line 1)"
+  },
+  {
+    "path": "/ip/hotspot/user/profile",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/hotspot/walled-garden",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/hotspot/walled-garden/ip",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/ipsec/active-peers",
+    "required": [],
+    "hasAdd": true,
+    "rawError": "error - contact MikroTik support and send a supout file (3) (/ip/ipsec/active-peers/add; line 1)"
+  },
+  {
+    "path": "/ip/ipsec/identity",
+    "required": [
+      "peer"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) peer (/ip/ipsec/identity/add; line 1)"
+  },
+  {
+    "path": "/ip/ipsec/key/psk",
+    "required": [
+      "id",
+      "key",
+      "peer"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) peer id key (/ip/ipsec/key/psk/add; line 1)"
+  },
+  {
+    "path": "/ip/ipsec/mode-config",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/ip/ipsec/mode-config/add; line 1)"
+  },
+  {
+    "path": "/ip/ipsec/peer",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/ipsec/policy",
+    "required": [
+      "peer"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: Peer not set! (/ip/ipsec/policy/add; line 1)"
+  },
+  {
+    "path": "/ip/ipsec/policy/group",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/ip/ipsec/policy/group/add; line 1)"
+  },
+  {
+    "path": "/ip/ipsec/profile",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/ip/ipsec/profile/add; line 1)"
+  },
+  {
+    "path": "/ip/ipsec/proposal",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/kid-control",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/kid-control/device",
+    "required": [
+      "mac-address",
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) mac-address user (/ip/kid-control/device/add; line 1)"
+  },
+  {
+    "path": "/ip/media",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/ip/media/add; line 1)"
+  },
+  {
+    "path": "/ip/nat-pmp/interfaces",
+    "required": [
+      "interface",
+      "type"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface type (/ip/nat-pmp/interfaces/add; line 1)"
+  },
+  {
+    "path": "/ip/packing",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/ip/packing/add; line 1)"
+  },
+  {
+    "path": "/ip/pool",
+    "required": [
+      "ranges"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) ranges (/ip/pool/add; line 1)"
+  },
+  {
+    "path": "/ip/proxy/access",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/proxy/cache",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/proxy/cache-contents",
+    "required": [],
+    "hasAdd": true,
+    "rawError": "error - contact MikroTik support and send a supout file (3) (/ip/proxy/cache-contents/add; line 1)"
+  },
+  {
+    "path": "/ip/proxy/direct",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/reverse-proxy",
+    "required": [],
+    "hasAdd": true,
+    "rawError": "failure: invalid address (/ip/reverse-proxy/add; line 1)"
+  },
+  {
+    "path": "/ip/route",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/smb/shares",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/ip/smb/shares/add; line 1)"
+  },
+  {
+    "path": "/ip/smb/users",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/ip/smb/users/add; line 1)"
+  },
+  {
+    "path": "/ip/socks/access",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/socks/users",
+    "required": [
+      "name",
+      "password"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name password (/ip/socks/users/add; line 1)"
+  },
+  {
+    "path": "/ip/socksify",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: name must be specified (/ip/socksify/add; line 1)"
+  },
+  {
+    "path": "/ip/tftp",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ip/traffic-flow/target",
+    "required": [
+      "dst-address"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) dst-address (/ip/traffic-flow/target/add; line 1)"
+  },
+  {
+    "path": "/ip/upnp/interfaces",
+    "required": [
+      "interface",
+      "type"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface type (/ip/upnp/interfaces/add; line 1)"
+  },
+  {
+    "path": "/ip/vrf",
+    "required": [
+      "interfaces",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name interfaces (/ip/vrf/add; line 1)"
+  },
+  {
+    "path": "/ipv6/address",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/ipv6/address/add; line 1)"
+  },
+  {
+    "path": "/ipv6/dhcp-client",
+    "required": [
+      "interface",
+      "request"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface request (/ipv6/dhcp-client/add; line 1)"
+  },
+  {
+    "path": "/ipv6/dhcp-client/option",
+    "required": [
+      "code",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name code (/ipv6/dhcp-client/option/add; line 1)"
+  },
+  {
+    "path": "/ipv6/dhcp-relay",
+    "required": [
+      "dhcp-server",
+      "interface",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name interface dhcp-server (/ipv6/dhcp-relay/add; line 1)"
+  },
+  {
+    "path": "/ipv6/dhcp-relay/option",
+    "required": [
+      "code",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name code (/ipv6/dhcp-relay/option/add; line 1)"
+  },
+  {
+    "path": "/ipv6/dhcp-server",
+    "required": [
+      "interface",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name interface (/ipv6/dhcp-server/add; line 1)"
+  },
+  {
+    "path": "/ipv6/dhcp-server/binding",
+    "required": [
+      "duid",
+      "iaid"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) duid iaid (/ipv6/dhcp-server/binding/add; line 1)"
+  },
+  {
+    "path": "/ipv6/dhcp-server/option",
+    "required": [
+      "code",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name code (/ipv6/dhcp-server/option/add; line 1)"
+  },
+  {
+    "path": "/ipv6/dhcp-server/option/sets",
+    "required": [
+      "name",
+      "options"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name options (/ipv6/dhcp-server/option/sets/add; line 1)"
+  },
+  {
+    "path": "/ipv6/firewall/address-list",
+    "required": [
+      "list"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) list (/ipv6/firewall/address-list/add; line 1)"
+  },
+  {
+    "path": "/ipv6/firewall/filter",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/ipv6/firewall/filter/add; line 1)"
+  },
+  {
+    "path": "/ipv6/firewall/mangle",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/ipv6/firewall/mangle/add; line 1)"
+  },
+  {
+    "path": "/ipv6/firewall/nat",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/ipv6/firewall/nat/add; line 1)"
+  },
+  {
+    "path": "/ipv6/firewall/raw",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/ipv6/firewall/raw/add; line 1)"
+  },
+  {
+    "path": "/ipv6/nd",
+    "required": [],
+    "hasAdd": true,
+    "rawError": "failure: configuration for this interface already exists (/ipv6/nd/add; line 1)"
+  },
+  {
+    "path": "/ipv6/nd/prefix",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/ipv6/nd/prefix/add; line 1)"
+  },
+  {
+    "path": "/ipv6/nd/proxy",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ipv6/neighbor",
+    "required": [
+      "address",
+      "mac-address"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: mac address is not set (/ipv6/neighbor/add; line 1)"
+  },
+  {
+    "path": "/ipv6/pool",
+    "required": [
+      "name",
+      "prefix-length"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name prefix-length (/ipv6/pool/add; line 1)"
+  },
+  {
+    "path": "/ipv6/route",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/mpls/interface",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/mpls/interface/add; line 1)"
+  },
+  {
+    "path": "/mpls/ldp",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/mpls/ldp/accept-filter",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/mpls/ldp/advertise-filter",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/mpls/ldp/interface",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/mpls/ldp/interface/add; line 1)"
+  },
+  {
+    "path": "/mpls/ldp/local-mapping",
+    "required": [
+      "dst-address",
+      "label"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) dst-address label (/mpls/ldp/local-mapping/add; line 1)"
+  },
+  {
+    "path": "/mpls/ldp/neighbor",
+    "required": [
+      "transport"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) transport (/mpls/ldp/neighbor/add; line 1)"
+  },
+  {
+    "path": "/mpls/ldp/remote-mapping",
+    "required": [
+      "dst-address",
+      "label",
+      "nexthop"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) dst-address label nexthop (/mpls/ldp/remote-mapping/add; line 1)"
+  },
+  {
+    "path": "/mpls/mangle",
+    "required": [
+      "set-exp",
+      "set-mark"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: set-exp or set-mark required (/mpls/mangle/add; line 1)"
+  },
+  {
+    "path": "/mpls/traffic-eng/interface",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/mpls/traffic-eng/interface/add; line 1)"
+  },
+  {
+    "path": "/mpls/traffic-eng/path",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/mpls/traffic-eng/path/add; line 1)"
+  },
+  {
+    "path": "/mpls/traffic-eng/tunnel",
+    "required": [
+      "name",
+      "to-address"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name to-address (/mpls/traffic-eng/tunnel/add; line 1)"
+  },
+  {
+    "path": "/port/remote-access",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ppp/l2tp-secret",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/ppp/profile",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/ppp/profile/add; line 1)"
+  },
+  {
+    "path": "/ppp/secret",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/ppp/secret/add; line 1)"
+  },
+  {
+    "path": "/queue/simple",
+    "required": [
+      "target"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) target (/queue/simple/add; line 1)"
+  },
+  {
+    "path": "/queue/tree",
+    "required": [
+      "parent"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) parent (/queue/tree/add; line 1)"
+  },
+  {
+    "path": "/queue/type",
+    "required": [
+      "kind",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name kind (/queue/type/add; line 1)"
+  },
+  {
+    "path": "/radius",
+    "required": [
+      "address"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) address (/radius/add; line 1)"
+  },
+  {
+    "path": "/routing/bfd/configuration",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/routing/bgp/connection",
+    "required": [
+      "instance",
+      "local.role",
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name instance local.role (/routing/bgp/connection/add; line 1)"
+  },
+  {
+    "path": "/routing/bgp/evpn",
+    "required": [
+      "instance"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) instance (/routing/bgp/evpn/add; line 1)"
+  },
+  {
+    "path": "/routing/bgp/instance",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/routing/bgp/template",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/routing/bgp/template/add; line 1)"
+  },
+  {
+    "path": "/routing/bgp/vpls",
+    "required": [
+      "cisco-id",
+      "site-id"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: must set either site-id or cisco-id (/routing/bgp/vpls/add; line 1)"
+  },
+  {
+    "path": "/routing/bgp/vpn",
+    "required": [
+      "instance",
+      "label-allocation-policy",
+      "route-distinguisher",
+      "vrf"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) instance route-distinguisher vrf label-allocation-policy (/routing/bgp/vpn/add; line 1)"
+  },
+  {
+    "path": "/routing/fantasy",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/routing/filter/community-ext-list",
+    "required": [
+      "list"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) list (/routing/filter/community-ext-list/add; line 1)"
+  },
+  {
+    "path": "/routing/filter/community-large-list",
+    "required": [
+      "list"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) list (/routing/filter/community-large-list/add; line 1)"
+  },
+  {
+    "path": "/routing/filter/community-list",
+    "required": [
+      "list"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) list (/routing/filter/community-list/add; line 1)"
+  },
+  {
+    "path": "/routing/filter/num-list",
+    "required": [
+      "list"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) list (/routing/filter/num-list/add; line 1)"
+  },
+  {
+    "path": "/routing/filter/rule",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/routing/filter/rule/add; line 1)"
+  },
+  {
+    "path": "/routing/filter/select-rule",
+    "required": [
+      "chain"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain (/routing/filter/select-rule/add; line 1)"
+  },
+  {
+    "path": "/routing/gmp",
+    "required": [
+      "interfaces"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: interfaces must be specified (/routing/gmp/add; line 1)"
+  },
+  {
+    "path": "/routing/id",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/routing/igmp-proxy/interface",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/routing/igmp-proxy/mfc",
+    "required": [
+      "group",
+      "source",
+      "upstream-interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) group source upstream-interface (/routing/igmp-proxy/mfc/add; line 1)"
+  },
+  {
+    "path": "/routing/isis/instance",
+    "required": [
+      "system-id"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: system-id must be configured (/routing/isis/instance/add; line 1)"
+  },
+  {
+    "path": "/routing/isis/interface-template",
+    "required": [
+      "instance"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: instance must be configured (/routing/isis/interface-template/add; line 1)"
+  },
+  {
+    "path": "/routing/ospf/area",
+    "required": [
+      "instance"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) instance (/routing/ospf/area/add; line 1)"
+  },
+  {
+    "path": "/routing/ospf/area/range",
+    "required": [
+      "area",
+      "prefix"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) area prefix (/routing/ospf/area/range/add; line 1)"
+  },
+  {
+    "path": "/routing/ospf/instance",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/routing/ospf/interface",
+    "required": [
+      "area"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: area must be specified (/routing/ospf/interface/add; line 1)"
+  },
+  {
+    "path": "/routing/ospf/interface-template",
+    "required": [
+      "area"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) area (/routing/ospf/interface-template/add; line 1)"
+  },
+  {
+    "path": "/routing/ospf/static-neighbor",
+    "required": [
+      "address",
+      "area"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) area address (/routing/ospf/static-neighbor/add; line 1)"
+  },
+  {
+    "path": "/routing/pimsm/bsr/candidate",
+    "required": [
+      "instance"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: instance must be specified (/routing/pimsm/bsr/candidate/add; line 1)"
+  },
+  {
+    "path": "/routing/pimsm/bsr/rp-candidate",
+    "required": [
+      "instance"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: instance must be specified (/routing/pimsm/bsr/rp-candidate/add; line 1)"
+  },
+  {
+    "path": "/routing/pimsm/instance",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/routing/pimsm/interface-template",
+    "required": [
+      "instance"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) instance (/routing/pimsm/interface-template/add; line 1)"
+  },
+  {
+    "path": "/routing/pimsm/static-rp",
+    "required": [
+      "instance"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) instance (/routing/pimsm/static-rp/add; line 1)"
+  },
+  {
+    "path": "/routing/rip/instance",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/routing/rip/interface-template",
+    "required": [
+      "instance"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) instance (/routing/rip/interface-template/add; line 1)"
+  },
+  {
+    "path": "/routing/rip/keys",
+    "required": [
+      "chain",
+      "key",
+      "key-id"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) chain key-id key (/routing/rip/keys/add; line 1)"
+  },
+  {
+    "path": "/routing/rip/static-neighbor",
+    "required": [
+      "instance"
+    ],
+    "hasAdd": true,
+    "rawError": "failure: instance not specified (/routing/rip/static-neighbor/add; line 1)"
+  },
+  {
+    "path": "/routing/rpki",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/routing/rule",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/routing/table",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/snmp/community",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/special-login",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/system/console",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/system/leds",
+    "required": [
+      "leds",
+      "type"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) type leds (/system/leds/add; line 1)"
+  },
+  {
+    "path": "/system/logging",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/system/logging/action",
+    "required": [
+      "name",
+      "target"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name target (/system/logging/action/add; line 1)"
+  },
+  {
+    "path": "/system/ntp/client/servers",
+    "required": [
+      "address"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) address (/system/ntp/client/servers/add; line 1)"
+  },
+  {
+    "path": "/system/ntp/key",
+    "required": [
+      "key-id",
+      "key-val"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) key-id key-val (/system/ntp/key/add; line 1)"
+  },
+  {
+    "path": "/system/package/local-update/update-package-source",
+    "required": [
+      "address",
+      "password",
+      "user"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) address user password (/system/package/local-update/update-package-source/add; line 1)"
+  },
+  {
+    "path": "/system/scheduler",
+    "required": [
+      "name"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name (/system/scheduler/add; line 1)"
+  },
+  {
+    "path": "/system/script",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/system/ups",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/task",
+    "required": [
+      "source"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) source (/task/add; line 1)"
+  },
+  {
+    "path": "/tool/graphing/interface",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/tool/graphing/queue",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/tool/graphing/resource",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/tool/netwatch",
+    "required": [
+      "host"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) host (/tool/netwatch/add; line 1)"
+  },
+  {
+    "path": "/tool/romon/port",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/tool/romon/port/add; line 1)"
+  },
+  {
+    "path": "/tool/traffic-generator/packet-template",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/tool/traffic-generator/port",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/tool/traffic-generator/port/add; line 1)"
+  },
+  {
+    "path": "/tool/traffic-generator/raw-packet-template",
+    "required": [],
+    "hasAdd": true,
+    "rawError": ""
+  },
+  {
+    "path": "/tool/traffic-generator/stream",
+    "required": [
+      "tx-template"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) tx-template (/tool/traffic-generator/stream/add; line 1)"
+  },
+  {
+    "path": "/tool/traffic-monitor",
+    "required": [
+      "interface"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) interface (/tool/traffic-monitor/add; line 1)"
+  },
+  {
+    "path": "/user",
+    "required": [
+      "group",
+      "name",
+      "password"
+    ],
+    "hasAdd": true,
+    "rawError": "Script Error: missing value(s) of argument(s) name group password (/user/add; line 1)"
+  },
+  {
+    "path": "/user/active",
+    "required": [],
+    "hasAdd": true,
+    "rawError": "error - contact MikroTik support and send a supout file (3) (/user/active/add; line 1)"
+  },
+  {
+    "path": "/user/group",
+    "required": [],
+    "hasAdd": true,
+    "rawError": "failure: invalid group name (/user/group/add; line 1)"
+  },
+  {
+    "path": "/user/ssh-keys",
+    "required": [],
+    "hasAdd": true,
+    "rawError": "failure: unable to load key file (wrong format or bad passphrase)! (/user/ssh-keys/add; line 1)"
+  }
+]

@@ -463,7 +463,7 @@ This error is exact and machine-parseable. Tested against 18 menus on 7.22.1:
 
 Caveats: (a) `certificate` uses a non-standard error format ("At least one field specifying certificate name must be set!"), so not every menu follows the `missing value(s)` pattern; (b) `/disk` only exposes the top-level `type` requirement — conditional args like `iscsi-address` (required when `type=iscsi`) need a second pass after providing the discriminator; (c) `add` commands that don't exist (e.g. `/ip/service`) return `bad command name add` instead.
 
-**Implications for the LSP.** The execute-error technique is an empirical, per-version probe — a good candidate for a dedicated capture harness similar to `scripts/collect-parseil.ts`. A version-tagged required-arg map would let the LSP emit a "missing required argument" diagnostic today, without any structural change to the RouterOS inspect API. See `[research: required-args]` in `BACKLOG.md`.
+**Implications for the LSP.** The execute-error technique is an empirical, per-version probe — and that follow-up landed as [`docs/required-args.md`](required-args.md) plus `scripts/collect-required-args.ts`. A version-tagged required-arg map now exists for 7.20.8 / 7.22.1 / 7.23rc1 and is strong enough for an offline "missing required argument" diagnostic on the exact-pattern subset, without any structural change to the RouterOS inspect API.
 
 The `findwhere=` cross-version drift (§5.1) pairs with this: when a property disappears from the drift (e.g. `suppress-hw-offload` gone from `/ip/route` on 7.22.1), confirming it was optional avoids a false-positive required-arg diagnostic on the older version's corpus.
 
