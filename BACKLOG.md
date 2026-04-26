@@ -84,21 +84,27 @@ Profiling shows a sharp timing cliff at ~28KB across all syntax types. Spike: in
 
 ### `[research: rosetta-join]` Integrate `tikoci/rosetta` docs into hover / completion
 
-**Research complete — see [`docs/rosetta-alignment.md`](docs/rosetta-alignment.md).**
+**Research complete — see [`docs/rosetta-alignment.md`](docs/rosetta-alignment.md)** (third-eye refined 2026-04-25).
 
-Key findings: no runtime dependency on rosetta; enrichment is opt-in via static data files.
-Access-model decision: start with a committed static JSON (path → docs URL) for hover links
-and document-link provider; probe an optional local `ros-help.db` for property descriptions
-in Node/standalone targets. VSCode Web can only use the static JSON path.
+Key findings: no runtime dependency on rosetta. Two access models matter:
+**Option A** (static JSON, ~6 KB gzipped) works in every deployment context including
+VSCode Web; ship it first. **Option E** (lite DB + sql.js) gives richer hover content
+in every context but requires rosetta to publish the lite DB artifact and the LSP to
+adopt sql.js. Avoid `better-sqlite3` (per-platform native binaries in Marketplace VSIX
+are a packaging headache). See § "The sqlite-in-VSCode problem" in the alignment doc.
+
+Live device wins for syntax/structure/version-correctness; rosetta wins for prose,
+URLs, and breaking-change history. See § "Online + offline — who wins for what".
 
 Actionable items from the research:
 
-- 📋 **`routeros-docs-links.json` artifact** — generate from rosetta DB (or the MCP server) and commit to `docs/`. ~15 KB gzipped. Used by hover and `textDocument/documentLink`. *[rosetta-join P0]*
+- 📋 **`routeros-docs-links.json` artifact** — generate from rosetta DB (or the MCP server) and commit to `docs/`. **~6 KB gzipped** for 512 dirs. Used by hover and `textDocument/documentLink`. Filed upstream as [tikoci/rosetta#4](https://github.com/tikoci/rosetta/issues/4) so future updates can come from CI. *[rosetta-join P0]*
 - 📋 **Hover doc link** — append `📚 [Documentation](url)` to hover output for `path` and `cmd-name` tokens using the above JSON. Simple `Map` lookup, no new runtime dep. *[rosetta-join P0]*
 - 📋 **`textDocument/documentLink`** — new LSP capability: return a `DocumentLink` for every `path` token range, pointing at the docs URL. *[rosetta-join P0]*
-- 📋 **Completion `documentation` field** — populate from `item.text` first (no rosetta needed), then optionally from `properties` table when local `ros-help.db` is available. *[rosetta-join P1]*
-- 📋 **Optional rosetta DB probe** — add `routeroslsp.rosettaDbPath` setting (Node/standalone only); when set, open DB read-only and use `properties` + `callouts` for richer hover content. Guard from Web bundle. *[rosetta-join P2]*
-- 📋 **Upstream rosetta** — file items in rosetta BACKLOG: `routeros-docs-links.json` CI export, `command_path` column on `properties`, `ros-toc.json` cleanup. *[rosetta-join P3]*
+- 📋 **Completion `documentation` field** — populate from `item.text` first (no rosetta needed), then optionally from `properties` table once Option E lands. *[rosetta-join P1]*
+- 📋 **Lite DB + sql.js spike** — once rosetta ships `ros-help-lite.db` ([tikoci/rosetta#4](https://github.com/tikoci/rosetta/issues/4)), prove out a sql.js loader in `.scratch/` and measure WASM bundle impact on the Web target. Single code path for desktop + web. *[rosetta-join P2]*
+- 📋 **Vendor `canonicalize.ts`** — pre-vendor audit at [`docs/canonicalize-audit.md`](docs/canonicalize-audit.md). **Safe fixes shipped upstream** in [tikoci/rosetta@9be870b](https://github.com/tikoci/rosetta/commit/9be870b) (BOM strip, backticks/ZWSP as whitespace, expanded universal verb set). Roadmap tracked at [tikoci/rosetta#5](https://github.com/tikoci/rosetta/issues/5) with the H1–H8 hardenings. **Vendoring no longer required** for routine extraction; reopen if/when we need the lenient prose-extraction mode (H1) or the pluggable `isVerb` resolver (H4 — needed for menu-specific verbs like `/log/info` that can't go in the universal set because `info` is also a dir at `/interface/wireless`). See § "Two backends, one parser" in the audit doc for the alignment between rosetta's DB-backed resolver and the LSP's live-inspect path. *[rosetta-join P2]*
+- 📋 **Upstream rosetta asks** — `routeros-docs-links.json` CI export ([#4](https://github.com/tikoci/rosetta/issues/4) ✅ filed), `ros-toc.json` cleanup ([#3](https://github.com/tikoci/rosetta/issues/3) ✅ filed), lite DB CI artifact, `command_path` column on `properties`, `routeros_lookup_path` MCP tool, ship `schema_nodes` to released DB. *[rosetta-join P3]*
 
 ### `[research: md-embedded]` RouterOS in Markdown fenced blocks
 
