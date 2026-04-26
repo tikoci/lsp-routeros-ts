@@ -5,8 +5,6 @@
 import { BrowserMessageReader, BrowserMessageWriter, createConnection } from 'vscode-languageserver/browser'
 import { LspController } from './controller'
 
-console.log('RouterOS LSP server worker started')
-
 const messageReader = new BrowserMessageReader(self)
 const messageWriter = new BrowserMessageWriter(self)
 

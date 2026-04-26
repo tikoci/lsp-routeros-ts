@@ -9,9 +9,9 @@ Several feature items below (especially under **LSP Feature Improvements**) are 
 
 The triage rule for new work:
 
-1. If a feature touches `controller.ts`/`model.ts`/`tokens.ts` and depends on RouterOS behavior we haven't measured against the corpus, it goes through **Research & Experiments** first — collect data, write up findings in [`DESIGN.md`](DESIGN.md), then build.
+1. If a feature touches `controller.ts`/`model.ts`/`tokens.ts` and depends on RouterOS behavior we haven't measured against the corpus, it goes through **Research & Experiments** first — collect data, write up findings in [`DESIGN.md`](DESIGN.md) or `docs/`, then build.
 2. Items already grounded by snapshots, integration tests, or dataset assessment can proceed normally.
-3. Spikes land harnesses in `scripts/` (not `server/src/`), throwaway probes in `.scratch/`, snapshots under `test-data/`, and conclusions in `DESIGN.md`.
+3. Spikes land harnesses in `scripts/` (not `server/src/`), throwaway probes in `.scratch/`, snapshots under `test-data/`, and conclusions in `DESIGN.md` or a dedicated `docs/` reference page.
 
 Cross-references in feature sections use the tag `[research: <spike-id>]` to point at the blocking experiment.
 
@@ -21,13 +21,13 @@ Goal: when a maintainer triggers a pre-release build, automated testing should g
 
 - 🔄 **Per-context smoke test in CI** — stdio smoke now covers the bundled Node server and standalone binary with a mocked RouterOS, running in `ci.yaml` on every push/PR (not just at release time). VSCode Desktop/Web, npm-installed bin, NeoVim, and Copilot CLI still need fuller per-context automation.
 - 📋 **CI-booted CHR for integration** — run `integration.test.ts` against a QEMU CHR booted in GitHub Actions using [`tikoci/quickchr`](https://github.com/tikoci/quickchr). quickchr is specifically designed for this: pins a RouterOS version, exposes `/console/inspect` predictably, and runs headless. Pairs with the 📋 "QEMU CHR in CI" item under CI/CD below.
-- 📋 **Pre-release checklist in `deployment.instructions.md`** — document what has to be green before `vsix:package:prerelease` is considered trustworthy. Keep it short enough that agents can actually follow it.
+- ✅ **Pre-release checklist in `deployment.instructions.md`** — per-context checklist (VSCode Desktop/Web, standalone, npm, NeoVim, Copilot CLI) is in place; items graduate from manual to automated as CI coverage grows.
 - 📋 **npm publish audit** — `@tikoci/routeroslsp` on npmjs.org is currently at 0.7.2 (`package.json` is at 0.7.3 as the next version). Confirm the conditional `if: env.NPM_TOKEN != ''` publish step actually runs on each pre-release, and that the shebang-prepend is correct. CI is the only supported publish path; no maintainer should `npm publish` from their laptop.
 - 📋 **Copilot CLI LSP config still needs launch verification** — `.github/lsp.json` now uses obviously fake placeholders, but the `npx --yes @tikoci/routeroslsp --stdio` path still needs a real Copilot CLI smoke check after each npm publish. README now documents per-user override in `~/.copilot/lsp-config.json`.
 
 ## Research & Experiments (Pre-Feature Work)
 
-Goal: ground the next round of LSP feature work in measured RouterOS behavior, using the 913-script corpus already in `test-data/` plus a [`tikoci/quickchr`](https://github.com/tikoci/quickchr)-booted CHR. Each spike produces (a) a reusable harness in `scripts/`, (b) snapshots/artifacts under `test-data/` (or a sibling dir), (c) a write-up in `DESIGN.md` answering specific questions. **Production code waits.**
+Goal: ground the next round of LSP feature work in measured RouterOS behavior, using the 913-script corpus already in `test-data/` plus a [`tikoci/quickchr`](https://github.com/tikoci/quickchr)-booted CHR. Each spike produces (a) a reusable harness in `scripts/`, (b) snapshots/artifacts under `test-data/` (or a sibling dir), (c) a write-up in `DESIGN.md` or a dedicated `docs/` reference page answering specific questions. **Production code waits.**
 
 ### `[research: parseil]` Decode RouterOS `:parse` IL using the script corpus
 
@@ -80,9 +80,25 @@ The fake-space / fake-equals tricks are documented as folklore in README. Before
 
 Profiling shows a sharp timing cliff at ~28KB across all syntax types. Spike: instrument the harness from `[research: inspect-shapes]` to sweep document size in 1KB increments around the cliff, vary syntax composition (pure comments, pure scripting, mixed), and try non-`highlight` request types to see if the cliff is endpoint-specific or process-wide. Goal: a write-up that's specific enough to file an upstream report at MikroTik, plus an LSP-side mitigation recommendation (truncate-with-warning vs split-and-stitch vs degrade-gracefully).
 
+**parseil cross-check (from [`docs/parseil-format.md`](docs/parseil-format.md) §2):** `:parse` does not reproduce the cliff — a 56 KB script parsed cleanly in 1361 ms with no inflection point. This isolates the cliff to the `highlight` endpoint specifically (not a global RouterOS parse budget), which is useful evidence for the upstream report.
+
 ### `[research: rosetta-join]` Integrate `tikoci/rosetta` docs into hover / completion
 
-[rosetta](https://github.com/tikoci/rosetta) exposes RouterOS docs as an FTS5 MCP server. Hover/completion could pull descriptions, examples, property tables, and changelog deltas from rosetta. Design questions worth answering before any code: does the LSP call rosetta directly (new dependency on the user having an MCP-capable client; doesn't work in VSCode Web), or do we expose a capability and let a Copilot/TikBook layer do the joining? How does this interact with `[research: inspect-shapes]`'s `request=syntax` data — overlap, complement, or redundant? Decision lives in `DESIGN.md` once scoped.
+**Research complete — see [`docs/rosetta-alignment.md`](docs/rosetta-alignment.md).**
+
+Key findings: no runtime dependency on rosetta; enrichment is opt-in via static data files.
+Access-model decision: start with a committed static JSON (path → docs URL) for hover links
+and document-link provider; probe an optional local `ros-help.db` for property descriptions
+in Node/standalone targets. VSCode Web can only use the static JSON path.
+
+Actionable items from the research:
+
+- 📋 **`routeros-docs-links.json` artifact** — generate from rosetta DB (or the MCP server) and commit to `docs/`. ~15 KB gzipped. Used by hover and `textDocument/documentLink`. *[rosetta-join P0]*
+- 📋 **Hover doc link** — append `📚 [Documentation](url)` to hover output for `path` and `cmd-name` tokens using the above JSON. Simple `Map` lookup, no new runtime dep. *[rosetta-join P0]*
+- 📋 **`textDocument/documentLink`** — new LSP capability: return a `DocumentLink` for every `path` token range, pointing at the docs URL. *[rosetta-join P0]*
+- 📋 **Completion `documentation` field** — populate from `item.text` first (no rosetta needed), then optionally from `properties` table when local `ros-help.db` is available. *[rosetta-join P1]*
+- 📋 **Optional rosetta DB probe** — add `routeroslsp.rosettaDbPath` setting (Node/standalone only); when set, open DB read-only and use `properties` + `callouts` for richer hover content. Guard from Web bundle. *[rosetta-join P2]*
+- 📋 **Upstream rosetta** — file items in rosetta BACKLOG: `routeros-docs-links.json` CI export, `command_path` column on `properties`, `ros-toc.json` cleanup. *[rosetta-join P3]*
 
 ### `[research: md-embedded]` RouterOS in Markdown fenced blocks
 
@@ -129,8 +145,8 @@ Generalize the TikBook `.rsc.md` idea: any ` ```routeros ` fenced block inside a
 - ✅ **Add `variable-auto`, `obj-dynamic`, `obj-disabled` to TokenTypes** — dataset assessment (913 .rsc files) found variable-auto in 167 files, obj-dynamic in 4, obj-disabled in 2. Added to tokens.ts, package.json, theme, with tests.
 - ✅ **Map raw RouterOS token aliases into semantic token types** — `arg-scope`, `arg-dot`, and `path` now map into the existing semantic legend, and dataset/integration checks use the same mapper as semantic token generation
 - ✅ **Clean up duplicate `test-data/eworm-de/`** — merged into `test-data/eworm/`
-- 📋 **Migrate ESLint to Biome** — align with user preference for single lint/format tool
-- 📋 **Add `no-console` ESLint rule** — enforce `log.*` usage over `console.log`
+- ✅ **Migrate ESLint to Biome** — `biome.json` in place; `bun run lint` now runs `bunx @biomejs/biome lint` over `server/src/` and `client/src/`. ESLint removed.
+- ✅ **Add Biome `noConsole` rule** — `suspicious.noConsole: "error"` added to `biome.json`; removed pre-connection `console.*` debug traces from `server.web.ts` and both client entry points.
 
 ## LSP Feature Improvements
 
@@ -146,11 +162,11 @@ Generalize the TikBook `.rsc.md` idea: any ` ```routeros ` fenced block inside a
 - 📋 **Show type information** — detect `Num`, `IP`, enum types from syntax responses. *[research: inspect-shapes]*
 - 📋 **Show value ranges** — parse "1..65535 (integer number)" format from syntax TEXT. *[research: inspect-shapes]*
 - 📋 **Improve beyond debug info** — current hover shows token type regex, not user-friendly help. *[research: rosetta-join]*
-- 📋 **"Show parseIL" hover supplement / command** — surface the `:parse` IL for the current script (or selection) as a debug view. *[research: parseil]*
+- 📋 **"Show parseIL" hover supplement / command** — surface the `:parse` IL for the current script (or selection) as a debug view. The capture pattern (file upload → `:put [:parse …]` via `/rest/execute`) is fully documented in [`docs/parseil-format.md`](docs/parseil-format.md) §2; grammar reference in §3. *[research: parseil]*
 
 ### Diagnostics
 - 📋 **Detect RouterOS data types** — flag type mismatches for `ip`, `num`, etc. *[research: inspect-shapes]*
-- 📋 **Multi-error reporting** — currently stops at first error token. *[research: parseil]* — `:parse` reports multiple errors with line/col; may be a better source than `highlight` for this.
+- 📋 **Multi-error reporting** — currently stops at first error token. `highlight` is the only viable source for multi-error diagnostics: it marks every error token and continues. `:parse` is a **hard parser** — it stops at the first error with no partial IL — so parseIL cannot back multi-error reporting (confirmed by [`docs/parseil-format.md`](docs/parseil-format.md) §4). *[research: inspect-shapes]*
 - 📋 **Severity levels** — differentiate errors, warnings (deprecated), info (old syntax)
 - 📋 **Map `syntax-obsolete` to warnings** — flag deprecated commands
 
@@ -158,12 +174,12 @@ Generalize the TikBook `.rsc.md` idea: any ` ```routeros ` fenced block inside a
 - 📋 **Signature Help** — show argument list and descriptions when typing commands. *[research: inspect-shapes]*
 - 📋 **Code Actions** — suggest fixes for deprecated commands, old syntax
 - 📋 **Formatting** — basic RouterOS script formatting
-- 📋 **Folding Ranges** — fold blocks (`:if`, `:for`, `:foreach`, etc.). *[research: parseil]* — IL block delimiters are the natural source.
-- 📋 **Definition/References** — variable scope tracking. *[research: parseil]* — gating question is whether the IL resolves `:local`/`:global` by name or slot.
+- 📋 **Folding Ranges** — fold blocks (`:if`, `:for`, `:foreach`, etc.). IL block delimiters (`do=;`, `else=;`, `on-error=;` followed by sibling `(evl …)`) are the natural source. See [`docs/parseil-format.md`](docs/parseil-format.md) §3.3 for the block-body IL pattern. *[research: parseil]*
+- 📋 **Definition/References** — variable scope tracking via IL scope reconstruction. The gating question (name vs slot) is now answered: **IL resolves by name, not slot** — there is no syntactic distinction between `:local`-bound, `:global`-bound, parameter, and built-in `$1`/`$2` refs (see [`docs/parseil-format.md`](docs/parseil-format.md) §3.6). Scopes must be reconstructed by walking `(evl /local…)` / `(evl /global…)` / `do=` boundaries. Feasible but not free. *[research: parseil]*
 - 📋 **Inlay Hints** — re-enable disabled `inlayHintProvider`; show type info inline. *[research: inspect-shapes]*
 - 📋 **Code Lens** — show RouterOS path context above blocks
 - 📋 **Document Links** — detect and link RouterOS paths (e.g., `/ip/firewall/filter`)
-- 📋 **Document Symbols: functions, not just variables** — extract function definitions in addition to `:local`/`:global`. *[research: parseil]*
+- 📋 **Document Symbols: functions, not just variables** — extract function definitions in addition to `:local`/`:global`. Functions lower to `(evl /localdo=;…;name=$f)` in the IL; the `do=` key with a non-empty body distinguishes them from plain variable declarations. See [`docs/parseil-format.md`](docs/parseil-format.md) §3.5 (`<%%` and function-call IL). *[research: parseil]*
 
 ## VSCode Extension
 
@@ -193,7 +209,7 @@ Generalize the TikBook `.rsc.md` idea: any ` ```routeros ` fenced block inside a
 - 📋 **User manual** — comprehensive guide beyond README.md (topics: setup, troubleshooting, features, customization)
 - 📋 **CORS proxy guide** — expand `docs/cors.md` with actual instructions (Caddy, nginx, Cloudflare Tunnel)
 - 📋 **Developer guide** — document how to add new LSP features (controller handler patterns)
-- 📋 **RouterOS API reference** — document all `/console/inspect` request types and response formats used
+- 📋 **RouterOS API reference** — document all `/console/inspect` request types and response formats used. Note: [`docs/parseil-format.md`](docs/parseil-format.md) already covers the `:parse` / IL endpoint in full; the remaining `request=highlight`, `request=completion`, and `request=syntax` shapes belong to `[research: inspect-shapes]`.
 
 ## Architecture & Internals
 
@@ -201,7 +217,7 @@ Generalize the TikBook `.rsc.md` idea: any ` ```routeros ` fenced block inside a
 - 📋 **Incremental document sync** — switch from full-document to incremental sync
 - 📋 **Debounce/throttle API calls** — avoid flooding RouterOS on rapid typing; profiling shows 32KB scripts take 2–6 seconds depending on syntax complexity
 - 📋 **Request cancellation** — cancel in-flight requests when document changes again
-- 📋 **Mitigate the 28KB highlight cliff** — production-side fix (truncate-with-warning vs split-and-stitch vs degrade) once `[research: 28kb]` lands a recommendation.
+- 📋 **Mitigate the 28KB highlight cliff** — production-side fix (truncate-with-warning vs split-and-stitch vs degrade) once `[research: 28kb]` lands a recommendation. Note: [`docs/parseil-format.md`](docs/parseil-format.md) §2 confirms `:parse` does not share the cliff (56 KB parsed cleanly), so the issue is specific to the `highlight` endpoint.
 
 ### Code Organization
 - 📋 **Extract completion logic** — `controller.ts` at ~850 lines is getting large

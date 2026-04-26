@@ -8,17 +8,11 @@ let client: LanguageClient | undefined
 let worker: Worker | undefined
 let watchdog: Disposable | undefined
 
-console.log('RouterOS LSP extension load starting...')
-
 // this method is called when vs code is activated
 export async function activate(context: ExtensionContext) {
-	console.log('RouterOS LSP activate() starting')
-
 	const serverMain = Uri.joinPath(context.extensionUri, 'server/dist/server.web.js')
-	console.info(`RouterOS LSP using server at ${serverMain.toString(true)}`)
 	worker = new Worker(serverMain.toString(true))
 	client = new LanguageClient(...getPackageInfo(context), getLanguageClientOptions(), worker)
-	console.log('RouterOS LSP about to start()')
 
 	await client.start()
 	await autoApplySemanticTokenColorsOnStartup(context, client)

@@ -29,6 +29,7 @@
 				"noUnusedTemplateLiteral": "off"
 			},
 			"suspicious": {
+				"noConsole": "error",
 				"noExplicitAny": "warn",
 				"noDoubleEquals": "error"
 			},

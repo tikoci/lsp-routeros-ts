@@ -8,11 +8,7 @@ import { initializeWatchdog } from './watchdog'
 let client: LanguageClient | undefined
 let watchdog: Disposable | undefined
 
-console.info('RouterOS LSP extension load starting')
-
 export async function activate(context: ExtensionContext) {
-	console.log('RouterOS LSP client activate() starting')
-
 	const serverModule = context.asAbsolutePath('./server/dist/server.js')
 
 	client = new LanguageClient(
