@@ -585,18 +585,25 @@ benefiting from the parser. Re-vendor on rosetta releases, or convince rosetta t
 publish `canonicalize` as its own micro-package on npm — the latter is cleaner if
 multiple tikoci tools end up wanting it (tikbook, copilot tooling).
 
-> ⚠️ **Pre-vendor audit:** The current parser has known robustness gaps when fed
-> arbitrary text (prose, MCP input, markdown) as opposed to clean CLI input. See
-> [`canonicalize-audit.md`](canonicalize-audit.md) for the 12 findings, 8 proposed
-> hardenings (H1–H8), and the *"two backends, one parser"* alignment that
-> reconciles rosetta's DB-backed verb resolution with the LSP's live-inspect path.
+> ✅ **Pre-vendor audit complete + addressed upstream.** See
+> [`canonicalize-audit.md`](canonicalize-audit.md) for the 12 findings and 8
+> hardenings (H1–H8); the *"two backends, one parser"* design reconciles
+> rosetta's DB-backed verb resolution with the LSP's live-inspect path.
 >
-> **Status (2026-04-25):** safe fixes shipped upstream in rosetta —
-> BOM/zero-width strip, backticks-as-whitespace, universal verb expansion
-> (`unset`/`clear`/`reset-counters`/`reset-counters-all`). Test count went 61 → 98
-> with 9 `test.todo` markers tracking the remaining hardenings. **Vendoring is no
-> longer required for routine "what commands does this script reference?" use** —
-> only needed if/when we need the lenient prose-extraction mode (H1).
+> **Status (2026-04-26):** rosetta shipped H4 / H6 / H7 / H8 across
+> [`9be870b`](https://github.com/tikoci/rosetta/commit/9be870b),
+> [`7c3e6fb`](https://github.com/tikoci/rosetta/commit/7c3e6fb), and
+> [`e05b508`](https://github.com/tikoci/rosetta/commit/e05b508). The pluggable
+> `CanonicalizeOptions { isVerb?: (token, parentPath) => boolean }` is real,
+> the universal verb set stays active alongside the resolver (so consumers
+> only need to supply menu-specific verbs), and there's now an
+> `extractMentions()` plus `confidence` field on each command.
+> Rosetta full suite: **546 pass / 5 todo / 0 fail**. Remaining hardenings
+> (H1 lenient mode, H2 `Tok.Var`, H3 paren scope, H5 `{` block-value) preserve
+> the same options shape so the LSP can pull them by diff. **The LSP can
+> adopt canonicalize today** — vendor or wait for an upstream package — and
+> wire `isVerb` to live `/console/inspect` highlight observations
+> (sketch in the audit's *Path forward* section).
 
 ---
 

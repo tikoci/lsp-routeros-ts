@@ -332,40 +332,68 @@ Lets consumers filter (e.g., the LSP could ignore `low` for hover, accept all fo
 
 ## Status of fixes
 
-Shipped in `tikoci/rosetta` 2026-04-25 — commit
-[`9be870b`](https://github.com/tikoci/rosetta/commit/9be870b);
-roadmap tracked at [`tikoci/rosetta#5`](https://github.com/tikoci/rosetta/issues/5):
+Roadmap tracked at [`tikoci/rosetta#5`](https://github.com/tikoci/rosetta/issues/5).
+Three rosetta commits delivered the bulk of the audit:
+
+**2026-04-25 — [`9be870b`](https://github.com/tikoci/rosetta/commit/9be870b)** (safe in-place fixes):
 
 - ✅ **H7 — BOM strip + zero-width as whitespace** (tokenizer; closes finding #9).
 - ✅ **Backticks as whitespace** in both outer + word loop (closes finding #5).
 - ✅ **Universal verbs expanded** with `unset`, `clear`, `reset-counters`,
   `reset-counters-all` (partially closes finding #4 — the verbs that are *truly*
   universal in the rosetta DB).
-- ✅ **Fuzz test suite added** at `src/canonicalize.fuzz.test.ts` — 37 new tests,
-  9 `test.todo` markers for the unshipped hardenings; replaces the throwaway
-  probe scripts that previously lived in `/tmp`.
+- ✅ **Fuzz test suite added** at `src/canonicalize.fuzz.test.ts`.
 
-Test count: was 61 / 0 fail → now **98 pass / 9 todo / 0 fail** across both files.
-The original 61 tests are unchanged and still pass.
+**2026-04-26 — [`7c3e6fb`](https://github.com/tikoci/rosetta/commit/7c3e6fb)**
+(the H4/H6/H8 design from this audit, shipped as one feature commit):
+
+- ✅ **H4 — pluggable `isVerb` resolver.**
+  `CanonicalizeOptions { isVerb?: (token, parentPath) => boolean }` threaded
+  through `canonicalize()`, `extractPaths()`, `primaryPath()`, and the new
+  `extractMentions()`. Path-aware lookup fires both at Word-time and at
+  flushCommand-time so `/log/info` and `/system/script/run` resolve correctly.
+- ✅ **rosetta wiring for H4** — new `src/canonicalize-resolver.ts` exports
+  `makeDbVerbResolver(db)` against `commands` table; threaded through
+  `classifyQuery({ isVerb })` so MCP `routeros_search` and TUI `s` benefit
+  automatically.
+- ✅ **H6 — `extractMentions(input, cwd?, options?)`** returns every distinct
+  path the input references, including bare navigation. `ParseResult` also
+  gained a `mentions: string[]` field. `extractPaths()` semantics unchanged.
+- ✅ **H8 — `confidence: 'high' | 'medium' | 'low'`** on each `CanonicalCommand`.
+  `high` for absolute path with directly-identified verb, `medium` for
+  relative-with-cwd / pure navigation / blocks, `low` when verb was inferred
+  from a trailing path segment at flush time.
+- ✅ **DESIGN.md** in rosetta gained a new section *"`canonicalize.ts` —
+  vendoring intent and DB-backed verb resolver"* explaining shape parity.
+
+**2026-04-26 — [`e05b508`](https://github.com/tikoci/rosetta/commit/e05b508)**
+(important refinement — the universal verb set is **not** displaced by the
+resolver; it stays active and the resolver supplements it):
+
+- ✅ `isVerbAt()` now does `isKnownVerb(token) || options.isVerb?.(token, parentPath)`.
+  This means downstream consumers (LSP) only need their resolver to add
+  *path-specific* verbs — they don't have to enumerate ubiquitous helpers like
+  `find`. Important for the LSP's live-`/console/inspect` resolver: a
+  highlight response only marks tokens that appear in *that* script, so we'd
+  never see `find` if the script doesn't use it. The universal fallback
+  prevents that gap.
+
+Test count: rosetta full suite now **546 pass / 5 todo / 0 fail** (was 61 / 0
+before the audit). The original tests are unchanged.
 
 Still on the books (not yet shipped):
 
-- ⬜ **H1** — `mode: 'strict' | 'lenient'` parameter. Anchor tests in
-  `canonicalize.fuzz.test.ts` document the strict-mode behaviour to preserve.
+- ⬜ **H1** — `mode: 'strict' | 'lenient'` parameter. Biggest remaining payoff
+  for chat / MCP / prose input. Anchor tests in `canonicalize.fuzz.test.ts`
+  document the strict-mode behaviour to preserve.
 - ⬜ **H2** — `Tok.Var` for `$identifier`. Today's behaviour is *good enough*
   in args position (most common case). Path-position `$var` is still wrong but
   uncommon.
 - ⬜ **H3** — paren `(…)` expression scope. Affects `:if` / `:while` body
   extraction.
-- ⬜ **H4** — pluggable `isVerb` resolver + `verbs.json` artifact. Requires
-  rosetta CI changes ([tikoci/rosetta#4](https://github.com/tikoci/rosetta/issues/4)
-  is the related docs-links artifact; verbs would ship alongside).
 - ⬜ **H5** — `{` after `key=` as block-value (closes finding #8 — `source={…}`).
-- ⬜ **H6** — `extractMentions()` for navigation-only path references.
-- ⬜ **H8** — confidence flag.
 
-The 9 `test.todo` entries in the fuzz test file mirror this list, so `bun test`
-output is the running scorecard.
+The remaining 5 `test.todo` entries in the fuzz test file mirror this list.
 
 ## Suggested test fixtures
 
@@ -408,27 +436,48 @@ Conventions in the file:
 
 ## Path forward
 
-The 2026-04-25 in-place fixes (H7, universal-verb expansion, backtick whitespace)
-are uncommitted edits in `~/GitHub/rosetta` waiting on user review before a PR.
-They were chosen because each is a 1–3 line change with unambiguous safety: zero
-existing test breakage, and the verb additions were cross-checked against the DB
-to confirm no path collisions.
+H4/H6/H7/H8 are upstream. The remaining work splits cleanly:
 
-Remaining hardenings split into two tiers:
+### Upstream-tracked (rosetta will likely ship)
 
-### Tier 1 — Worth doing in rosetta upstream
+H1 (lenient mode), H2 (`Tok.Var`), H3 (paren scope), H5 (`{` block-value) all
+preserve the same `CanonicalizeOptions` shape, so any LSP consumer can pull
+them by diff once landed. H1 is the biggest remaining payoff for prose / MCP
+input; H3 is the next-most-impactful for script analysis (`:if (…)`/`:while (…)`).
 
-H1 (lenient mode), H4 (`isVerb` resolver), H7-residual (none — done), H8 (confidence)
-all benefit rosetta itself (the TUI and MCP consume canonicalize too) and align
-with the [§ Two backends, one parser](#two-backends-one-parser) design. File upstream
-as one PR proposing the API additions plus the lenient-mode semantics. The `verbs.json`
-artifact is a separate rosetta CI ask alongside [tikoci/rosetta#4](https://github.com/tikoci/rosetta/issues/4).
+### LSP-side wiring (when we adopt canonicalize)
 
-### Tier 2 — Vendor-only if upstream is slow
+When the LSP picks this up — either by vendoring or by depending on a future
+`@tikoci/canonicalize-routeros` package — wire `isVerb` to the live device:
 
-H3 (paren scope), H5 (`{` block-value), H6 (extractMentions) are smaller, more
-LSP-specific, and could ship as a vendor patch in `server/src/lib/canonicalize.ts`
-if we hit a concrete LSP feature that needs them before upstream lands.
+```ts
+// Sketch — not yet implemented in lsp-routeros-ts.
+// Cache verb classifications observed in /console/inspect highlight responses.
+const verbCache = new Map<string, boolean>(); // key: `${parentPath}\0${name}`
+function recordHighlightTokens(tokens: HighlightToken[], parentPath: string) {
+  for (const t of tokens) {
+    if (t.type === 'cmd-name') verbCache.set(`${parentPath}\0${t.text}`, true);
+  }
+}
+const isVerb = (token: string, parentPath: string) =>
+  verbCache.get(`${parentPath}\0${token}`) === true;
+canonicalize(input, '/', { isVerb });
+```
+
+Two notes on this wiring:
+
+- The universal verb set still fires first (per
+  [`e05b508`](https://github.com/tikoci/rosetta/commit/e05b508)), so our
+  resolver only needs to *add* device-observed menu-specific verbs — we don't
+  need to seed it with `add`/`set`/`get`/etc.
+- For tokens we haven't seen in any highlight response yet, the cache
+  returns `false` and the universal fallback decides. That's fine — the
+  parser is already conservative when no evidence exists.
+
+A future enhancement could optionally consume `routeros-verbs.json` from
+rosetta CI ([tikoci/rosetta#4](https://github.com/tikoci/rosetta/issues/4)
+neighbour) for cold-start coverage in deployment contexts where there's no
+live device yet (e.g., editing a script before `useConnectionUrl` is set).
 
 **Vendoring is no longer required to use canonicalize today.** With H7 + the
 expanded verb set, the parser is robust enough for "what RouterOS commands does
