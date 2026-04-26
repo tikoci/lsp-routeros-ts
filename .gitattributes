@@ -1,0 +1,3 @@
+# Mark checked-in binary artifacts so Git doesn't try to text-diff them
+# and GitHub Linguist doesn't count them toward language stats.
+test-data/corpus.sqlite binary linguist-generated
