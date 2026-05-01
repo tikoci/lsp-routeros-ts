@@ -1,23 +1,18 @@
 # Release Notes
 
-## Known Issues in "latest"
-
-* "Walkthrough" (shown after install on VS Code "Welcome" screen) needs to be updated to show commands and more graphics.
-* `README.md` is still very much a WIP - so it's more a catalog of notes, than documentation today.
-* In VSCode, "Hover" on Code and "Problems" tab present more debug information than nice text – although they do allow to see "token" so remaining for now.  In future, "hover on code" will likely change, or be an option
-* "Triggers" characters should be LSP configuration options, currently: <kbd>space</kbd>, <kbd>/</kbd>, <kbd>:</kbd>, and <kbd>=</kbd>.  Space in particular may be "aggressive" as default.
-* Tokenizer should detect RouterOS _data_ types like "ip" and "num", but does not.
-* Blue color used for "escaped" types "\12\3A\BC" is too dark in dark mode - other colors could be tweaked more.
-* Standalone LSP (i.e. NeoVim) on Windows is untested. _VS Code for Windows uses JS-based extension, so does **not** use the standalone LSP_
-
-## Changelog
+For active known issues and planned work, see [BACKLOG.md](BACKLOG.md).
 
 ### 0.7.4 (pre-release)
 
 #### Changes
 
+* Improved the VSCode setup walkthrough with concrete RouterOS REST setup, limited-user guidance, settings, connection testing, and VSCode Web notes
+* Added practical VSCode Web CORS proxy guidance with Caddy and nginx examples
+* Clarified README release-note vs active-development links
+
 #### Fixes
 
+* Cleaned up stale documentation and agent instructions so release contexts, lint tooling, NeoVim support, and test layout point at the current source of truth
 
 ### 0.7.3 (pre-release)
 

@@ -170,7 +170,7 @@ All data comes from `POST /rest/console/inspect`:
 **Key gotchas:**
 - RouterOS uses Windows-1252 encoding; before querying, the LSP **replaces** all non-ASCII characters (>127) with `?`
 - Documents >32KB are truncated (RouterOS API limit)
-- Adding a fake space or `=` after input can expose arg completions or value definitions (see README "Implementation Tips")
+- Adding a fake space or `=` after input can expose arg completions or value definitions; keep this gated by the `[research: completion-tricks]` backlog item before relying on it in production behavior
 - Response format varies significantly between `request` types — `highlight` is comma-delimited, others are structured JSON
 
 ### Client Architecture (VSCode Only)

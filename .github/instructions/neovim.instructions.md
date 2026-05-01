@@ -6,18 +6,26 @@ description: "Use when editing NeoVim Lua configuration for RouterOS LSP. Covers
 # NeoVim LSP Integration
 
 ## Overview
-`nvim-routeros-lsp-init.lua` configures NeoVim to use the standalone LSP server binary. It handles:
+`nvim-routeros-lsp-init.lua` configures NeoVim to use the npm-installed or standalone LSP server. It handles:
 - LSP client creation with `vim.lsp.start()`
 - `workspace/configuration` handler (delivers settings to the LSP)
 - Semantic token highlight colors (maps LSP token types to NeoVim highlights)
 - `.rsc` filetype detection
 
-## Standalone Binary
-The LSP server runs as `lsp-routeros-server --stdio`. It's compiled via `bun build --compile` for multiple platforms:
-- `lsp-routeros-server-darwin-arm64`, `darwin-x64`
-- `lsp-routeros-server-linux-arm64`, `linux-x64`
-- `lsp-routeros-server-windows-x64.exe`
-Default install location: `~/.bin/`
+## Server command
+
+The preferred non-VSCode install is the npm package:
+
+```bash
+npm install -g @tikoci/routeroslsp
+```
+
+The LSP server then runs as `routeroslsp --stdio`.
+
+The native standalone binary remains supported for users without Node.js. Release
+artifacts are built for linux-x64, linux-arm64, linux-x64-musl,
+linux-arm64-musl, darwin-x64, darwin-arm64, windows-x64, and windows-arm64.
+Default manual install location is `~/.bin/`.
 
 ## Configuration Handler
 NeoVim must implement the `workspace/configuration` handler to deliver `routeroslsp.*` settings to the server. The current `config_handler` function does this — don't remove it.
@@ -37,7 +45,5 @@ After changes:
 5. Test completion with `<C-x><C-o>` in insert mode
 
 ## Future Work
-- Update for modern NeoVim (0.10+) APIs
-- Support lazy.nvim plugin manager setup
 - Contribute to nvim-lspconfig registry
 - Improve from single-file script to proper NeoVim plugin structure

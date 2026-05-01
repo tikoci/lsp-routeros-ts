@@ -5,8 +5,18 @@
 1. **This file** — overview and quick reference
 2. **[CLAUDE.md](../CLAUDE.md)** — full architecture, design decisions, and patterns
 3. **[DESIGN.md](../DESIGN.md)** — design rationale and cross-project patterns
-4. **[BACKLOG.md](../BACKLOG.md)** — future work and task tracking
+4. **[BACKLOG.md](../BACKLOG.md)** — active work index only
 5. **`.github/instructions/`** — file-scoped rules loaded automatically by `applyTo` globs
+
+## Documentation Ownership
+
+- **BACKLOG.md** — active, actionable work only. Completed history and durable
+  research findings should move out and leave only links to the source of truth.
+- **docs/** — stable user/developer references and research write-ups.
+- **.github/instructions/** — scoped agent/process rules tied to files and
+  workflows.
+- **DESIGN.md** — accepted design decisions and tradeoffs.
+- **CHANGELOG.md** — shipped user-visible release notes, not live task tracking.
 
 ## Agent Roles
 
@@ -43,7 +53,7 @@ bun install                 # Install all deps (chains client + server)
 bun run compile             # Full build (client + server + exe + web)
 bun run watch:node          # Dev mode — rebuild server on changes
 bun run test                # Run all tests (unit + snapshot + model + client)
-bun run lint                # ESLint
+bun run lint                # Biome + typecheck
 bun run vsix:package        # Package .vsix for VSCode Marketplace
 bun run bun:exe             # Build standalone binary (copies to ~/.bin/)
 ```
@@ -68,7 +78,7 @@ When changing build scripts, lint config, the test runner, or the smoke harness,
 - **All syntax data comes from RouterOS** — the LSP has no built-in grammar. Every completion, diagnostic, and token comes from querying a live device's `/console/inspect` endpoint.
 - **Three ID conventions**: `lsp-routeros-ts` (project), `routeroslsp` (settings/config namespace), `lsp-routeros-server-*` (standalone binaries)
 - **`client/src/` and `server/src/` hold runtime code only** — what ships in `dist/`. Tests live in `tests/server/` and `tests/client/`; tooling scripts live in `scripts/`; ad-hoc experiments go in `.scratch/` (gitignored). Do not add tests, scripts, or experiments to `server/src/` or `client/src/`.
-- **Pre-release quality gate** — before `vsix:package:prerelease` or an npm publish can be trusted, the five deployment contexts above all need at least a smoke check green. See [`deployment.instructions.md`](instructions/deployment.instructions.md#pre-release-checklist).
+- **Pre-release quality gate** — before `vsix:package:prerelease` or an npm publish can be trusted, the six deployment contexts above all need at least a smoke check green. See [`deployment.instructions.md`](instructions/deployment.instructions.md#pre-release-checklist).
 
 ## Key Files
 

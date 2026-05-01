@@ -163,10 +163,11 @@ The `TEXT` format varies significantly and would require parsing to be actionabl
 
 ## Testing
 
-Tests use `bun test` with co-located `*.test.ts` files:
+Tests use `bun test`. Test files live under `tests/server/` and
+`tests/client/`, mirroring the runtime source tree:
 
 ```bash
-bun run test    # unit + snapshot tests (no device needed)
+bun run test    # unit, model, snapshot, smoke-adjacent, and client tests
 ```
 
 Integration tests against a live RouterOS device (CHR) are skipped automatically when no device is reachable. Set `ROUTEROS_TEST_URL` to override the default `http://192.168.74.150`. To regenerate snapshot files from a live device:
@@ -175,7 +176,9 @@ Integration tests against a live RouterOS device (CHR) are skipped automatically
 bun run scripts/capture-snapshots.ts
 ```
 
-See [`BACKLOG.md`](BACKLOG.md) for remaining testing work.
+See [`.github/instructions/testing.instructions.md`](.github/instructions/testing.instructions.md)
+for the full test-tier, corpus, snapshot, smoke, and CHR workflow. See
+[`BACKLOG.md`](BACKLOG.md) only for active testing work that is not done yet.
 
 ### Importing Scripts From `forum.mikrotik.com`
 

@@ -23,7 +23,7 @@ The LSP activates automatically for `.rsc` files or when language is set to `rou
 
 > ⚠️ **Without** a RouterOS connection, the **LSP cannot function**.  Credentials can be provided in editor's LSP configuration, see [Configuration](#configuration) section.
 
-> 𝌡 For known issues, changelog, and feature tracking, see [CHANGELOG.md](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGELOG.md).
+> 𝌡 For release notes, see [CHANGELOG.md](https://github.com/tikoci/lsp-routeros-ts/blob/main/CHANGELOG.md). For active development work, see [BACKLOG.md](https://github.com/tikoci/lsp-routeros-ts/blob/main/BACKLOG.md).
 
 ## Installation
 

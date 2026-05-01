@@ -1,5 +1,5 @@
 ---
-description: "Use when changing anything that affects how the LSP ships: package.json, server/package.json, webpack.config.js, build-standalone.sh, workflows, .github/lsp.json, README install sections, or the nvim init script. Covers the five deployment contexts and the pre-release checklist."
+description: "Use when changing anything that affects how the LSP ships: package.json, server/package.json, webpack.config.js, build-standalone.sh, workflows, .github/lsp.json, README install sections, or the nvim init script. Covers the six deployment contexts and the pre-release checklist."
 applyTo: "package.json,server/package.json,client/package.json,webpack.config.js,build-standalone.sh,.github/workflows/**,.github/lsp.json,README.md,nvim-routeros-lsp-init.lua,docs/**"
 ---
 

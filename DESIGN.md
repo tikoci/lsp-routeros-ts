@@ -132,26 +132,35 @@ router.validateScript / router.executeScript arguments
 
 TikBook holds credentials in `SecretStorage` and passes them to the LSP via `routeroslsp.server.useConnectionUrl` command. The LSP server stores the override in memory (not persisted). That override applies only to the ambient read-only LSP path; explicit validate/execute commands must carry their own credentials on every call and never fall back to ambient settings.
 
-## Future Design Considerations
+## Research-Derived Design Decisions
 
-### Adding `request=syntax` Support
+This section records decisions from completed or partially completed research.
+Open tasks stay in [`BACKLOG.md`](BACKLOG.md); this file should explain why a
+direction is preferred, not track every next step.
+
+### `request=syntax` Support
 
 `/console/inspect` with `request=syntax` provides richer metadata (descriptions, type definitions) but requires "tricks":
 - Adding a fake space after `input=` exposes argument names
 - Adding `=` exposes value definitions/enums
 - The `TEXT` field format varies wildly (prose, expressions, ranges)
 
-This is documented in README.md under "Implementation Tips" and is the key to improving hover and signature help.
+`request=syntax` is the likely source for richer hover, completion, and
+signature-help metadata, but runtime use stays gated on the active
+`[research: inspect-shapes]` and `[research: completion-tricks]` backlog items.
 
-### Copilot/AI Integration
+### Agent and AI Integration
 
-Future work on Copilot integration considerations:
-- The LSP could expose RouterOS context (connected version, available commands) as tool contexts
-- Code actions could suggest RouterOS-specific fixes (deprecated command replacement, etc.)
-- The `/console/inspect request=syntax` TEXT field could provide LLM-consumable descriptions
-- Cross-extension with TikBook: TikBook handles notebook execution, LSP handles language intelligence
-- **Copilot CLI is already a consumer** — `.github/lsp.json` makes the LSP available to Copilot CLI as a plain LSP server (not an MCP server). The ambient credential path (`initializationOptions` since Copilot CLI doesn't implement `workspace/configuration`) is load-bearing and must be preserved, but explicit RouterOS writes should continue to flow through the same LSP command interface as every other client.
-- **`tikoci/rosetta` docs integration** — rosetta exposes RouterOS docs as FTS5 over MCP. Open question: does the LSP call rosetta directly, or does a higher layer (TikBook, a Copilot skill) join LSP data with rosetta data? Adding a dependency pulls rosetta into every VSCode install; keeping the LSP pure and exposing a capability lets callers decide. Leaning toward the latter.
+Copilot CLI is already a consumer through `.github/lsp.json`: it loads the LSP
+as a plain stdio language server, not as an MCP server. The ambient credential
+path through `initializationOptions` is load-bearing because Copilot CLI does not
+implement `workspace/configuration`; explicit RouterOS writes continue to use the
+same per-call LSP command interface as every other client.
+
+For broader AI/tool exposure, keep RouterOS LSP focused on language-server
+behavior until the TikBook/rosetta responsibility boundary is settled. rosetta is
+the docs/RAG layer; TikBook is the natural UI/tool host; the LSP should expose
+portable language intelligence without taking a hard dependency on either.
 
 ### `[:parse <script>]` as a Signal Source — parseIL
 

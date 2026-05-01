@@ -386,12 +386,12 @@
       {
         "id": "routerlsp-walkthrough",
         "title": "RouterOS LSP Setup",
-        "description": "In order to use the RouterOS LSP, a \"live\" connection to a RouterOS device is required.  This can be set in \"Settings\"",
+        "description": "RouterOS LSP needs a live RouterOS REST connection. Configure it in Settings.",
         "steps": [
           {
             "id": "changeBaseUri",
-            "title": "Set RouterOS `baseURL` with RouterOS connection information",
-            "description": "Protocol (`http:` or `https:`) and host to need to be set in the `baseURL`.\n\n[Change Setting](command:workbench.action.openSettings?\"routeroslsp.baseUrl\")",
+            "title": "Set RouterOS `baseUrl`",
+            "description": "Set the protocol and host for your RouterOS REST endpoint, for example `http://192.168.88.1`.\n\n[Change Setting](command:workbench.action.openSettings?\"routeroslsp.baseUrl\")",
             "media": {
               "markdown": "docs/walkthrough.md"
             },
@@ -401,8 +401,8 @@
           },
           {
             "id": "changeUsername",
-            "title": "Set RouterOS `username` to use",
-            "description": "The default user name `lsp` and should be changed.\n\n[Change Setting](command:workbench.action.openSettings?\"routeroslsp.username\")",
+            "title": "Set RouterOS `username`",
+            "description": "Set the RouterOS user name. A dedicated user with `read,api,rest-api` policy is recommended.\n\n[Change Setting](command:workbench.action.openSettings?\"routeroslsp.username\")",
             "media": {
               "markdown": "docs/walkthrough.md"
             },
@@ -412,8 +412,8 @@
           },
           {
             "id": "changePassword",
-            "title": "Set RouterOS `password` to use",
-            "description": "The default password is `changeme` and should be changed.\n\n[Change Setting](command:workbench.action.openSettings?\"routeroslsp.password\")",
+            "title": "Set RouterOS `password`",
+            "description": "Set the password for the RouterOS user configured above.\n\n[Change Setting](command:workbench.action.openSettings?\"routeroslsp.password\")",
             "media": {
               "markdown": "docs/walkthrough.md"
             },
@@ -423,8 +423,8 @@
           },
           {
             "id": "webRemote",
-            "title": "VSCode for Web needs a CORS proxy setup",
-            "description": "A proxy server is required between RouterOS and VSCode for Web, otherwise LSP will not work!",
+            "title": "VSCode Web needs a CORS proxy",
+            "description": "A CORS-capable HTTPS proxy is required between RouterOS and VSCode Web. See the walkthrough for details.",
             "when": "workspacePlatform == 'webworker'",
             "media": {
               "markdown": "docs/walkthrough.md"
