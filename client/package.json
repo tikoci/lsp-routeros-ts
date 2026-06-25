@@ -9,11 +9,11 @@
     "vscode": "^1.78.2"
   },
   "dependencies": {
-    "vscode-languageclient": "^9.0.1"
+    "vscode-languageclient": "^10.0.1"
   },
   "devDependencies": {
     "@types/vscode": "^1.116.0",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^3.0.0"
   },
   "overrides": {
     "on-headers": "^1.1.0",
