@@ -26,7 +26,9 @@ do not duplicate their findings back into this backlog.
 
 | Topic | Source of truth | Notes |
 | --- | --- | --- |
+| Highlight wire format and live lexical behavior | [`docs/highlight-format.md`](docs/highlight-format.md) | Captured against RouterOS 7.9.2, 7.23.2, and 7.24rc2. |
 | parseIL format and `:parse` behavior | [`docs/parseil-format.md`](docs/parseil-format.md) | Captured against RouterOS 7.20.8, 7.22.1, and 7.23rc1. |
+| Syntax-inspection probe selection | [`docs/syntax-inspection-map.md`](docs/syntax-inspection-map.md) | Cross-probe decision and provenance layer for future skills/consumers. |
 | Required-argument probe | [`docs/required-args.md`](docs/required-args.md) | Version-tagged execute-time signal and unresolved edge cases. |
 | rosetta/LSP docs enrichment | [`docs/rosetta-alignment.md`](docs/rosetta-alignment.md) | No runtime rosetta dependency; static JSON first. |
 | canonicalize audit | [`docs/canonicalize-audit.md`](docs/canonicalize-audit.md) | Upstream rosetta parser alignment and remaining hardening. |

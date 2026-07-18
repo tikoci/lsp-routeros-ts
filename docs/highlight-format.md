@@ -4,7 +4,7 @@
 > `/console/inspect request=highlight` — the data behind this LSP's semantic
 > tokens and diagnostics. Grounded on a 913-script full-corpus sweep against
 > CHR **7.23.2** (stable), re-run on **7.24rc2** (testing) and **7.9.2** (the
-> oldest REST-API release) for drift, plus ~30 targeted probes for rare token
+> earliest plain-HTTP REST branch tested here) for drift, plus 23 targeted probes for rare token
 > classes. Capture artifacts:
 > `test-data/highlight-summary.v<version>.json` (from
 > `scripts/collect-highlight.ts`); the six committed `.rsc.highlight` fixtures
@@ -28,14 +28,14 @@ POST /rest/console/inspect
 ```
 
 The `highlight` field is a comma-joined list of token-class names, **exactly
-one per input byte** — for ASCII input, one per character (verified 912/913
-corpus files; the exception is the empty file — empty input returns
-`"highlight": ""`, and naïve `"".split(',')` yields `[""]`, so guard the empty
-case). Multi-byte UTF-8 input is accepted but each *byte* gets a token
+one per input byte** — for ASCII input, one per character (verified across all
+913 corpus files). Empty input returns `"highlight": ""`, which represents zero
+tokens; guard it before splitting or naïve `"".split(',')` produces a fake
+token named `""`. Multi-byte UTF-8 input is accepted but each *byte* gets a token
 (`café` in a string → four `none` + one extra for é's second byte), which
 desynchronizes token indexes from JS string offsets — see §2. The response
 array always contains exactly one item (`type` is always `"highlight"`; zero
-multi-item responses across both sweeps).
+multi-item responses across all three sweeps).
 
 Because the classifier is the *live console's own tokenizer*, the result is
 version-exact and — important — **stateful**: token classes depend not just on
@@ -169,6 +169,14 @@ The LSP's error set (`HighlightTokens.ErrorTokenTypes` in
 `obj-dynamic`, `obj-disabled`, `syntax-obsolete`, `syntax-old`, and
 `ambiguous` as diagnostics-worthy.
 
+That set is an **LSP policy**, not the RouterOS grammar's error taxonomy. Only
+`error` is the measured hard parser stop. `obj-disabled` and `obj-dynamic` can
+describe perfectly valid references to live objects; `syntax-obsolete` is
+accepted syntax; and `obj-inactive` mixes unknown names with version/package
+and ambiguity effects. A generic skill or centrs `explain` implementation
+should preserve the class and evidence, then let its caller choose warning/error
+severity instead of copying `ErrorTokenTypes` as “invalid syntax.”
+
 ## 5. Statefulness and encoding gotchas
 
 **The same input tokenizes differently on different devices — or the same
@@ -226,11 +234,17 @@ So drift mirrors parseIL's pattern (`parseil-format.md` §5.1): the *format* is
 stable across versions; the *classifications* leak the live command schema.
 Version-tag any comparison artifacts.
 
-### 7.1 The 7.9.2 floor check
+### 7.1 The 7.9.2 plain-HTTP floor check
 
-A third full sweep against **7.9.2** — the oldest RouterOS with the REST API —
-bounds the format's stability over the whole REST era
+A third full sweep against **7.9.2** — from the first release branch where the
+REST API can use the plain-HTTP `www` service — extends the measured floor substantially
 (`highlight-summary.v7.9.2.json`):
+
+RouterOS REST itself predates 7.9: MikroTik documents its introduction in
+[7.1beta4](https://help.mikrotik.com/docs/spaces/ROS/pages/47579162/REST%2BAPI),
+when access required `www-ssl`. This study therefore does **not** establish the
+highlight format for 7.1–7.8; an HTTPS capture is the remaining historical-floor
+check.
 
 - Wire format identical: one token per byte, same response shape, same core
   class names.
@@ -312,8 +326,14 @@ collapse: adjacent identical classes merge into one `{token, range}` span
 - `scripts/collect-highlight.ts` — full-corpus sweep + targeted probes against
   a live CHR (`ROUTEROS_TEST_URL`, default `http://127.0.0.1:9170`). Writes
   `test-data/highlight-summary.v<version>.json`: per-class totals, per-file
-  type sets, probe run-lengths, unknown-token flags. Re-run on each new
-  RouterOS release; diff the summaries for drift.
+  type sets, probe run-lengths, unknown-token flags, an exact selected-corpus
+  SHA-256, and the device architecture/package manifest. Re-run on each new
+  RouterOS release; only diff summaries with the same corpus SHA. The three
+  existing summaries predate the environment-manifest field (their corpus hash
+  was backfilled), so package-dependent interpretation of those captures must
+  remain conservative. `bun run corpus:db` imports their per-file rows into
+  `highlight_results`; `v_highlight_by_version` and `v_highlight_drift` provide
+  normalized comparisons without reparsing the 16K-line exports.
 - `scripts/capture-snapshots.ts` — regenerates the six committed
   `.rsc.highlight` fixtures used by `tests/server/snapshot.test.ts`. These are
   *unversioned* (pre-7.23 capture); if regenerated, adopt the version-tagged
@@ -338,3 +358,7 @@ collapse: adjacent identical classes merge into one `{token, range}` span
 - **Iterative multi-error highlighting** — re-request from past the error
   position to recover more diagnostics per document; interacts with the 32 KB
   window and per-request cost.
+- **RouterOS 7.1–7.8 HTTPS floor capture** — REST began at 7.1beta4, but the
+  oldest sweep here is 7.9.2 because the current harness uses plain HTTP by
+  default. Capture an early v7 image over `www-ssl` before claiming whole-REST-era
+  wire compatibility.

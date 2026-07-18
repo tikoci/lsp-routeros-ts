@@ -177,7 +177,7 @@ Decisions captured from the spike:
 
 ### `request=highlight` Wire Format — highlight-format.md
 
-**Status:** Full-corpus sweeps landed against RouterOS 7.23.2 (stable), 7.24rc2 (testing), and 7.9.2 (oldest REST-era release). The wire format, complete observed token vocabulary (19 classes), error model (one hard-error char, then unclassified), statefulness gotchas, and cross-version drift are documented in **[`docs/highlight-format.md`](docs/highlight-format.md)**. The corpus harness is `scripts/collect-highlight.ts`; summaries live at `test-data/highlight-summary.v<version>.json` (no per-file sidecars — a highlight response is ~6× source size; the six committed `.rsc.highlight` fixtures remain the offline test inputs).
+**Status:** Full-corpus sweeps landed against RouterOS 7.23.2 (stable), 7.24rc2 (testing), and 7.9.2 (the earliest plain-HTTP REST branch tested here; REST itself began at 7.1beta4 over HTTPS). The wire format, complete observed token vocabulary (19 classes), error model (one hard-error char, then unclassified), statefulness gotchas, and cross-version drift are documented in **[`docs/highlight-format.md`](docs/highlight-format.md)**. The corpus harness is `scripts/collect-highlight.ts`; summaries live at `test-data/highlight-summary.v<version>.json` (no per-file sidecars — a highlight response is ~6× source size; the six committed `.rsc.highlight` fixtures remain the offline test inputs).
 
 Decisions captured from the sweep:
 
@@ -198,9 +198,9 @@ Decisions captured from the sweep:
 - `source_scripts` + `source_scripts_fts` — one row per `.rsc`, collection classification, size/line/hash flags, text, and BM25/FTS search.
 - `artifact_files` — raw sidecar provenance (`.rsc.highlight`, `.parseil`, `.parseil.meta.json`, summaries, notebooks, manifests), linked to a script when possible.
 - `analysis_runs` — versioned runs such as `parseil`, `required-args`, and future `inspect-shapes` / `completion-tricks`.
-- `parseil_results`, `highlight_snapshots`, and `required_arg_results` — normalized imports of the current sidecars.
+- `parseil_results`, `highlight_snapshots`, `highlight_results`, and `required_arg_results` — normalized imports of the current sidecars and versioned highlight sweeps.
 - `inspect_responses` and `completion_trick_results` — forward-compatible tables for the next research spikes.
-- Views: `v_script_summary`, `v_parseil_by_version`, `v_parseil_drift`, `v_required_args_by_version`, `v_required_arg_drift`, and `v_analysis_overview`.
+- Views: `v_script_summary`, `v_parseil_by_version`, `v_parseil_drift`, `v_highlight_by_version`, `v_highlight_drift`, `v_required_args_by_version`, `v_required_arg_drift`, and `v_analysis_overview`.
 
 **Future spike pattern:** write the reusable harness in `scripts/`, insert normalized rows into `corpus.sqlite`, and add/update an `analysis_runs` row with RouterOS version/build metadata. Keep the checked-in DB reproducible from committed inputs: use corpus fingerprints plus source-side `capturedAt` metadata, not fresh import timestamps. Keep large raw responses in `artifact_files` or the purpose-built result table. Export JSON/Markdown only when reviewers need a stable textual diff or a doc page needs a curated excerpt.
 

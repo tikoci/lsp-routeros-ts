@@ -21,6 +21,7 @@
  *   test-data/highlight-summary.v<routeros-version>.json
  */
 
+import { createHash } from 'node:crypto'
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { replaceNonAscii } from '../server/src/routeros'
@@ -86,11 +87,33 @@ async function rest(path: string, body?: unknown): Promise<unknown> {
 	return resp.json()
 }
 
-async function chrVersion(): Promise<{ version: string; buildTime: string }> {
-	const r = (await rest('/rest/system/resource')) as { version?: string; ['build-time']?: string }
+interface CaptureEnvironment {
+	version: string
+	buildTime: string
+	architectureName: string
+	boardName: string
+	packages: Array<{ name: string; version: string; disabled: boolean }>
+}
+
+async function captureEnvironment(): Promise<CaptureEnvironment> {
+	const r = (await rest('/rest/system/resource')) as {
+		version?: string
+		['build-time']?: string
+		['architecture-name']?: string
+		['board-name']?: string
+	}
+	const packageRows = (await rest('/rest/system/package')) as Array<{ name?: string; version?: string; disabled?: string }>
 	const raw = (r.version ?? '').trim()
 	const version = raw.split(/\s+/)[0] || 'unknown'
-	return { version, buildTime: r['build-time'] ?? '' }
+	return {
+		version,
+		buildTime: r['build-time'] ?? '',
+		architectureName: r['architecture-name'] ?? '',
+		boardName: r['board-name'] ?? '',
+		packages: packageRows
+			.map((pkg) => ({ name: pkg.name ?? '', version: pkg.version ?? '', disabled: pkg.disabled === 'true' }))
+			.sort((a, b) => a.name.localeCompare(b.name)),
+	}
 }
 
 interface HighlightCapture {
@@ -107,8 +130,9 @@ async function fetchHighlight(input: string, path?: string): Promise<HighlightCa
 	const data = (await rest('/rest/console/inspect', body)) as Array<Record<string, string>>
 	const ms = Math.round(performance.now() - t0)
 	const first = data[0] ?? {}
+	const highlight = first.highlight ?? ''
 	return {
-		tokens: (first.highlight ?? '').split(','),
+		tokens: highlight.length === 0 ? [] : highlight.split(','),
 		itemCount: data.length,
 		itemKeys: Object.keys(first),
 		ms,
@@ -125,6 +149,18 @@ function globRsc(dir: string): string[] {
 	return out.sort()
 }
 
+/** Fingerprint the exact selected inputs so cross-version diffs cannot silently compare different corpora. */
+function corpusSha256(files: string[]): string {
+	const hash = createHash('sha256')
+	for (const file of files) {
+		hash.update(relative(TEST_DATA_DIR, file))
+		hash.update('\0')
+		hash.update(new Uint8Array(readFileSync(file)))
+		hash.update('\0')
+	}
+	return hash.digest('hex')
+}
+
 interface FileResult {
 	rel: string
 	inputChars: number
@@ -137,15 +173,13 @@ interface FileResult {
 
 /**
  * Targeted probes for token classes the corpus may not elicit.
- * `setup`/`teardown` are CLI commands run via /rest/execute so highlight can
- * observe live object flags (disabled/dynamic items) — highlight is stateful.
+ * Object-state probes are deliberately read-only: this harness may point at a
+ * non-disposable router, and corpus examples already exercise stateful flags.
  */
 interface Probe {
 	name: string
 	input: string
 	path?: string
-	setup?: string[]
-	teardown?: string[]
 }
 
 const PROBES: Probe[] = [
@@ -167,13 +201,11 @@ const PROBES: Probe[] = [
 	{ name: 'unknown-arg', input: '/ip/address/add bogusarg=1' },
 	{
 		name: 'ref-disabled-item',
-		input: '/ip firewall filter set 0 comment=x',
-		setup: ['/ip firewall filter add chain=forward action=accept comment=hlcap-probe disabled=yes'],
-		teardown: ['/ip firewall filter remove [find comment=hlcap-probe]'],
+		input: '/ip/service/enable www-ssl',
 	},
 	{
 		name: 'ref-dynamic-item',
-		input: '/ip dns static set 0 comment=x',
+		input: '/ip/route/print where routing-table=main',
 	},
 	{ name: 'path-context-relative', input: 'add address=10.0.0.1/24 interface=ether1', path: 'ip,address' },
 	{ name: 'path-context-bare-cmd', input: 'print', path: 'ip,address' },
@@ -205,17 +237,15 @@ function runLength(input: string, tokens: string[]): Array<[string, string]> {
 	return out
 }
 
-async function execCli(cmd: string): Promise<void> {
-	await rest('/rest/execute', { script: cmd, 'as-string': 'true' })
-}
-
 async function main() {
-	const { version, buildTime } = await chrVersion()
+	const environment = await captureEnvironment()
+	const { version, buildTime } = environment
 	console.log(`CHR ${CHR_URL} → RouterOS ${version} (build ${buildTime})`)
 
 	let files = globRsc(TEST_DATA_DIR)
 	if (argTarget) files = files.filter((f) => f.includes(argTarget))
 	if (argLimit > 0) files = files.slice(0, argLimit)
+	const inputCorpusSha256 = corpusSha256(files)
 	console.log(`Collecting highlight for ${files.length} script(s) …`)
 
 	const tokenTotals = new Map<string, number>()
@@ -223,7 +253,7 @@ async function main() {
 	const tokenExampleFile = new Map<string, string>()
 	const unknownTokens = new Map<string, string[]>() // token → example files
 	const results: FileResult[] = []
-	let itemKeysSeen: string[] = []
+	const itemKeysSeen = new Set<string>()
 	let multiItemResponses = 0
 
 	let i = 0
@@ -234,7 +264,7 @@ async function main() {
 		const input = replaceNonAscii(text.substring(0, ROUTEROS_API_MAX_BYTES), '?')
 		try {
 			const cap = await fetchHighlight(input)
-			itemKeysSeen = cap.itemKeys
+			for (const key of cap.itemKeys) itemKeysSeen.add(key)
 			if (cap.itemCount > 1) multiItemResponses++
 			const types = [...new Set(cap.tokens)].sort()
 			for (const t of cap.tokens) tokenTotals.set(t, (tokenTotals.get(t) ?? 0) + 1)
@@ -274,7 +304,6 @@ async function main() {
 	const probeResults: ProbeResult[] = []
 	for (const probe of PROBES) {
 		try {
-			for (const cmd of probe.setup ?? []) await execCli(cmd)
 			const input = replaceNonAscii(probe.input.substring(0, ROUTEROS_API_MAX_BYTES), '?')
 			const cap = await fetchHighlight(input, probe.path)
 			const types = [...new Set(cap.tokens)].sort()
@@ -303,10 +332,6 @@ async function main() {
 				error: err instanceof Error ? err.message : String(err),
 			})
 			console.log(`  ${probe.name}: ERR`)
-		} finally {
-			for (const cmd of PROBES.find((p) => p.name === probe.name)?.teardown ?? []) {
-				await execCli(cmd).catch(() => {})
-			}
 		}
 	}
 
@@ -330,7 +355,7 @@ async function main() {
 	console.log(`\nKnown classes never observed (corpus or probes): ${neverObserved.join(', ') || '(none)'}`)
 	const mismatches = ok.filter((r) => !r.tokenCountMatch)
 	console.log(`Token-count mismatches: ${mismatches.length}/${ok.length}`)
-	console.log(`Multi-item responses: ${multiItemResponses}; response item keys: ${itemKeysSeen.join(', ')}`)
+	console.log(`Multi-item responses: ${multiItemResponses}; response item keys: ${[...itemKeysSeen].join(', ')}`)
 
 	const summaryPath = join(TEST_DATA_DIR, `highlight-summary.v${version}.json`)
 	writeFileSync(
@@ -339,12 +364,15 @@ async function main() {
 			{
 				routerosVersion: version,
 				chrBuildTime: buildTime,
+				environment,
 				capturedAt: new Date().toISOString(),
+				corpusSha256: inputCorpusSha256,
+				selection: { target: argTarget || null, limit: argLimit || null },
 				totalFiles: files.length,
 				ok: ok.length,
 				failed: results.length - ok.length,
 				tokenCountMismatches: mismatches.map((r) => r.rel),
-				responseItemKeys: itemKeysSeen,
+				responseItemKeys: [...itemKeysSeen].sort(),
 				multiItemResponses,
 				vocabulary,
 				tokenTotals: sortedTotals,

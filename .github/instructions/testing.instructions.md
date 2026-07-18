@@ -69,7 +69,7 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 
 ### Corpus datastore (`build-corpus-db.ts`)
 - Rebuilds the checked-in SQLite corpus database at `test-data/corpus.sqlite` from committed `.rsc` files and sidecars
-- Imports script metadata, FTS text, `.rsc.highlight` snapshots, parseIL `.parseil`/`.parseil.meta.json` captures, artifact provenance, and forward-compatible tables for inspect-shapes/completion-tricks research
+- Imports script metadata, FTS text, `.rsc.highlight` snapshots, versioned highlight summaries, parseIL `.parseil`/`.parseil.meta.json` captures, artifact provenance, and forward-compatible tables for inspect-shapes/completion-tricks research
 - Usage: `bun run corpus:db` or `bun run scripts/build-corpus-db.ts [--db test-data/corpus.sqlite]`
 - Because `corpus.sqlite` is checked in, rebuilds must be deterministic from committed inputs; prefer corpus fingerprints and source capture timestamps over wall-clock import timestamps
 - Future research harnesses should write normalized rows to this DB first; export JSON/Markdown only when a reviewer needs a textual diff or docs need a curated excerpt

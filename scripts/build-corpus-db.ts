@@ -21,7 +21,7 @@ ConnectionLogger.console = { log: noop, info: noop, warn: noop, error: noop, deb
 
 const TEST_DATA_DIR = resolve(import.meta.dir, '../test-data')
 const REPO_ROOT = resolve(import.meta.dir, '..')
-const SCHEMA_VERSION = '2'
+const SCHEMA_VERSION = '3'
 const DEFAULT_DB = join(TEST_DATA_DIR, 'corpus.sqlite')
 
 interface ParseIlMeta {
@@ -48,6 +48,21 @@ interface ParseIlSummary {
 	parseMsMean?: number
 	parseMsMax?: number
 	results?: unknown[]
+}
+
+interface HighlightSummary {
+	routerosVersion?: string
+	chrBuildTime?: string
+	capturedAt?: string
+	results?: Array<{
+		rel?: string
+		inputChars?: number
+		tokenCount?: number
+		tokenCountMatch?: boolean
+		ms?: number
+		types?: unknown
+		error?: string
+	}>
 }
 
 interface RequiredArgSummaryEntry {
@@ -170,6 +185,10 @@ function parseSummaryVersion(relPath: string): string | null {
 	return relPath.match(/^parseil-summary\.v(.+)\.json$/)?.[1] ?? null
 }
 
+function parseHighlightSummaryVersion(relPath: string): string | null {
+	return relPath.match(/^highlight-summary\.v(.+)\.json$/)?.[1] ?? null
+}
+
 function parseRequiredArgsVersion(relPath: string): string | null {
 	return relPath.match(/^required-args\.v(.+?)\.(?:meta\.)?json$/)?.[1] ?? null
 }
@@ -231,6 +250,19 @@ function artifactInfo(filePath: string): ArtifactInfo {
 		return {
 			artifactKind: 'parseil_summary',
 			routerosVersion: value?.routerosVersion ?? summaryVersion,
+			scriptPath: null,
+			contentType: 'application/json',
+			capturedAt: value?.capturedAt ?? null,
+			jsonValid: valid,
+		}
+	}
+
+	const highlightSummaryVersion = parseHighlightSummaryVersion(relPath)
+	if (highlightSummaryVersion) {
+		const { value, valid } = readJson<HighlightSummary>(filePath)
+		return {
+			artifactKind: 'highlight_summary',
+			routerosVersion: value?.routerosVersion ?? highlightSummaryVersion,
 			scriptPath: null,
 			contentType: 'application/json',
 			capturedAt: value?.capturedAt ?? null,
@@ -387,6 +419,19 @@ captured_at TEXT,
 PRIMARY KEY (script_id, artifact_id)
 );
 
+CREATE TABLE highlight_results (
+run_id INTEGER NOT NULL REFERENCES analysis_runs(id) ON DELETE CASCADE,
+script_id INTEGER NOT NULL REFERENCES source_scripts(id) ON DELETE CASCADE,
+routeros_version TEXT NOT NULL,
+input_chars INTEGER NOT NULL,
+token_count INTEGER NOT NULL,
+token_count_match INTEGER NOT NULL,
+elapsed_ms INTEGER NOT NULL,
+token_types_json TEXT NOT NULL,
+error TEXT,
+PRIMARY KEY (run_id, script_id)
+);
+
 CREATE TABLE inspect_responses (
 id INTEGER PRIMARY KEY,
 run_id INTEGER REFERENCES analysis_runs(id) ON DELETE SET NULL,
@@ -440,6 +485,7 @@ CREATE INDEX idx_artifact_files_script ON artifact_files(script_id);
 CREATE INDEX idx_artifact_files_kind ON artifact_files(artifact_kind);
 CREATE INDEX idx_parseil_results_version ON parseil_results(routeros_version);
 CREATE INDEX idx_highlight_snapshots_script ON highlight_snapshots(script_id);
+CREATE INDEX idx_highlight_results_version ON highlight_results(routeros_version);
 CREATE INDEX idx_inspect_responses_request ON inspect_responses(request_type);
 CREATE INDEX idx_completion_trick_results_trick ON completion_trick_results(trick);
 CREATE INDEX idx_required_arg_results_version ON required_arg_results(routeros_version);
@@ -491,6 +537,29 @@ JOIN parseil_results p ON p.script_id = s.id
 GROUP BY s.id
 HAVING distinct_results > 1;
 
+CREATE VIEW v_highlight_by_version AS
+SELECT
+routeros_version,
+COUNT(*) AS result_count,
+SUM(CASE WHEN error IS NULL THEN 1 ELSE 0 END) AS ok_count,
+SUM(CASE WHEN error IS NOT NULL THEN 1 ELSE 0 END) AS error_count,
+SUM(CASE WHEN token_count_match = 0 THEN 1 ELSE 0 END) AS token_count_mismatch_count,
+ROUND(AVG(elapsed_ms), 2) AS avg_elapsed_ms,
+MAX(elapsed_ms) AS max_elapsed_ms
+FROM highlight_results
+GROUP BY routeros_version;
+
+CREATE VIEW v_highlight_drift AS
+SELECT
+s.path,
+COUNT(h.routeros_version) AS versions,
+COUNT(DISTINCT h.token_types_json) AS distinct_token_type_sets,
+GROUP_CONCAT(h.routeros_version || ':' || h.token_types_json, ', ') AS version_type_sets
+FROM source_scripts s
+JOIN highlight_results h ON h.script_id = s.id
+GROUP BY s.id
+HAVING distinct_token_type_sets > 1;
+
 CREATE VIEW v_analysis_overview AS
 SELECT
 a.id,
@@ -500,6 +569,7 @@ a.source_path,
 a.captured_at,
 CASE
 WHEN a.analysis_name = 'parseil' THEN (SELECT COUNT(*) FROM parseil_results p WHERE p.run_id = a.id)
+WHEN a.analysis_name = 'highlight' THEN (SELECT COUNT(*) FROM highlight_results h WHERE h.run_id = a.id)
 WHEN a.analysis_name = 'required-args' THEN (SELECT COUNT(*) FROM required_arg_results r WHERE r.run_id = a.id)
 WHEN a.analysis_name = 'inspect-shapes' THEN (SELECT COUNT(*) FROM inspect_responses i WHERE i.run_id = a.id)
 WHEN a.analysis_name = 'completion-tricks' THEN (SELECT COUNT(*) FROM completion_trick_results c WHERE c.run_id = a.id)
@@ -632,6 +702,17 @@ analysis_name, routeros_version, chr_build_time, source_path, captured_at, summa
 		byKey.set(analysisRunKey('parseil', version), Number(result.lastInsertRowid))
 	}
 
+	const highlightSummaryFiles = files.filter((f) => parseHighlightSummaryVersion(rel(f))).sort((a, b) => rel(a).localeCompare(rel(b)))
+	for (const filePath of highlightSummaryFiles) {
+		const relPath = rel(filePath)
+		const { value } = readJson<HighlightSummary>(filePath)
+		const fallbackVersion = parseHighlightSummaryVersion(relPath)
+		const version = value?.routerosVersion ?? fallbackVersion ?? 'unknown'
+		const summaryJson = readFileSync(filePath, 'utf-8')
+		const result = insert.run('highlight', version, value?.chrBuildTime ?? null, relPath, value?.capturedAt ?? null, summaryJson)
+		byKey.set(analysisRunKey('highlight', version), Number(result.lastInsertRowid))
+	}
+
 	const metaFiles = files.filter((f) => f.endsWith('.parseil.meta.json')).sort((a, b) => rel(a).localeCompare(rel(b)))
 	for (const filePath of metaFiles) {
 		const parsedPath = parseVersionedParseIlPath(rel(filePath))
@@ -751,6 +832,44 @@ token_count_match, unique_token_types_json, error_token_count, captured_at
 	}
 }
 
+function insertHighlightResults(db: Database, files: string[], scriptIds: Map<string, number>, runIds: Map<string, number>): void {
+	const insert = db.prepare(`
+INSERT OR REPLACE INTO highlight_results (
+run_id, script_id, routeros_version, input_chars, token_count, token_count_match,
+elapsed_ms, token_types_json, error
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+`)
+
+	const summaryFiles = files.filter((f) => parseHighlightSummaryVersion(rel(f))).sort((a, b) => rel(a).localeCompare(rel(b)))
+	for (const filePath of summaryFiles) {
+		const relPath = rel(filePath)
+		const { value: summary, valid } = readJson<HighlightSummary>(filePath)
+		if (!valid || !summary) continue
+
+		const version = summary.routerosVersion ?? parseHighlightSummaryVersion(relPath) ?? 'unknown'
+		const runId = runIds.get(analysisRunKey('highlight', version))
+		if (!runId) continue
+
+		for (const result of summary.results ?? []) {
+			if (!result.rel) continue
+			const scriptId = scriptIds.get(result.rel)
+			if (!scriptId) continue
+			const types = Array.isArray(result.types) ? result.types.filter((item): item is string => typeof item === 'string') : []
+			insert.run(
+				runId,
+				scriptId,
+				version,
+				result.inputChars ?? 0,
+				result.tokenCount ?? 0,
+				result.tokenCountMatch ? 1 : 0,
+				result.ms ?? 0,
+				JSON.stringify(types),
+				result.error ?? null,
+			)
+		}
+	}
+}
+
 function insertRequiredArgResults(db: Database, files: string[], runIds: Map<string, number>): void {
 	const insert = db.prepare(`
 INSERT OR REPLACE INTO required_arg_results (
@@ -809,6 +928,7 @@ SELECT
 (SELECT COUNT(*) FROM analysis_runs) AS analysis_runs,
 (SELECT COUNT(*) FROM parseil_results) AS parseil_results,
 (SELECT COUNT(*) FROM highlight_snapshots) AS highlight_snapshots,
+(SELECT COUNT(*) FROM highlight_results) AS highlight_results,
 (SELECT COUNT(*) FROM required_arg_results) AS required_arg_results,
 (SELECT COUNT(*) FROM inspect_responses) AS inspect_responses,
 (SELECT COUNT(*) FROM completion_trick_results) AS completion_trick_results
@@ -823,7 +943,8 @@ SELECT
 			`artifacts=${row.artifacts}`,
 			`analysis_runs=${row.analysis_runs}`,
 			`parseil=${row.parseil_results}`,
-			`highlights=${row.highlight_snapshots}`,
+			`highlight_snapshots=${row.highlight_snapshots}`,
+			`highlight_results=${row.highlight_results}`,
 			`required_args=${row.required_arg_results}`,
 			`inspect=${row.inspect_responses}`,
 			`completion_tricks=${row.completion_trick_results}`,
@@ -851,6 +972,7 @@ function main(): void {
 		const runIds = insertAnalysisRuns(db, files)
 		insertParseIlResults(db, files, scriptIds, runIds)
 		insertHighlightSnapshots(db, files, scriptIds, artifactIds)
+		insertHighlightResults(db, files, scriptIds, runIds)
 		insertRequiredArgResults(db, files, runIds)
 	})
 

@@ -5,22 +5,13 @@
   "totalFiles": 913,
   "ok": 913,
   "failed": 0,
-  "tokenCountMismatches": [
-    "edge-cases/empty.rsc"
-  ],
+  "tokenCountMismatches": [],
   "responseItemKeys": [
     "highlight",
     "type"
   ],
   "multiItemResponses": 0,
   "vocabulary": [
-    {
-      "token": "",
-      "known": false,
-      "chars": 1,
-      "files": 1,
-      "firstSeen": "edge-cases/empty.rsc"
-    },
     {
       "token": "arg",
       "known": true,
@@ -174,14 +165,9 @@
     "obj-dynamic": 24,
     "arg-dot": 20,
     "obj-disabled": 7,
-    "syntax-obsolete": 3,
-    "": 1
+    "syntax-obsolete": 3
   },
-  "unknownTokens": {
-    "": [
-      "edge-cases/empty.rsc"
-    ]
-  },
+  "unknownTokens": {},
   "knownNeverObserved": [
     "ambiguous",
     "path",
@@ -1204,12 +1190,10 @@
     {
       "rel": "edge-cases/empty.rsc",
       "inputChars": 0,
-      "tokenCount": 1,
-      "tokenCountMatch": false,
+      "tokenCount": 0,
+      "tokenCountMatch": true,
       "ms": 1,
-      "types": [
-        ""
-      ]
+      "types": []
     },
     {
       "rel": "edge-cases/oversize-32k.rsc",
@@ -15950,5 +15934,10 @@
         "variable-local"
       ]
     }
-  ]
+  ],
+  "corpusSha256": "fb808aec7e71b421689e43119f27766a9ed6120a1b5424b423c2b28e7b4f9ba9",
+  "selection": {
+    "target": null,
+    "limit": null
+  }
 }
