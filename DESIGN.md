@@ -168,12 +168,23 @@ portable language intelligence without taking a hard dependency on either.
 
 Decisions captured from the spike:
 
-- **Use parseIL as a *supplemental* signal, not a replacement for `highlight`.** `:parse` is a hard parser (stops at the first error, no partial IL), so multi-error diagnostics still flow through `highlight`. parseIL earns its place for structure-driven features (folding, function symbols, scope-aware references) and for canonicalisation hints (`200ms` → `00:00:00.200`, `yes` → `true`) where the IL shows what RouterOS actually saw.
+- **Use parseIL as a *supplemental* signal, not a replacement for `highlight`.** `:parse` is a hard parser (stops at the first error, no partial IL). Highlight also stops classifying at its first hard error, but keeps everything before it fully tokenized — including the soft markers (`obj-*`, `variable-undefined`, `syntax-obsolete`) — so diagnostics still flow through `highlight` (see `docs/highlight-format.md` §4). parseIL earns its place for structure-driven features (folding, function symbols, scope-aware references) and for canonicalisation hints (`200ms` → `00:00:00.200`, `yes` → `true`) where the IL shows what RouterOS actually saw.
 - **Don't ship the IL parser in the runtime LSP yet.** The IL/path/args boundary is implicit in the grammar and depends on `/console/inspect` schema knowledge to split deterministically. Wait until `[research: inspect-shapes]` lands so we have one well-defined dependency rather than two coupled ones.
 - **Use `:parse` as a cheap pre-check.** Parse time is roughly flat in the corpus and exhibits no analogue of `highlight`'s 28 KB cliff, so a `:parse` probe before a costly highlight request is a safe optimisation once we wire it in.
 - **Treat `>` / `<%%` as real RouterOS operators.** RouterOS 7.22.1 `/console/inspect request=completion` labels `>` as `quote` and `<%%` as `activate in environment`; source-level scripts use both directly, and quoted expressions have runtime type `op`. They are not parseIL-private markers.
 - **Snapshot files are version-tagged on disk.** `<file>.rsc.v<routeros-version>.parseil` lets multiple RouterOS versions coexist in the corpus and keeps IL grammar drift visible as plain diffs across releases.
 - **Keep parseIL comparisons version-aware.** The core IL forms held steady across 7.20.8/7.22.1/7.23rc1, but 74/912 successful captures still drifted because RouterOS leaks live command schema into the IL (`findwhere=` field dumps, command-path canonicalisation like `/ping` → `/tool/ping`, and version-specific `bad parameter` / `bad command name` annotations).
+
+### `request=highlight` Wire Format — highlight-format.md
+
+**Status:** Full-corpus sweeps landed against RouterOS 7.23.2 (stable), 7.24rc2 (testing), and 7.9.2 (oldest REST-era release). The wire format, complete observed token vocabulary (19 classes), error model (one hard-error char, then unclassified), statefulness gotchas, and cross-version drift are documented in **[`docs/highlight-format.md`](docs/highlight-format.md)**. The corpus harness is `scripts/collect-highlight.ts`; summaries live at `test-data/highlight-summary.v<version>.json` (no per-file sidecars — a highlight response is ~6× source size; the six committed `.rsc.highlight` fixtures remain the offline test inputs).
+
+Decisions captured from the sweep:
+
+- **Highlight yields at most one hard error per request.** `error` marks a single character and everything after it is `none`. The existing "potential issues after prior highlight error" trailing warning in `validation.ts` models this correctly — keep it.
+- **Token streams are per byte, not per character.** The LSP's non-ASCII → `?` substitution is what keeps token indexes aligned with string offsets; don't remove it, and don't send raw UTF-8.
+- **Token classes are stateful.** `obj-disabled`/`obj-dynamic` reflect live object flags; unknown-name classes reflect the connected device's command tree and installed packages. Snapshot fixtures must be version-tagged going forward.
+- **Eight `tokens.ts` classes are not highlight tokens at all** (`ambiguous`, `path`, `varname*`, `syntax-val`, `syntax-old`, `syntax-noterm`) — never observed on the wire in 913-file sweeps across 7.9.2 / 7.23.2 / 7.24rc2. Provenance: the original hand-crafted list conflated the `/terminal/style` display vocabulary (7 of the 8) and the `request=child` node-type vocabulary (`path`) with highlight's token vocabulary (see `docs/highlight-format.md` §8). Keep them mapped defensively; don't build features on them.
 
 ### Test Corpus SQLite Database
 
