@@ -102,7 +102,8 @@ Do not collapse these distinctions:
 - The 32,767-byte highlight window and JavaScript source offsets align only
   after one-byte ASCII substitution. Record truncation rather than implying the
   unchecked tail passed.
-- Completion offsets are also UTF-8 byte offsets. A completion verdict applies
+- Completion offsets are also byte offsets (RouterOS is byte-oriented; the REST
+  wire is UTF-8). A completion verdict applies
   to the word at the probe cursor, not all earlier input; advancing past an
   invalid word can hide its sentinel.
 - A returned completion candidate is evidence that RouterOS offered it, not
