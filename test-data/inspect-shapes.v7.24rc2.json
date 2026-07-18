@@ -1,8 +1,20 @@
 {
   "routerosVersion": "7.24rc2",
   "chrBuildTime": "2026-07-10 08:58:23",
-  "capturedAt": "2026-07-18T01:35:43.601Z",
-  "probeCount": 31,
+  "environment": {
+    "architecture": "x86_64",
+    "boardName": "CHR QEMU Standard PC (i440FX + PIIX, 1996)",
+    "packages": [
+      {
+        "name": "routeros",
+        "version": "7.24rc2"
+      }
+    ]
+  },
+  "capturedAt": "2026-07-18T02:10:41.258Z",
+  "probeCount": 37,
+  "probeSha256": "9ca1ed7861edf66786da0f3b0ab80c653e494c73946a77c57e299652854441cc",
+  "requestTimeoutMs": 60000,
   "fieldInventory": {
     "child": {
       "name": {
@@ -122,24 +134,24 @@
         ]
       },
       "offset": {
-        "distinctValues": 15,
+        "distinctValues": 19,
         "sample": [
           "0",
           "1",
           "2",
           "4",
           "6",
+          "12",
+          "17",
+          "25",
           "24",
-          "31",
-          "30",
-          "26",
-          "22",
-          "3",
-          "10"
+          "16",
+          "23",
+          "31"
         ]
       },
       "preference": {
-        "distinctValues": 8,
+        "distinctValues": 9,
         "sample": [
           "-1",
           "95",
@@ -148,7 +160,8 @@
           "96",
           "-20",
           "64",
-          "80"
+          "80",
+          "-10"
         ]
       },
       "show": {
@@ -159,7 +172,7 @@
         ]
       },
       "style": {
-        "distinctValues": 9,
+        "distinctValues": 10,
         "sample": [
           "none",
           "dir",
@@ -168,6 +181,7 @@
           "variable-auto",
           "obj-inactive",
           "arg",
+          "syntax-obsolete",
           "variable-local",
           "variable-global"
         ]
@@ -205,7 +219,7 @@
         "request": "child",
         "path": ""
       },
-      "ms": 2,
+      "ms": 13,
       "itemCount": 79,
       "response": [
         {
@@ -612,7 +626,7 @@
         "request": "child",
         "path": "ip"
       },
-      "ms": 1,
+      "ms": 6,
       "itemCount": 32,
       "response": [
         {
@@ -784,7 +798,7 @@
         "request": "child",
         "path": "ip,address"
       },
-      "ms": 1,
+      "ms": 5,
       "itemCount": 13,
       "response": [
         {
@@ -861,7 +875,7 @@
         "request": "child",
         "path": "ip,address,add"
       },
-      "ms": 1,
+      "ms": 5,
       "itemCount": 9,
       "response": [
         {
@@ -918,7 +932,7 @@
         "request": "child",
         "path": "ip,address,add,address"
       },
-      "ms": 1,
+      "ms": 4,
       "itemCount": 1,
       "response": [
         {
@@ -935,7 +949,7 @@
         "request": "child",
         "path": "terminal,style"
       },
-      "ms": 16,
+      "ms": 5,
       "itemCount": 2,
       "response": [
         {
@@ -957,7 +971,7 @@
         "request": "child",
         "path": "put"
       },
-      "ms": 1,
+      "ms": 5,
       "itemCount": 2,
       "response": [
         {
@@ -980,7 +994,7 @@
         "input": "add",
         "path": "ip"
       },
-      "ms": 1,
+      "ms": 6,
       "itemCount": 32,
       "response": [
         {
@@ -1152,7 +1166,7 @@
         "request": "child",
         "path": "nonexistent"
       },
-      "ms": 15,
+      "ms": 5,
       "itemCount": 0,
       "response": []
     },
@@ -1163,7 +1177,7 @@
         "request": "syntax",
         "path": ""
       },
-      "ms": 62,
+      "ms": 14,
       "itemCount": 78,
       "response": [
         {
@@ -1799,7 +1813,7 @@
         "request": "syntax",
         "path": "ip"
       },
-      "ms": 58,
+      "ms": 9,
       "itemCount": 32,
       "response": [
         {
@@ -2067,7 +2081,7 @@
         "request": "syntax",
         "path": "ip,address"
       },
-      "ms": 2,
+      "ms": 6,
       "itemCount": 14,
       "response": [
         {
@@ -2191,7 +2205,7 @@
         "request": "syntax",
         "path": "ip,address,add"
       },
-      "ms": 17,
+      "ms": 5,
       "itemCount": 9,
       "response": [
         {
@@ -2275,7 +2289,7 @@
         "request": "syntax",
         "path": "ip,address,add,address"
       },
-      "ms": 1,
+      "ms": 6,
       "itemCount": 1,
       "response": [
         {
@@ -2295,7 +2309,7 @@
         "request": "syntax",
         "path": "ip,firewall,filter,add,action"
       },
-      "ms": 1,
+      "ms": 4,
       "itemCount": 1,
       "response": [
         {
@@ -2315,7 +2329,7 @@
         "request": "syntax",
         "path": "put"
       },
-      "ms": 19,
+      "ms": 4,
       "itemCount": 2,
       "response": [
         {
@@ -2344,7 +2358,7 @@
         "input": "address=",
         "path": "ip,address,add"
       },
-      "ms": 1,
+      "ms": 4,
       "itemCount": 1,
       "response": [
         {
@@ -2358,13 +2372,24 @@
       ]
     },
     {
+      "name": "syntax-bogus-path",
+      "demonstrates": "response for a nonexistent syntax path",
+      "body": {
+        "request": "syntax",
+        "path": "nonexistent"
+      },
+      "ms": 4,
+      "itemCount": 0,
+      "response": []
+    },
+    {
       "name": "completion-empty-root",
       "demonstrates": "completions for empty input at root",
       "body": {
         "request": "completion",
         "input": ""
       },
-      "ms": 101,
+      "ms": 14,
       "itemCount": 86,
       "response": [
         {
@@ -3150,7 +3175,7 @@
         "request": "completion",
         "input": "/"
       },
-      "ms": 79,
+      "ms": 13,
       "itemCount": 81,
       "response": [
         {
@@ -3891,7 +3916,7 @@
         "request": "completion",
         "input": "/i"
       },
-      "ms": 1,
+      "ms": 5,
       "itemCount": 9,
       "response": [
         {
@@ -3984,7 +4009,7 @@
         "request": "completion",
         "input": "/ip/ad"
       },
-      "ms": 18,
+      "ms": 4,
       "itemCount": 5,
       "response": [
         {
@@ -4035,13 +4060,100 @@
       ]
     },
     {
+      "name": "completion-valid-command",
+      "demonstrates": "sentinels at an exact valid command boundary",
+      "body": {
+        "request": "completion",
+        "input": "/ip/address/print"
+      },
+      "ms": 4,
+      "itemCount": 3,
+      "response": [
+        {
+          "completion": "print",
+          "offset": "12",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Print values of item properties",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "17",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "17",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-unknown-command",
+      "demonstrates": "sentinels for an unknown command word",
+      "body": {
+        "request": "completion",
+        "input": "/ip/address/not-a-command"
+      },
+      "ms": 4,
+      "itemCount": 4,
+      "response": [
+        {
+          "completion": "",
+          "offset": "12",
+          "preference": "-20",
+          "show": "false",
+          "style": "obj-inactive",
+          "text": "unknown command",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "25",
+          "preference": "64",
+          "show": "false",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "25",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "25",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        }
+      ]
+    },
+    {
       "name": "completion-after-cmd-space",
       "demonstrates": "argument candidates after command + space",
       "body": {
         "request": "completion",
         "input": "/ip/firewall/filter/add "
       },
-      "ms": 80,
+      "ms": 13,
       "itemCount": 68,
       "response": [
         {
@@ -4659,13 +4771,91 @@
       ]
     },
     {
+      "name": "completion-valid-arg",
+      "demonstrates": "sentinels at an exact valid argument word",
+      "body": {
+        "request": "completion",
+        "input": "/ip/address/add address"
+      },
+      "ms": 5,
+      "itemCount": 3,
+      "response": [
+        {
+          "completion": "address",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Local IP address",
+          "type": "completion"
+        },
+        {
+          "completion": "=",
+          "offset": "23",
+          "preference": "95",
+          "show": "true",
+          "style": "syntax-meta",
+          "text": "argument value separator",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "23",
+          "preference": "-10",
+          "show": "false",
+          "style": "syntax-obsolete",
+          "text": "old syntax",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-unknown-arg",
+      "demonstrates": "sentinels for an unknown argument word",
+      "body": {
+        "request": "completion",
+        "input": "/ip/address/add bogusarg"
+      },
+      "ms": 4,
+      "itemCount": 3,
+      "response": [
+        {
+          "completion": "",
+          "offset": "16",
+          "preference": "-20",
+          "show": "false",
+          "style": "obj-inactive",
+          "text": "unknown parameter",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "24",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "24",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        }
+      ]
+    },
+    {
       "name": "completion-arg-value-enum",
-      "demonstrates": "enum values after arg= (closed set)",
+      "demonstrates": "enum-looking candidates after arg=",
       "body": {
         "request": "completion",
         "input": "/ip/firewall/filter/add action="
       },
-      "ms": 19,
+      "ms": 6,
       "itemCount": 18,
       "response": [
         {
@@ -4839,7 +5029,7 @@
         "request": "completion",
         "input": "/ip/firewall/filter/add chain="
       },
-      "ms": 21,
+      "ms": 11,
       "itemCount": 10,
       "response": [
         {
@@ -4941,7 +5131,7 @@
         "request": "completion",
         "input": "/ip/address/add interface="
       },
-      "ms": 1,
+      "ms": 6,
       "itemCount": 10,
       "response": [
         {
@@ -5043,7 +5233,7 @@
         "request": "completion",
         "input": "/ip/route/print where "
       },
-      "ms": 58,
+      "ms": 11,
       "itemCount": 46,
       "response": [
         {
@@ -5469,7 +5659,7 @@
         "request": "completion",
         "input": ":pu"
       },
-      "ms": 21,
+      "ms": 4,
       "itemCount": 3,
       "response": [
         {
@@ -5508,7 +5698,7 @@
         "request": "completion",
         "input": ":put [/ip/ad"
       },
-      "ms": 1,
+      "ms": 5,
       "itemCount": 5,
       "response": [
         {
@@ -5566,7 +5756,7 @@
         "input": "add address=",
         "path": "ip,address"
       },
-      "ms": 1,
+      "ms": 5,
       "itemCount": 7,
       "response": [
         {
@@ -5636,12 +5826,12 @@
     },
     {
       "name": "completion-terminal-style",
-      "demonstrates": "closed 12-value enum (terminal styles)",
+      "demonstrates": "12 terminal-style candidates",
       "body": {
         "request": "completion",
         "input": "/terminal/style "
       },
-      "ms": 17,
+      "ms": 6,
       "itemCount": 21,
       "response": [
         {
@@ -5842,7 +6032,7 @@
         "request": "completion",
         "input": ":global shapesProbe 1; :put $"
       },
-      "ms": 20,
+      "ms": 6,
       "itemCount": 5,
       "response": [
         {
@@ -5888,6 +6078,63 @@
           "show": "false",
           "style": "syntax-meta",
           "text": "start of quoted string",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-nonascii-offset",
+      "demonstrates": "whether offsets count UTF-8 bytes or JavaScript UTF-16 units",
+      "body": {
+        "request": "completion",
+        "input": ":put \"é\"; /ip/ad"
+      },
+      "ms": 5,
+      "itemCount": 5,
+      "response": [
+        {
+          "completion": "address",
+          "offset": "15",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Address management",
+          "type": "completion"
+        },
+        {
+          "completion": "/",
+          "offset": "17",
+          "preference": "95",
+          "show": "true",
+          "style": "dir",
+          "text": "top of command hierarchy",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "17",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": "{",
+          "offset": "17",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command block",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "17",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
           "type": "completion"
         }
       ]

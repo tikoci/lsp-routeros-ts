@@ -45,11 +45,14 @@ requested question:
    enumerate commands and arguments.
 5. **Enrich, do not override.** Add rosetta prose, URLs, changelog history, and
    static CLI-to-REST mapping. When live schema and a static snapshot disagree,
-   the target wins for existence and accepted values; static sources win only
-   for the prose/history they uniquely provide.
+   the target wins for what its inspect surface exposes (existence, classes,
+   and candidates); only execution proves runtime acceptance. Static sources
+   win only for the prose/history they uniquely provide.
 6. **Run execution probes only on explicit request and an appropriate target.**
    `:parse`, highlight, completion, child, and syntax are inspection surfaces.
-   Required-argument discovery and arbitrary `/rest/execute` calls cross into
+   The `:parse` primitive does not run the returned code, but this repo's
+   large-input capture recipe uploads and removes a temporary file. Required-
+   argument discovery and arbitrary `/rest/execute` calls cross further into
    runtime behavior and need the caller's mutation policy.
 
 This pipeline is deliberately additive. A lightweight `explain` can stop after
@@ -63,14 +66,22 @@ Every derived fact should retain enough metadata to answer “how do we know?”
 interface RouterOsSyntaxEvidence {
   source: 'highlight' | 'parseil' | 'completion' | 'child' | 'syntax' | 'execute-error' | 'static-schema' | 'docs'
   claim: string
-  confidence: 'live' | 'versioned-snapshot' | 'heuristic'
+  basis: 'direct-response' | 'derived' | 'documentation' | 'heuristic'
+  capturedAt?: string
+  targetId?: string
   routerosVersion?: string
   architecture?: string
   packages?: Array<{ name: string; version: string }>
   pathContext?: string
-  inputSha256?: string
+  originalInputSha256?: string
+  analyzedInputSha256?: string
   corpusSha256?: string
+  inputBytes?: number
+  analyzedBytes?: number
+  offsetUnit?: 'utf8-byte' | 'line-column' | 'none'
+  normalization?: 'none' | 'non-ascii-to-question-mark'
   truncated?: boolean
+  outcome?: 'ok' | 'empty' | 'timeout' | 'transport-error'
 }
 ```
 
@@ -91,6 +102,13 @@ Do not collapse these distinctions:
 - The 32,767-byte highlight window and JavaScript source offsets align only
   after one-byte ASCII substitution. Record truncation rather than implying the
   unchecked tail passed.
+- Completion offsets are also UTF-8 byte offsets. A completion verdict applies
+  to the word at the probe cursor, not all earlier input; advancing past an
+  invalid word can hide its sentinel.
+- A returned completion candidate is evidence that RouterOS offered it, not
+  proof that the list is closed or that execution will accept it.
+- Preserve `[]`, timeout, and transport failure as distinct outcomes. On 7.9.2,
+  some command-level `syntax` calls stall while nonexistent paths return `[]`.
 
 ## 4. Current evidence and remaining gates
 
@@ -122,8 +140,10 @@ routeros-syntax-inspection/
   references/validation.md         # required-args and live/static layering
 ```
 
-The skill is ready to draft from the first three references now
+The skill is ready to draft as a probe-selection and wire-format skill from
+the first three references now
 (`highlight-format.md`, `parseil-format.md`, `inspect-shapes.md`), but it
-should label `completion-tricks`, the corpus-position `inspect_responses`
-sweep, early-v7 highlight compatibility, and CLI-to-REST conversion as open
-evidence rather than filling those gaps with inference.
+should not yet promise a generic completion-based validator. Label
+`completion-tricks`, the corpus-position `inspect_responses` sweep, early-v7
+highlight compatibility, enum exhaustiveness, and CLI-to-REST conversion as
+open evidence rather than filling those gaps with inference.
