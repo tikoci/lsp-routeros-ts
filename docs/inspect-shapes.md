@@ -99,9 +99,10 @@ special case. The full item is:
   six paths always crash.
 - **Do not combine `input` with `syntax`.** On 7.23.2/7.24rc2 it changes the
   response to a lone empty `definition` row (semantics unclear); on **7.9.2
-  the request hangs until timeout** (60 s in the capture, with knock-on
-  slowness on other REST calls while it was stuck). Query `syntax` by `path`
-  only.
+  the request stalls ~60 s** — one capture aborted at the client timeout, a
+  re-capture returned `[]` at the same ~60 s mark (RouterOS appears to have
+  its own internal timeout), with knock-on slowness on other REST calls while
+  stuck. Query `syntax` by `path` only.
 
 ## 4. `request=completion` — candidates, enums, and a validity signal
 

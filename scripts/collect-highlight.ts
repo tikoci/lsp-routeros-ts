@@ -83,8 +83,11 @@ async function rest(path: string, body?: unknown): Promise<unknown> {
 		body: body === undefined ? undefined : JSON.stringify(body),
 		signal: AbortSignal.timeout(120_000),
 	})
-	if (!resp.ok) throw new Error(`${path} → ${resp.status} ${resp.statusText}`)
-	return resp.json()
+	// Read the body before the ok-check so non-2xx RouterOS payloads survive
+	// into the recorded result instead of being reduced to a status line.
+	const text = await resp.text()
+	if (!resp.ok) throw new Error(`${path} → ${resp.status} ${resp.statusText}: ${text.slice(0, 500)}`)
+	return JSON.parse(text)
 }
 
 interface CaptureEnvironment {
@@ -218,6 +221,10 @@ interface ProbeResult {
 	name: string
 	input: string
 	path?: string
+	inputChars?: number
+	tokenCount?: number
+	/** false = token/char misalignment; raw tokens are kept so nothing is lost. */
+	tokenCountMatch?: boolean
 	tokens?: string[]
 	pairs?: Array<[string, string]>
 	types: string[]
@@ -315,11 +322,18 @@ async function main() {
 				}
 			}
 			const big = input.length > 200
+			const aligned = cap.tokens.length === input.length
 			probeResults.push({
 				name: probe.name,
 				input: big ? `${input.slice(0, 40)}… (${input.length} chars)` : probe.input,
 				path: probe.path,
-				pairs: big ? undefined : runLength(input, cap.tokens),
+				inputChars: input.length,
+				tokenCount: cap.tokens.length,
+				tokenCountMatch: aligned,
+				// runLength() would silently drop the unmatched suffix — on
+				// misalignment keep the raw tokens instead of a truncated view.
+				tokens: aligned ? undefined : cap.tokens,
+				pairs: big || !aligned ? undefined : runLength(input, cap.tokens),
 				types,
 			})
 			console.log(`  ${probe.name}: ${types.join(', ')}`)
@@ -357,7 +371,15 @@ async function main() {
 	console.log(`Token-count mismatches: ${mismatches.length}/${ok.length}`)
 	console.log(`Multi-item responses: ${multiItemResponses}; response item keys: ${[...itemKeysSeen].join(', ')}`)
 
-	const summaryPath = join(TEST_DATA_DIR, `highlight-summary.v${version}.json`)
+	// A --limit/--target run is a diagnostic slice, not the corpus: write it to a
+	// name that build-corpus-db.ts's ^highlight-summary\.v… matcher cannot pick
+	// up, so a partial capture can never replace the canonical artifact.
+	const isPartial = Boolean(argTarget) || argLimit > 0
+	const summaryPath = join(
+		TEST_DATA_DIR,
+		isPartial ? `highlight-summary.partial.v${version}.json` : `highlight-summary.v${version}.json`,
+	)
+	if (isPartial) console.log('\nPartial selection (--limit/--target) → writing noncanonical artifact')
 	writeFileSync(
 		summaryPath,
 		`${JSON.stringify(

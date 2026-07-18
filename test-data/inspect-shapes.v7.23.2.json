@@ -6,19 +6,63 @@
     "boardName": "CHR QEMU Standard PC (i440FX + PIIX, 1996)",
     "packages": [
       {
+        "name": "calea",
+        "version": ""
+      },
+      {
+        "name": "container",
+        "version": ""
+      },
+      {
+        "name": "dude",
+        "version": ""
+      },
+      {
+        "name": "gps",
+        "version": ""
+      },
+      {
+        "name": "iot",
+        "version": ""
+      },
+      {
+        "name": "openflow",
+        "version": ""
+      },
+      {
+        "name": "rose-storage",
+        "version": ""
+      },
+      {
         "name": "routeros",
         "version": "7.23.2"
+      },
+      {
+        "name": "tr069-client",
+        "version": ""
+      },
+      {
+        "name": "ups",
+        "version": ""
+      },
+      {
+        "name": "user-manager",
+        "version": ""
+      },
+      {
+        "name": "wireless",
+        "version": ""
       }
     ]
   },
-  "capturedAt": "2026-07-18T02:09:45.517Z",
+  "capturedAt": "2026-07-18T03:09:37.238Z",
   "probeCount": 37,
   "probeSha256": "9ca1ed7861edf66786da0f3b0ab80c653e494c73946a77c57e299652854441cc",
   "requestTimeoutMs": 60000,
   "fieldInventory": {
     "child": {
       "name": {
-        "distinctValues": 40,
+        "distinctValues": 124,
         "sample": [
           "root",
           "beep",
@@ -67,7 +111,7 @@
         ]
       },
       "symbol": {
-        "distinctValues": 40,
+        "distinctValues": 124,
         "sample": [
           "",
           "beep",
@@ -92,7 +136,7 @@
         ]
       },
       "text": {
-        "distinctValues": 40,
+        "distinctValues": 106,
         "sample": [
           "",
           "Certificate management",
@@ -117,7 +161,7 @@
     },
     "completion": {
       "completion": {
-        "distinctValues": 40,
+        "distinctValues": 215,
         "sample": [
           " ",
           "/",
@@ -187,7 +231,7 @@
         ]
       },
       "text": {
-        "distinctValues": 40,
+        "distinctValues": 143,
         "sample": [
           "whitespace",
           "top of command hierarchy",
@@ -219,7 +263,7 @@
         "request": "child",
         "path": ""
       },
-      "ms": 8,
+      "ms": 2,
       "itemCount": 79,
       "response": [
         {
@@ -626,7 +670,7 @@
         "request": "child",
         "path": "ip"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 32,
       "response": [
         {
@@ -798,7 +842,7 @@
         "request": "child",
         "path": "ip,address"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 13,
       "response": [
         {
@@ -875,7 +919,7 @@
         "request": "child",
         "path": "ip,address,add"
       },
-      "ms": 2,
+      "ms": 19,
       "itemCount": 9,
       "response": [
         {
@@ -932,7 +976,7 @@
         "request": "child",
         "path": "ip,address,add,address"
       },
-      "ms": 2,
+      "ms": 1,
       "itemCount": 1,
       "response": [
         {
@@ -949,7 +993,7 @@
         "request": "child",
         "path": "terminal,style"
       },
-      "ms": 2,
+      "ms": 1,
       "itemCount": 2,
       "response": [
         {
@@ -971,7 +1015,7 @@
         "request": "child",
         "path": "put"
       },
-      "ms": 2,
+      "ms": 1,
       "itemCount": 2,
       "response": [
         {
@@ -994,7 +1038,7 @@
         "input": "add",
         "path": "ip"
       },
-      "ms": 3,
+      "ms": 2,
       "itemCount": 32,
       "response": [
         {
@@ -1166,7 +1210,7 @@
         "request": "child",
         "path": "nonexistent"
       },
-      "ms": 2,
+      "ms": 34,
       "itemCount": 0,
       "response": []
     },
@@ -1177,7 +1221,7 @@
         "request": "syntax",
         "path": ""
       },
-      "ms": 7,
+      "ms": 60,
       "itemCount": 78,
       "response": [
         {
@@ -1813,7 +1857,7 @@
         "request": "syntax",
         "path": "ip"
       },
-      "ms": 4,
+      "ms": 39,
       "itemCount": 32,
       "response": [
         {
@@ -2081,7 +2125,7 @@
         "request": "syntax",
         "path": "ip,address"
       },
-      "ms": 3,
+      "ms": 2,
       "itemCount": 14,
       "response": [
         {
@@ -2205,7 +2249,7 @@
         "request": "syntax",
         "path": "ip,address,add"
       },
-      "ms": 3,
+      "ms": 20,
       "itemCount": 9,
       "response": [
         {
@@ -2289,7 +2333,7 @@
         "request": "syntax",
         "path": "ip,address,add,address"
       },
-      "ms": 3,
+      "ms": 19,
       "itemCount": 1,
       "response": [
         {
@@ -2329,7 +2373,7 @@
         "request": "syntax",
         "path": "put"
       },
-      "ms": 2,
+      "ms": 1,
       "itemCount": 2,
       "response": [
         {
@@ -2358,7 +2402,7 @@
         "input": "address=",
         "path": "ip,address,add"
       },
-      "ms": 2,
+      "ms": 1,
       "itemCount": 1,
       "response": [
         {
@@ -2378,7 +2422,7 @@
         "request": "syntax",
         "path": "nonexistent"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 0,
       "response": []
     },
@@ -2389,7 +2433,7 @@
         "request": "completion",
         "input": ""
       },
-      "ms": 8,
+      "ms": 104,
       "itemCount": 86,
       "response": [
         {
@@ -3175,7 +3219,7 @@
         "request": "completion",
         "input": "/"
       },
-      "ms": 7,
+      "ms": 80,
       "itemCount": 81,
       "response": [
         {
@@ -3916,7 +3960,7 @@
         "request": "completion",
         "input": "/i"
       },
-      "ms": 3,
+      "ms": 19,
       "itemCount": 9,
       "response": [
         {
@@ -4009,7 +4053,7 @@
         "request": "completion",
         "input": "/ip/ad"
       },
-      "ms": 3,
+      "ms": 2,
       "itemCount": 5,
       "response": [
         {
@@ -4066,7 +4110,7 @@
         "request": "completion",
         "input": "/ip/address/print"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 3,
       "response": [
         {
@@ -4105,7 +4149,7 @@
         "request": "completion",
         "input": "/ip/address/not-a-command"
       },
-      "ms": 2,
+      "ms": 17,
       "itemCount": 4,
       "response": [
         {
@@ -4153,7 +4197,7 @@
         "request": "completion",
         "input": "/ip/firewall/filter/add "
       },
-      "ms": 6,
+      "ms": 79,
       "itemCount": 68,
       "response": [
         {
@@ -4777,7 +4821,7 @@
         "request": "completion",
         "input": "/ip/address/add address"
       },
-      "ms": 3,
+      "ms": 2,
       "itemCount": 3,
       "response": [
         {
@@ -4816,7 +4860,7 @@
         "request": "completion",
         "input": "/ip/address/add bogusarg"
       },
-      "ms": 3,
+      "ms": 18,
       "itemCount": 4,
       "response": [
         {
@@ -4864,7 +4908,7 @@
         "request": "completion",
         "input": "/ip/firewall/filter/add action="
       },
-      "ms": 4,
+      "ms": 3,
       "itemCount": 18,
       "response": [
         {
@@ -5038,7 +5082,7 @@
         "request": "completion",
         "input": "/ip/firewall/filter/add chain="
       },
-      "ms": 6,
+      "ms": 18,
       "itemCount": 10,
       "response": [
         {
@@ -5140,7 +5184,7 @@
         "request": "completion",
         "input": "/ip/address/add interface="
       },
-      "ms": 4,
+      "ms": 20,
       "itemCount": 10,
       "response": [
         {
@@ -5242,7 +5286,7 @@
         "request": "completion",
         "input": "/ip/route/print where "
       },
-      "ms": 7,
+      "ms": 60,
       "itemCount": 46,
       "response": [
         {
@@ -5668,7 +5712,7 @@
         "request": "completion",
         "input": ":pu"
       },
-      "ms": 3,
+      "ms": 2,
       "itemCount": 3,
       "response": [
         {
@@ -5707,7 +5751,7 @@
         "request": "completion",
         "input": ":put [/ip/ad"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 5,
       "response": [
         {
@@ -5765,7 +5809,7 @@
         "input": "add address=",
         "path": "ip,address"
       },
-      "ms": 3,
+      "ms": 2,
       "itemCount": 7,
       "response": [
         {
@@ -5840,7 +5884,7 @@
         "request": "completion",
         "input": "/terminal/style "
       },
-      "ms": 5,
+      "ms": 14,
       "itemCount": 21,
       "response": [
         {
@@ -6041,7 +6085,7 @@
         "request": "completion",
         "input": ":global shapesProbe 1; :put $"
       },
-      "ms": 3,
+      "ms": 20,
       "itemCount": 5,
       "response": [
         {
@@ -6098,7 +6142,7 @@
         "request": "completion",
         "input": ":put \"é\"; /ip/ad"
       },
-      "ms": 3,
+      "ms": 21,
       "itemCount": 5,
       "response": [
         {

@@ -11,14 +11,14 @@
       }
     ]
   },
-  "capturedAt": "2026-07-18T02:15:11.668Z",
+  "capturedAt": "2026-07-18T03:15:02.017Z",
   "probeCount": 37,
   "probeSha256": "9ca1ed7861edf66786da0f3b0ab80c653e494c73946a77c57e299652854441cc",
   "requestTimeoutMs": 60000,
   "fieldInventory": {
     "child": {
       "name": {
-        "distinctValues": 40,
+        "distinctValues": 106,
         "sample": [
           "root",
           "beep",
@@ -67,7 +67,7 @@
         ]
       },
       "symbol": {
-        "distinctValues": 40,
+        "distinctValues": 101,
         "sample": [
           "",
           "beep",
@@ -92,7 +92,7 @@
         ]
       },
       "text": {
-        "distinctValues": 40,
+        "distinctValues": 84,
         "sample": [
           "",
           "Certificate management",
@@ -117,7 +117,7 @@
     },
     "completion": {
       "completion": {
-        "distinctValues": 40,
+        "distinctValues": 199,
         "sample": [
           " ",
           "/",
@@ -186,7 +186,7 @@
         ]
       },
       "text": {
-        "distinctValues": 40,
+        "distinctValues": 131,
         "sample": [
           "whitespace",
           "top of command hierarchy",
@@ -218,7 +218,7 @@
         "request": "child",
         "path": ""
       },
-      "ms": 70,
+      "ms": 2,
       "itemCount": 65,
       "response": [
         {
@@ -555,7 +555,7 @@
         "request": "child",
         "path": "ip"
       },
-      "ms": 18,
+      "ms": 1,
       "itemCount": 27,
       "response": [
         {
@@ -702,7 +702,7 @@
         "request": "child",
         "path": "ip,address"
       },
-      "ms": 34,
+      "ms": 1,
       "itemCount": 13,
       "response": [
         {
@@ -779,7 +779,7 @@
         "request": "child",
         "path": "ip,address,add"
       },
-      "ms": 50,
+      "ms": 1,
       "itemCount": 9,
       "response": [
         {
@@ -836,7 +836,7 @@
         "request": "child",
         "path": "ip,address,add,address"
       },
-      "ms": 18,
+      "ms": 1,
       "itemCount": 1,
       "response": [
         {
@@ -853,7 +853,7 @@
         "request": "child",
         "path": "terminal,style"
       },
-      "ms": 17,
+      "ms": 0,
       "itemCount": 2,
       "response": [
         {
@@ -875,7 +875,7 @@
         "request": "child",
         "path": "put"
       },
-      "ms": 17,
+      "ms": 0,
       "itemCount": 2,
       "response": [
         {
@@ -898,7 +898,7 @@
         "input": "add",
         "path": "ip"
       },
-      "ms": 35,
+      "ms": 1,
       "itemCount": 27,
       "response": [
         {
@@ -1045,7 +1045,7 @@
         "request": "child",
         "path": "nonexistent"
       },
-      "ms": 35,
+      "ms": 13,
       "itemCount": 0,
       "response": []
     },
@@ -1056,7 +1056,7 @@
         "request": "syntax",
         "path": ""
       },
-      "ms": 79,
+      "ms": 60,
       "itemCount": 65,
       "response": [
         {
@@ -1588,7 +1588,7 @@
         "request": "syntax",
         "path": "ip"
       },
-      "ms": 154,
+      "ms": 39,
       "itemCount": 28,
       "response": [
         {
@@ -1824,7 +1824,7 @@
         "request": "syntax",
         "path": "ip,address"
       },
-      "ms": 66,
+      "ms": 2,
       "itemCount": 14,
       "response": [
         {
@@ -1948,8 +1948,9 @@
         "request": "syntax",
         "path": "ip,address,add"
       },
-      "ms": 60085,
-      "error": "The operation timed out."
+      "ms": 60000,
+      "itemCount": 0,
+      "response": []
     },
     {
       "name": "syntax-arg",
@@ -1958,7 +1959,7 @@
         "request": "syntax",
         "path": "ip,address,add,address"
       },
-      "ms": 150,
+      "ms": 8,
       "itemCount": 1,
       "response": [
         {
@@ -1978,7 +1979,7 @@
         "request": "syntax",
         "path": "ip,firewall,filter,add,action"
       },
-      "ms": 51,
+      "ms": 1,
       "itemCount": 1,
       "response": [
         {
@@ -1998,7 +1999,7 @@
         "request": "syntax",
         "path": "put"
       },
-      "ms": 59992,
+      "ms": 60000,
       "itemCount": 0,
       "response": []
     },
@@ -2010,8 +2011,9 @@
         "input": "address=",
         "path": "ip,address,add"
       },
-      "ms": 60007,
-      "error": "The operation timed out."
+      "ms": 59999,
+      "itemCount": 0,
+      "response": []
     },
     {
       "name": "syntax-bogus-path",
@@ -2020,7 +2022,7 @@
         "request": "syntax",
         "path": "nonexistent"
       },
-      "ms": 151,
+      "ms": 8,
       "itemCount": 0,
       "response": []
     },
@@ -2031,7 +2033,7 @@
         "request": "completion",
         "input": ""
       },
-      "ms": 46,
+      "ms": 2,
       "itemCount": 72,
       "response": [
         {
@@ -2691,7 +2693,7 @@
         "request": "completion",
         "input": "/"
       },
-      "ms": 12,
+      "ms": 2,
       "itemCount": 67,
       "response": [
         {
@@ -3306,7 +3308,7 @@
         "request": "completion",
         "input": "/i"
       },
-      "ms": 5,
+      "ms": 1,
       "itemCount": 9,
       "response": [
         {
@@ -3399,7 +3401,7 @@
         "request": "completion",
         "input": "/ip/ad"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 5,
       "response": [
         {
@@ -3456,7 +3458,7 @@
         "request": "completion",
         "input": "/ip/address/print"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 3,
       "response": [
         {
@@ -3495,7 +3497,7 @@
         "request": "completion",
         "input": "/ip/address/not-a-command"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 4,
       "response": [
         {
@@ -3543,7 +3545,7 @@
         "request": "completion",
         "input": "/ip/firewall/filter/add "
       },
-      "ms": 10,
+      "ms": 2,
       "itemCount": 67,
       "response": [
         {
@@ -4158,7 +4160,7 @@
         "request": "completion",
         "input": "/ip/address/add address"
       },
-      "ms": 5,
+      "ms": 1,
       "itemCount": 3,
       "response": [
         {
@@ -4197,7 +4199,7 @@
         "request": "completion",
         "input": "/ip/address/add bogusarg"
       },
-      "ms": 3,
+      "ms": 0,
       "itemCount": 0,
       "response": []
     },
@@ -4208,7 +4210,7 @@
         "request": "completion",
         "input": "/ip/firewall/filter/add action="
       },
-      "ms": 5,
+      "ms": 2,
       "itemCount": 18,
       "response": [
         {
@@ -4382,7 +4384,7 @@
         "request": "completion",
         "input": "/ip/firewall/filter/add chain="
       },
-      "ms": 6,
+      "ms": 1,
       "itemCount": 10,
       "response": [
         {
@@ -4484,7 +4486,7 @@
         "request": "completion",
         "input": "/ip/address/add interface="
       },
-      "ms": 4,
+      "ms": 1,
       "itemCount": 9,
       "response": [
         {
@@ -4577,7 +4579,7 @@
         "request": "completion",
         "input": "/ip/route/print where "
       },
-      "ms": 8,
+      "ms": 1,
       "itemCount": 45,
       "response": [
         {
@@ -4994,7 +4996,7 @@
         "request": "completion",
         "input": ":pu"
       },
-      "ms": 4,
+      "ms": 0,
       "itemCount": 3,
       "response": [
         {
@@ -5033,7 +5035,7 @@
         "request": "completion",
         "input": ":put [/ip/ad"
       },
-      "ms": 3,
+      "ms": 0,
       "itemCount": 5,
       "response": [
         {
@@ -5091,7 +5093,7 @@
         "input": "add address=",
         "path": "ip,address"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 7,
       "response": [
         {
@@ -5166,7 +5168,7 @@
         "request": "completion",
         "input": "/terminal/style "
       },
-      "ms": 5,
+      "ms": 1,
       "itemCount": 21,
       "response": [
         {
@@ -5367,7 +5369,7 @@
         "request": "completion",
         "input": ":global shapesProbe 1; :put $"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 5,
       "response": [
         {
@@ -5424,7 +5426,7 @@
         "request": "completion",
         "input": ":put \"é\"; /ip/ad"
       },
-      "ms": 3,
+      "ms": 1,
       "itemCount": 5,
       "response": [
         {

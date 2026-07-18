@@ -43,8 +43,11 @@ async function rest(path: string, body?: unknown): Promise<unknown> {
 		body: body === undefined ? undefined : JSON.stringify(body),
 		signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
 	})
-	if (!resp.ok) throw new Error(`${path} → ${resp.status} ${resp.statusText}`)
-	return resp.json()
+	// Read the body before the ok-check: non-2xx RouterOS payloads are research
+	// data too, and must survive into the recorded probe result.
+	const text = await resp.text()
+	if (!resp.ok) throw new Error(`${path} → ${resp.status} ${resp.statusText}: ${text.slice(0, 500)}`)
+	return JSON.parse(text)
 }
 
 async function chrVersion(): Promise<{ version: string; buildTime: string }> {
@@ -144,7 +147,8 @@ async function main() {
 	console.log(`CHR ${CHR_URL} → RouterOS ${version} (build ${buildTime})`)
 
 	const results: ProbeResult[] = []
-	// field inventory: request type → field name → set of observed values (capped)
+	// field inventory: request type → field name → set of observed values
+	// (uncapped — distinctValues must be exact; only the exported sample is cut)
 	const fieldValues = new Map<string, Map<string, Set<string>>>()
 
 	for (const probe of PROBES) {
@@ -153,19 +157,31 @@ async function main() {
 		if (probe.path !== undefined) body.path = probe.path
 		const t0 = performance.now()
 		try {
-			const response = (await rest('/rest/console/inspect', body)) as Array<Record<string, string>>
+			const response = await rest('/rest/console/inspect', body)
 			const ms = Math.round(performance.now() - t0)
-			for (const item of response) {
+			// Never assume the shape: a non-array response is itself a finding and
+			// must land in the artifact verbatim rather than die in the catch below.
+			const items = Array.isArray(response)
+				? response.filter((item): item is Record<string, unknown> => typeof item === 'object' && item !== null)
+				: []
+			for (const item of items) {
 				const perReq = fieldValues.get(probe.request) ?? new Map<string, Set<string>>()
 				fieldValues.set(probe.request, perReq)
 				for (const [k, v] of Object.entries(item)) {
 					const vals = perReq.get(k) ?? new Set<string>()
 					perReq.set(k, vals)
-					if (vals.size < 40) vals.add(String(v))
+					vals.add(String(v))
 				}
 			}
-			results.push({ name: probe.name, demonstrates: probe.demonstrates, body, ms, itemCount: response.length, response })
-			console.log(`  ${probe.name}: ${response.length} item(s), ${ms}ms`)
+			results.push({
+				name: probe.name,
+				demonstrates: probe.demonstrates,
+				body,
+				ms,
+				itemCount: Array.isArray(response) ? response.length : undefined,
+				response,
+			})
+			console.log(`  ${probe.name}: ${Array.isArray(response) ? `${response.length} item(s)` : 'NON-ARRAY response'}, ${ms}ms`)
 		} catch (err) {
 			const ms = Math.round(performance.now() - t0)
 			results.push({ name: probe.name, demonstrates: probe.demonstrates, body, ms, error: err instanceof Error ? err.message : String(err) })
