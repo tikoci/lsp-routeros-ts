@@ -26,7 +26,10 @@ do not duplicate their findings back into this backlog.
 
 | Topic | Source of truth | Notes |
 | --- | --- | --- |
+| Highlight wire format and live lexical behavior | [`docs/highlight-format.md`](docs/highlight-format.md) | Captured against RouterOS 7.9.2, 7.23.2, and 7.24rc2. |
 | parseIL format and `:parse` behavior | [`docs/parseil-format.md`](docs/parseil-format.md) | Captured against RouterOS 7.20.8, 7.22.1, and 7.23rc1. |
+| Syntax-inspection probe selection | [`docs/syntax-inspection-map.md`](docs/syntax-inspection-map.md) | Cross-probe decision and provenance layer for future skills/consumers. |
+| `completion`/`syntax`/`child` response shapes | [`docs/inspect-shapes.md`](docs/inspect-shapes.md) | Curated-context captures on RouterOS 7.9.2, 7.23.2, and 7.24rc2. |
 | Required-argument probe | [`docs/required-args.md`](docs/required-args.md) | Version-tagged execute-time signal and unresolved edge cases. |
 | rosetta/LSP docs enrichment | [`docs/rosetta-alignment.md`](docs/rosetta-alignment.md) | No runtime rosetta dependency; static JSON first. |
 | canonicalize audit | [`docs/canonicalize-audit.md`](docs/canonicalize-audit.md) | Upstream rosetta parser alignment and remaining hardening. |
@@ -66,9 +69,11 @@ semantics should be grounded in measured RouterOS behavior first. The usual path
 ## P0 — Research blockers
 
 - 📋 **`[research: inspect-shapes]` Catalog `/console/inspect` responses** —
-  capture `highlight`, `completion`, `syntax`, and `child` response shapes across
-  representative corpus positions into `test-data/corpus.sqlite`; document the
-  schemas before building syntax-driven features.
+  schemas are documented: `highlight` in [`docs/highlight-format.md`](docs/highlight-format.md),
+  `completion`/`syntax`/`child` in [`docs/inspect-shapes.md`](docs/inspect-shapes.md)
+  (curated-context captures on 7.9.2/7.23.2/7.24rc2 via
+  `scripts/collect-inspect-shapes.ts`). Remaining: the representative
+  corpus-position sweep into `inspect_responses` in `test-data/corpus.sqlite`.
 - 📋 **`[research: completion-tricks]` Validate fake-space / fake-equals
   heuristics** — measure when synthetic trailing space or `=` probes improve,
   change, or break completions; define safe application rules.
@@ -156,9 +161,10 @@ semantics should be grounded in measured RouterOS behavior first. The usual path
   troubleshooting, features, and customization.
 - 📋 **Developer guide** — document how to add LSP features and where handlers,
   tests, and docs belong.
-- 📋 **RouterOS inspect API reference** — after `[research: inspect-shapes]`, add
-  a focused reference for `highlight`, `completion`, `syntax`, and `child`
-  responses.
+- ✅ **RouterOS inspect API reference** — landed as
+  [`docs/highlight-format.md`](docs/highlight-format.md) (`highlight`) and
+  [`docs/inspect-shapes.md`](docs/inspect-shapes.md) (`completion`, `syntax`,
+  `child`).
 
 ## P1 — Architecture and internals
 

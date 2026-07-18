@@ -252,7 +252,7 @@ callee-quote and supplies the environment explicitly:
 ```
 
 The 7.22.1 parseIL corpus contains both forms heavily (`(<%%`: 263 occurrences,
-`(> `: 281 occurrences), and the source corpus includes direct uses from
+`(>` + space: 281 occurrences), and the source corpus includes direct uses from
 forum-derived examples (`qkeys`, `$INQUIRE`, `$mkvlan`, and "What does op type
 do?"). These are not IL-internal markers.
 
@@ -315,9 +315,12 @@ stems:
 | `missing value for where` | Incomplete `where` filter expression. |
 
 There is **no partial IL** alongside an error message. This confirms parseIL
-cannot back multi-error diagnostics — for that goal, `/console/inspect
-highlight` (which does mark every error token and continues) remains the source
-of truth.
+cannot back multi-error diagnostics. Highlight is only partially better: it
+marks the *first* hard-error character and stops classifying after it (see
+[`highlight-format.md`](highlight-format.md) §4) — but everything before the
+error stays fully tokenized, including soft markers (`obj-*`,
+`variable-undefined`, `syntax-obsolete`), so it remains the richer diagnostics
+source per request.
 
 There is one special case that does embed errors *inside* IL: a script with a
 **bad command name** like `this is not a command` produces a `(<%% …)` form
@@ -493,8 +496,10 @@ The `findwhere=` cross-version drift (§5.1) pairs with this: when a property di
 
 ### Not useful for
 
-- **Multi-error diagnostics.** `:parse` aborts at the first error. Highlight is
-  the right source for "show every error in the script."
+- **Multi-error diagnostics.** `:parse` aborts at the first error. Highlight
+  also stops classifying at its first hard error, but still surfaces soft
+  markers before it — the better (though not complete) diagnostics source; see
+  [`highlight-format.md`](highlight-format.md) §4.
 - **Source position metadata for valid IL.** The IL only carries `(line N
   column M)` on error annotations; valid IL nodes have no source positions, so
   mapping IL nodes back to source ranges requires structural reconstruction

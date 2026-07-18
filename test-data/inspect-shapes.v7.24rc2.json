@@ -1,0 +1,6191 @@
+{
+  "routerosVersion": "7.24rc2",
+  "chrBuildTime": "2026-07-10 08:58:23",
+  "environment": {
+    "architecture": "x86_64",
+    "boardName": "CHR QEMU Standard PC (i440FX + PIIX, 1996)",
+    "packages": [
+      {
+        "name": "calea",
+        "version": ""
+      },
+      {
+        "name": "container",
+        "version": ""
+      },
+      {
+        "name": "dude",
+        "version": ""
+      },
+      {
+        "name": "gps",
+        "version": ""
+      },
+      {
+        "name": "iot",
+        "version": ""
+      },
+      {
+        "name": "netinstall",
+        "version": ""
+      },
+      {
+        "name": "openflow",
+        "version": ""
+      },
+      {
+        "name": "rose-storage",
+        "version": ""
+      },
+      {
+        "name": "routeros",
+        "version": "7.24rc2"
+      },
+      {
+        "name": "tr069-client",
+        "version": ""
+      },
+      {
+        "name": "ups",
+        "version": ""
+      },
+      {
+        "name": "user-manager",
+        "version": ""
+      },
+      {
+        "name": "wireless",
+        "version": ""
+      }
+    ]
+  },
+  "capturedAt": "2026-07-18T03:10:53.656Z",
+  "probeCount": 37,
+  "probeSha256": "9ca1ed7861edf66786da0f3b0ab80c653e494c73946a77c57e299652854441cc",
+  "requestTimeoutMs": 60000,
+  "fieldInventory": {
+    "child": {
+      "name": {
+        "distinctValues": 124,
+        "sample": [
+          "root",
+          "beep",
+          "break",
+          "certificate",
+          "console",
+          "continue",
+          "convert",
+          "delay",
+          "deserialize",
+          "disk",
+          "do",
+          "environment"
+        ]
+      },
+      "node-type": {
+        "distinctValues": 4,
+        "sample": [
+          "path",
+          "cmd",
+          "dir",
+          "arg"
+        ]
+      },
+      "type": {
+        "distinctValues": 2,
+        "sample": [
+          "self",
+          "child"
+        ]
+      }
+    },
+    "syntax": {
+      "nested": {
+        "distinctValues": 2,
+        "sample": [
+          "0",
+          "1"
+        ]
+      },
+      "nonorm": {
+        "distinctValues": 2,
+        "sample": [
+          "true",
+          "false"
+        ]
+      },
+      "symbol": {
+        "distinctValues": 124,
+        "sample": [
+          "",
+          "beep",
+          "break",
+          "certificate",
+          "console",
+          "continue",
+          "convert",
+          "delay",
+          "deserialize",
+          "disk",
+          "do",
+          "environment"
+        ]
+      },
+      "symbol-type": {
+        "distinctValues": 3,
+        "sample": [
+          "collection",
+          "explanation",
+          "definition"
+        ]
+      },
+      "text": {
+        "distinctValues": 106,
+        "sample": [
+          "",
+          "Certificate management",
+          "convert binary data encoding",
+          "does nothing for a while",
+          "deserialize input to console values",
+          "executes command",
+          "list of all variables",
+          "make error value",
+          "run script as separate console job",
+          "Local router file storage.",
+          "Find items by value",
+          "executes command for a range of integer values"
+        ]
+      },
+      "type": {
+        "distinctValues": 1,
+        "sample": [
+          "syntax"
+        ]
+      }
+    },
+    "completion": {
+      "completion": {
+        "distinctValues": 215,
+        "sample": [
+          " ",
+          "/",
+          ":",
+          "[",
+          "(",
+          "$",
+          "{",
+          ";",
+          "beep",
+          "break",
+          "certificate",
+          "console"
+        ]
+      },
+      "offset": {
+        "distinctValues": 19,
+        "sample": [
+          "0",
+          "1",
+          "2",
+          "4",
+          "6",
+          "12",
+          "17",
+          "25",
+          "24",
+          "16",
+          "23",
+          "31"
+        ]
+      },
+      "preference": {
+        "distinctValues": 9,
+        "sample": [
+          "-1",
+          "95",
+          "75",
+          "40",
+          "96",
+          "-20",
+          "64",
+          "80",
+          "-10"
+        ]
+      },
+      "show": {
+        "distinctValues": 2,
+        "sample": [
+          "false",
+          "true"
+        ]
+      },
+      "style": {
+        "distinctValues": 10,
+        "sample": [
+          "none",
+          "dir",
+          "syntax-meta",
+          "cmd",
+          "variable-auto",
+          "obj-inactive",
+          "arg",
+          "syntax-obsolete",
+          "variable-local",
+          "variable-global"
+        ]
+      },
+      "text": {
+        "distinctValues": 143,
+        "sample": [
+          "whitespace",
+          "top of command hierarchy",
+          "special commands",
+          "start of command substitution",
+          "start of expression",
+          "substitution",
+          "start of command block",
+          "end of command",
+          "",
+          "Certificate management",
+          "convert binary data encoding",
+          "does nothing for a while"
+        ]
+      },
+      "type": {
+        "distinctValues": 1,
+        "sample": [
+          "completion"
+        ]
+      }
+    }
+  },
+  "results": [
+    {
+      "name": "child-root",
+      "demonstrates": "root menu listing; node-type mix",
+      "body": {
+        "request": "child",
+        "path": ""
+      },
+      "ms": 2,
+      "itemCount": 79,
+      "response": [
+        {
+          "name": "root",
+          "node-type": "path",
+          "type": "self"
+        },
+        {
+          "name": "beep",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "break",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "certificate",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "console",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "continue",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "convert",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "delay",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "deserialize",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "disk",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "do",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "environment",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "error",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "execute",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "exit",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "file",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "find",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "for",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "foreach",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "global",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "grep",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "if",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "import",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "interface",
+          "node-type": "path",
+          "type": "child"
+        },
+        {
+          "name": "ip",
+          "node-type": "path",
+          "type": "child"
+        },
+        {
+          "name": "ipv6",
+          "node-type": "path",
+          "type": "child"
+        },
+        {
+          "name": "jobname",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "len",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "local",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "lock",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "log",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "mpls",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "nothing",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "onerror",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "parse",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "password",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "pick",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "port",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "ppp",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "put",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "queue",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "quit",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "radius",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "range",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "redo",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "resolve",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "retry",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "return",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "rndnum",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "rndstr",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "routing",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "safe-mode",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "serialize",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "set",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "snmp",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "special-login",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "system",
+          "node-type": "path",
+          "type": "child"
+        },
+        {
+          "name": "task",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "terminal",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "time",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "timestamp",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "toarray",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "tobool",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "tocrlf",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "toid",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "toip",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "toip6",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "tolf",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "tonsec",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "tonum",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "tool",
+          "node-type": "path",
+          "type": "child"
+        },
+        {
+          "name": "tostr",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "totime",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "typeof",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "undo",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "user",
+          "node-type": "path",
+          "type": "child"
+        },
+        {
+          "name": "while",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "export",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "recursive-print",
+          "node-type": "cmd",
+          "type": "child"
+        }
+      ]
+    },
+    {
+      "name": "child-dir",
+      "demonstrates": "children of a dir node",
+      "body": {
+        "request": "child",
+        "path": "ip"
+      },
+      "ms": 1,
+      "itemCount": 32,
+      "response": [
+        {
+          "name": "ip",
+          "node-type": "path",
+          "type": "self"
+        },
+        {
+          "name": "address",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "arp",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "cloud",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "dhcp-client",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "dhcp-relay",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "dhcp-server",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "dns",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "firewall",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "hotspot",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "ipsec",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "kid-control",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "media",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "nat-pmp",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "neighbor",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "packing",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "pool",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "proxy",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "reverse-proxy",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "route",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "service",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "settings",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "smb",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "socks",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "socksify",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "ssh",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "tftp",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "traffic-flow",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "upnp",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "vrf",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "export",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "recursive-print",
+          "node-type": "cmd",
+          "type": "child"
+        }
+      ]
+    },
+    {
+      "name": "child-path-node",
+      "demonstrates": "children of a path node: cmds + args",
+      "body": {
+        "request": "child",
+        "path": "ip,address"
+      },
+      "ms": 1,
+      "itemCount": 13,
+      "response": [
+        {
+          "name": "address",
+          "node-type": "dir",
+          "type": "self"
+        },
+        {
+          "name": "add",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "comment",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "disable",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "edit",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "enable",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "export",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "find",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "get",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "print",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "remove",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "reset",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "set",
+          "node-type": "cmd",
+          "type": "child"
+        }
+      ]
+    },
+    {
+      "name": "child-cmd-node",
+      "demonstrates": "children of a cmd node: its args",
+      "body": {
+        "request": "child",
+        "path": "ip,address,add"
+      },
+      "ms": 1,
+      "itemCount": 9,
+      "response": [
+        {
+          "name": "add",
+          "node-type": "cmd",
+          "type": "self"
+        },
+        {
+          "name": "address",
+          "node-type": "arg",
+          "type": "child"
+        },
+        {
+          "name": "broadcast",
+          "node-type": "arg",
+          "type": "child"
+        },
+        {
+          "name": "comment",
+          "node-type": "arg",
+          "type": "child"
+        },
+        {
+          "name": "copy-from",
+          "node-type": "arg",
+          "type": "child"
+        },
+        {
+          "name": "disabled",
+          "node-type": "arg",
+          "type": "child"
+        },
+        {
+          "name": "interface",
+          "node-type": "arg",
+          "type": "child"
+        },
+        {
+          "name": "netmask",
+          "node-type": "arg",
+          "type": "child"
+        },
+        {
+          "name": "network",
+          "node-type": "arg",
+          "type": "child"
+        }
+      ]
+    },
+    {
+      "name": "child-arg-node",
+      "demonstrates": "children of an arg node (leaf?)",
+      "body": {
+        "request": "child",
+        "path": "ip,address,add,address"
+      },
+      "ms": 21,
+      "itemCount": 1,
+      "response": [
+        {
+          "name": "address",
+          "node-type": "arg",
+          "type": "self"
+        }
+      ]
+    },
+    {
+      "name": "child-self-entry",
+      "demonstrates": "type=self entry when node is both cmd and arg",
+      "body": {
+        "request": "child",
+        "path": "terminal,style"
+      },
+      "ms": 1,
+      "itemCount": 2,
+      "response": [
+        {
+          "name": "style",
+          "node-type": "cmd",
+          "type": "self"
+        },
+        {
+          "name": "style",
+          "node-type": "arg",
+          "type": "child"
+        }
+      ]
+    },
+    {
+      "name": "child-scripting-cmd",
+      "demonstrates": "root-level scripting command node",
+      "body": {
+        "request": "child",
+        "path": "put"
+      },
+      "ms": 1,
+      "itemCount": 2,
+      "response": [
+        {
+          "name": "put",
+          "node-type": "cmd",
+          "type": "self"
+        },
+        {
+          "name": "message",
+          "node-type": "arg",
+          "type": "child"
+        }
+      ]
+    },
+    {
+      "name": "child-with-input",
+      "demonstrates": "whether the input field filters child results",
+      "body": {
+        "request": "child",
+        "input": "add",
+        "path": "ip"
+      },
+      "ms": 2,
+      "itemCount": 32,
+      "response": [
+        {
+          "name": "ip",
+          "node-type": "path",
+          "type": "self"
+        },
+        {
+          "name": "address",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "arp",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "cloud",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "dhcp-client",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "dhcp-relay",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "dhcp-server",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "dns",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "firewall",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "hotspot",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "ipsec",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "kid-control",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "media",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "nat-pmp",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "neighbor",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "packing",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "pool",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "proxy",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "reverse-proxy",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "route",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "service",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "settings",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "smb",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "socks",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "socksify",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "ssh",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "tftp",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "traffic-flow",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "upnp",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "vrf",
+          "node-type": "dir",
+          "type": "child"
+        },
+        {
+          "name": "export",
+          "node-type": "cmd",
+          "type": "child"
+        },
+        {
+          "name": "recursive-print",
+          "node-type": "cmd",
+          "type": "child"
+        }
+      ]
+    },
+    {
+      "name": "child-bogus-path",
+      "demonstrates": "error shape for a nonexistent path",
+      "body": {
+        "request": "child",
+        "path": "nonexistent"
+      },
+      "ms": 15,
+      "itemCount": 0,
+      "response": []
+    },
+    {
+      "name": "syntax-root",
+      "demonstrates": "syntax at root",
+      "body": {
+        "request": "syntax",
+        "path": ""
+      },
+      "ms": 63,
+      "itemCount": 78,
+      "response": [
+        {
+          "nested": "0",
+          "nonorm": "true",
+          "symbol": "",
+          "symbol-type": "collection",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "beep",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "break",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "certificate",
+          "symbol-type": "explanation",
+          "text": "Certificate management",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "console",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "continue",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "convert",
+          "symbol-type": "explanation",
+          "text": "convert binary data encoding",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "delay",
+          "symbol-type": "explanation",
+          "text": "does nothing for a while",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "deserialize",
+          "symbol-type": "explanation",
+          "text": "deserialize input to console values",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "disk",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "do",
+          "symbol-type": "explanation",
+          "text": "executes command",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "environment",
+          "symbol-type": "explanation",
+          "text": "list of all variables",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "error",
+          "symbol-type": "explanation",
+          "text": "make error value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "execute",
+          "symbol-type": "explanation",
+          "text": "run script as separate console job",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "exit",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "file",
+          "symbol-type": "explanation",
+          "text": "Local router file storage.",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "find",
+          "symbol-type": "explanation",
+          "text": "Find items by value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "for",
+          "symbol-type": "explanation",
+          "text": "executes command for a range of integer values",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "foreach",
+          "symbol-type": "explanation",
+          "text": "executes command for every element in a list",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "global",
+          "symbol-type": "explanation",
+          "text": "set value global variable",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "grep",
+          "symbol-type": "explanation",
+          "text": "search for patterns in script output",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "if",
+          "symbol-type": "explanation",
+          "text": "executes command if condition is true",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "import",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "interface",
+          "symbol-type": "explanation",
+          "text": "Interface configuration",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "ip",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "ipv6",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "jobname",
+          "symbol-type": "explanation",
+          "text": "return current script name",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "len",
+          "symbol-type": "explanation",
+          "text": "return number of elements in value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "local",
+          "symbol-type": "explanation",
+          "text": "set value of local variable",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "lock",
+          "symbol-type": "explanation",
+          "text": "lock terminal session",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "log",
+          "symbol-type": "explanation",
+          "text": "System logs",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "mpls",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "nothing",
+          "symbol-type": "explanation",
+          "text": "do nothing and return nothing",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "onerror",
+          "symbol-type": "explanation",
+          "text": "executes command",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "parse",
+          "symbol-type": "explanation",
+          "text": "build command from text",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "password",
+          "symbol-type": "explanation",
+          "text": "Change password",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "pick",
+          "symbol-type": "explanation",
+          "text": "return range of string characters or array values",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "port",
+          "symbol-type": "explanation",
+          "text": "Serial ports",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "ppp",
+          "symbol-type": "explanation",
+          "text": "Point to Point Protocol",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "put",
+          "symbol-type": "explanation",
+          "text": "prints argument on the screen",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "queue",
+          "symbol-type": "explanation",
+          "text": "Bandwidth management",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "quit",
+          "symbol-type": "explanation",
+          "text": "Quit console",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "radius",
+          "symbol-type": "explanation",
+          "text": "Radius client settings",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "range",
+          "symbol-type": "explanation",
+          "text": "make an array from the provided range",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "redo",
+          "symbol-type": "explanation",
+          "text": "Redo previously undone action",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "resolve",
+          "symbol-type": "explanation",
+          "text": "perform a dns lookup of domain name",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "retry",
+          "symbol-type": "explanation",
+          "text": "repeatedly executes command until it succeeds",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "return",
+          "symbol-type": "explanation",
+          "text": "return value from function",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "rndnum",
+          "symbol-type": "explanation",
+          "text": "return random number in given interval",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "rndstr",
+          "symbol-type": "explanation",
+          "text": "return random string",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "routing",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "safe-mode",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "serialize",
+          "symbol-type": "explanation",
+          "text": "serialize console values to different formats",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "set",
+          "symbol-type": "explanation",
+          "text": "Change item properties",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "snmp",
+          "symbol-type": "explanation",
+          "text": "SNMP settings",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "special-login",
+          "symbol-type": "explanation",
+          "text": "Special login users",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "system",
+          "symbol-type": "explanation",
+          "text": "System information and utilities",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "task",
+          "symbol-type": "explanation",
+          "text": "commands related to background task handling",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "terminal",
+          "symbol-type": "explanation",
+          "text": "commands related to terminal handling",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "time",
+          "symbol-type": "explanation",
+          "text": "returns time taken by command to execute",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "timestamp",
+          "symbol-type": "explanation",
+          "text": "returns time since the epoch",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "toarray",
+          "symbol-type": "explanation",
+          "text": "convert argument to array value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "tobool",
+          "symbol-type": "explanation",
+          "text": "convert argument to truth value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "tocrlf",
+          "symbol-type": "explanation",
+          "text": "converts line endings to CRLF",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "toid",
+          "symbol-type": "explanation",
+          "text": "convert argument to internal number value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "toip",
+          "symbol-type": "explanation",
+          "text": "convert argument to IP address value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "toip6",
+          "symbol-type": "explanation",
+          "text": "convert argument to IPv6 address value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "tolf",
+          "symbol-type": "explanation",
+          "text": "converts line endings to LF",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "tonsec",
+          "symbol-type": "explanation",
+          "text": "convert time argument to nanoseconds",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "tonum",
+          "symbol-type": "explanation",
+          "text": "convert argument to integer number value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "tool",
+          "symbol-type": "explanation",
+          "text": "Diagnostics tools",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "tostr",
+          "symbol-type": "explanation",
+          "text": "convert argument to string value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "totime",
+          "symbol-type": "explanation",
+          "text": "convert argument to time interval value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "typeof",
+          "symbol-type": "explanation",
+          "text": "return type of value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "undo",
+          "symbol-type": "explanation",
+          "text": "Undo previous action",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "user",
+          "symbol-type": "explanation",
+          "text": "User management",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "while",
+          "symbol-type": "explanation",
+          "text": "executes command while condition is true",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "export",
+          "symbol-type": "explanation",
+          "text": "Print or save an export script that can be used to restore configuration",
+          "type": "syntax"
+        }
+      ]
+    },
+    {
+      "name": "syntax-dir",
+      "demonstrates": "syntax of a dir node",
+      "body": {
+        "request": "syntax",
+        "path": "ip"
+      },
+      "ms": 38,
+      "itemCount": 32,
+      "response": [
+        {
+          "nested": "0",
+          "nonorm": "true",
+          "symbol": "",
+          "symbol-type": "collection",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "..",
+          "symbol-type": "explanation",
+          "text": "go up to root",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "address",
+          "symbol-type": "explanation",
+          "text": "Address management",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "arp",
+          "symbol-type": "explanation",
+          "text": "ARP entries management",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "cloud",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "dhcp-client",
+          "symbol-type": "explanation",
+          "text": "DHCP client settings",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "dhcp-relay",
+          "symbol-type": "explanation",
+          "text": "DHCP relay settings",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "dhcp-server",
+          "symbol-type": "explanation",
+          "text": "DHCP server settings",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "dns",
+          "symbol-type": "explanation",
+          "text": "DNS settings",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "firewall",
+          "symbol-type": "explanation",
+          "text": "Firewall management",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "hotspot",
+          "symbol-type": "explanation",
+          "text": "HotSpot servers management",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "ipsec",
+          "symbol-type": "explanation",
+          "text": "IP security",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "kid-control",
+          "symbol-type": "explanation",
+          "text": "Kid control settings",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "media",
+          "symbol-type": "explanation",
+          "text": "UPnP Media Server management",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "nat-pmp",
+          "symbol-type": "explanation",
+          "text": "NATPMP Internet Gateway Device management",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "neighbor",
+          "symbol-type": "explanation",
+          "text": "Neighbors",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "packing",
+          "symbol-type": "explanation",
+          "text": "Packet packing settings",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "pool",
+          "symbol-type": "explanation",
+          "text": "IP address pool",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "proxy",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "reverse-proxy",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "route",
+          "symbol-type": "explanation",
+          "text": "Route management",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "service",
+          "symbol-type": "explanation",
+          "text": "IP services",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "settings",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "smb",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "socks",
+          "symbol-type": "explanation",
+          "text": "SOCKS version 4 proxy",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "socksify",
+          "symbol-type": "explanation",
+          "text": "Socksifier / TOR client",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "ssh",
+          "symbol-type": "explanation",
+          "text": "SSH settings",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "tftp",
+          "symbol-type": "explanation",
+          "text": "TFTP server",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "traffic-flow",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "upnp",
+          "symbol-type": "explanation",
+          "text": "Universal Plug and Play",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "vrf",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "export",
+          "symbol-type": "explanation",
+          "text": "Print or save an export script that can be used to restore configuration",
+          "type": "syntax"
+        }
+      ]
+    },
+    {
+      "name": "syntax-path-node",
+      "demonstrates": "syntax of a path node",
+      "body": {
+        "request": "syntax",
+        "path": "ip,address"
+      },
+      "ms": 18,
+      "itemCount": 14,
+      "response": [
+        {
+          "nested": "0",
+          "nonorm": "true",
+          "symbol": "",
+          "symbol-type": "collection",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "..",
+          "symbol-type": "explanation",
+          "text": "go up to ip",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "add",
+          "symbol-type": "explanation",
+          "text": "Create a new item",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "comment",
+          "symbol-type": "explanation",
+          "text": "Set comment for items",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "disable",
+          "symbol-type": "explanation",
+          "text": "Disable items",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "edit",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "enable",
+          "symbol-type": "explanation",
+          "text": "Enable items",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "export",
+          "symbol-type": "explanation",
+          "text": "Print or save an export script that can be used to restore configuration",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "find",
+          "symbol-type": "explanation",
+          "text": "Find items by value",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "get",
+          "symbol-type": "explanation",
+          "text": "Gets value of item's property",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "print",
+          "symbol-type": "explanation",
+          "text": "Print values of item properties",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "remove",
+          "symbol-type": "explanation",
+          "text": "Remove item",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "reset",
+          "symbol-type": "explanation",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "set",
+          "symbol-type": "explanation",
+          "text": "Change item properties",
+          "type": "syntax"
+        }
+      ]
+    },
+    {
+      "name": "syntax-cmd",
+      "demonstrates": "syntax of a cmd node",
+      "body": {
+        "request": "syntax",
+        "path": "ip,address,add"
+      },
+      "ms": 2,
+      "itemCount": 9,
+      "response": [
+        {
+          "nested": "0",
+          "nonorm": "true",
+          "symbol": "",
+          "symbol-type": "collection",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "address",
+          "symbol-type": "explanation",
+          "text": "Local IP address",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "broadcast",
+          "symbol-type": "explanation",
+          "text": "Broadcast address",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "comment",
+          "symbol-type": "explanation",
+          "text": "Short description of the item",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "copy-from",
+          "symbol-type": "explanation",
+          "text": "Item number",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "disabled",
+          "symbol-type": "explanation",
+          "text": "Defines whether item is ignored or used",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "interface",
+          "symbol-type": "explanation",
+          "text": "Interface name",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "netmask",
+          "symbol-type": "explanation",
+          "text": "Network mask",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "network",
+          "symbol-type": "explanation",
+          "text": "Network prefix",
+          "type": "syntax"
+        }
+      ]
+    },
+    {
+      "name": "syntax-arg",
+      "demonstrates": "syntax of an arg node — the classic description",
+      "body": {
+        "request": "syntax",
+        "path": "ip,address,add,address"
+      },
+      "ms": 17,
+      "itemCount": 1,
+      "response": [
+        {
+          "nested": "0",
+          "nonorm": "false",
+          "symbol": "Address",
+          "symbol-type": "definition",
+          "text": "A.B.C.D    (IP address)",
+          "type": "syntax"
+        }
+      ]
+    },
+    {
+      "name": "syntax-arg-enum",
+      "demonstrates": "syntax of an enum-valued arg",
+      "body": {
+        "request": "syntax",
+        "path": "ip,firewall,filter,add,action"
+      },
+      "ms": 1,
+      "itemCount": 1,
+      "response": [
+        {
+          "nested": "0",
+          "nonorm": "false",
+          "symbol": "",
+          "symbol-type": "definition",
+          "text": "",
+          "type": "syntax"
+        }
+      ]
+    },
+    {
+      "name": "syntax-scripting-cmd",
+      "demonstrates": "syntax of a scripting command",
+      "body": {
+        "request": "syntax",
+        "path": "put"
+      },
+      "ms": 1,
+      "itemCount": 2,
+      "response": [
+        {
+          "nested": "0",
+          "nonorm": "true",
+          "symbol": "",
+          "symbol-type": "collection",
+          "text": "",
+          "type": "syntax"
+        },
+        {
+          "nested": "1",
+          "nonorm": "false",
+          "symbol": "<message>",
+          "symbol-type": "explanation",
+          "text": "string or any expression",
+          "type": "syntax"
+        }
+      ]
+    },
+    {
+      "name": "syntax-with-input",
+      "demonstrates": "whether input affects syntax response",
+      "body": {
+        "request": "syntax",
+        "input": "address=",
+        "path": "ip,address,add"
+      },
+      "ms": 1,
+      "itemCount": 1,
+      "response": [
+        {
+          "nested": "0",
+          "nonorm": "false",
+          "symbol": "",
+          "symbol-type": "definition",
+          "text": "",
+          "type": "syntax"
+        }
+      ]
+    },
+    {
+      "name": "syntax-bogus-path",
+      "demonstrates": "response for a nonexistent syntax path",
+      "body": {
+        "request": "syntax",
+        "path": "nonexistent"
+      },
+      "ms": 18,
+      "itemCount": 0,
+      "response": []
+    },
+    {
+      "name": "completion-empty-root",
+      "demonstrates": "completions for empty input at root",
+      "body": {
+        "request": "completion",
+        "input": ""
+      },
+      "ms": 99,
+      "itemCount": 86,
+      "response": [
+        {
+          "completion": " ",
+          "offset": "0",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": "/",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "dir",
+          "text": "top of command hierarchy",
+          "type": "completion"
+        },
+        {
+          "completion": ":",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "dir",
+          "text": "special commands",
+          "type": "completion"
+        },
+        {
+          "completion": "[",
+          "offset": "0",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "(",
+          "offset": "0",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of expression",
+          "type": "completion"
+        },
+        {
+          "completion": "$",
+          "offset": "0",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "{",
+          "offset": "0",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command block",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "0",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        },
+        {
+          "completion": "beep",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "break",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "certificate",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Certificate management",
+          "type": "completion"
+        },
+        {
+          "completion": "console",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "continue",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "convert",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert binary data encoding",
+          "type": "completion"
+        },
+        {
+          "completion": "delay",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "does nothing for a while",
+          "type": "completion"
+        },
+        {
+          "completion": "deserialize",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "deserialize input to console values",
+          "type": "completion"
+        },
+        {
+          "completion": "disk",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "do",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command",
+          "type": "completion"
+        },
+        {
+          "completion": "environment",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "dir",
+          "text": "list of all variables",
+          "type": "completion"
+        },
+        {
+          "completion": "error",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "make error value",
+          "type": "completion"
+        },
+        {
+          "completion": "execute",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "run script as separate console job",
+          "type": "completion"
+        },
+        {
+          "completion": "exit",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "file",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Local router file storage.",
+          "type": "completion"
+        },
+        {
+          "completion": "find",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "Find items by value",
+          "type": "completion"
+        },
+        {
+          "completion": "for",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command for a range of integer values",
+          "type": "completion"
+        },
+        {
+          "completion": "foreach",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command for every element in a list",
+          "type": "completion"
+        },
+        {
+          "completion": "global",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "set value global variable",
+          "type": "completion"
+        },
+        {
+          "completion": "grep",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "search for patterns in script output",
+          "type": "completion"
+        },
+        {
+          "completion": "if",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command if condition is true",
+          "type": "completion"
+        },
+        {
+          "completion": "import",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "interface",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Interface configuration",
+          "type": "completion"
+        },
+        {
+          "completion": "ip",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "ipv6",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "jobname",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return current script name",
+          "type": "completion"
+        },
+        {
+          "completion": "len",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return number of elements in value",
+          "type": "completion"
+        },
+        {
+          "completion": "local",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "set value of local variable",
+          "type": "completion"
+        },
+        {
+          "completion": "lock",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "lock terminal session",
+          "type": "completion"
+        },
+        {
+          "completion": "log",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "System logs",
+          "type": "completion"
+        },
+        {
+          "completion": "mpls",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "nothing",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "do nothing and return nothing",
+          "type": "completion"
+        },
+        {
+          "completion": "onerror",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command",
+          "type": "completion"
+        },
+        {
+          "completion": "parse",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "build command from text",
+          "type": "completion"
+        },
+        {
+          "completion": "password",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Change password",
+          "type": "completion"
+        },
+        {
+          "completion": "pick",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return range of string characters or array values",
+          "type": "completion"
+        },
+        {
+          "completion": "port",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Serial ports",
+          "type": "completion"
+        },
+        {
+          "completion": "ppp",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Point to Point Protocol",
+          "type": "completion"
+        },
+        {
+          "completion": "put",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "prints argument on the screen",
+          "type": "completion"
+        },
+        {
+          "completion": "queue",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Bandwidth management",
+          "type": "completion"
+        },
+        {
+          "completion": "quit",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Quit console",
+          "type": "completion"
+        },
+        {
+          "completion": "radius",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Radius client settings",
+          "type": "completion"
+        },
+        {
+          "completion": "range",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "make an array from the provided range",
+          "type": "completion"
+        },
+        {
+          "completion": "redo",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Redo previously undone action",
+          "type": "completion"
+        },
+        {
+          "completion": "resolve",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "perform a dns lookup of domain name",
+          "type": "completion"
+        },
+        {
+          "completion": "retry",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "repeatedly executes command until it succeeds",
+          "type": "completion"
+        },
+        {
+          "completion": "return",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return value from function",
+          "type": "completion"
+        },
+        {
+          "completion": "rndnum",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return random number in given interval",
+          "type": "completion"
+        },
+        {
+          "completion": "rndstr",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return random string",
+          "type": "completion"
+        },
+        {
+          "completion": "routing",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "safe-mode",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "serialize",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "serialize console values to different formats",
+          "type": "completion"
+        },
+        {
+          "completion": "set",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "Change item properties",
+          "type": "completion"
+        },
+        {
+          "completion": "snmp",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "SNMP settings",
+          "type": "completion"
+        },
+        {
+          "completion": "special-login",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Special login users",
+          "type": "completion"
+        },
+        {
+          "completion": "system",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "System information and utilities",
+          "type": "completion"
+        },
+        {
+          "completion": "task",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "commands related to background task handling",
+          "type": "completion"
+        },
+        {
+          "completion": "terminal",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "dir",
+          "text": "commands related to terminal handling",
+          "type": "completion"
+        },
+        {
+          "completion": "time",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "returns time taken by command to execute",
+          "type": "completion"
+        },
+        {
+          "completion": "timestamp",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "returns time since the epoch",
+          "type": "completion"
+        },
+        {
+          "completion": "toarray",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to array value",
+          "type": "completion"
+        },
+        {
+          "completion": "tobool",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to truth value",
+          "type": "completion"
+        },
+        {
+          "completion": "tocrlf",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "converts line endings to CRLF",
+          "type": "completion"
+        },
+        {
+          "completion": "toid",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to internal number value",
+          "type": "completion"
+        },
+        {
+          "completion": "toip",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to IP address value",
+          "type": "completion"
+        },
+        {
+          "completion": "toip6",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to IPv6 address value",
+          "type": "completion"
+        },
+        {
+          "completion": "tolf",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "converts line endings to LF",
+          "type": "completion"
+        },
+        {
+          "completion": "tonsec",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert time argument to nanoseconds",
+          "type": "completion"
+        },
+        {
+          "completion": "tonum",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to integer number value",
+          "type": "completion"
+        },
+        {
+          "completion": "tool",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Diagnostics tools",
+          "type": "completion"
+        },
+        {
+          "completion": "tostr",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to string value",
+          "type": "completion"
+        },
+        {
+          "completion": "totime",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to time interval value",
+          "type": "completion"
+        },
+        {
+          "completion": "typeof",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return type of value",
+          "type": "completion"
+        },
+        {
+          "completion": "undo",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Undo previous action",
+          "type": "completion"
+        },
+        {
+          "completion": "user",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "User management",
+          "type": "completion"
+        },
+        {
+          "completion": "while",
+          "offset": "0",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command while condition is true",
+          "type": "completion"
+        },
+        {
+          "completion": "export",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Print or save an export script that can be used to restore configuration",
+          "type": "completion"
+        },
+        {
+          "completion": "ping",
+          "offset": "0",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-auto",
+          "text": "tool/ping alias",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-slash",
+      "demonstrates": "completions right after /",
+      "body": {
+        "request": "completion",
+        "input": "/"
+      },
+      "ms": 59,
+      "itemCount": 81,
+      "response": [
+        {
+          "completion": " ",
+          "offset": "1",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": "{",
+          "offset": "1",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command block",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "1",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        },
+        {
+          "completion": "beep",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "break",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "certificate",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Certificate management",
+          "type": "completion"
+        },
+        {
+          "completion": "console",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "continue",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "convert",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert binary data encoding",
+          "type": "completion"
+        },
+        {
+          "completion": "delay",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "does nothing for a while",
+          "type": "completion"
+        },
+        {
+          "completion": "deserialize",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "deserialize input to console values",
+          "type": "completion"
+        },
+        {
+          "completion": "disk",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "do",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command",
+          "type": "completion"
+        },
+        {
+          "completion": "environment",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "dir",
+          "text": "list of all variables",
+          "type": "completion"
+        },
+        {
+          "completion": "error",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "make error value",
+          "type": "completion"
+        },
+        {
+          "completion": "execute",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "run script as separate console job",
+          "type": "completion"
+        },
+        {
+          "completion": "exit",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "file",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Local router file storage.",
+          "type": "completion"
+        },
+        {
+          "completion": "find",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "Find items by value",
+          "type": "completion"
+        },
+        {
+          "completion": "for",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command for a range of integer values",
+          "type": "completion"
+        },
+        {
+          "completion": "foreach",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command for every element in a list",
+          "type": "completion"
+        },
+        {
+          "completion": "global",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "set value global variable",
+          "type": "completion"
+        },
+        {
+          "completion": "grep",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "search for patterns in script output",
+          "type": "completion"
+        },
+        {
+          "completion": "if",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command if condition is true",
+          "type": "completion"
+        },
+        {
+          "completion": "import",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "interface",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Interface configuration",
+          "type": "completion"
+        },
+        {
+          "completion": "ip",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "ipv6",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "jobname",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return current script name",
+          "type": "completion"
+        },
+        {
+          "completion": "len",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return number of elements in value",
+          "type": "completion"
+        },
+        {
+          "completion": "local",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "set value of local variable",
+          "type": "completion"
+        },
+        {
+          "completion": "lock",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "lock terminal session",
+          "type": "completion"
+        },
+        {
+          "completion": "log",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "System logs",
+          "type": "completion"
+        },
+        {
+          "completion": "mpls",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "nothing",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "do nothing and return nothing",
+          "type": "completion"
+        },
+        {
+          "completion": "onerror",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command",
+          "type": "completion"
+        },
+        {
+          "completion": "parse",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "build command from text",
+          "type": "completion"
+        },
+        {
+          "completion": "password",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Change password",
+          "type": "completion"
+        },
+        {
+          "completion": "pick",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return range of string characters or array values",
+          "type": "completion"
+        },
+        {
+          "completion": "port",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Serial ports",
+          "type": "completion"
+        },
+        {
+          "completion": "ppp",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Point to Point Protocol",
+          "type": "completion"
+        },
+        {
+          "completion": "put",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "prints argument on the screen",
+          "type": "completion"
+        },
+        {
+          "completion": "queue",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Bandwidth management",
+          "type": "completion"
+        },
+        {
+          "completion": "quit",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Quit console",
+          "type": "completion"
+        },
+        {
+          "completion": "radius",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Radius client settings",
+          "type": "completion"
+        },
+        {
+          "completion": "range",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "make an array from the provided range",
+          "type": "completion"
+        },
+        {
+          "completion": "redo",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Redo previously undone action",
+          "type": "completion"
+        },
+        {
+          "completion": "resolve",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "perform a dns lookup of domain name",
+          "type": "completion"
+        },
+        {
+          "completion": "retry",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "repeatedly executes command until it succeeds",
+          "type": "completion"
+        },
+        {
+          "completion": "return",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return value from function",
+          "type": "completion"
+        },
+        {
+          "completion": "rndnum",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return random number in given interval",
+          "type": "completion"
+        },
+        {
+          "completion": "rndstr",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return random string",
+          "type": "completion"
+        },
+        {
+          "completion": "routing",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "safe-mode",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "serialize",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "serialize console values to different formats",
+          "type": "completion"
+        },
+        {
+          "completion": "set",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "Change item properties",
+          "type": "completion"
+        },
+        {
+          "completion": "snmp",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "SNMP settings",
+          "type": "completion"
+        },
+        {
+          "completion": "special-login",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Special login users",
+          "type": "completion"
+        },
+        {
+          "completion": "system",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "System information and utilities",
+          "type": "completion"
+        },
+        {
+          "completion": "task",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "commands related to background task handling",
+          "type": "completion"
+        },
+        {
+          "completion": "terminal",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "dir",
+          "text": "commands related to terminal handling",
+          "type": "completion"
+        },
+        {
+          "completion": "time",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "returns time taken by command to execute",
+          "type": "completion"
+        },
+        {
+          "completion": "timestamp",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "returns time since the epoch",
+          "type": "completion"
+        },
+        {
+          "completion": "toarray",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to array value",
+          "type": "completion"
+        },
+        {
+          "completion": "tobool",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to truth value",
+          "type": "completion"
+        },
+        {
+          "completion": "tocrlf",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "converts line endings to CRLF",
+          "type": "completion"
+        },
+        {
+          "completion": "toid",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to internal number value",
+          "type": "completion"
+        },
+        {
+          "completion": "toip",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to IP address value",
+          "type": "completion"
+        },
+        {
+          "completion": "toip6",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to IPv6 address value",
+          "type": "completion"
+        },
+        {
+          "completion": "tolf",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "converts line endings to LF",
+          "type": "completion"
+        },
+        {
+          "completion": "tonsec",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert time argument to nanoseconds",
+          "type": "completion"
+        },
+        {
+          "completion": "tonum",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to integer number value",
+          "type": "completion"
+        },
+        {
+          "completion": "tool",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Diagnostics tools",
+          "type": "completion"
+        },
+        {
+          "completion": "tostr",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to string value",
+          "type": "completion"
+        },
+        {
+          "completion": "totime",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "convert argument to time interval value",
+          "type": "completion"
+        },
+        {
+          "completion": "typeof",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "return type of value",
+          "type": "completion"
+        },
+        {
+          "completion": "undo",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Undo previous action",
+          "type": "completion"
+        },
+        {
+          "completion": "user",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "User management",
+          "type": "completion"
+        },
+        {
+          "completion": "while",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command while condition is true",
+          "type": "completion"
+        },
+        {
+          "completion": "export",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Print or save an export script that can be used to restore configuration",
+          "type": "completion"
+        },
+        {
+          "completion": "ping",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-auto",
+          "text": "tool/ping alias",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-ambiguous-prefix",
+      "demonstrates": "candidate set for an ambiguous prefix",
+      "body": {
+        "request": "completion",
+        "input": "/i"
+      },
+      "ms": 19,
+      "itemCount": 9,
+      "response": [
+        {
+          "completion": "if",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "executes command if condition is true",
+          "type": "completion"
+        },
+        {
+          "completion": "import",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "interface",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Interface configuration",
+          "type": "completion"
+        },
+        {
+          "completion": "ip",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "ipv6",
+          "offset": "1",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "",
+          "offset": "1",
+          "preference": "-20",
+          "show": "false",
+          "style": "obj-inactive",
+          "text": "unknown command",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "2",
+          "preference": "64",
+          "show": "false",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "2",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "2",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-unique-prefix",
+      "demonstrates": "offset semantics for a mid-word completion",
+      "body": {
+        "request": "completion",
+        "input": "/ip/ad"
+      },
+      "ms": 22,
+      "itemCount": 5,
+      "response": [
+        {
+          "completion": "address",
+          "offset": "4",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Address management",
+          "type": "completion"
+        },
+        {
+          "completion": "/",
+          "offset": "6",
+          "preference": "95",
+          "show": "true",
+          "style": "dir",
+          "text": "top of command hierarchy",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "6",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": "{",
+          "offset": "6",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command block",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "6",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-valid-command",
+      "demonstrates": "sentinels at an exact valid command boundary",
+      "body": {
+        "request": "completion",
+        "input": "/ip/address/print"
+      },
+      "ms": 2,
+      "itemCount": 3,
+      "response": [
+        {
+          "completion": "print",
+          "offset": "12",
+          "preference": "96",
+          "show": "true",
+          "style": "cmd",
+          "text": "Print values of item properties",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "17",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "17",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-unknown-command",
+      "demonstrates": "sentinels for an unknown command word",
+      "body": {
+        "request": "completion",
+        "input": "/ip/address/not-a-command"
+      },
+      "ms": 1,
+      "itemCount": 4,
+      "response": [
+        {
+          "completion": "",
+          "offset": "12",
+          "preference": "-20",
+          "show": "false",
+          "style": "obj-inactive",
+          "text": "unknown command",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "25",
+          "preference": "64",
+          "show": "false",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "25",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "25",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-after-cmd-space",
+      "demonstrates": "argument candidates after command + space",
+      "body": {
+        "request": "completion",
+        "input": "/ip/firewall/filter/add "
+      },
+      "ms": 85,
+      "itemCount": 68,
+      "response": [
+        {
+          "completion": "!",
+          "offset": "24",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": "action",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Action to undertake if the packet matches the rule",
+          "type": "completion"
+        },
+        {
+          "completion": "address-list",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Address list in which marked address put",
+          "type": "completion"
+        },
+        {
+          "completion": "address-list-timeout",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Time interval after which address remove from address list",
+          "type": "completion"
+        },
+        {
+          "completion": "chain",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "The name of the chain through which packets are traversing",
+          "type": "completion"
+        },
+        {
+          "completion": "comment",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Short description of the item",
+          "type": "completion"
+        },
+        {
+          "completion": "connection-bytes",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Match packets with given bytes or byte range",
+          "type": "completion"
+        },
+        {
+          "completion": "connection-limit",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Restrict connection limit per address or address block",
+          "type": "completion"
+        },
+        {
+          "completion": "connection-mark",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Matches packets marked via mangle facility with particular connection mark",
+          "type": "completion"
+        },
+        {
+          "completion": "connection-nat-state",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "connection-rate",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "connection-state",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Interprets the connection tracking analysis data for a particular packet",
+          "type": "completion"
+        },
+        {
+          "completion": "connection-type",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Match packets with given connection type",
+          "type": "completion"
+        },
+        {
+          "completion": "content",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "The text packets should contain in order to match the rule",
+          "type": "completion"
+        },
+        {
+          "completion": "copy-from",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Item number",
+          "type": "completion"
+        },
+        {
+          "completion": "disabled",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Defines whether item is ignored or used",
+          "type": "completion"
+        },
+        {
+          "completion": "dscp",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "dst-address",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Destination address with mask",
+          "type": "completion"
+        },
+        {
+          "completion": "dst-address-list",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Destination address list name in which packet place",
+          "type": "completion"
+        },
+        {
+          "completion": "dst-address-type",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Destination address type",
+          "type": "completion"
+        },
+        {
+          "completion": "dst-limit",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Packet limitation per time with burst to dst-address, dst-port or src-address",
+          "type": "completion"
+        },
+        {
+          "completion": "dst-port",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Destination port number or range",
+          "type": "completion"
+        },
+        {
+          "completion": "fragment",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "hotspot",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Matches packets received from clients against various Hot-Spot",
+          "type": "completion"
+        },
+        {
+          "completion": "icmp-options",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Matches ICMP Type:Code fields",
+          "type": "completion"
+        },
+        {
+          "completion": "in-bridge-port",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "in-bridge-port-list",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "in-interface",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Interface the packet has entered the router through",
+          "type": "completion"
+        },
+        {
+          "completion": "in-interface-list",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "ingress-priority",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "ipsec-policy",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "ipv4-options",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Match ipv4 header options",
+          "type": "completion"
+        },
+        {
+          "completion": "jump-target",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Name of the target chain, if the action=jump is used",
+          "type": "completion"
+        },
+        {
+          "completion": "layer7-protocol",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "limit",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Setup burst, how many times to use it in during time interval measured in seconds",
+          "type": "completion"
+        },
+        {
+          "completion": "log",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "log-prefix",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Creates all logs with specific prefix",
+          "type": "completion"
+        },
+        {
+          "completion": "nth",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Match nth packets received by the rule",
+          "type": "completion"
+        },
+        {
+          "completion": "out-bridge-port",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Matches the bridge port physical output device added to a bridge device",
+          "type": "completion"
+        },
+        {
+          "completion": "out-bridge-port-list",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "out-interface",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Interface the packet has leaved the router through",
+          "type": "completion"
+        },
+        {
+          "completion": "out-interface-list",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "p2p",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "P2P program to match",
+          "type": "completion"
+        },
+        {
+          "completion": "packet-mark",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Matches packets marked via mangle facility with particular packet mark",
+          "type": "completion"
+        },
+        {
+          "completion": "packet-size",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Packet size or range in bytes",
+          "type": "completion"
+        },
+        {
+          "completion": "per-connection-classifier",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "place-before",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Item number",
+          "type": "completion"
+        },
+        {
+          "completion": "port",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "priority",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "protocol",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Protocol name or number",
+          "type": "completion"
+        },
+        {
+          "completion": "psd",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Detect TCP un UDP scans",
+          "type": "completion"
+        },
+        {
+          "completion": "random",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Match packets randomly with given probability",
+          "type": "completion"
+        },
+        {
+          "completion": "realm",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "reject-with",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Alters the reply packet of reject action",
+          "type": "completion"
+        },
+        {
+          "completion": "routing-mark",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Matches packets marked by mangle facility with particular routing mark",
+          "type": "completion"
+        },
+        {
+          "completion": "src-address",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Source address with mask",
+          "type": "completion"
+        },
+        {
+          "completion": "src-address-list",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Matches source address of a packet against user-defined address list",
+          "type": "completion"
+        },
+        {
+          "completion": "src-address-type",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Source IP address type",
+          "type": "completion"
+        },
+        {
+          "completion": "src-mac-address",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Source MAC address",
+          "type": "completion"
+        },
+        {
+          "completion": "src-port",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Source-port number",
+          "type": "completion"
+        },
+        {
+          "completion": "tcp-flags",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "TCP flags to match",
+          "type": "completion"
+        },
+        {
+          "completion": "tcp-mss",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "TCP Maximum Segment Size value",
+          "type": "completion"
+        },
+        {
+          "completion": "time",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Packet arrival time and date or locally generated packets departure time and date",
+          "type": "completion"
+        },
+        {
+          "completion": "tls-host",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "tos",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Specifies a match to the value of Type of Service (ToS) field of IP header",
+          "type": "completion"
+        },
+        {
+          "completion": "ttl",
+          "offset": "24",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "",
+          "offset": "24",
+          "preference": "-20",
+          "show": "false",
+          "style": "obj-inactive",
+          "text": "unknown parameter",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "24",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-valid-arg",
+      "demonstrates": "sentinels at an exact valid argument word",
+      "body": {
+        "request": "completion",
+        "input": "/ip/address/add address"
+      },
+      "ms": 21,
+      "itemCount": 3,
+      "response": [
+        {
+          "completion": "address",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "Local IP address",
+          "type": "completion"
+        },
+        {
+          "completion": "=",
+          "offset": "23",
+          "preference": "95",
+          "show": "true",
+          "style": "syntax-meta",
+          "text": "argument value separator",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "23",
+          "preference": "-10",
+          "show": "false",
+          "style": "syntax-obsolete",
+          "text": "old syntax",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-unknown-arg",
+      "demonstrates": "sentinels for an unknown argument word",
+      "body": {
+        "request": "completion",
+        "input": "/ip/address/add bogusarg"
+      },
+      "ms": 1,
+      "itemCount": 3,
+      "response": [
+        {
+          "completion": "",
+          "offset": "16",
+          "preference": "-20",
+          "show": "false",
+          "style": "obj-inactive",
+          "text": "unknown parameter",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "24",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "24",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-arg-value-enum",
+      "demonstrates": "enum-looking candidates after arg=",
+      "body": {
+        "request": "completion",
+        "input": "/ip/firewall/filter/add action="
+      },
+      "ms": 2,
+      "itemCount": 18,
+      "response": [
+        {
+          "completion": " ",
+          "offset": "31",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "31",
+          "preference": "64",
+          "show": "false",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "[",
+          "offset": "31",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "(",
+          "offset": "31",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of expression",
+          "type": "completion"
+        },
+        {
+          "completion": "$",
+          "offset": "31",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "\"",
+          "offset": "31",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of quoted string",
+          "type": "completion"
+        },
+        {
+          "completion": "accept",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "add-dst-to-address-list",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "add-src-to-address-list",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "drop",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "fasttrack-connection",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "jump",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "log",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "passthrough",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "reject",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "return",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "tarpit",
+          "offset": "31",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "*",
+          "offset": "31",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "id prefix",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-arg-value-mixed",
+      "demonstrates": "enum + free-form values after chain=",
+      "body": {
+        "request": "completion",
+        "input": "/ip/firewall/filter/add chain="
+      },
+      "ms": 16,
+      "itemCount": 10,
+      "response": [
+        {
+          "completion": " ",
+          "offset": "30",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "30",
+          "preference": "64",
+          "show": "false",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "[",
+          "offset": "30",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "(",
+          "offset": "30",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of expression",
+          "type": "completion"
+        },
+        {
+          "completion": "$",
+          "offset": "30",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "\"",
+          "offset": "30",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of quoted string",
+          "type": "completion"
+        },
+        {
+          "completion": "forward",
+          "offset": "30",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "input",
+          "offset": "30",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "output",
+          "offset": "30",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "<value>",
+          "offset": "30",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "literal value that consists only of digits, letters and characters -.,:<>/|+_*&^%#@!~",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-arg-value-object-ref",
+      "demonstrates": "live object references (interfaces) after interface=",
+      "body": {
+        "request": "completion",
+        "input": "/ip/address/add interface="
+      },
+      "ms": 20,
+      "itemCount": 10,
+      "response": [
+        {
+          "completion": " ",
+          "offset": "26",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "26",
+          "preference": "64",
+          "show": "false",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "[",
+          "offset": "26",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "(",
+          "offset": "26",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of expression",
+          "type": "completion"
+        },
+        {
+          "completion": "$",
+          "offset": "26",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "\"",
+          "offset": "26",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of quoted string",
+          "type": "completion"
+        },
+        {
+          "completion": "ether1",
+          "offset": "26",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "lo",
+          "offset": "26",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "*",
+          "offset": "26",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "id prefix",
+          "type": "completion"
+        },
+        {
+          "completion": "<value>",
+          "offset": "26",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "literal value that consists only of digits, letters and characters -.,:<>/|+_*&^%#@!~",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-where-fields",
+      "demonstrates": "menu fields offered inside a where clause",
+      "body": {
+        "request": "completion",
+        "input": "/ip/route/print where "
+      },
+      "ms": 64,
+      "itemCount": 46,
+      "response": [
+        {
+          "completion": " ",
+          "offset": "22",
+          "preference": "64",
+          "show": "false",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "22",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": "(",
+          "offset": "22",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of subexpression",
+          "type": "completion"
+        },
+        {
+          "completion": "$",
+          "offset": "22",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "[",
+          "offset": "22",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "{",
+          "offset": "22",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of array value",
+          "type": "completion"
+        },
+        {
+          "completion": "\"",
+          "offset": "22",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of quoted string",
+          "type": "completion"
+        },
+        {
+          "completion": "!",
+          "offset": "22",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "logical negation",
+          "type": "completion"
+        },
+        {
+          "completion": "-",
+          "offset": "22",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "unary minus",
+          "type": "completion"
+        },
+        {
+          "completion": "~",
+          "offset": "22",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "bit inversion",
+          "type": "completion"
+        },
+        {
+          "completion": ">",
+          "offset": "22",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "quote",
+          "type": "completion"
+        },
+        {
+          "completion": "",
+          "offset": "22",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "quote",
+          "type": "completion"
+        },
+        {
+          "completion": ".dead",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": ".id",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "Item number",
+          "type": "completion"
+        },
+        {
+          "completion": ".nextid",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "about",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "active",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "bgp",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "Find or not BGP routing protocol",
+          "type": "completion"
+        },
+        {
+          "completion": "bgp-mpls-vpn",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "blackhole",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "check-gateway",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "Whether all nexthops of this route are checking reachability of gateway by sending arp requests every 10 seconds",
+          "type": "completion"
+        },
+        {
+          "completion": "comment",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "Short description of the item",
+          "type": "completion"
+        },
+        {
+          "completion": "connect",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "dhcp",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "disabled",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "Defines whether item is ignored or used",
+          "type": "completion"
+        },
+        {
+          "completion": "distance",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "Administrative distance of the route",
+          "type": "completion"
+        },
+        {
+          "completion": "dst-address",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "Destination address",
+          "type": "completion"
+        },
+        {
+          "completion": "dynamic",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "ecmp",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "gateway",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "hw-offloaded",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "immediate-gw",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "inactive",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "is-is",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "local-address",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "modem",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "ospf",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "Find or not OSPF routing protocol",
+          "type": "completion"
+        },
+        {
+          "completion": "pref-src",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "rip",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "Find or not RIP routing protocol",
+          "type": "completion"
+        },
+        {
+          "completion": "routing-table",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "scope",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "static",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "target-scope",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "vpn",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "vrf-interface",
+          "offset": "22",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-local",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "<value>",
+          "offset": "22",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "literal value that consists only of digits, letters and characters ._",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-scripting-prefix",
+      "demonstrates": "scripting command prefix after colon",
+      "body": {
+        "request": "completion",
+        "input": ":pu"
+      },
+      "ms": 1,
+      "itemCount": 3,
+      "response": [
+        {
+          "completion": "put",
+          "offset": "1",
+          "preference": "95",
+          "show": "true",
+          "style": "cmd",
+          "text": "prints argument on the screen",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "3",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "3",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-nested-bracket",
+      "demonstrates": "completion inside [ ] command substitution",
+      "body": {
+        "request": "completion",
+        "input": ":put [/ip/ad"
+      },
+      "ms": 1,
+      "itemCount": 5,
+      "response": [
+        {
+          "completion": "address",
+          "offset": "10",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Address management",
+          "type": "completion"
+        },
+        {
+          "completion": "/",
+          "offset": "12",
+          "preference": "95",
+          "show": "true",
+          "style": "dir",
+          "text": "top of command hierarchy",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "12",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": "{",
+          "offset": "12",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command block",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "12",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-path-context",
+      "demonstrates": "path parameter sets the menu context",
+      "body": {
+        "request": "completion",
+        "input": "add address=",
+        "path": "ip,address"
+      },
+      "ms": 13,
+      "itemCount": 7,
+      "response": [
+        {
+          "completion": " ",
+          "offset": "12",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "12",
+          "preference": "64",
+          "show": "false",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "[",
+          "offset": "12",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "(",
+          "offset": "12",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of expression",
+          "type": "completion"
+        },
+        {
+          "completion": "$",
+          "offset": "12",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "\"",
+          "offset": "12",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of quoted string",
+          "type": "completion"
+        },
+        {
+          "completion": "<value>",
+          "offset": "12",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "literal value that consists only of digits, letters and characters -.,:<>/|+_*&^%#@!~",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-terminal-style",
+      "demonstrates": "12 terminal-style candidates",
+      "body": {
+        "request": "completion",
+        "input": "/terminal/style "
+      },
+      "ms": 2,
+      "itemCount": 21,
+      "response": [
+        {
+          "completion": "!",
+          "offset": "16",
+          "preference": "80",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": "style",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "arg",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "=",
+          "offset": "16",
+          "preference": "95",
+          "show": "true",
+          "style": "syntax-meta",
+          "text": "argument value separator",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "16",
+          "preference": "64",
+          "show": "false",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "[",
+          "offset": "16",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "(",
+          "offset": "16",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of expression",
+          "type": "completion"
+        },
+        {
+          "completion": "$",
+          "offset": "16",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "\"",
+          "offset": "16",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of quoted string",
+          "type": "completion"
+        },
+        {
+          "completion": "ambiguous",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "comment",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "Set comment for items",
+          "type": "completion"
+        },
+        {
+          "completion": "error",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "escaped",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "none",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "syntax-meta",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "syntax-noterm",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "syntax-old",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "syntax-val",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "varname",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "varname-global",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "varname-local",
+          "offset": "16",
+          "preference": "96",
+          "show": "true",
+          "style": "none",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "*",
+          "offset": "16",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "id prefix",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-variable",
+      "demonstrates": "completion after $ (declared globals?)",
+      "body": {
+        "request": "completion",
+        "input": ":global shapesProbe 1; :put $"
+      },
+      "ms": 21,
+      "itemCount": 5,
+      "response": [
+        {
+          "completion": "shapesProbe",
+          "offset": "29",
+          "preference": "96",
+          "show": "true",
+          "style": "variable-global",
+          "text": "",
+          "type": "completion"
+        },
+        {
+          "completion": "[",
+          "offset": "29",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "(",
+          "offset": "29",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of expression",
+          "type": "completion"
+        },
+        {
+          "completion": "$",
+          "offset": "29",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "substitution",
+          "type": "completion"
+        },
+        {
+          "completion": "\"",
+          "offset": "29",
+          "preference": "75",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of quoted string",
+          "type": "completion"
+        }
+      ]
+    },
+    {
+      "name": "completion-nonascii-offset",
+      "demonstrates": "whether offsets count UTF-8 bytes or JavaScript UTF-16 units",
+      "body": {
+        "request": "completion",
+        "input": ":put \"é\"; /ip/ad"
+      },
+      "ms": 19,
+      "itemCount": 5,
+      "response": [
+        {
+          "completion": "address",
+          "offset": "15",
+          "preference": "96",
+          "show": "true",
+          "style": "dir",
+          "text": "Address management",
+          "type": "completion"
+        },
+        {
+          "completion": "/",
+          "offset": "17",
+          "preference": "95",
+          "show": "true",
+          "style": "dir",
+          "text": "top of command hierarchy",
+          "type": "completion"
+        },
+        {
+          "completion": " ",
+          "offset": "17",
+          "preference": "-1",
+          "show": "false",
+          "style": "none",
+          "text": "whitespace",
+          "type": "completion"
+        },
+        {
+          "completion": "{",
+          "offset": "17",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "start of command block",
+          "type": "completion"
+        },
+        {
+          "completion": ";",
+          "offset": "17",
+          "preference": "40",
+          "show": "false",
+          "style": "syntax-meta",
+          "text": "end of command",
+          "type": "completion"
+        }
+      ]
+    }
+  ]
+}

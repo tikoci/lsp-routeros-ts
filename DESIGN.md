@@ -168,12 +168,23 @@ portable language intelligence without taking a hard dependency on either.
 
 Decisions captured from the spike:
 
-- **Use parseIL as a *supplemental* signal, not a replacement for `highlight`.** `:parse` is a hard parser (stops at the first error, no partial IL), so multi-error diagnostics still flow through `highlight`. parseIL earns its place for structure-driven features (folding, function symbols, scope-aware references) and for canonicalisation hints (`200ms` → `00:00:00.200`, `yes` → `true`) where the IL shows what RouterOS actually saw.
+- **Use parseIL as a *supplemental* signal, not a replacement for `highlight`.** `:parse` is a hard parser (stops at the first error, no partial IL). Highlight also stops classifying at its first hard error, but keeps everything before it fully tokenized — including the soft markers (`obj-*`, `variable-undefined`, `syntax-obsolete`) — so diagnostics still flow through `highlight` (see `docs/highlight-format.md` §4). parseIL earns its place for structure-driven features (folding, function symbols, scope-aware references) and for canonicalisation hints (`200ms` → `00:00:00.200`, `yes` → `true`) where the IL shows what RouterOS actually saw.
 - **Don't ship the IL parser in the runtime LSP yet.** The IL/path/args boundary is implicit in the grammar and depends on `/console/inspect` schema knowledge to split deterministically. Wait until `[research: inspect-shapes]` lands so we have one well-defined dependency rather than two coupled ones.
 - **Use `:parse` as a cheap pre-check.** Parse time is roughly flat in the corpus and exhibits no analogue of `highlight`'s 28 KB cliff, so a `:parse` probe before a costly highlight request is a safe optimisation once we wire it in.
 - **Treat `>` / `<%%` as real RouterOS operators.** RouterOS 7.22.1 `/console/inspect request=completion` labels `>` as `quote` and `<%%` as `activate in environment`; source-level scripts use both directly, and quoted expressions have runtime type `op`. They are not parseIL-private markers.
 - **Snapshot files are version-tagged on disk.** `<file>.rsc.v<routeros-version>.parseil` lets multiple RouterOS versions coexist in the corpus and keeps IL grammar drift visible as plain diffs across releases.
 - **Keep parseIL comparisons version-aware.** The core IL forms held steady across 7.20.8/7.22.1/7.23rc1, but 74/912 successful captures still drifted because RouterOS leaks live command schema into the IL (`findwhere=` field dumps, command-path canonicalisation like `/ping` → `/tool/ping`, and version-specific `bad parameter` / `bad command name` annotations).
+
+### `request=highlight` Wire Format — highlight-format.md
+
+**Status:** Full-corpus sweeps landed against RouterOS 7.23.2 (stable), 7.24rc2 (testing), and 7.9.2 (the earliest plain-HTTP REST branch tested here; REST itself began at 7.1beta4 over HTTPS). The wire format, complete observed token vocabulary (19 classes), error model (one hard-error char, then unclassified), statefulness gotchas, and cross-version drift are documented in **[`docs/highlight-format.md`](docs/highlight-format.md)**. The corpus harness is `scripts/collect-highlight.ts`; summaries live at `test-data/highlight-summary.v<version>.json` (no per-file sidecars — a highlight response is ~6× source size; the six committed `.rsc.highlight` fixtures remain the offline test inputs).
+
+Decisions captured from the sweep:
+
+- **Highlight yields at most one hard error per request.** `error` marks a single character and everything after it is `none`. The existing "potential issues after prior highlight error" trailing warning in `validation.ts` models this correctly — keep it.
+- **Token streams are per byte, not per character.** The LSP's non-ASCII → `?` substitution is what keeps token indexes aligned with string offsets; don't remove it, and don't send raw UTF-8.
+- **Token classes are stateful.** `obj-disabled`/`obj-dynamic` reflect live object flags; unknown-name classes reflect the connected device's command tree and installed packages. Snapshot fixtures must be version-tagged going forward.
+- **Eight `tokens.ts` classes are not highlight tokens at all** (`ambiguous`, `path`, `varname*`, `syntax-val`, `syntax-old`, `syntax-noterm`) — never observed on the wire in 913-file sweeps across 7.9.2 / 7.23.2 / 7.24rc2. Provenance: the original hand-crafted list conflated the `/terminal/style` display vocabulary (7 of the 8) and the `request=child` node-type vocabulary (`path`) with highlight's token vocabulary (see `docs/highlight-format.md` §8). Keep them mapped defensively; don't build features on them.
 
 ### Test Corpus SQLite Database
 
@@ -187,9 +198,9 @@ Decisions captured from the spike:
 - `source_scripts` + `source_scripts_fts` — one row per `.rsc`, collection classification, size/line/hash flags, text, and BM25/FTS search.
 - `artifact_files` — raw sidecar provenance (`.rsc.highlight`, `.parseil`, `.parseil.meta.json`, summaries, notebooks, manifests), linked to a script when possible.
 - `analysis_runs` — versioned runs such as `parseil`, `required-args`, and future `inspect-shapes` / `completion-tricks`.
-- `parseil_results`, `highlight_snapshots`, and `required_arg_results` — normalized imports of the current sidecars.
+- `parseil_results`, `highlight_snapshots`, `highlight_results`, and `required_arg_results` — normalized imports of the current sidecars and versioned highlight sweeps.
 - `inspect_responses` and `completion_trick_results` — forward-compatible tables for the next research spikes.
-- Views: `v_script_summary`, `v_parseil_by_version`, `v_parseil_drift`, `v_required_args_by_version`, `v_required_arg_drift`, and `v_analysis_overview`.
+- Views: `v_script_summary`, `v_parseil_by_version`, `v_parseil_drift`, `v_highlight_by_version`, `v_highlight_drift`, `v_required_args_by_version`, `v_required_arg_drift`, and `v_analysis_overview`.
 
 **Future spike pattern:** write the reusable harness in `scripts/`, insert normalized rows into `corpus.sqlite`, and add/update an `analysis_runs` row with RouterOS version/build metadata. Keep the checked-in DB reproducible from committed inputs: use corpus fingerprints plus source-side `capturedAt` metadata, not fresh import timestamps. Keep large raw responses in `artifact_files` or the purpose-built result table. Export JSON/Markdown only when reviewers need a stable textual diff or a doc page needs a curated excerpt.
 
