@@ -328,10 +328,10 @@ collapse: adjacent identical classes merge into one `{token, range}` span
   `test-data/highlight-summary.v<version>.json`: per-class totals, per-file
   type sets, probe run-lengths, unknown-token flags, an exact selected-corpus
   SHA-256, and the device architecture/package manifest. Re-run on each new
-  RouterOS release; only diff summaries with the same corpus SHA. The three
-  existing summaries predate the environment-manifest field (their corpus hash
-  was backfilled), so package-dependent interpretation of those captures must
-  remain conservative. `bun run corpus:db` imports their per-file rows into
+  RouterOS release; only diff summaries with the same corpus SHA. All three
+  committed summaries are full captures from this harness (environment
+  manifest included; the corpus vocabulary numbers reproduced exactly across
+  the re-run). `bun run corpus:db` imports their per-file rows into
   `highlight_results`; `v_highlight_by_version` and `v_highlight_drift` provide
   normalized comparisons without reparsing the 16K-line exports.
 - `scripts/capture-snapshots.ts` — regenerates the six committed

@@ -16,7 +16,7 @@ syntax parsing:
 | Which source span is a command, argument, variable, comment, or live-state marker? | Live `/console/inspect` `request=highlight` | Nested structure, value validity, required arguments, or errors after the first hard stop. |
 | Is the whole script structurally valid, and what blocks/expressions did RouterOS build? | Live `:parse` IL | Source ranges, partial IL on error, required arguments, or an unambiguous path/argument split without command-schema data. |
 | What is valid at this cursor or synthetic input boundary? | Live `/console/inspect` `request=completion` | Requiredness; all arguments currently have equivalent completion priority. Synthetic space/`=` tricks remain research, not a stable contract. |
-| What paths, commands, and arguments exist on this device? | Live `/console/inspect` `request=child`; `request=syntax` for terse descriptions | Runtime preconditions, required arguments, rich documentation, historical availability. |
+| What paths, commands, and arguments exist on this device? | Live `/console/inspect` `request=child`; `request=syntax` for structured help (value-type definitions, per-arg explanations) | Runtime preconditions, required arguments, enum values (those live in `completion`), historical availability. |
 | Which arguments are required by an `add` command? | Versioned execute-error probe | Conditional requirements beyond the first discriminator and menus with custom/erroring behavior. This probe can mutate state unless its add/remove wrapper is proven safe. |
 | Where are RouterOS CLI paths in arbitrary text or a static `.rsc` file? | `@tikoci/canonicalize-routeros` / rosetta canonicalization | Semantic validity or live device state. This is tolerant segmentation and path normalization, not RouterOS's parser. |
 | What does a path/property mean, when did it change, and what REST surface maps to it? | rosetta/restraml snapshots plus docs/changelog data | Exact behavior of a differently versioned or differently packaged live device. |
@@ -61,16 +61,16 @@ Every derived fact should retain enough metadata to answer “how do we know?”
 
 ```typescript
 interface RouterOsSyntaxEvidence {
-	source: 'highlight' | 'parseil' | 'completion' | 'child' | 'syntax' | 'execute-error' | 'static-schema' | 'docs'
-	claim: string
-	confidence: 'live' | 'versioned-snapshot' | 'heuristic'
-	routerosVersion?: string
-	architecture?: string
-	packages?: Array<{ name: string; version: string }>
-	pathContext?: string
-	inputSha256?: string
-	corpusSha256?: string
-	truncated?: boolean
+  source: 'highlight' | 'parseil' | 'completion' | 'child' | 'syntax' | 'execute-error' | 'static-schema' | 'docs'
+  claim: string
+  confidence: 'live' | 'versioned-snapshot' | 'heuristic'
+  routerosVersion?: string
+  architecture?: string
+  packages?: Array<{ name: string; version: string }>
+  pathContext?: string
+  inputSha256?: string
+  corpusSha256?: string
+  truncated?: boolean
 }
 ```
 
@@ -101,7 +101,7 @@ Do not collapse these distinctions:
 | Required arguments | [`required-args.md`](required-args.md) | Versioned execute-error dataset with explicit unresolved cases. |
 | Live versus rosetta ownership | [`rosetta-alignment.md`](rosetta-alignment.md) | Decision matrix and join rules exist. |
 | Static path slicing/canonicalization | [`canonicalize-audit.md`](canonicalize-audit.md) | Reusable package exists; deep block/scope parsing is not solved by it. |
-| `completion`, `syntax`, and `child` response shapes | [`BACKLOG.md`](../BACKLOG.md) `[research: inspect-shapes]` | Still a blocker. Capture representative cursor/path contexts before promising a stable generic schema. |
+| `completion`, `syntax`, and `child` response shapes | [`inspect-shapes.md`](inspect-shapes.md) | Curated-context catalog captured on 7.9.2/7.23.2/7.24rc2: field semantics, enum discovery, validity sentinels, `self`/`child` rows, `symbol-type` help structure. The representative corpus-position sweep into `inspect_responses` remains open. |
 | Synthetic trailing-space / trailing-`=` completion probes | [`BACKLOG.md`](../BACKLOG.md) `[research: completion-tricks]` | Still a blocker. Do not encode as a skill recipe yet. |
 | CLI-to-REST/API conversion | rosetta/restraml command schema | Keep separate from source parsing; validate mappings per command family and version. |
 
@@ -118,11 +118,12 @@ routeros-syntax-inspection/
   SKILL.md                         # selection matrix, safety, provenance rules
   references/highlight.md          # compact form of highlight-format.md
   references/parseil.md            # compact form of parseil-format.md
-  references/command-schema.md     # child/syntax/completion after research lands
+  references/command-schema.md     # compact form of inspect-shapes.md (child/syntax/completion)
   references/validation.md         # required-args and live/static layering
 ```
 
-The skill is ready to draft from the first two references now, but it should
-label `inspect-shapes`, `completion-tricks`, early-v7 highlight compatibility,
-and CLI-to-REST conversion as open evidence rather than filling those gaps with
-inference.
+The skill is ready to draft from the first three references now
+(`highlight-format.md`, `parseil-format.md`, `inspect-shapes.md`), but it
+should label `completion-tricks`, the corpus-position `inspect_responses`
+sweep, early-v7 highlight compatibility, and CLI-to-REST conversion as open
+evidence rather than filling those gaps with inference.

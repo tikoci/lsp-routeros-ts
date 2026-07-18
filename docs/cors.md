@@ -30,16 +30,16 @@ controls you are comfortable operating.
 
 ```caddyfile
 routeros-proxy.example.net {
-	header {
-		Access-Control-Allow-Origin "https://vscode.dev"
-		Access-Control-Allow-Methods "GET, POST, PATCH, PUT, DELETE, OPTIONS"
-		Access-Control-Allow-Headers "Authorization, Content-Type"
-	}
+  header {
+    Access-Control-Allow-Origin "https://vscode.dev"
+    Access-Control-Allow-Methods "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers "Authorization, Content-Type"
+  }
 
-	@preflight method OPTIONS
-	respond @preflight 204
+  @preflight method OPTIONS
+  respond @preflight 204
 
-	reverse_proxy 192.168.88.1:80
+  reverse_proxy 192.168.88.1:80
 }
 ```
 
@@ -50,28 +50,28 @@ trusted internal origin policy that covers both hosts.
 
 ```nginx
 server {
-	listen 443 ssl;
-	server_name routeros-proxy.example.net;
+  listen 443 ssl;
+  server_name routeros-proxy.example.net;
 
-	ssl_certificate     /etc/letsencrypt/live/routeros-proxy.example.net/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/routeros-proxy.example.net/privkey.pem;
+  ssl_certificate     /etc/letsencrypt/live/routeros-proxy.example.net/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/routeros-proxy.example.net/privkey.pem;
 
-	location / {
-		if ($request_method = OPTIONS) {
-			add_header Access-Control-Allow-Origin "https://vscode.dev" always;
-			add_header Access-Control-Allow-Methods "GET, POST, PATCH, PUT, DELETE, OPTIONS" always;
-			add_header Access-Control-Allow-Headers "Authorization, Content-Type" always;
-			return 204;
-		}
+  location / {
+    if ($request_method = OPTIONS) {
+      add_header Access-Control-Allow-Origin "https://vscode.dev" always;
+      add_header Access-Control-Allow-Methods "GET, POST, PATCH, PUT, DELETE, OPTIONS" always;
+      add_header Access-Control-Allow-Headers "Authorization, Content-Type" always;
+      return 204;
+    }
 
-		add_header Access-Control-Allow-Origin "https://vscode.dev" always;
-		add_header Access-Control-Allow-Methods "GET, POST, PATCH, PUT, DELETE, OPTIONS" always;
-		add_header Access-Control-Allow-Headers "Authorization, Content-Type" always;
+    add_header Access-Control-Allow-Origin "https://vscode.dev" always;
+    add_header Access-Control-Allow-Methods "GET, POST, PATCH, PUT, DELETE, OPTIONS" always;
+    add_header Access-Control-Allow-Headers "Authorization, Content-Type" always;
 
-		proxy_pass http://192.168.88.1;
-		proxy_set_header Host $host;
-		proxy_set_header Authorization $http_authorization;
-	}
+    proxy_pass http://192.168.88.1;
+    proxy_set_header Host $host;
+    proxy_set_header Authorization $http_authorization;
+  }
 }
 ```
 
