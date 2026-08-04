@@ -1,0 +1,148 @@
+{
+	"source": "https://tangentsoft.com/mikrotik/dir?name=defconf",
+	"repoUrl": "https://tangentsoft.com/mikrotik",
+	"fileCount": 35,
+	"generatedAt": "2026-08-04T16:37:21.953Z",
+	"files": [
+		{
+			"sourcePath": "defconf/C52iG-5HaxD2HaxD.rsc",
+			"fileName": "C52iG-5HaxD2HaxD.rsc"
+		},
+		{
+			"sourcePath": "defconf/C53UiG+5HPaxD2HPaxD.rsc",
+			"fileName": "C53UiG+5HPaxD2HPaxD.rsc"
+		},
+		{
+			"sourcePath": "defconf/CCR1009-7G-1C-1S+.rsc",
+			"fileName": "CCR1009-7G-1C-1S+.rsc"
+		},
+		{
+			"sourcePath": "defconf/CCR1009-8G-1S-1S+.rsc",
+			"fileName": "CCR1009-8G-1S-1S+.rsc"
+		},
+		{
+			"sourcePath": "defconf/CCR1036-12G-4S.rsc",
+			"fileName": "CCR1036-12G-4S.rsc"
+		},
+		{
+			"sourcePath": "defconf/CCR1036-8G-2S+.rsc",
+			"fileName": "CCR1036-8G-2S+.rsc"
+		},
+		{
+			"sourcePath": "defconf/CCR2116-12G-4S+.rsc",
+			"fileName": "CCR2116-12G-4S+.rsc"
+		},
+		{
+			"sourcePath": "defconf/CHR.rsc",
+			"fileName": "CHR.rsc"
+		},
+		{
+			"sourcePath": "defconf/CRS112-8P-4S.rsc",
+			"fileName": "CRS112-8P-4S.rsc"
+		},
+		{
+			"sourcePath": "defconf/CRS212-1G-10S-1S+.rsc",
+			"fileName": "CRS212-1G-10S-1S+.rsc"
+		},
+		{
+			"sourcePath": "defconf/CRS310-8G+2S+.rsc",
+			"fileName": "CRS310-8G+2S+.rsc"
+		},
+		{
+			"sourcePath": "defconf/CRS328-24P-4S+.rsc",
+			"fileName": "CRS328-24P-4S+.rsc"
+		},
+		{
+			"sourcePath": "defconf/H53UiG-5HaxQ2HaxQ.rsc",
+			"fileName": "H53UiG-5HaxQ2HaxQ.rsc"
+		},
+		{
+			"sourcePath": "defconf/L41G-2axD-router.rsc",
+			"fileName": "L41G-2axD-router.rsc"
+		},
+		{
+			"sourcePath": "defconf/L41G-2axD-switch.rsc",
+			"fileName": "L41G-2axD-switch.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB1100AHx2.rsc",
+			"fileName": "RB1100AHx2.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB2011UiAS-2HnD.rsc",
+			"fileName": "RB2011UiAS-2HnD.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB4011iGS+RM.rsc",
+			"fileName": "RB4011iGS+RM.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB433-nowifi.rsc",
+			"fileName": "RB433-nowifi.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB433-wifi.rsc",
+			"fileName": "RB433-wifi.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB450G.rsc",
+			"fileName": "RB450G.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB5009UG+S+IN.rsc",
+			"fileName": "RB5009UG+S+IN.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB750Pr2.rsc",
+			"fileName": "RB750Pr2.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB941-2nD.rsc",
+			"fileName": "RB941-2nD.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB951Ui-2HnD.rsc",
+			"fileName": "RB951Ui-2HnD.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB960PGS-router.rsc",
+			"fileName": "RB960PGS-router.rsc"
+		},
+		{
+			"sourcePath": "defconf/RB960PGS-switch.rsc",
+			"fileName": "RB960PGS-switch.rsc"
+		},
+		{
+			"sourcePath": "defconf/RBD53iG-5HacD2HnD-wifi-qcom-ac.rsc",
+			"fileName": "RBD53iG-5HacD2HnD-wifi-qcom-ac.rsc"
+		},
+		{
+			"sourcePath": "defconf/RBD53iG-5HacD2HnD-wireless.rsc",
+			"fileName": "RBD53iG-5HacD2HnD-wireless.rsc"
+		},
+		{
+			"sourcePath": "defconf/RBcAPGi-5acD2nD-wifi-qcom-ac.rsc",
+			"fileName": "RBcAPGi-5acD2nD-wifi-qcom-ac.rsc"
+		},
+		{
+			"sourcePath": "defconf/RBcAPGi-5acD2nD-wireless.rsc",
+			"fileName": "RBcAPGi-5acD2nD-wireless.rsc"
+		},
+		{
+			"sourcePath": "defconf/RBwAP2nDr2.rsc",
+			"fileName": "RBwAP2nDr2.rsc"
+		},
+		{
+			"sourcePath": "defconf/SXT G-2HnD r2.rsc",
+			"fileName": "SXT G-2HnD r2.rsc"
+		},
+		{
+			"sourcePath": "defconf/SXT G-5HPacD.rsc",
+			"fileName": "SXT G-5HPacD.rsc"
+		},
+		{
+			"sourcePath": "defconf/SXT G-5HPnD r2.rsc",
+			"fileName": "SXT G-5HPnD r2.rsc"
+		}
+	]
+}
