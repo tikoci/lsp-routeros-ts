@@ -51,7 +51,7 @@ import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join, resolve } from 'node:path'
+import { isAbsolute, join, relative, resolve } from 'node:path'
 
 type CliOptions = {
 	repoPath: string | null
@@ -164,8 +164,13 @@ function ensureRepo(opts: CliOptions): string {
  */
 function assertSafeOutDir(outDirAbs: string) {
 	const testDataRoot = resolve(process.cwd(), 'test-data')
+	// `path.relative` rather than a string prefix: hardcoding `/` rejects every
+	// legitimate destination on Windows, where resolved paths use `\`. A path
+	// is inside the root when the relative step neither escapes (`..`) nor is
+	// absolute (different drive), and is non-empty (the root itself).
+	const step = relative(testDataRoot, outDirAbs)
 	const isInsideTestData =
-		outDirAbs.startsWith(`${testDataRoot}/`) && resolve(outDirAbs) !== testDataRoot
+		step !== '' && !step.startsWith('..') && !isAbsolute(step)
 	if (!isInsideTestData) {
 		throw new Error(
 			`refusing to clear ${outDirAbs}: --out-dir must be a subdirectory of ${testDataRoot}`,

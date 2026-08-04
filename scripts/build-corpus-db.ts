@@ -9,6 +9,7 @@
  * rebuilt from committed .rsc scripts and sidecar captures; it is not runtime
  * code and is excluded from the VSIX by .vscodeignore's test-data/ rule.
  */
+import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
@@ -109,16 +110,44 @@ function parseArgs(): { dbPath: string } {
 	return { dbPath: DEFAULT_DB }
 }
 
+/**
+ * Files git tracks under `dir`, as absolute paths.
+ *
+ * The corpus database is committed and is meant to be reproducible from a
+ * clean checkout, so tracked-ness is the correct membership test: an ignored
+ * or untracked local file cannot be reproduced by anyone else, and indexing
+ * one silently contaminates the artifact. This is not hypothetical — a local
+ * `test-data/vscode.dev/` TLS key pair and an `assessment-results.json`, both
+ * gitignored, were fingerprinted into the committed database this way.
+ */
+function trackedFiles(dir: string): Set<string> {
+	const result = spawnSync('git', ['ls-files', '-z', '--', dir], {
+		cwd: REPO_ROOT,
+		encoding: 'utf-8',
+		maxBuffer: 64 * 1024 * 1024,
+	})
+	if (result.status !== 0) {
+		throw new Error(`git ls-files failed: ${result.stderr || result.error?.message || 'unknown error'}`)
+	}
+	return new Set(
+		result.stdout
+			.split('\0')
+			.filter((line) => line !== '')
+			.map((relPath) => resolve(REPO_ROOT, relPath)),
+	)
+}
+
 function allFiles(dir: string): string[] {
+	const tracked = trackedFiles(dir)
 	const out: string[] = []
-	for (const entry of readdirSync(dir, { withFileTypes: true })) {
-		const full = join(dir, entry.name)
-		if (entry.isDirectory()) {
-			out.push(...allFiles(full))
-		} else {
-			out.push(full)
+	const walk = (current: string) => {
+		for (const entry of readdirSync(current, { withFileTypes: true })) {
+			const full = join(current, entry.name)
+			if (entry.isDirectory()) walk(full)
+			else if (tracked.has(resolve(full))) out.push(full)
 		}
 	}
+	walk(dir)
 	return out.sort((a, b) => relative(TEST_DATA_DIR, a).localeCompare(relative(TEST_DATA_DIR, b)))
 }
 
