@@ -8,9 +8,12 @@
  * MACs/serials/timezone/country-code already redacted by the maintainer
  * before publishing.
  *
- * Provenance is measured, not asserted: the manifest pins the upstream Fossil
- * check-in UUID and a SHA-256 per file, and each file's RouterOS version is
- * read from its own `/export` banner. Note that the upstream README's
+ * Provenance is measured, not asserted: the importer verifies the clone's
+ * Fossil project code before writing tangentsoft attribution, the manifest
+ * pins the upstream check-in UUID and a SHA-256 per file, and each file's
+ * RouterOS version is read from its own `/export` banner. The output
+ * directory is staged and swapped, so a failed run cannot leave a partial
+ * collection behind a stale manifest. Note that the upstream README's
  * "7.1 through 7.19" range describes the `_common.rsc` version history — the
  * one file this importer excludes — not these captures, whose banners span a
  * narrower band. Note too that the archive's `-switch`/`-router` pairs are
@@ -46,7 +49,7 @@
 
 import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
@@ -64,6 +67,14 @@ const DEFAULT_CHECKIN = 'trunk'
 const SEED_URL = 'https://tangentsoft.com/mikrotik/dir?name=defconf'
 const EXCLUDED = new Set(['defconf/_common.rsc'])
 
+/**
+ * Fossil's per-repository project code — stable across clones and mirrors, and
+ * independent of the URL used to reach them. `--repo`/`--url` can point at any
+ * Fossil database, but this importer writes tangentsoft attribution, so it
+ * verifies it is actually reading that archive rather than trusting the URL.
+ */
+const EXPECTED_PROJECT_CODE = 'fb4000be731786c3866e5e4b8cec262d836de66e'
+
 function parseArgs(args: string[]): CliOptions {
 	const opts: CliOptions = {
 		repoPath: null,
@@ -72,17 +83,25 @@ function parseArgs(args: string[]): CliOptions {
 		checkin: DEFAULT_CHECKIN,
 		dryRun: false,
 	}
+	// A flag that swallows the next flag is worse than a hard failure here:
+	// `--repo --dry-run` would silently write, and `--checkin --dry-run` would
+	// silently fall back to mutable `trunk` instead of the pinned check-in.
+	const value = (flag: string, index: number): string => {
+		const next = args[index + 1]
+		if (next === undefined || next.startsWith('-')) throw new Error(`${flag} requires a value`)
+		return next
+	}
 	for (let i = 0; i < args.length; i++) {
 		const arg = args[i]
-		if (arg === '--repo') opts.repoPath = args[++i] || opts.repoPath
-		else if (arg === '--url') opts.url = args[++i] || opts.url
-		else if (arg === '--out-dir') opts.outDir = args[++i] || opts.outDir
-		else if (arg === '--checkin') opts.checkin = args[++i] || opts.checkin
+		if (arg === '--repo') opts.repoPath = value(arg, i++)
+		else if (arg === '--url') opts.url = value(arg, i++)
+		else if (arg === '--out-dir') opts.outDir = value(arg, i++)
+		else if (arg === '--checkin') opts.checkin = value(arg, i++)
 		else if (arg === '--dry-run') opts.dryRun = true
 		else if (arg === '--help' || arg === '-h') {
 			printHelp()
 			process.exit(0)
-		}
+		} else throw new Error(`unknown option: ${arg}`)
 	}
 	return opts
 }
@@ -112,17 +131,23 @@ function run(cmd: string, args: string[]): string {
 function ensureRepo(opts: CliOptions): string {
 	if (opts.repoPath) {
 		if (!existsSync(opts.repoPath)) throw new Error(`--repo path does not exist: ${opts.repoPath}`)
+		// Identity before network: a caller-supplied clone is checked before we
+		// pull into it, so pointing at the wrong repo fails on the wrong repo
+		// rather than on some unrelated fossil error.
+		assertExpectedRepo(opts.repoPath)
 		console.log(`Pulling latest into existing clone: ${opts.repoPath}`)
 		run('fossil', ['pull', '-R', opts.repoPath])
 		return opts.repoPath
 	}
 	const repoPath = join(tmpdir(), 'tangentsoft-mikrotik.fossil')
 	if (existsSync(repoPath)) {
+		assertExpectedRepo(repoPath)
 		console.log(`Pulling latest into cached clone: ${repoPath}`)
 		run('fossil', ['pull', '-R', repoPath])
 	} else {
 		console.log(`Cloning ${opts.url} -> ${repoPath}`)
 		run('fossil', ['clone', opts.url, repoPath])
+		assertExpectedRepo(repoPath)
 	}
 	return repoPath
 }
@@ -144,6 +169,23 @@ function assertSafeOutDir(outDirAbs: string) {
 	if (!isInsideTestData) {
 		throw new Error(
 			`refusing to clear ${outDirAbs}: --out-dir must be a subdirectory of ${testDataRoot}`,
+		)
+	}
+}
+
+/**
+ * Confirm the clone really is tangentsoft's archive before writing attribution
+ * that says so. The check-in UUID and file hashes pin *which snapshot* was
+ * imported; this pins *whose repository* it came from.
+ */
+function assertExpectedRepo(repoPath: string) {
+	const info = run('fossil', ['info', '-R', repoPath])
+	const projectCode = info.match(/^project-code:\s+(\S+)/m)?.[1]
+	if (projectCode !== EXPECTED_PROJECT_CODE) {
+		throw new Error(
+			`${repoPath} is not the tangentsoft MikroTik archive ` +
+				`(project-code ${projectCode ?? 'unknown'}, expected ${EXPECTED_PROJECT_CODE}). ` +
+				'This importer writes tangentsoft attribution, so it refuses other repositories.',
 		)
 	}
 }
@@ -260,8 +302,7 @@ function writeManifest(outDirAbs: string, url: string, checkin: string, files: I
 	writeFileSync(join(outDirAbs, 'manifest.json'), `${JSON.stringify(manifest, null, '\t')}\n`, 'utf-8')
 }
 
-function main() {
-	const opts = parseArgs(process.argv.slice(2))
+function importDefconf(opts: CliOptions): ImportedFile[] | null {
 	const outDirAbs = resolve(process.cwd(), opts.outDir)
 	if (!opts.dryRun) assertSafeOutDir(outDirAbs)
 	const repoPath = ensureRepo(opts)
@@ -271,33 +312,52 @@ function main() {
 
 	if (deviceFiles.length === 0) {
 		console.warn('No defconf/*.rsc device files found.')
-		return
+		return null
 	}
 
 	if (opts.dryRun) {
 		for (const relPath of deviceFiles) console.log(`[dry-run] ${relPath}`)
 		console.log(`${deviceFiles.length} device files would be imported into ${opts.outDir}`)
-		return
+		return null
 	}
 
-	rmSync(outDirAbs, { recursive: true, force: true })
-	mkdirSync(outDirAbs, { recursive: true })
+	// Stage into a sibling directory and swap only once every file, the
+	// attribution, and the manifest are written. A `fossil cat` that fails
+	// half-way must not leave a partial collection behind a stale manifest.
+	const stageDir = `${outDirAbs}.staging`
+	rmSync(stageDir, { recursive: true, force: true })
+	mkdirSync(stageDir, { recursive: true })
 
-	const written: ImportedFile[] = []
-	for (const relPath of deviceFiles) {
-		const fileName = relPath.replace(/^defconf\//, '')
-		const content = catFile(repoPath, checkin, relPath)
-		writeFileSync(join(outDirAbs, fileName), content, 'utf-8')
-		written.push({
-			sourcePath: relPath,
-			fileName,
-			sha256: sha256(content),
-			routerosVersion: bannerVersion(content),
-		})
+	try {
+		const written: ImportedFile[] = []
+		for (const relPath of deviceFiles) {
+			const fileName = relPath.replace(/^defconf\//, '')
+			const content = catFile(repoPath, checkin, relPath)
+			writeFileSync(join(stageDir, fileName), content, 'utf-8')
+			written.push({
+				sourcePath: relPath,
+				fileName,
+				sha256: sha256(content),
+				routerosVersion: bannerVersion(content),
+			})
+		}
+
+		writeAttribution(stageDir, opts.url, written)
+		writeManifest(stageDir, opts.url, checkin, written)
+
+		rmSync(outDirAbs, { recursive: true, force: true })
+		renameSync(stageDir, outDirAbs)
+		return written
+	} catch (error) {
+		rmSync(stageDir, { recursive: true, force: true })
+		throw error
 	}
+}
 
-	writeAttribution(outDirAbs, opts.url, written)
-	writeManifest(outDirAbs, opts.url, checkin, written)
+function main() {
+	const opts = parseArgs(process.argv.slice(2))
+	const written = importDefconf(opts)
+	if (!written) return
 	const unbannered = written.filter((f) => f.routerosVersion === null).length
 	console.log(
 		`Imported ${written.length} device export scripts into ${opts.outDir}` +
