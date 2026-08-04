@@ -36,8 +36,12 @@
  * Options:
  *   --repo <path>     Reuse an existing local .fossil clone instead of cloning fresh
  *   --url <url>       Fossil repo URL (default: https://tangentsoft.com/mikrotik)
- *   --out-dir <path>  Output directory (default: test-data/tangentsoft)
+ *   --out-dir <path>  Output directory (default: test-data/tangentsoft); must
+ *                     be under test-data/, since the importer clears it first
+ *   --checkin <ref>   Check-in to import (default: trunk); pass the UUID from
+ *                     manifest.json to reproduce a past import exactly
  *   --dry-run         List files without writing
+ *   --help, -h        Show this help
  */
 
 import { spawnSync } from 'node:child_process'
@@ -89,7 +93,8 @@ function printHelp() {
 Options:
   --repo <path>     Reuse an existing local .fossil clone instead of cloning fresh
   --url <url>       Fossil repo URL (default: ${DEFAULT_URL})
-  --out-dir <path>  Output directory (default: ${DEFAULT_OUT_DIR})
+  --out-dir <path>  Output directory (default: ${DEFAULT_OUT_DIR}); must be
+                    under test-data/, since the importer clears it first
   --checkin <ref>   Check-in to import (default: ${DEFAULT_CHECKIN}); pass the
                     UUID recorded in manifest.json to reproduce a past import
   --dry-run         List files without writing
@@ -127,6 +132,22 @@ function ensureRepo(opts: CliOptions): string {
  * listing, every `cat`, and the manifest all name the same immutable version.
  * Importing against a bare `trunk` would silently drift as upstream commits.
  */
+/**
+ * The importer clears its output directory before writing, so `--out-dir .` or
+ * `--out-dir ..` would wipe the checkout. Confine it to `test-data/`, which is
+ * the only place a corpus collection belongs anyway.
+ */
+function assertSafeOutDir(outDirAbs: string) {
+	const testDataRoot = resolve(process.cwd(), 'test-data')
+	const isInsideTestData =
+		outDirAbs.startsWith(`${testDataRoot}/`) && resolve(outDirAbs) !== testDataRoot
+	if (!isInsideTestData) {
+		throw new Error(
+			`refusing to clear ${outDirAbs}: --out-dir must be a subdirectory of ${testDataRoot}`,
+		)
+	}
+}
+
 function resolveCheckin(repoPath: string, ref: string): string {
 	const info = run('fossil', ['info', ref, '-R', repoPath])
 	const match = info.match(/^hash:\s+([0-9a-f]{40,})/m)
@@ -242,6 +263,7 @@ function writeManifest(outDirAbs: string, url: string, checkin: string, files: I
 function main() {
 	const opts = parseArgs(process.argv.slice(2))
 	const outDirAbs = resolve(process.cwd(), opts.outDir)
+	if (!opts.dryRun) assertSafeOutDir(outDirAbs)
 	const repoPath = ensureRepo(opts)
 	const checkin = resolveCheckin(repoPath, opts.checkin)
 	console.log(`Importing from check-in ${checkin}`)
@@ -283,4 +305,10 @@ function main() {
 	)
 }
 
-main()
+try {
+	main()
+} catch (error) {
+	const message = error instanceof Error ? error.message : String(error)
+	console.error(`import-tangentsoft-defconf: ${message}`)
+	process.exit(1)
+}
