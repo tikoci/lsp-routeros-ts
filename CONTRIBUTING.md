@@ -208,6 +208,21 @@ bun run scripts/import-discourse-sqlite-snippets.ts \
 
 This importer groups files under topic-based directories using topic IDs/titles from the database.
 
+### Importing the tangentsoft `defconf` Archive
+
+To (re-)import device `/export` captures from tangentsoft's Fossil repo, use:
+
+```bash
+bun run scripts/import-tangentsoft-defconf.ts --out-dir test-data/tangentsoft
+```
+
+The web UI gates file downloads behind a JS proof-of-work anti-bot check that
+blocks scripted HTTP fetches, so this shells out to the `fossil` CLI
+(`fossil clone`/`fossil cat`) instead of scraping HTML — Fossil's native sync
+protocol is unaffected. Requires `fossil` on `PATH`. Use `--repo <path>` to
+reuse an existing local `.fossil` clone, or `--dry-run` to list files without
+writing.
+
 ## Attributions
 
 ### ✂ Rextended "Fragments of Snippets" (forum.mikrotik.com)
@@ -227,3 +242,22 @@ by Christian Hesse <mail@eworm.de>, licensed under GPL.
 
 Used as test data for the RouterOS LSP integration tests.
 See [rsc.eworm.de/COPYING.md](https://rsc.eworm.de/COPYING.md) for the full license.
+
+### tangentsoft MikroTik defconf Archive (Fossil)
+
+`test-data/tangentsoft/` contains genuine `/export show-sensitive terse`
+captures from real devices, imported from this Fossil repository's
+default-configuration archive:
+
+[tangentsoft.com/mikrotik/dir?name=defconf](https://tangentsoft.com/mikrotik/dir?name=defconf)
+
+Thanks to [@tangent](https://tangentsoft.com/mikrotik) for maintaining and
+sharing this archive, and for confirming redistribution here directly.
+
+`test-data/tangentsoft/manifest.json` pins the upstream Fossil check-in UUID
+and a SHA-256 per file, and records each capture's RouterOS version as read
+from its own `/export` banner; re-running the importer with
+`--checkin <uuid>` reproduces the directory byte for byte. See
+`test-data/tangentsoft/ATTRIBUTION.md` for the redaction and
+maintainer-modification caveats — the collection is device-emitted text that a
+human then edited, not raw device output.

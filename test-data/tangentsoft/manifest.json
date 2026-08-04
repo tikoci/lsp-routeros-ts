@@ -1,0 +1,218 @@
+{
+	"source": "https://tangentsoft.com/mikrotik/dir?name=defconf",
+	"repoUrl": "https://tangentsoft.com/mikrotik",
+	"checkin": "ff1582264d6410f7ad3f90bccfdd4b3f39a5527e",
+	"fileCount": 35,
+	"files": [
+		{
+			"sourcePath": "defconf/C52iG-5HaxD2HaxD.rsc",
+			"fileName": "C52iG-5HaxD2HaxD.rsc",
+			"sha256": "1686cd01da97aebed1925a5e8118acfc823866fe2961271e34330b2c16be273e",
+			"routerosVersion": "7.16"
+		},
+		{
+			"sourcePath": "defconf/C53UiG+5HPaxD2HPaxD.rsc",
+			"fileName": "C53UiG+5HPaxD2HPaxD.rsc",
+			"sha256": "bc06c8a4788caf97d08022d7c9d0a4a2caef62e9305d584d9f9f02137466b258",
+			"routerosVersion": "7.15.2"
+		},
+		{
+			"sourcePath": "defconf/CCR1009-7G-1C-1S+.rsc",
+			"fileName": "CCR1009-7G-1C-1S+.rsc",
+			"sha256": "2cba52b39e4a66123defdf4f989464664a4497be74b89b09e5e393a02e41e525",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/CCR1009-8G-1S-1S+.rsc",
+			"fileName": "CCR1009-8G-1S-1S+.rsc",
+			"sha256": "1a1b3895ff8a2743fb2517d018f7e8a5084b89b7364cdb0d5c9287b58ec263c4",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/CCR1036-12G-4S.rsc",
+			"fileName": "CCR1036-12G-4S.rsc",
+			"sha256": "2856d3e1924826534b2e26f3d10c584c811313a03dc04ee024dd26314bf635b9",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/CCR1036-8G-2S+.rsc",
+			"fileName": "CCR1036-8G-2S+.rsc",
+			"sha256": "9378c45b71b160f5940d9db4b61371a8c28756060bc5aa5ceff2c44ec92145e4",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/CCR2116-12G-4S+.rsc",
+			"fileName": "CCR2116-12G-4S+.rsc",
+			"sha256": "7703e1cc8d795c1e1143becf890ed5c42e7cc2450d3cf530589ce6f52ccb7c0b",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/CHR.rsc",
+			"fileName": "CHR.rsc",
+			"sha256": "862394ad2f2b949f9ff32f7b490b55f36ca99f07daf5d26fa9e3bd654692e72c",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/CRS112-8P-4S.rsc",
+			"fileName": "CRS112-8P-4S.rsc",
+			"sha256": "3c0d317a1e099970c4dac90b0cf7615b0a97e5703a1601c3ce6ff3514b245889",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/CRS212-1G-10S-1S+.rsc",
+			"fileName": "CRS212-1G-10S-1S+.rsc",
+			"sha256": "ea2e2788575c59d4eaa9f97438b8cef4682012841c6599dab470819dcb7ea2d9",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/CRS310-8G+2S+.rsc",
+			"fileName": "CRS310-8G+2S+.rsc",
+			"sha256": "2450db237e8402cfb1206f15172524e7f21aa66d76d2c5643e880dfa4e32e6f7",
+			"routerosVersion": "7.16.1"
+		},
+		{
+			"sourcePath": "defconf/CRS328-24P-4S+.rsc",
+			"fileName": "CRS328-24P-4S+.rsc",
+			"sha256": "f4d0801382ffc73f2a920ff9a6a7636ed94482243f48a2fbb03c24c3d52cf360",
+			"routerosVersion": "7.16.1"
+		},
+		{
+			"sourcePath": "defconf/H53UiG-5HaxQ2HaxQ.rsc",
+			"fileName": "H53UiG-5HaxQ2HaxQ.rsc",
+			"sha256": "0b28b3e6d8bd2b4e12f6400061a2e71edc08d50a87ef60f6c5b8ce92d33c028c",
+			"routerosVersion": "7.18.2"
+		},
+		{
+			"sourcePath": "defconf/L41G-2axD-router.rsc",
+			"fileName": "L41G-2axD-router.rsc",
+			"sha256": "dd65769a8327645cf8a70ae54dc01bc1f9d7e058f50916527f199ebc1fa29711",
+			"routerosVersion": "7.15.2"
+		},
+		{
+			"sourcePath": "defconf/L41G-2axD-switch.rsc",
+			"fileName": "L41G-2axD-switch.rsc",
+			"sha256": "345b2e8381b8f8667fa1791ea3b72bb6ef6533cd62fc3b8eef04c05d8e3a8df1",
+			"routerosVersion": "7.15.2"
+		},
+		{
+			"sourcePath": "defconf/RB1100AHx2.rsc",
+			"fileName": "RB1100AHx2.rsc",
+			"sha256": "83f6048d84bce7f5a3badc658737777cefc0f121248809dc5b2d1ded9d3abd66",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RB2011UiAS-2HnD.rsc",
+			"fileName": "RB2011UiAS-2HnD.rsc",
+			"sha256": "26c035ad50c02e34e80a04b5d03799382ce2b308f2509cc20f98be91e5e618fb",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RB4011iGS+RM.rsc",
+			"fileName": "RB4011iGS+RM.rsc",
+			"sha256": "0c2cb049014b4ff358315b64355d7da4aa77378ec05859d0d86e47f72eb7ee4c",
+			"routerosVersion": "7.18.2"
+		},
+		{
+			"sourcePath": "defconf/RB433-nowifi.rsc",
+			"fileName": "RB433-nowifi.rsc",
+			"sha256": "e616f88fac6ecae629210f459f56e5128e9bd15bdc7e6f840ca4a06278140901",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RB433-wifi.rsc",
+			"fileName": "RB433-wifi.rsc",
+			"sha256": "cf7615471adaadb4e4e851ad0557afe9f7fb5c420f71695053364690122633d8",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RB450G.rsc",
+			"fileName": "RB450G.rsc",
+			"sha256": "a5e427b4904e336fe2356dc5a3758cd50bf44b265b3670565f1cf4d3e9fa46f2",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RB5009UG+S+IN.rsc",
+			"fileName": "RB5009UG+S+IN.rsc",
+			"sha256": "39cb8ad64d2338f9915c3bfb66f7dd4ac720cbdea03cbc99a09ccaa931d1c3e9",
+			"routerosVersion": "7.15.2"
+		},
+		{
+			"sourcePath": "defconf/RB750Pr2.rsc",
+			"fileName": "RB750Pr2.rsc",
+			"sha256": "c3cc9edfaf4e3fb7d835f3e4cb741159df1ab0faf378ba8fc46cde6590b8ade8",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RB941-2nD.rsc",
+			"fileName": "RB941-2nD.rsc",
+			"sha256": "0b5a21c74e6f8e552b7490e5b09101e2b048a8e85e9bb045dbbf5b400cd1f4bb",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RB951Ui-2HnD.rsc",
+			"fileName": "RB951Ui-2HnD.rsc",
+			"sha256": "6d2916577375877a5c839727289e4463656479a08da88430d2d76bc2b05817ba",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RB960PGS-router.rsc",
+			"fileName": "RB960PGS-router.rsc",
+			"sha256": "c6df5f28ba4e2fdb6c72ca204d4bc8c918934f090b325dc2285b3006ca773a94",
+			"routerosVersion": "7.15.2"
+		},
+		{
+			"sourcePath": "defconf/RB960PGS-switch.rsc",
+			"fileName": "RB960PGS-switch.rsc",
+			"sha256": "16a7d260a8e570b05bd095eee0b98386b6b335c8cf7a82cdc01c8b8df00d6938",
+			"routerosVersion": "7.15.2"
+		},
+		{
+			"sourcePath": "defconf/RBD53iG-5HacD2HnD-wifi-qcom-ac.rsc",
+			"fileName": "RBD53iG-5HacD2HnD-wifi-qcom-ac.rsc",
+			"sha256": "3b8452e7a00f4b8ad4b30658eb9bf5184c5a01825b626f3ac429ea70ec391b3d",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RBD53iG-5HacD2HnD-wireless.rsc",
+			"fileName": "RBD53iG-5HacD2HnD-wireless.rsc",
+			"sha256": "b4eb5d1dc3a091d0b29bca07af0a55f4feceae74639e4ca1b4acdc7d3870cc82",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RBcAPGi-5acD2nD-wifi-qcom-ac.rsc",
+			"fileName": "RBcAPGi-5acD2nD-wifi-qcom-ac.rsc",
+			"sha256": "3ed9bd7b9a516bc62ae9d30875dcbc262868fb7314bf860ad0b994b9189929a5",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RBcAPGi-5acD2nD-wireless.rsc",
+			"fileName": "RBcAPGi-5acD2nD-wireless.rsc",
+			"sha256": "adbae91b3ed99aae9a1fa0cf2da98ccd97430799fc081b026570a6081e90b0d6",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/RBwAP2nDr2.rsc",
+			"fileName": "RBwAP2nDr2.rsc",
+			"sha256": "7ba243246120be5da100edefa97d86c19951d8cae8559856103e12db868e3375",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/SXT G-2HnD r2.rsc",
+			"fileName": "SXT G-2HnD r2.rsc",
+			"sha256": "e632f91a0efa717cc53069b02cc874dfe541069af3eb5b7f141a5806b961a2f6",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/SXT G-5HPacD.rsc",
+			"fileName": "SXT G-5HPacD.rsc",
+			"sha256": "8732f967c7952ae664f558f4884b84103b0e8e3ba651102c6b159a3d1c29d66e",
+			"routerosVersion": "7.15.3"
+		},
+		{
+			"sourcePath": "defconf/SXT G-5HPnD r2.rsc",
+			"fileName": "SXT G-5HPnD r2.rsc",
+			"sha256": "0968a87cabb28c849c995216bd6947fadfcd6b77893fc5ae6f729323b9c3b401",
+			"routerosVersion": "7.15.3"
+		}
+	]
+}

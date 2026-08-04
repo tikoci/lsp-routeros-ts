@@ -158,6 +158,7 @@ function classifyCollection(relPath: string): string {
 	if (relPath.startsWith('edge-cases/')) return 'edge-cases'
 	if (relPath.startsWith('tikbook/')) return 'tikbook'
 	if (relPath.startsWith('complex/')) return 'complex'
+	if (relPath.startsWith('tangentsoft/')) return 'tangentsoft'
 	if (relPath.startsWith('forum/')) return 'forum-legacy'
 	return 'root'
 }
