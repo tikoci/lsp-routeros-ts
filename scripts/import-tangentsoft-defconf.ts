@@ -3,10 +3,19 @@
  * Fossil repo (https://tangentsoft.com/mikrotik), directory `defconf/`.
  *
  * These are genuine `/export show-sensitive terse` captures from real
- * devices (per the directory's own README), spanning RouterOS 7.1-7.19
- * across ~35 device models — a second, independent real-`/export` source
- * alongside the forum corpus, with MACs/serials/timezone/country-code
- * already redacted by the maintainer before publishing.
+ * devices (per the directory's own README) across ~35 device models — a
+ * second, independent real-`/export` source alongside the forum corpus, with
+ * MACs/serials/timezone/country-code already redacted by the maintainer
+ * before publishing.
+ *
+ * Provenance is measured, not asserted: the manifest pins the upstream Fossil
+ * check-in UUID and a SHA-256 per file, and each file's RouterOS version is
+ * read from its own `/export` banner. Note that the upstream README's
+ * "7.1 through 7.19" range describes the `_common.rsc` version history — the
+ * one file this importer excludes — not these captures, whose banners span a
+ * narrower band. Note too that the archive's `-switch`/`-router` pairs are
+ * maintainer-modified variants of one capture, so this collection is L1
+ * ("a device emitted this, then a human edited it"), not raw device output.
  *
  * The web UI gates file downloads behind a JS proof-of-work anti-bot check
  * that blocks scripted HTTP fetches (curl/WebFetch get a "Browser
@@ -32,6 +41,7 @@
  */
 
 import { spawnSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -40,21 +50,30 @@ type CliOptions = {
 	repoPath: string | null
 	url: string
 	outDir: string
+	checkin: string
 	dryRun: boolean
 }
 
 const DEFAULT_URL = 'https://tangentsoft.com/mikrotik'
 const DEFAULT_OUT_DIR = 'test-data/tangentsoft'
+const DEFAULT_CHECKIN = 'trunk'
 const SEED_URL = 'https://tangentsoft.com/mikrotik/dir?name=defconf'
 const EXCLUDED = new Set(['defconf/_common.rsc'])
 
 function parseArgs(args: string[]): CliOptions {
-	const opts: CliOptions = { repoPath: null, url: DEFAULT_URL, outDir: DEFAULT_OUT_DIR, dryRun: false }
+	const opts: CliOptions = {
+		repoPath: null,
+		url: DEFAULT_URL,
+		outDir: DEFAULT_OUT_DIR,
+		checkin: DEFAULT_CHECKIN,
+		dryRun: false,
+	}
 	for (let i = 0; i < args.length; i++) {
 		const arg = args[i]
 		if (arg === '--repo') opts.repoPath = args[++i] || opts.repoPath
 		else if (arg === '--url') opts.url = args[++i] || opts.url
 		else if (arg === '--out-dir') opts.outDir = args[++i] || opts.outDir
+		else if (arg === '--checkin') opts.checkin = args[++i] || opts.checkin
 		else if (arg === '--dry-run') opts.dryRun = true
 		else if (arg === '--help' || arg === '-h') {
 			printHelp()
@@ -71,6 +90,8 @@ Options:
   --repo <path>     Reuse an existing local .fossil clone instead of cloning fresh
   --url <url>       Fossil repo URL (default: ${DEFAULT_URL})
   --out-dir <path>  Output directory (default: ${DEFAULT_OUT_DIR})
+  --checkin <ref>   Check-in to import (default: ${DEFAULT_CHECKIN}); pass the
+                    UUID recorded in manifest.json to reproduce a past import
   --dry-run         List files without writing
   --help, -h        Show this help
 `)
@@ -101,8 +122,20 @@ function ensureRepo(opts: CliOptions): string {
 	return repoPath
 }
 
-function listDeviceFiles(repoPath: string): string[] {
-	const listing = run('fossil', ['ls', '-R', repoPath, '-r', 'trunk'])
+/**
+ * Resolve a ref (`trunk`, a tag, a prefix) to the full check-in UUID, so the
+ * listing, every `cat`, and the manifest all name the same immutable version.
+ * Importing against a bare `trunk` would silently drift as upstream commits.
+ */
+function resolveCheckin(repoPath: string, ref: string): string {
+	const info = run('fossil', ['info', ref, '-R', repoPath])
+	const match = info.match(/^hash:\s+([0-9a-f]{40,})/m)
+	if (!match?.[1]) throw new Error(`could not resolve check-in "${ref}" in ${repoPath}`)
+	return match[1]
+}
+
+function listDeviceFiles(repoPath: string, checkin: string): string[] {
+	const listing = run('fossil', ['ls', '-R', repoPath, '-r', checkin])
 	return listing
 		.split('\n')
 		.map((line) => line.trim())
@@ -111,11 +144,51 @@ function listDeviceFiles(repoPath: string): string[] {
 		.sort()
 }
 
-function catFile(repoPath: string, relPath: string): string {
-	return run('fossil', ['cat', relPath, '-R', repoPath])
+function catFile(repoPath: string, checkin: string, relPath: string): string {
+	return run('fossil', ['cat', relPath, '-r', checkin, '-R', repoPath])
 }
 
-function writeAttribution(outDirAbs: string, url: string, fileCount: number) {
+function sha256(content: string): string {
+	return createHash('sha256').update(content, 'utf-8').digest('hex')
+}
+
+/**
+ * RouterOS version from the file's own `/export` banner
+ * (`# <date> by RouterOS <version>`). This is the capture's environment, read
+ * from what the device wrote rather than asserted in prose.
+ */
+function bannerVersion(content: string): string | null {
+	return content.match(/^#\s.*\bby RouterOS\s+(\S+)/m)?.[1] ?? null
+}
+
+function compareVersions(a: string, b: string): number {
+	const parts = (v: string) => v.split('.').map((p) => [Number.parseInt(p, 10) || 0, p] as const)
+	const [pa, pb] = [parts(a), parts(b)]
+	for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+		const [na, sa] = pa[i] ?? [0, '']
+		const [nb, sb] = pb[i] ?? [0, '']
+		if (na !== nb) return na - nb
+		if (sa !== sb) return sa < sb ? -1 : 1
+	}
+	return 0
+}
+
+function versionRange(versions: string[]): string {
+	const sorted = [...new Set(versions)].sort(compareVersions)
+	if (sorted.length === 0) return 'an unknown RouterOS version'
+	if (sorted.length === 1) return `RouterOS ${sorted[0]}`
+	return `RouterOS ${sorted[0]}-${sorted[sorted.length - 1]}`
+}
+
+type ImportedFile = {
+	sourcePath: string
+	fileName: string
+	sha256: string
+	routerosVersion: string | null
+}
+
+function writeAttribution(outDirAbs: string, url: string, files: ImportedFile[]) {
+	const versions = files.map((f) => f.routerosVersion).filter((v): v is string => v !== null)
 	const body = `# tangentsoft MikroTik defconf archive
 
 Scripts in this directory were imported from the "MikroTik Solutions" Fossil
@@ -126,13 +199,26 @@ ${SEED_URL}
 Thanks to [@tangent](${url}) for maintaining and sharing this archive, and
 for confirming redistribution here directly.
 
-These are genuine \`/export show-sensitive terse\` captures from ${fileCount}
-real devices spanning RouterOS 7.1-7.19. MACs, serial numbers, timezone, and
-country-code settings are already redacted by the maintainer before
-publishing (see the archive's own README for the exact redaction policy).
+These are ${files.length} genuine \`/export show-sensitive terse\` device
+captures spanning ${versionRange(versions)}. That range is read from each
+file's own export banner (${versions.length} of ${files.length} carry one),
+not asserted — the upstream README's "7.1 through 7.19" describes the
+\`_common.rsc\` version history, which is not imported here.
+
+MACs, serial numbers, timezone, and country-code settings are already redacted
+by the maintainer before publishing (see the archive's own README for the exact
+redaction policy) — this is **not** a controlled synthetic-canary fixture. The
+maintainer also hand-derives some variants from a capture (the
+\`-router\`/\`-switch\` pairs), so treat the collection as "a device emitted
+this, then a human edited it", not as raw device output.
+
 \`_common.rsc\` (a scripted \`/system/default-configuration print\` template,
 not a flat export) and the \`tools/\` capture scripts are intentionally
 excluded — different genre, out of scope for this collection.
+
+\`manifest.json\` pins the upstream Fossil check-in and a SHA-256 per file;
+re-running the importer with \`--checkin <uuid>\` reproduces this directory
+byte for byte.
 
 Imported with:
 \`bun run scripts/import-tangentsoft-defconf.ts --out-dir test-data/tangentsoft\`
@@ -140,13 +226,15 @@ Imported with:
 	writeFileSync(join(outDirAbs, 'ATTRIBUTION.md'), body, 'utf-8')
 }
 
-function writeManifest(outDirAbs: string, url: string, files: { relPath: string; fileName: string }[]) {
+function writeManifest(outDirAbs: string, url: string, checkin: string, files: ImportedFile[]) {
 	const manifest = {
 		source: SEED_URL,
 		repoUrl: url,
+		// The immutable upstream version this directory was cut from. Re-run with
+		// `--checkin <this>` to reproduce it; the per-file hashes verify the result.
+		checkin,
 		fileCount: files.length,
-		generatedAt: new Date().toISOString(),
-		files: files.map((f) => ({ sourcePath: f.relPath, fileName: f.fileName })),
+		files,
 	}
 	writeFileSync(join(outDirAbs, 'manifest.json'), `${JSON.stringify(manifest, null, '\t')}\n`, 'utf-8')
 }
@@ -155,7 +243,9 @@ function main() {
 	const opts = parseArgs(process.argv.slice(2))
 	const outDirAbs = resolve(process.cwd(), opts.outDir)
 	const repoPath = ensureRepo(opts)
-	const deviceFiles = listDeviceFiles(repoPath)
+	const checkin = resolveCheckin(repoPath, opts.checkin)
+	console.log(`Importing from check-in ${checkin}`)
+	const deviceFiles = listDeviceFiles(repoPath, checkin)
 
 	if (deviceFiles.length === 0) {
 		console.warn('No defconf/*.rsc device files found.')
@@ -171,17 +261,26 @@ function main() {
 	rmSync(outDirAbs, { recursive: true, force: true })
 	mkdirSync(outDirAbs, { recursive: true })
 
-	const written: { relPath: string; fileName: string }[] = []
+	const written: ImportedFile[] = []
 	for (const relPath of deviceFiles) {
 		const fileName = relPath.replace(/^defconf\//, '')
-		const content = catFile(repoPath, relPath)
+		const content = catFile(repoPath, checkin, relPath)
 		writeFileSync(join(outDirAbs, fileName), content, 'utf-8')
-		written.push({ relPath, fileName })
+		written.push({
+			sourcePath: relPath,
+			fileName,
+			sha256: sha256(content),
+			routerosVersion: bannerVersion(content),
+		})
 	}
 
-	writeAttribution(outDirAbs, opts.url, written.length)
-	writeManifest(outDirAbs, opts.url, written)
-	console.log(`Imported ${written.length} device export scripts into ${opts.outDir}`)
+	writeAttribution(outDirAbs, opts.url, written)
+	writeManifest(outDirAbs, opts.url, checkin, written)
+	const unbannered = written.filter((f) => f.routerosVersion === null).length
+	console.log(
+		`Imported ${written.length} device export scripts into ${opts.outDir}` +
+			(unbannered > 0 ? ` (${unbannered} without an export banner)` : ''),
+	)
 }
 
 main()

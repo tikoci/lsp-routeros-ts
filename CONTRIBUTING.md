@@ -253,3 +253,11 @@ default-configuration archive:
 
 Thanks to [@tangent](https://tangentsoft.com/mikrotik) for maintaining and
 sharing this archive, and for confirming redistribution here directly.
+
+`test-data/tangentsoft/manifest.json` pins the upstream Fossil check-in UUID
+and a SHA-256 per file, and records each capture's RouterOS version as read
+from its own `/export` banner; re-running the importer with
+`--checkin <uuid>` reproduces the directory byte for byte. See
+`test-data/tangentsoft/ATTRIBUTION.md` for the redaction and
+maintainer-modification caveats — the collection is device-emitted text that a
+human then edited, not raw device output.
