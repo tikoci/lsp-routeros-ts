@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (evl /terminal/inkey)));(evl /putmessage=(evl (evl /convertfrom=byte-array;to=raw;value=(evl (evl /terminal/inkey)))))

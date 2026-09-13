@@ -1,0 +1,1 @@
+(evl /port/setname=serial0;numbers=0);(evl /ip/address/addaddress=192.168.88.1;24;comment=defconf;interface=ether1;network=192.168.88.0)

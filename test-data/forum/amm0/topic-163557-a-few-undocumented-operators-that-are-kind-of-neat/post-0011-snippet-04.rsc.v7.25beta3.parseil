@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl (evl /globalname=$fn) (<%% $fn (> $fn)));name=$fn);(evl /putmessage=$fn);(evl /globaldo=;(evl (<%% (evl (evl /globalname=$fn);(<%% $fn (> $fn))) ));name=$fn);(evl /putmessage=$fn);/

@@ -5,7 +5,9 @@
 > `[research: parseil]` spike (see `BACKLOG.md`); grounded on a 913-script
 > corpus captured against CHR 7.22.1, then re-run on 7.20.8 and 7.23rc1 for
 > drift. 912 scripts produced IL on all three versions; the one failure was the
-> intentional 126 KiB oversize sample hitting the REST upload cap.
+> intentional 126 KiB oversize sample hitting the REST upload cap. Re-run again
+> on the (then-current) 948-script corpus against **7.24.2** and **7.25beta3**:
+> same 947/948 pass rate, same single oversize failure, no grammar drift.
 >
 > Status: working reference, RouterOS 7.22.1 grammar with cross-version drift
 > notes from 7.20.8 and 7.23rc1. Every snapshot in `test-data/` carries the

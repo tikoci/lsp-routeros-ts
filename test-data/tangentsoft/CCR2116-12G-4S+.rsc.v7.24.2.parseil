@@ -1,0 +1,1 @@
+(evl /port/setname=serial0;numbers=0);(evl /ip/address/addaddress=192.168.88.1;24;comment=defconf;interface=ether13;network=192.168.88.0);(<%% bad command name routerboard (line 6 column 9) routerboard;settings;set;enter-setup-on=delete-key)

@@ -1,0 +1,1 @@
+/;/ip/firewall/nat/;(evl /ip/firewall/nat/addaction=src-nat;chain=srcnat;out-interface=;ether1;per-connection-classifier=;both-addresses-and-ports;2;0;to-addresses=156.55.55.2);(evl /ip/firewall/nat/addaction=src-nat;chain=srcnat;out-interface=;ether1;per-connection-classifier=;both-addresses-and-ports;2;1;to-addresses=156.55.55.3)

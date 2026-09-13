@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (evl /typeofvalue=(evl (evl /toboolvalue=anystring)))));(evl /putmessage=(evl (evl /typeofvalue=(evl (evl /toboolvalue=false)))))

@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (evl /serializeto=json;value=(evl (evl /ip/firewall/connection/printas-value=true;detail=true)))))

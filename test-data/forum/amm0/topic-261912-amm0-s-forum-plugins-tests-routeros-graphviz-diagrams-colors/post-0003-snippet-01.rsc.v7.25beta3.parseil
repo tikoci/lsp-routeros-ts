@@ -1,0 +1,8 @@
+/;(evl / (evl /putmessage=
+[graphviz engine=patchwork]
+graph {
+    layout=patchwork
+    node [style=filled]
+) (evl /foreachcounter=$a;do=;(evl / (evl /putmessage=(. " (evl (evl /pickbegin=1;counter=(-> $a .id);end=10)) "   [ area= (-> $a packets)  label= " (-> $a chain)   (-> $a action) "  tooltip= " (-> $a comment) "  fontsize=128 fillcolor= (evl (<%% (> (evl (evl /ifcondition=(-> $a dynamic);do=;(evl (evl /returnvalue=silver));else=;(evl (evl /returnvalue=gold))))) ))  ])));in=(evl (evl /ip/firewall/filter/printas-value=true;stats=true))) (evl /putmessage=
+}
+[/graphviz]))

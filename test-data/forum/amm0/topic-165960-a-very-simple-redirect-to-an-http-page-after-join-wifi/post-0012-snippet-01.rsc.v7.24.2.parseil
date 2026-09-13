@@ -1,0 +1,1 @@
+/;(evl /ip/dhcp-server/option/addcode=114;name=no-captive-portal;value='urn:ietf:params:capport:unrestricted');(evl /ip/dhcp-server/option/sets/addname=default;options=no-captive-portal);(evl /ip/dhcp-server/setdhcp-option-set=default;numbers=(evl (evl /ip/dhcp-server/find)))

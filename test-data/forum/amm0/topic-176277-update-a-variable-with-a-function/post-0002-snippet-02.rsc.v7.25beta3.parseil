@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$confirmkey;value=(evl (evl /terminal/inkeytimeout=00:01:00))) (evl /ifcondition=(or (= $confirmkey 89) (= $confirmkey 121));do=;(evl (evl /putmessage=got Y or y));else=;(evl (evl /putmessage=got something else))))

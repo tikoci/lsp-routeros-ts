@@ -1,0 +1,1 @@
+/;(evl /globalname=$before;value=field1=mystr;field2=2);(evl /file/addcontents=$before;name=diskarray);(evl /globalname=$after;value=(evl (evl /toarrayvalue=(evl (evl /file/getnumber=diskarray;value-name=contents)))))

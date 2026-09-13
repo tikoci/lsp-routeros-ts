@@ -1,0 +1,1 @@
+/;(evl /system/ups/ (evl /foreachcounter=$ups;do=;(evl /system/ups/ (evl /log/infomessage=(evl (evl /putmessage=(evl (evl /system/ups/monitoras-value=true;numbers=$ups;once=true))))));in=(evl (evl /system/ups/find))))

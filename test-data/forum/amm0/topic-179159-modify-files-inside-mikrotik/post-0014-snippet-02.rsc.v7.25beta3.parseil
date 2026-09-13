@@ -1,0 +1,1 @@
+/;(evl /globalname=$replacedContent;value=(evl (<%% $STR (> $STR);replace;(evl (evl /file/getnumber=FILENAME;value-name=contents));http://;https://)));(evl /putmessage=$replacedContent);(evl /file/addname=NEWFILENAME);(evl /file/setcontents=$replacedContent;numbers=NEWFILENAME)

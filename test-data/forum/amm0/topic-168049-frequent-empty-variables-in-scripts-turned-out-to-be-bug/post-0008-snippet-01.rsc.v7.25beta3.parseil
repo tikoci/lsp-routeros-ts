@@ -1,0 +1,1 @@
+/;(evl / (evl /localdo=;(evl (evl /returnvalue=(. txt  $domainName)));name=$func) (evl /putmessage=(evl (<%% $func (> $func);domainName=123))) (evl /putmessage=(evl (<%% $func (> $func);domainName=223))) (evl /putmessage=(evl (<%% $func (> $func);domainName=323))) (evl /putmessage=(evl (<%% $func (> $func);domainName=423))))

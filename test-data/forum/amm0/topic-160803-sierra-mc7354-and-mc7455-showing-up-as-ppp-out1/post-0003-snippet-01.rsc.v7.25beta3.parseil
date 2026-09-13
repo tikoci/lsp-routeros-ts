@@ -1,0 +1,1 @@
+/;(evl /interface/ppp-client/setdata-channel=2;info-channel=2;numbers=(evl (evl /interface/ppp-client/find)));(evl /interface/ppp-client/at-chatinput=(. AT!ENTERCND= " A710 ");number=(evl (evl /interface/ppp-client/find)));(evl /interface/ppp-client/at-chatinput=AT!UDUSBCOMP=8;number=(evl (evl /interface/ppp-client/find)));(evl /system/reboot)

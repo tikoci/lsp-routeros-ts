@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (evl /parsevalue=/ip address print)));(evl /putmessage=(evl (evl /typeofvalue=(evl (evl /parsevalue=/ip address print)))))

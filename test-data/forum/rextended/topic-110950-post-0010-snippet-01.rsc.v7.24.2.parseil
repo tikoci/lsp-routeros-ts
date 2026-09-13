@@ -1,0 +1,1 @@
+/;(evl /log/warningmessage=callmebot 392*******: Service [Probe.Name] on [Device.Name] is now [Service.Status] ([Service.ProblemDescription]));(evl /tool/fetchhttp-method=get;mode=https;url=https://api.callmebot.com/whatsapp.php?phone=+39392*******&apikey=******&text=Service [Probe.Name] on [Device.Name] is now [Service.Status] ([Service.ProblemDescription]))

@@ -5,7 +5,9 @@
 > tokens and diagnostics. Grounded on a 913-script full-corpus sweep against
 > CHR **7.23.2** (stable), re-run on **7.24rc2** (testing) and **7.9.2** (the
 > earliest plain-HTTP REST branch tested here) for drift, plus 23 targeted probes for rare token
-> classes. Capture artifacts:
+> classes. Re-run again on the (then-current) 948-script corpus against
+> **7.24.2** (stable) and **7.25beta3** (development) — same 19 token classes,
+> identical vocabulary, zero drift. Capture artifacts:
 > `test-data/highlight-summary.v<version>.json` (from
 > `scripts/collect-highlight.ts`); the six committed `.rsc.highlight` fixtures
 > (pre-7.23, unversioned) remain the offline snapshot-test inputs.

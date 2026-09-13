@@ -1,0 +1,1 @@
+/;(evl /importfile-name=fakefloat);(evl /globalname=$myfloat;value=(evl (<%% $tofloat (> $tofloat);-10.1)));(evl /putmessage=(evl (<%% $fromfloat (> $fromfloat);$myfloat)))

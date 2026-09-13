@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl / (evl /returnvalue=(evl (evl /convertfrom=byte-array;to=hex;value=$1))));name=$numbyte2hex-using-convert);(evl /putmessage=(evl (<%% $numbyte2hex-using-convert (> $numbyte2hex-using-convert);255)))

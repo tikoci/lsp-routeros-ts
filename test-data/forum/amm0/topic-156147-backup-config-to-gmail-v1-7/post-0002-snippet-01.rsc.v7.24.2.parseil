@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$vermajor;value=(evl (evl /tonumvalue=(evl (evl /pickbegin=0;counter=(evl (evl /system/resource/getvalue-name=version));end=1))))) (evl /ifcondition=(> $vermajor 6);do=;(evl (<%% (evl /parsevalue=export show-sensitive file=backup.rsc) ));else=;(evl (evl /exportfile=backup.rsc))))

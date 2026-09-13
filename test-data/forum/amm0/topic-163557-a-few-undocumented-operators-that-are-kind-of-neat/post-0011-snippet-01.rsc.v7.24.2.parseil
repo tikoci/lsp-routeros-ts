@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl (<%% (+ $1 1) ));name=$add);(evl /putmessage=(<%% $add (<%% $add (<%% $add (<%% $add (<%% $add 0))))));/;(<%% bad command name 5 (line 8 column 2) 5)

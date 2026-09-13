@@ -1,0 +1,1 @@
+/;(evl /ifcondition=(= $vtype bool);do=;(evl (<%% (evl /;(<%% (evl /parsevalue=(. :global  $vname  [:to $vtype   (evl (evl /ip/firewall/layer7-protocol/getnumber=(evl (evl /ip/firewall/layer7-protocol/findwhere=$name;$regexp;$comment;$.id;$.nextid;$.dead;$.about;(= $name $vname);5));value-name=regexp)) ])) )) )))

@@ -1,0 +1,10 @@
+{
+  "source": "forum/telegram-notify.rsc",
+  "routerosVersion": "7.25beta3",
+  "chrBuildTime": "2026-09-02 09:02:51",
+  "inputBytes": 617,
+  "ilBytes": 630,
+  "parseMs": 8,
+  "ok": true,
+  "capturedAt": "2026-09-13T20:08:38.751Z"
+}

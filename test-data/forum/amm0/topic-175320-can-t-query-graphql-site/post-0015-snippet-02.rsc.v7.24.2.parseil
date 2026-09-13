@@ -1,0 +1,1 @@
+/;(evl /putmessage=(-> (-> (-> (-> $myarray data) inventory_model_field_data) entities) 0));(evl /putmessage=(-> (-> (-> (-> (-> $myarray data) inventory_model_field_data) entities) 0) id));(evl /putmessage=(evl (evl /lenvalue=(-> (-> (-> $myarray data) inventory_model_field_data) entities))))

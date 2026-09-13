@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$modbusread;value=(evl (<%% bad command name iot (line 7 column 21) iot;modbus;read-holding-registers;as-value;once;num-regs=2;reg-addr=514;slave-id=1))) (evl /localname=$reg514;value=(+ (* (-> (-> $modbusread values) 0) 65536) (-> (-> $modbusread values) 1))) (evl /putmessage=$reg514))

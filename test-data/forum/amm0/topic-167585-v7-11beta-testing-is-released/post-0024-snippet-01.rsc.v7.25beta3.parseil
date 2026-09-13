@@ -1,0 +1,1 @@
+/;(evl / (evl /putmessage=(. (evl (evl /terminal/stylestyle=escape)) Press any key to exit loop)) / (evl /localname=$keypress;value=65535) (evl /whilecondition=(= $keypress 65535);do=;(evl / (evl /putmessage=(. (evl (evl /terminal/stylestyle=none)) (evl (evl /rndstr)))) (evl /terminal/cuu) (evl /setname=$keypress;value=(evl (evl /terminal/inkeytimeout=00:00:01))))))

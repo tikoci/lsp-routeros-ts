@@ -1,0 +1,1 @@
+/;(evl /globalname=$myarraymap;value=key1=text1;key2=text2);(evl /globalname=$myarraylist;value=(, str1 str2));(evl /globalname=$mystr;value=myglobalvar);(evl /putmessage=(. $myarraylist $mystr));(evl /putmessage=(. $myarraymap $mystr));/

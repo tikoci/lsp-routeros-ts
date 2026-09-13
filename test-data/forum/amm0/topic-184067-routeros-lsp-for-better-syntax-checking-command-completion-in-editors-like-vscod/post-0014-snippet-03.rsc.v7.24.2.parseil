@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$outside;value=outside) (evl /localdo=;(evl / (evl /putmessage=(. local function can see ' $outside ' (outside))));name=$fn) (evl /globaldo=;(evl / (evl /putmessage=(. but global cannot see ' $outside ' (outside))));name=$FN) (<%% $fn (> $fn)) (<%% $FN (> $FN)))

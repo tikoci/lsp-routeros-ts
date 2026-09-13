@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl / (evl /putmessage=func A));name=$funcA);(evl /localdo=;(evl / (evl /globalname=$funcA) (<%% $funcA (> $funcA)) (evl /putmessage=func B));name=$funcB);(<%% $funcB (> $funcB))

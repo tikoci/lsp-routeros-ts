@@ -1,0 +1,1 @@
+/;(<%% bad command name user-manager (line 7 column 2) user-manager;user;(evl (evl bad parameter name (line 7 column 70) /find));attributes=Mikrotik-Group:write);(evl /user/group/addname=none);(evl /user/aaa/setdefault-group=none;use-radius=true);(evl /user/aaa/setexclude-groups=full)

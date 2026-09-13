@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$resp;value=(evl (evl /terminal/askprompt=Continue? [y/n]))) (evl /ifcondition=(~ $resp (. ^[yY] $));do=;(evl (evl /putmessage=got Y or y));else=;(evl (evl /putmessage=got something else))))

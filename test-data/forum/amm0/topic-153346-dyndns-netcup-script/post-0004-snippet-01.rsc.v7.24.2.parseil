@@ -1,0 +1,29 @@
+/;/system/script/;(evl /system/script/addname=Netcup;policy=read;write;test;source=(. :global apikey  " KEY "  
+ :global apipassword  " PASSWORD "  
+ :global customerid  " CUSTOMERNR "  
+ :global theinterface  " WAN1 "  
+ :global ddnshost  " subdomain.domain.de "  
+ :global ipddns [:resolve  $ ddnshost];  
+ :global ipfresh [ /ip address get [/ip address find interface= $ theinterface ] address ]  
+ :if ([ :typeof  $ ipfresh ] = nil ) do={  
+ :log info ( " NetcupDDNS: No IP address on  $ theinterface . " )  
+ } else={  
+ :for i from=( [:len  $ ipfresh] - 1) to=0 do={  
+ :if ( [:pick  $ ipfresh  $ i] =  " / " ) do={  
+ :set ipfresh [:pick  $ ipfresh 0  $ i];  
+ }  
+ }  
+ :if ( $ ipddns !=  $ ipfresh) do={  
+ :log info ( " NetcupDDNS: IP-Netcup =  $ ipddns " )  
+ :log info ( " NetcupDDNS: IP-Fresh =  $ ipfresh " )  
+ :log info  " NetcupDDNS: Update IP needed, Sending UPDATE...! "  
+ :global jsonRequestBody  " {json request body with new IP and other necessary info} "  
+ /tool fetch url= " https://ccp.netcup.net/run/webservice/servers/endpoint.php ? JSON "  http-method=post http-data= $ jsonRequestBody mode=https dst-p ath=( " /Netcup. " . $ ddnshost)  
+ :delay 1  
+ :global str [/file find name= " Netcup. $ ddnshost " ];  
+ /file remove  $ str  
+ :global ipddns  $ ipfresh  
+ :log info  " NetcupDDNS: IP updated to  $ ipfresh! "  
+ } else={  
+ :log info  " NetcupDDNS: dont need changes " ;  
+ } }))

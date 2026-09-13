@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (evl /tostrvalue=1.0.0.1)));(<%% bad command name 1.0.0.1 (line 7 column 6) 1.0.0.1);(evl /putmessage=(evl (evl /typeofvalue=1.0.0.1)));/ip/;(evl /putmessage=(evl (evl /resolvedomain-name=mt.lv;server=1.1)));(<%% bad command name 159.148.147.200 (line 11 column 7) 159.148.147.200)

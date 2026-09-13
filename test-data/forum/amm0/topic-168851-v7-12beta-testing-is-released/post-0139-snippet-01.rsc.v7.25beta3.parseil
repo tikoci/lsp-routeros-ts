@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (evl /tonumvalue=00:00:01)));(<%% bad command name 1 (line 7 column 1) 1);(evl /putmessage=(evl (evl /tonumvalue=(evl (evl /timestamp)))));(<%% bad command name 1693515184 (line 9 column 1) 1693515184)

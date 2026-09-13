@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$readut;value=<uptime>546837</uptime>) (evl /putmessage=(evl (evl /totimevalue=(evl (evl /pickbegin=(+ (evl (evl /findfrom=-1;in=$readut;key=>)) 1);counter=$readut;end=(evl (evl /findfrom=-1;in=$readut;key=</))))))))

@@ -1,0 +1,10 @@
+{
+  "source": "tangentsoft/RB960PGS-router.rsc",
+  "routerosVersion": "7.24.2",
+  "chrBuildTime": "2026-09-03 09:57:14",
+  "inputBytes": 6717,
+  "ilBytes": 6953,
+  "parseMs": 45,
+  "ok": true,
+  "capturedAt": "2026-09-13T20:05:45.503Z"
+}

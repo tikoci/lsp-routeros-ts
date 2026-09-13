@@ -1,0 +1,1 @@
+/;(evl /globalname=$hello;value=123);(evl /globalname=$hello2;value=(. $hello 456));(evl /putmessage=$hello2)

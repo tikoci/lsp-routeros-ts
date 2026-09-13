@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$test;value=(-> (evl (<%% bad command name fetch (line 6 column 15) fetch;as-value;http-header-field=Range: bytes=0-64511;output=user;url=https://www.iwik.org/ipcountry/US.cidr)) data)) (evl /putmessage=$test))

@@ -1,0 +1,10 @@
+{
+  "source": "tangentsoft/CCR1036-12G-4S.rsc",
+  "routerosVersion": "7.25beta3",
+  "chrBuildTime": "2026-09-02 09:02:51",
+  "inputBytes": 123,
+  "ilBytes": 75,
+  "parseMs": 7,
+  "ok": true,
+  "capturedAt": "2026-09-13T20:08:39.197Z"
+}

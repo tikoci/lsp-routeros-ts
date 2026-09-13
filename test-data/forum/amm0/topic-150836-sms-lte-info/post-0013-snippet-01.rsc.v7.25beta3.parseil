@@ -1,0 +1,1 @@
+/;(evl /log/infomessage=(evl (evl /putmessage=my code is here)));(evl /log/printwhere=$buffer;$time;$topics;$message;$extra-info;$.id;$.nextid;$.dead;$.about;(  (~ $topics script) (> $time 00:05:00));5);/

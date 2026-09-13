@@ -1,0 +1,1 @@
+/;(evl /system/package/ (evl /system/package/update/check-for-updatesduration=00:00:10) (evl /system/package/enablenumbers=rose-storage) (evl /system/package/apply-changes));(evl /system/reboot)

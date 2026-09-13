@@ -1,0 +1,1 @@
+/;(evl /globalname=$mystr;value=blah, blah, blah);(evl /globalname=$matches;value=(evl (<%% bad command name regex (line 7 column 19) regex;multiline;greedy;global;from=$mystr;match=/blah/)));(evl /putmessage=(evl (evl /typeofvalue=$matches)));(evl /putmessage=$matches);(evl /putmessage=(evl (evl /lenvalue=$matches)))

@@ -1,0 +1,10 @@
+{
+  "source": "tangentsoft/CRS112-8P-4S.rsc",
+  "routerosVersion": "7.24.2",
+  "chrBuildTime": "2026-09-03 09:57:14",
+  "inputBytes": 1169,
+  "ilBytes": 1170,
+  "parseMs": 12,
+  "ok": true,
+  "capturedAt": "2026-09-13T20:05:44.557Z"
+}

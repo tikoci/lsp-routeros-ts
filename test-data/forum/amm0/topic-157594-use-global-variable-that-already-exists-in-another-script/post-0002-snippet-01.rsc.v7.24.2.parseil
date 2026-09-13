@@ -1,0 +1,1 @@
+/;(evl /globalname=$stopRouterRun);(evl /docommand=;(evl / (evl /delaydelay-time=00:01:00));while=(! $stopRouterRun))

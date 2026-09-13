@@ -1,0 +1,10 @@
+{
+  "source": "eworm/fw-addr-lists.rsc",
+  "routerosVersion": "7.25beta3",
+  "chrBuildTime": "2026-09-02 09:02:51",
+  "inputBytes": 9303,
+  "ilBytes": 11176,
+  "parseMs": 63,
+  "ok": true,
+  "capturedAt": "2026-09-13T20:08:06.716Z"
+}

@@ -1,0 +1,1 @@
+/;(evl /user/group/addname=tikbook-read;policy=;read;;api;;rest-api);(evl /user/addgroup=tikbook-read;name=tikbook;password=(evl (evl /terminal/askprompt=Select password for new 'tikbook' account:)))

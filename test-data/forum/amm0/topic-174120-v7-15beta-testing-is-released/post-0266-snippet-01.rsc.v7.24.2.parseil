@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (evl /timecommand=;(evl (evl /docommand=;(evl (evl /resolvedomain-name=www.ibm.com));on-error=;(evl /))))));(evl /putmessage=(evl (evl /timecommand=;(evl (evl /docommand=;(evl (evl /resolvedomain-name=zqtk.net));on-error=;(evl /))))))

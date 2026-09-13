@@ -1,0 +1,1 @@
+(<%% (evl (<%% (evl (<%% (evl /;(evl /globalname=$greetings;value=(evl (evl /toarrayvalue=)));(evl /setdo=;(evl (evl /putmessage=(. $0   $prefix   $1)));name=(-> $greetings hello));(<%% (-> $greetings hello) hello;world;prefix=mx)) );(<%% (-> $greetings hello) hello;world;prefix=mrs)) );(<%% (-> $greetings hello) hello;world;prefix=mr)) )

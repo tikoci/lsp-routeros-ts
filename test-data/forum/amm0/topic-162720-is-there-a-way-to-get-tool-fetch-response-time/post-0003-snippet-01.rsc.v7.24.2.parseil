@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$start;value=(evl (evl /timestamp))) (evl /tool/fetchoutput=user;url=https://wttr.in/Riga+LV?T&format=2) (evl /localname=$stop;value=(evl (evl /timestamp))) (evl /putmessage=(- $stop $start)))

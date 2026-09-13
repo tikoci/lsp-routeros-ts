@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$hotspotconfig;value=(evl (evl /deserializefrom=json;value=(evl (evl /file/getnumber=myhotspotconfig.json;value-name=contents))))) (evl /putmessage=(-> $hotspotconfig user)) (evl /putmessage=(-> $hotspotconfig company)))

@@ -1,0 +1,1 @@
+/;(evl /globalname=$certkeysize;value=2048);(evl /globalname=$digestalgo;value=sha256);(evl /globalname=$certdays;value=365);(evl /globalname=$certcadays;value=1825);(evl /globalname=$scepdays;value=10);(evl /globalname=$domainname;value=$scepbase);(evl /globalname=$certserversans;value=(, (. DNS: $domainname) (. DNS:*. $domainname)));(evl /putmessage=$certserversans)

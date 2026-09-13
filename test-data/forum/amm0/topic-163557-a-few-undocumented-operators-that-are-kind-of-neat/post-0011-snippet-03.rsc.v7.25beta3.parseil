@@ -1,0 +1,1 @@
+/;(evl /putmessage=(> (. text  $1)));(evl /putmessage=(evl (<%% (> (. text  $1)) )));/

@@ -1,0 +1,1 @@
+/;(evl /system/sshaddress=192.168.x.y;command=date +%s;user=usr);(evl /putmessage=(evl (<%% $unixT2S (> $unixT2S))));(evl /system/sshaddress=192.168.x.y;command=(. date -r  (evl (<%% $unixT2S (> $unixT2S))));user=usr);(evl /putmessage=(evl (evl /system/clock/getvalue-name=date)));(evl /putmessage=(evl (evl /system/clock/getvalue-name=time)))

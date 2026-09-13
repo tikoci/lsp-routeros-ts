@@ -1,0 +1,1 @@
+/;(evl /docommand=;(evl (evl /interface/bridge/addname=loopback) /);on-error=;(evl (evl /putmessage=loopback exists)));/interface/bridge/;(evl /ifcondition=(= (evl (evl /lenvalue=(evl (evl bad parameter name (line 12 column 40) /findin=where)))) 0);do=;(evl (evl /interface/bridge/addname=loopback)))

@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl (evl /returnvalue=(evl (evl /toarrayvalue=jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec))));name=$strmonths);(evl /globaldo=;(evl (evl /returnvalue=(, jan feb mar apr may jun jul aug sep oct nov dec)));name=$arrmonths)

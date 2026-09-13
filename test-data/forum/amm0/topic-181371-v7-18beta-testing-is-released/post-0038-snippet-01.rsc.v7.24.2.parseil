@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (evl /serializedelimiter=	;options=dsv.remap;to=dsv;value=(evl (evl /ip/firewall/connection/printas-value=true)))));(evl /serializedelimiter=,;file-name=connections.csv;options=dsv.remap;to=dsv;value=(evl (evl /ip/firewall/connection/printas-value=true)))

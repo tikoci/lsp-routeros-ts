@@ -1,0 +1,1 @@
+/;(evl /globalname=$tilden;value=(. � �));(evl /putmessage=(. espa $tilden ola));(evl /globalname=$garaisi;value=(. � �));(evl /putmessage=(. Labr $garaisi t))

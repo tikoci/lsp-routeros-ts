@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (evl /convertfrom=hex;to=bit-array-lsb;value=EF)));(evl /putmessage=(evl (evl /convertfrom=hex;to=bit-array-msb;value=EF)));(evl /putmessage=(evl (evl /convertfrom=byte-array;to=bit-array-lsb;value=239)));(evl /putmessage=(evl (evl /convertfrom=byte-array;to=bit-array-msb;value=239)))

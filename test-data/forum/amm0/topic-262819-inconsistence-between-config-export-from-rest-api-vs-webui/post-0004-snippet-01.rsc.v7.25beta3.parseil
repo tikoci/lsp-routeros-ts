@@ -1,0 +1,1 @@
+/;(evl /tool/fetchhttp-data=(evl (evl /serializeto=json;value=file=dnsexport.rsc;terse=true));http-header-field=content-type:application/json;http-method=post;output=user;password=(evl (evl /terminal/askprompt=password));url=http://127.0.0.1/rest/ip/dns/export;user=(evl (evl /terminal/askprompt=username)))

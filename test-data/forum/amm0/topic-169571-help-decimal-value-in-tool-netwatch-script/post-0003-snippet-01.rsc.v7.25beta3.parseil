@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$ns;value=25543) (evl /putmessage=(evl (evl /totimevalue=(. (/ $ns 1000000) . (/ $ns 1000) (% $ns 1000))))))

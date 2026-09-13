@@ -1,0 +1,1 @@
+/;(evl /globalname=$myiccid;value=9223372036854775807);(evl /putmessage=(. $myiccid   (evl (evl /typeofvalue=$myiccid))  ))

@@ -1,0 +1,1 @@
+/;(evl /globalname=$userinput;value=(evl (evl /terminal/askpreinput=preinput>;prompt=Some text that in prompt=)));(evl /putmessage=$userinput)

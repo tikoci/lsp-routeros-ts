@@ -115,12 +115,12 @@ Do not collapse these distinctions:
 
 | Surface | Grounded reference | Status |
 |---|---|---|
-| Highlight wire classes, byte alignment, hard-error behavior, statefulness | [`highlight-format.md`](highlight-format.md) | Full-corpus captures on 7.9.2, 7.23.2, and 7.24rc2. Early HTTPS-only v7 remains untested. |
-| `:parse` IL grammar, structure, errors, and drift | [`parseil-format.md`](parseil-format.md) | Full-corpus captures on 7.20.8, 7.22.1, and 7.23rc1. |
+| Highlight wire classes, byte alignment, hard-error behavior, statefulness | [`highlight-format.md`](highlight-format.md) | Full-corpus captures on 7.9.2, 7.23.2, 7.24rc2, 7.24.2, and 7.25beta3. Early HTTPS-only v7 remains untested. |
+| `:parse` IL grammar, structure, errors, and drift | [`parseil-format.md`](parseil-format.md) | Full-corpus captures on 7.20.8, 7.22.1, 7.23rc1, 7.24.2, and 7.25beta3. |
 | Required arguments | [`required-args.md`](required-args.md) | Versioned execute-error dataset with explicit unresolved cases. |
 | Live versus rosetta ownership | [`rosetta-alignment.md`](rosetta-alignment.md) | Decision matrix and join rules exist. |
 | Static path slicing/canonicalization | [`canonicalize-audit.md`](canonicalize-audit.md) | Reusable package exists; deep block/scope parsing is not solved by it. |
-| `completion`, `syntax`, and `child` response shapes | [`inspect-shapes.md`](inspect-shapes.md) | Curated-context catalog captured on 7.9.2/7.23.2/7.24rc2: field semantics, enum discovery, validity sentinels, `self`/`child` rows, `symbol-type` help structure. The representative corpus-position sweep into `inspect_responses` remains open. |
+| `completion`, `syntax`, and `child` response shapes | [`inspect-shapes.md`](inspect-shapes.md) | Curated-context catalog captured on 7.9.2/7.23.2/7.24rc2, plus 7.24.2/7.25beta3 corpus re-runs: field semantics, enum discovery, validity sentinels, `self`/`child` rows, `symbol-type` help structure. The representative corpus-position sweep into `inspect_responses` remains open. |
 | Synthetic trailing-space / trailing-`=` completion probes | [`BACKLOG.md`](../BACKLOG.md) `[research: completion-tricks]` | Still a blocker. Do not encode as a skill recipe yet. |
 | CLI-to-REST/API conversion | rosetta/restraml command schema | Keep separate from source parsing; validate mappings per command family and version. |
 

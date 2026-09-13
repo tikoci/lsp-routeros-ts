@@ -1,0 +1,1 @@
+/;(evl /globalname=$myarray;value=a=1;child=ca=2);(evl /globalname=$mysubarray;value=(-> $myarray child));(evl /setname=(-> $mysubarray ca);value=1)

@@ -1,0 +1,1 @@
+(<%% (evl /;(<%% (evl /parsevalue=(. :global ArrayIN; :set ( $lpath )  " new ")) )) )

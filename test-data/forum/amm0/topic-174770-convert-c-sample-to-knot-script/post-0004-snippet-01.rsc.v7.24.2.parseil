@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl / (evl /localname=$hexdata;value=$1) (evl /localname=$intarray;value=(evl (evl /toarrayvalue=))) (evl /forcounter=$i;do=;(evl / (evl /setname=(-> $intarray (/ $i 2));value=(evl (evl /tonumvalue=(. 0x (evl (evl /pickbegin=$i;counter=$hexdata;end=(+ $i 2))))))));from=0;step=2;to=(evl (evl /lenvalue=$hexdata))) (evl /returnvalue=$intarray));name=$hex2ints)

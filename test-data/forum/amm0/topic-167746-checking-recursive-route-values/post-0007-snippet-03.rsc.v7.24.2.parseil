@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$vlanspecs;value=type=access;vid=10) (evl /putmessage=(-> $vlanspecs vid)) (evl /putmessage=(-> $vlanspecs type)) (evl /putmessage=(evl (evl /typeofvalue=(-> $vlanspecs somethingnotthere)))))
