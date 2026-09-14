@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$output;value=18630;49152) (evl /localname=$fullvalue;value=(+ (* (-> $output 0) 65536) (-> $output 1))) (evl /putmessage=$fullvalue))

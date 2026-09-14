@@ -1,0 +1,1 @@
+/;(evl /ip/address/addaddress=192.168.0.99;24;interface=bridge1);(evl /ip/firewall/nat/addaction=masquerade;chain=srcnat;dst-address=;192.168.0.0/24)

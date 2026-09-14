@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$rv;value=(evl (<%% $reverseNumber (> $reverseNumber);ABCD;as-array))) (evl /putmessage=$rv) (evl /putmessage=(evl (evl /typeofvalue=$rv))) (evl /setname=$rv;value=(evl (<%% $reverseNumber (> $reverseNumber);ABCD))) (evl /putmessage=$rv) (evl /putmessage=(evl (evl /typeofvalue=$rv))))

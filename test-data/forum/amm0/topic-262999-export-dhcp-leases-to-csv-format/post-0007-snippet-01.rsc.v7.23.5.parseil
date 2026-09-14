@@ -1,0 +1,1 @@
+/;(evl /serializedelimiter=	;file-name=(. dhcp-leases- (evl (evl /system/identity/getvalue-name=name)) .csv.txt);options=dsv.remap;order=address;mac-address;client-id;server;host-name;comment;to=dsv;value=(evl (evl /ip/dhcp-server/lease/printas-value=true;detail=true)))

@@ -1,0 +1,1 @@
+/;(<%% $npushover (> $npushover);html=1;message=(. Mikrotik SXT Rebooted <b>nPushover</b><br><pre>  (evl (evl /tostrvalue=(evl (evl /interface/lte/monitoras-value=lte1;numbers=lte1;once=lte1)))) </pre>);priority=0;sound=magic;title=MikroTik SXTR;token=private;url=https://192.168.x.1;url_title=MikroTik;user=private)

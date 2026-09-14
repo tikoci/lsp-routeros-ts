@@ -22,7 +22,7 @@ ConnectionLogger.console = { log: noop, info: noop, warn: noop, error: noop, deb
 
 const TEST_DATA_DIR = resolve(import.meta.dir, '../test-data')
 const REPO_ROOT = resolve(import.meta.dir, '..')
-const SCHEMA_VERSION = '3'
+const SCHEMA_VERSION = '4'
 const DEFAULT_DB = join(TEST_DATA_DIR, 'corpus.sqlite')
 
 interface ParseIlMeta {
@@ -88,6 +88,27 @@ interface RequiredArgMeta {
 	capturedAt?: string
 	target?: string
 	limit?: number
+}
+
+interface InspectShapesResult {
+	name?: string
+	demonstrates?: string
+	body?: { request?: string; path?: string; input?: string }
+	ms?: number
+	itemCount?: number
+	response?: unknown
+	error?: string
+}
+
+interface InspectShapesSummary {
+	routerosVersion?: string
+	chrBuildTime?: string
+	capturedAt?: string
+	probeCount?: number
+	probeSha256?: string
+	requestTimeoutMs?: number
+	fieldInventory?: unknown
+	results?: InspectShapesResult[]
 }
 
 interface ArtifactInfo {
@@ -223,6 +244,10 @@ function parseRequiredArgsVersion(relPath: string): string | null {
 	return relPath.match(/^required-args\.v(.+?)\.(?:meta\.)?json$/)?.[1] ?? null
 }
 
+function parseInspectShapesVersion(relPath: string): string | null {
+	return relPath.match(/^inspect-shapes\.v(.+)\.json$/)?.[1] ?? null
+}
+
 function analysisRunKey(analysisName: string, version: string): string {
 	return `${analysisName}\0${version}`
 }
@@ -321,6 +346,19 @@ function artifactInfo(filePath: string): ArtifactInfo {
 			scriptPath: null,
 			contentType: 'application/json',
 			capturedAt: null,
+			jsonValid: valid,
+		}
+	}
+
+	const inspectShapesVersion = parseInspectShapesVersion(relPath)
+	if (inspectShapesVersion) {
+		const { value, valid } = readJson<InspectShapesSummary>(filePath)
+		return {
+			artifactKind: 'inspect_shapes_summary',
+			routerosVersion: value?.routerosVersion ?? inspectShapesVersion,
+			scriptPath: null,
+			contentType: 'application/json',
+			capturedAt: value?.capturedAt ?? null,
 			jsonValid: valid,
 		}
 	}
@@ -618,6 +656,48 @@ SUM(CASE WHEN error_kind = 'routeros-bug' THEN 1 ELSE 0 END) AS routeros_bug_cou
 FROM required_arg_results
 GROUP BY routeros_version;
 
+-- Per-version capture coverage, derived from the rows actually present rather
+-- than hand-maintained. coverage_class = 'complete' is the filter a
+-- version-comparable query wants: both oracles (parseIL + highlight) captured
+-- over the whole current corpus on one build. Everything else is 'partial' —
+-- historical captures taken when the corpus was smaller or only one oracle ran,
+-- which stay queryable for archival/drift work but are not cell-to-cell
+-- comparable with complete versions. See lsp-routeros-ts#35.
+CREATE VIEW v_version_coverage AS
+SELECT
+routeros_version,
+corpus_script_count,
+parseil_script_count,
+highlight_script_count,
+required_arg_path_count,
+inspect_response_count,
+CASE WHEN parseil_script_count > 0 THEN 1 ELSE 0 END AS has_parseil,
+CASE WHEN highlight_script_count > 0 THEN 1 ELSE 0 END AS has_highlight,
+CASE WHEN parseil_script_count > 0 AND highlight_script_count > 0 THEN 1 ELSE 0 END AS has_both_oracles,
+CASE WHEN parseil_script_count = corpus_script_count AND highlight_script_count = corpus_script_count THEN 1 ELSE 0 END AS is_full_corpus,
+CASE
+WHEN parseil_script_count = corpus_script_count AND highlight_script_count = corpus_script_count THEN 'complete'
+ELSE 'partial'
+END AS coverage_class
+FROM (
+SELECT
+v.routeros_version AS routeros_version,
+(SELECT COUNT(*) FROM source_scripts) AS corpus_script_count,
+(SELECT COUNT(DISTINCT p.script_id) FROM parseil_results p WHERE p.routeros_version = v.routeros_version) AS parseil_script_count,
+(SELECT COUNT(DISTINCT h.script_id) FROM highlight_results h WHERE h.routeros_version = v.routeros_version) AS highlight_script_count,
+(SELECT COUNT(*) FROM required_arg_results r WHERE r.routeros_version = v.routeros_version) AS required_arg_path_count,
+(SELECT COUNT(*) FROM inspect_responses i WHERE i.routeros_version = v.routeros_version) AS inspect_response_count
+FROM (
+SELECT routeros_version FROM parseil_results WHERE routeros_version IS NOT NULL
+UNION
+SELECT routeros_version FROM highlight_results WHERE routeros_version IS NOT NULL
+UNION
+SELECT routeros_version FROM required_arg_results WHERE routeros_version IS NOT NULL
+UNION
+SELECT routeros_version FROM inspect_responses WHERE routeros_version IS NOT NULL
+) v
+);
+
 CREATE VIEW v_required_arg_drift AS
 SELECT
 path,
@@ -640,6 +720,12 @@ function insertMetadata(db: Database, dbPath: string, files: string[]): void {
 		['test_data_dir', 'test-data'],
 		['routeros_api_max_bytes', String(ROUTEROS_API_MAX_BYTES)],
 		['highlight_error_token_types', JSON.stringify(HighlightTokens.ErrorTokenTypes)],
+		['version_coverage_view', 'v_version_coverage'],
+		[
+			'version_coverage_complete_rule',
+			"both oracles (parseil_results + highlight_results) cover every source_scripts row on one build; filter v_version_coverage on coverage_class = 'complete' for version-comparable queries",
+		],
+		['reserved_tables', JSON.stringify(['completion_trick_results'])],
 	]
 	for (const [key, value] of values) insert.run(key, value)
 }
@@ -741,6 +827,17 @@ analysis_name, routeros_version, chr_build_time, source_path, captured_at, summa
 		const summaryJson = readFileSync(filePath, 'utf-8')
 		const result = insert.run('highlight', version, value?.chrBuildTime ?? null, relPath, value?.capturedAt ?? null, summaryJson)
 		byKey.set(analysisRunKey('highlight', version), Number(result.lastInsertRowid))
+	}
+
+	const inspectShapesFiles = files.filter((f) => parseInspectShapesVersion(rel(f))).sort((a, b) => rel(a).localeCompare(rel(b)))
+	for (const filePath of inspectShapesFiles) {
+		const relPath = rel(filePath)
+		const { value } = readJson<InspectShapesSummary>(filePath)
+		const fallbackVersion = parseInspectShapesVersion(relPath)
+		const version = value?.routerosVersion ?? fallbackVersion ?? 'unknown'
+		const summaryJson = readFileSync(filePath, 'utf-8')
+		const result = insert.run('inspect-shapes', version, value?.chrBuildTime ?? null, relPath, value?.capturedAt ?? null, summaryJson)
+		byKey.set(analysisRunKey('inspect-shapes', version), Number(result.lastInsertRowid))
 	}
 
 	const metaFiles = files.filter((f) => f.endsWith('.parseil.meta.json')).sort((a, b) => rel(a).localeCompare(rel(b)))
@@ -948,6 +1045,59 @@ run_id, routeros_version, path, has_add, required_json, required_count, raw_erro
 	}
 }
 
+/**
+ * Normalize the curated `/console/inspect` shape probes into `inspect_responses`.
+ *
+ * These probes are context-curated rather than corpus-swept: each row is one
+ * hand-picked request body, so `script_id` and `cursor_offset` stay NULL. The
+ * corpus-position sweep that would populate them is still open ([research:
+ * inspect-shapes] in BACKLOG).
+ */
+function insertInspectResponses(db: Database, files: string[], runIds: Map<string, number>): void {
+	const insert = db.prepare(`
+INSERT INTO inspect_responses (
+run_id, script_id, routeros_version, request_type, cursor_offset, input_variant,
+input_sha256, response_path, response_sha256, response_json, json_valid, ok, error, captured_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`)
+
+	const summaryFiles = files.filter((f) => parseInspectShapesVersion(rel(f))).sort((a, b) => rel(a).localeCompare(rel(b)))
+
+	for (const filePath of summaryFiles) {
+		const relPath = rel(filePath)
+		const { value, valid } = readJson<InspectShapesSummary>(filePath)
+		const version = value?.routerosVersion ?? parseInspectShapesVersion(relPath) ?? 'unknown'
+		const runId = runIds.get(analysisRunKey('inspect-shapes', version))
+		if (!runId || !valid || !Array.isArray(value?.results)) continue
+
+		for (const row of value.results) {
+			const requestType = row?.body?.request
+			// The table's CHECK constraint is the contract; skip anything outside it
+			// rather than failing the whole rebuild on one unexpected probe.
+			if (requestType !== 'highlight' && requestType !== 'completion' && requestType !== 'syntax' && requestType !== 'child') continue
+
+			const probeInput = row.body?.input ?? row.body?.path ?? ''
+			const responseJson = row.response === undefined ? null : JSON.stringify(row.response)
+			insert.run(
+				runId,
+				null,
+				version,
+				requestType,
+				null,
+				row.name ?? null,
+				sha256(probeInput),
+				relPath,
+				responseJson === null ? null : sha256(responseJson),
+				responseJson,
+				valid ? 1 : 0,
+				row.error ? 0 : 1,
+				row.error ?? null,
+				value?.capturedAt ?? null,
+			)
+		}
+	}
+}
+
 function printSummary(db: Database, dbPath: string): void {
 	const row = db
 		.query(
@@ -1004,6 +1154,7 @@ function main(): void {
 		insertHighlightSnapshots(db, files, scriptIds, artifactIds)
 		insertHighlightResults(db, files, scriptIds, runIds)
 		insertRequiredArgResults(db, files, runIds)
+		insertInspectResponses(db, files, runIds)
 	})
 
 	tx()

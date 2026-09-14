@@ -1,0 +1,3 @@
+/;(evl /globalname=$multilineString;value=(. hello 
+ world 
+ hello world));(evl /globalname=$hellos;value=(evl (evl /grepas-array=hello.*;pattern=hello.*;script=(. :put  " $multilineString "))));(evl /putmessage=$hellos);(evl /putmessage=(evl (evl /lenvalue=$hellos)))

@@ -1,0 +1,1 @@
+/;(evl /globalname=$messageText;value=(. bad string!!! & *even bad word d@c% or s# $ %));(evl /ifcondition=(~ $messageText (. [!@# $ %^&*]));do=;(evl / (evl /errormessage=bad char detected)))

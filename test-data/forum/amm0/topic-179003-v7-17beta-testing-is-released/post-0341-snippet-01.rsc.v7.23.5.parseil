@@ -1,0 +1,1 @@
+/;(evl /putmessage=Press 'y' to continue, or any other key to abort);(evl /ifcondition=(!= (evl (evl /convertfrom=num;to=raw;value=(evl (evl /terminal/inkey)))) y);do=;(evl (evl /errormessage=script stopped by user)))

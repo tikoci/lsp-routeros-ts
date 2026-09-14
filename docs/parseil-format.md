@@ -6,8 +6,12 @@
 > corpus captured against CHR 7.22.1, then re-run on 7.20.8 and 7.23rc1 for
 > drift. 912 scripts produced IL on all three versions; the one failure was the
 > intentional 126 KiB oversize sample hitting the REST upload cap. Re-run again
-> on the (then-current) 948-script corpus against **7.24.2** and **7.25beta3**:
-> same 947/948 pass rate, same single oversize failure, no grammar drift.
+> on the 948-script corpus against **7.24.2** (stable), **7.25beta3**
+> (development) and **7.23.5** (long-term): same 947/948 pass rate, same single
+> oversize failure, and no change to the core IL forms — the per-script
+> differences that remain are the live-schema leakage of §5.1, not grammar drift.
+> Those three builds also carry highlight, so the two oracles are directly
+> cross-checkable there.
 >
 > Status: working reference, RouterOS 7.22.1 grammar with cross-version drift
 > notes from 7.20.8 and 7.23rc1. Every snapshot in `test-data/` carries the
@@ -410,6 +414,27 @@ What did **not** drift in these passes: the core IL surface. No new top-level
 delimiters or forms appeared; statement sequencing still uses `;`, commands
 still lower to `(evl …)`, prefix operators still use `(<op> …)`, and quoted /
 activated function values still use `(> …)` and `(<%% …)`.
+
+#### 5.1.1 The 948-script versions (7.23.5 / 7.24.2 / 7.25beta3)
+
+The three currently-shipping channels were captured on the full 948-script
+corpus. Pairwise diff counts:
+
+| Compare | Differing `.parseil` files | Shared failure |
+| ------- | -------------------------- | -------------- |
+| 7.23.5 ↔ 7.24.2 | 87 | `edge-cases/oversize-32k.rsc` |
+| 7.24.2 ↔ 7.25beta3 | 11 | `edge-cases/oversize-32k.rsc` |
+| 7.23.5 ↔ 7.25beta3 | 91 | `edge-cases/oversize-32k.rsc` |
+
+The shape matches §5.1: the drift tracks **branch distance, not corpus size**.
+Within the 7.24 → 7.25 step only 11 files move, while the long-term 7.23 branch
+sits 87 files away from stable — the largest step measured in this corpus, and a
+reason not to treat long-term as interchangeable with stable when grounding
+version-sensitive claims. Both dominant causes are already-documented classes,
+not new ones: live-schema leakage (`/system/scheduler` gains `$days` in 7.24, so
+every `findwhere=` dump naming that menu changes) and command-argument
+serialisation (`as-string` lowers with an explicit `=true` on 7.24+). The core
+IL forms are unchanged across all three.
 
 ### 5.2 `findwhere=` field lists and required-attribute discovery
 

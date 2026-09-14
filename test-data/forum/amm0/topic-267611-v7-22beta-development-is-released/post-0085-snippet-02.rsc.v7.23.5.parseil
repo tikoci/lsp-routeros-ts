@@ -1,0 +1,1 @@
+/;(evl /system/note/setnote=);(evl /delaydelay-time=00:00:01);(evl /log/infomessage=log something);(evl /delaydelay-time=00:00:01);(evl /putmessage=(evl (evl /system/note/getvalue-name=note)))

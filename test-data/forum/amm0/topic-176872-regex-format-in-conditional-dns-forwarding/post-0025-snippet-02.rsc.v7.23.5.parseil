@@ -1,0 +1,1 @@
+/;(evl /putmessage=(~ a.com a[.]com));(evl /putmessage=(~ a1com a[.]com))

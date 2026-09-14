@@ -1,0 +1,10 @@
+{
+  "source": "forum/failover-script.rsc",
+  "routerosVersion": "7.23.5",
+  "chrBuildTime": "2026-09-04 05:32:46",
+  "inputBytes": 897,
+  "ilBytes": 3084,
+  "parseMs": 4,
+  "ok": true,
+  "capturedAt": "2026-09-14T17:05:01.914Z"
+}

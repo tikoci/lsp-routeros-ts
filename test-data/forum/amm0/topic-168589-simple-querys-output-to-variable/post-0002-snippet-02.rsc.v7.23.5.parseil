@@ -1,0 +1,2 @@
+/;(evl / (evl /localname=$porttext) / /port/ (evl /foreachcounter=$p;do=;(evl /port/ (evl /setname=$porttext;value=(. $porttext   (evl (evl /port/getnumber=$p;value-name=name))   (evl (evl /port/getnumber=$p;value-name=data-bits)) - (evl (evl /pickbegin=0;counter=(evl (evl /port/getnumber=$p;value-name=parity));end=1)) - (evl (evl /port/getnumber=$p;value-name=stop-bits))   (evl (evl /port/getnumber=$p;value-name=baud-rate))  (use:  (evl (evl /port/getnumber=$p;value-name=used-by)) )  
+)));in=(evl (evl /port/find))) (evl /putmessage=$porttext))

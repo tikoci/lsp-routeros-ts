@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$message;value=!Your message here) (evl /localname=$specialChars;value=(. [!@# $ %^&*])) (evl /localname=$found;value=false) (evl /ifcondition=(~ $message $specialChars);do=;(evl / (evl /setname=$found;value=true) (evl /log/warningmessage=found))))

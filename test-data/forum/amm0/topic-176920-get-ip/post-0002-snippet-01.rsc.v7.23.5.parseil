@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$dbip;value=(-> (evl (evl /tool/fetchas-value=https://api.db-ip.com/v2/free/self/ipAddress;output=user;url=https://api.db-ip.com/v2/free/self/ipAddress)) data)) (evl /putmessage=$dbip))

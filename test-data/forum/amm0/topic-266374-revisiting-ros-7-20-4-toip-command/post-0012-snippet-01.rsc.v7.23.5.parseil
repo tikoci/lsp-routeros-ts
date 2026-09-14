@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$baseprefix;value=10.0.0.0/24) (evl /localname=$baseip;value=(evl (evl /toipvalue=$baseprefix))) (evl /putmessage=(. First IP address is  (+ $baseip 1))))

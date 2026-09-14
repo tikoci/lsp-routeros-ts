@@ -1,0 +1,10 @@
+{
+  "source": "forum/amm0/topic-168334-why-does-mikrotik-always-use-veth-in-a-bridge/post-0001-snippet-01.rsc",
+  "routerosVersion": "7.23.5",
+  "chrBuildTime": "2026-09-04 05:32:46",
+  "inputBytes": 396,
+  "ilBytes": 174,
+  "parseMs": 2,
+  "ok": true,
+  "capturedAt": "2026-09-14T17:04:56.921Z"
+}

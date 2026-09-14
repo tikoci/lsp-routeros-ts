@@ -26,10 +26,10 @@ do not duplicate their findings back into this backlog.
 
 | Topic | Source of truth | Notes |
 | --- | --- | --- |
-| Highlight wire format and live lexical behavior | [`docs/highlight-format.md`](docs/highlight-format.md) | Captured against RouterOS 7.9.2, 7.23.2, and 7.24rc2. |
-| parseIL format and `:parse` behavior | [`docs/parseil-format.md`](docs/parseil-format.md) | Captured against RouterOS 7.20.8, 7.22.1, and 7.23rc1. |
+| Highlight wire format and live lexical behavior | [`docs/highlight-format.md`](docs/highlight-format.md) | Captured against RouterOS 7.9.2, 7.23.2, 7.24rc2, and the current channels 7.23.5 / 7.24.2 / 7.25beta3. |
+| parseIL format and `:parse` behavior | [`docs/parseil-format.md`](docs/parseil-format.md) | Captured against RouterOS 7.20.8, 7.22.1, 7.23rc1, and the current channels 7.23.5 / 7.24.2 / 7.25beta3. |
 | Syntax-inspection probe selection | [`docs/syntax-inspection-map.md`](docs/syntax-inspection-map.md) | Cross-probe decision and provenance layer for future skills/consumers. |
-| `completion`/`syntax`/`child` response shapes | [`docs/inspect-shapes.md`](docs/inspect-shapes.md) | Curated-context captures on RouterOS 7.9.2, 7.23.2, and 7.24rc2. |
+| `completion`/`syntax`/`child` response shapes | [`docs/inspect-shapes.md`](docs/inspect-shapes.md) | Curated-context captures on RouterOS 7.9.2, 7.23.2, 7.24rc2, 7.23.5, 7.24.2, and 7.25beta3; normalized into `inspect_responses`. |
 | Required-argument probe | [`docs/required-args.md`](docs/required-args.md) | Version-tagged execute-time signal and unresolved edge cases. |
 | rosetta/LSP docs enrichment | [`docs/rosetta-alignment.md`](docs/rosetta-alignment.md) | No runtime rosetta dependency; static JSON first. |
 | canonicalize audit | [`docs/canonicalize-audit.md`](docs/canonicalize-audit.md) | Upstream rosetta parser alignment and remaining hardening. |
@@ -71,9 +71,11 @@ semantics should be grounded in measured RouterOS behavior first. The usual path
 - 📋 **`[research: inspect-shapes]` Catalog `/console/inspect` responses** —
   schemas are documented: `highlight` in [`docs/highlight-format.md`](docs/highlight-format.md),
   `completion`/`syntax`/`child` in [`docs/inspect-shapes.md`](docs/inspect-shapes.md)
-  (curated-context captures on 7.9.2/7.23.2/7.24rc2 via
-  `scripts/collect-inspect-shapes.ts`). Remaining: the representative
-  corpus-position sweep into `inspect_responses` in `test-data/corpus.sqlite`.
+  (curated-context captures on 7.9.2/7.23.2/7.24rc2/7.23.5/7.24.2/7.25beta3 via
+  `scripts/collect-inspect-shapes.ts`, now normalized into `inspect_responses`
+  in `test-data/corpus.sqlite` — 37 probes x 6 versions). Remaining: the
+  representative corpus-position sweep, which is what would fill that table's
+  `script_id` / `cursor_offset` columns.
 - 📋 **`[research: completion-tricks]` Validate fake-space / fake-equals
   heuristics** — measure when synthetic trailing space or `=` probes improve,
   change, or break completions; define safe application rules.

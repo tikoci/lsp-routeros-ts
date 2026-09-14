@@ -1,0 +1,1 @@
+/;(evl /ifcondition=(~ (-> (evl (evl /system/check-installationas-value=true)) status) ok);do=;(evl / (evl /putmessage=good));else=;(evl / (evl /putmessage=bad)))

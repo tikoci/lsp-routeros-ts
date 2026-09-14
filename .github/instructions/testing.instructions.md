@@ -74,6 +74,57 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 - Because `corpus.sqlite` is checked in, rebuilds must be deterministic from committed inputs; prefer corpus fingerprints and source capture timestamps over wall-clock import timestamps
 - Future research harnesses should write normalized rows to this DB first; export JSON/Markdown only when a reviewer needs a textual diff or docs need a curated excerpt
 
+### Capture shape: both oracles, full corpus, one build
+
+**Standing rule for every new version capture: run parseIL *and* highlight over
+the whole corpus against a single CHR build.** Run `collect-inspect-shapes.ts`
+and `collect-required-args.ts` on that same build too.
+
+This is a rule because the corpus violated it for its first six versions by
+accident. parseIL was captured on 7.20.8 / 7.22.1 / 7.23rc1 and highlight on
+7.9.2 / 7.23.2 / 7.24rc2 — **disjoint sets, no version had both**. Consumers
+that cross-check the two oracles (tikoci/centrs scores its token partition
+against highlight and grounds its operator axis on `:parse` IL) could not make
+both claims about the same firmware, so any disagreement between them was
+confounded with a version difference. Those six versions also predate the
+`tangentsoft/` import, so they cover 913 scripts rather than 948 — which is why
+a metric averaged across all versions is not comparable cell-to-cell.
+
+Practical consequences:
+
+- **Pick versions by channel, not by convenience.** Cover what MikroTik
+  currently ships — stable, long-term, testing, development — one build each.
+  Long-term especially: it is the channel MikroTik treats as the recommended
+  minimum, so it is the one most consumers actually run. An rc or an early patch
+  of a branch (`7.23rc1`, `7.23.2`) is **not** a substitute for that branch's
+  maintained release (`7.23.5`).
+- **Don't backfill EOL firmware.** Historical partial captures keep archival and
+  drift value; re-capturing them does not earn its cost. They are marked instead
+  — see `v_version_coverage` below.
+- **Check the result before committing.** `SELECT * FROM v_version_coverage`
+  should show `coverage_class = 'complete'` for the version you just captured.
+
+Booting the CHR: use [`tikoci/quickchr`](https://github.com/tikoci/quickchr),
+e.g. `quickchr start --name corpus7235 --version 7.23.5 --mem 2048 --cpu 2
+--boot-size 2G`, then point the harnesses at it with `ROUTEROS_TEST_URL`.
+`collect-required-args.ts` additionally needs
+`restraml/docs/<version>/deep-inspect.json` as its input schema (that artifact
+belongs to tikoci/restraml; pass it with `--schema`).
+
+### Reading coverage out of the DB
+
+`v_version_coverage` derives per-version coverage from the rows actually
+present, so it never goes stale by hand:
+
+```sql
+-- versions safe to compare cell-to-cell
+SELECT routeros_version FROM v_version_coverage WHERE coverage_class = 'complete';
+```
+
+`coverage_class` is `'complete'` when both oracles cover every `source_scripts`
+row on that build, and `'partial'` otherwise. Consumers pinning this corpus
+should filter on it rather than assuming the version axis is uniform.
+
 ### Performance profiling (`profile-timing.ts`)
 - Tests size→time relationship by truncating scripts at progressive sizes (128B → 32KB)
 - Includes synthetic controls (pure comments, simple commands, complex scripting, mixed paths)

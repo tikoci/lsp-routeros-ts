@@ -1,0 +1,1 @@
+/;(evl /file/printfile=name with spaces);(evl /file/setcontents=it works;numbers=name with spaces);(evl /putmessage=(evl (evl /file/getnumber=name with spaces;value-name=contents)))

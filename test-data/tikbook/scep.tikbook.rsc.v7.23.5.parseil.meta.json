@@ -1,0 +1,10 @@
+{
+  "source": "tikbook/scep.tikbook.rsc",
+  "routerosVersion": "7.23.5",
+  "chrBuildTime": "2026-09-04 05:32:46",
+  "inputBytes": 4982,
+  "ilBytes": 33,
+  "parseMs": 4,
+  "ok": true,
+  "capturedAt": "2026-09-14T17:05:07.483Z"
+}

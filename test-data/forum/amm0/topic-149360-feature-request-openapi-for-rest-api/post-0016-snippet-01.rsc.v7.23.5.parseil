@@ -1,0 +1,1 @@
+/;(evl /putmessage=(evl (evl /typeofvalue=(evl (evl /console/inspectinput=:put [/system/identity/get name];request=error)))));(evl /putmessage=(evl (evl /typeofvalue=(evl (evl /console/inspectinput=/somebadcommand;request=error)))))

@@ -1,0 +1,10 @@
+{
+  "source": "eworm/ppp-on-up.rsc",
+  "routerosVersion": "7.23.5",
+  "chrBuildTime": "2026-09-04 05:32:46",
+  "inputBytes": 1439,
+  "ilBytes": 2286,
+  "parseMs": 3,
+  "ok": true,
+  "capturedAt": "2026-09-14T17:04:54.896Z"
+}

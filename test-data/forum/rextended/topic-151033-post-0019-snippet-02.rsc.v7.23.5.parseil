@@ -1,0 +1,1 @@
+/;(evl /globaldo=;(evl / (evl /localname=$conv;value=$1) (evl /ifcondition=(! (~ $conv (. ^[0-9a-fA-F]+ $)));do=;(evl (evl /returnvalue=0))) (evl /ifcondition=(= (evl (evl /typeofvalue=(evl (evl /findfrom=-1;in=$conv;key=0x)))) nil);do=;(evl (evl /setname=$conv;value=(. 0x $conv)))) (evl /returnvalue=(evl (evl /tonumvalue=$conv))));name=$hex2dec)

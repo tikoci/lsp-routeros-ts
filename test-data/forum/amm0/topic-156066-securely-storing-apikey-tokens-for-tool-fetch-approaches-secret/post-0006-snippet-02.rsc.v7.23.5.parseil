@@ -1,0 +1,1 @@
+/;(<%% $SECRET (> $SECRET));(<%% $SECRET (> $SECRET);print);(<%% $SECRET (> $SECRET);add;rest_apikey;password=mikrotik);(<%% $SECRET (> $SECRET);print);(evl /putmessage=(evl (<%% $SECRET (> $SECRET);get;rest_apikey)));(<%% $SECRET (> $SECRET);remove;rest_apikey);(evl /putmessage=(evl (<%% $SECRET (> $SECRET);get;rest_apikey)))

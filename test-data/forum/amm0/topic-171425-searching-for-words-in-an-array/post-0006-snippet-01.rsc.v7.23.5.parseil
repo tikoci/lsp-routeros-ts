@@ -1,0 +1,1 @@
+/;(evl /globalname=$months;value=(evl (evl /toarrayvalue=jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec)));(evl /putmessage=(evl (evl /findin=$months;key=feb)));(evl /putmessage=(evl (evl /typeofvalue=(evl (evl /findin=$months;key=jan, f)))))

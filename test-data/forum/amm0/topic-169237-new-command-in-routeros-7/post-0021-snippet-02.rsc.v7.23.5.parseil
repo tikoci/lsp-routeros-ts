@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$interfaceOneName;value=(evl (evl /tool/snmp-getaddress=127.0.0.1;as-value=public;community=public;oid=.1.3.6.1.2.1.2.2.1.2.1))) (evl /putmessage=$interfaceOneName) (evl /putmessage=(-> $interfaceOneName value)))

@@ -1,0 +1,1 @@
+/;(evl / (evl /foreachcounter=$foundItem;do=;(evl / (evl /putmessage=$foundItem) (evl /putmessage=(-> $foundItem comment)) (evl /foreachcounter=$routeAttr;$attrValue;do=;(evl / (evl /putmessage=(. $routeAttr  is set to  $attrValue)));in=$foundItem));in=(evl (evl /ip/route/printas-value=true))))

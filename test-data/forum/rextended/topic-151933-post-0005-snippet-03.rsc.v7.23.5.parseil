@@ -1,0 +1,1 @@
+/;/ipv6/dhcp-client/option/;(evl /ipv6/dhcp-client/option/setnumbers=(evl (evl /ipv6/dhcp-client/option/findwhere=$name;$code;$value;$raw-value;$default;$comment;$.id;$.nextid;$.dead;$.about;(= $code 39);5));value=(evl (<%% $fqdn2encdns (> $fqdn2encdns);www.thisismydomainname.net)))

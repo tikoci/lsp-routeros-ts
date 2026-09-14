@@ -3,12 +3,15 @@
 > Reference for the three non-highlight request types of `/console/inspect`,
 > grounded on a curated 37-context probe catalog captured verbatim against CHR
 > **7.23.2** (stable), **7.24rc2** (testing), and **7.9.2** (plain-HTTP floor).
-> Re-run again against **7.24.2** (stable) and **7.25beta3** (development):
-> identical field inventory and response shapes across the probe catalog, no
-> drift. Artifacts: `test-data/inspect-shapes.v<version>.json` from
-> `scripts/collect-inspect-shapes.ts`. This lands the `completion`/`syntax`/
-> `child` share of `[research: inspect-shapes]`; the corpus-position sweep and
-> the synthetic-probe rules (`[research: completion-tricks]`) remain open.
+> Re-run again against **7.24.2** (stable), **7.25beta3** (development) and
+> **7.23.5** (long-term): identical field inventory and response shapes across
+> the probe catalog, no drift. Artifacts: `test-data/inspect-shapes.v<version>.json`
+> from `scripts/collect-inspect-shapes.ts`, normalized into `corpus.sqlite` as
+> `inspect_responses` (one row per probe per version; `script_id` and
+> `cursor_offset` stay NULL because the contexts are curated, not corpus-swept).
+> This lands the `completion`/`syntax`/`child` share of
+> `[research: inspect-shapes]`; the corpus-position sweep and the
+> synthetic-probe rules (`[research: completion-tricks]`) remain open.
 >
 > Companions: [`highlight-format.md`](highlight-format.md) for
 > `request=highlight`; the `routeros-command-tree` skill for tree-walking

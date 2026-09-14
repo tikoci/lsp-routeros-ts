@@ -1,0 +1,1 @@
+/;(evl /certificate/addcommon-name=(. (evl (evl /converttransform=uc;value=$scepbase))  Authority ( $sysname ));days-valid=$certcadays;digest-algorithm=$digestalgo;key-size=$certkeysize;key-usage=key-cert-sign;crl-sign;name=(. $scepbase - $sysname -ca);organization=$scepbase;unit=$sysname)

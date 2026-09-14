@@ -1,0 +1,1 @@
+/;(evl /localname=$char;value=(evl (<%% (evl /parsevalue=(. ( " \ (evl (evl /pickbegin=(& (>> $key 4) 15);counter=0123456789ABCDEF)) (evl (evl /pickbegin=(& $key 15);counter=0123456789ABCDEF)) " ))) )))

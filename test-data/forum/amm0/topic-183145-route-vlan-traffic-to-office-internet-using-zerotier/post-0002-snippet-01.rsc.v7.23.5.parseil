@@ -1,0 +1,1 @@
+/;(evl /routing/table/addfib=ztoffice;name=ztoffice);(evl /ip/route/addcheck-gateway=ping;gateway=10.172.17.21;routing-table=ztoffice);(evl /routing/rule/addaction=lookup;interface=vlan5;table=ztoffice)

@@ -1,0 +1,1 @@
+/;(evl /globalname=$myarraylist;value=(, text1 text2));(evl /globaldo=;(evl (evl /returnvalue=(. something  $1   $0)));name=$myfunction);(evl /putmessage=(. $myarraylist $myfunction));(evl /putmessage=(. $myarraylist (evl (<%% $myfunction (> $myfunction)))))

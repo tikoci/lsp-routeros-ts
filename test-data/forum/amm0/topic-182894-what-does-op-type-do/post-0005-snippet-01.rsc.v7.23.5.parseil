@@ -1,0 +1,1 @@
+/;(evl / (evl /localname=$x;value=1) (evl /localdo=;(evl (evl /putmessage=$x));name=$fn) (<%% $fn (> $fn)));(evl / (evl /localname=$x2;value=2) (evl /localname=$fn2;value=(> (evl (evl /putmessage=$x2)))) (<%% $fn2 (> $fn2)));(<%% bad command name 2 (line 21 column 1) 2)

@@ -1,0 +1,11 @@
+{
+  "source": "edge-cases/oversize-32k.rsc",
+  "routerosVersion": "7.23.5",
+  "chrBuildTime": "2026-09-04 05:32:46",
+  "inputBytes": 126976,
+  "ilBytes": 0,
+  "parseMs": 0,
+  "ok": false,
+  "error": "/rest/file/add → 413 Payload Too Large",
+  "capturedAt": "2026-09-14T17:04:54.588Z"
+}

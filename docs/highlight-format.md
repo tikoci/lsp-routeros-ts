@@ -5,9 +5,12 @@
 > tokens and diagnostics. Grounded on a 913-script full-corpus sweep against
 > CHR **7.23.2** (stable), re-run on **7.24rc2** (testing) and **7.9.2** (the
 > earliest plain-HTTP REST branch tested here) for drift, plus 23 targeted probes for rare token
-> classes. Re-run again on the (then-current) 948-script corpus against
-> **7.24.2** (stable) and **7.25beta3** (development) — same 19 token classes,
-> identical vocabulary, zero drift. Capture artifacts:
+> classes. Re-run again on the 948-script corpus against **7.24.2** (stable),
+> **7.25beta3** (development) and **7.23.5** (long-term) — all three observe the
+> same 19 token classes with identical vocabulary; 7.24.2 and 7.25beta3 are
+> per-script identical, while long-term 7.23.5 differs on 33 files (§7.2). Those
+> three builds also carry parseIL, so the two oracles are directly
+> cross-checkable there. Capture artifacts:
 > `test-data/highlight-summary.v<version>.json` (from
 > `scripts/collect-highlight.ts`); the six committed `.rsc.highlight` fixtures
 > (pre-7.23, unversioned) remain the offline snapshot-test inputs.
@@ -259,6 +262,31 @@ check.
 - **None of the eight reserved classes appeared on 7.9.2 either** — they are
   not "old tokens that disappeared"; they have never been on the highlight
   wire in the REST era. See §8 for where they actually come from.
+
+### 7.2 The 948-script versions (7.23.5 / 7.24.2 / 7.25beta3)
+
+The three currently-shipping channels were re-captured on the full 948-script
+corpus. Vocabulary is identical on all three — the same 19 classes.
+
+| Compare | Files with differing token-class sets |
+| ------- | ------------------------------------: |
+| 7.24.2 ↔ 7.25beta3 | 0 |
+| 7.23.5 ↔ 7.24.2 | 33 |
+| 7.23.5 ↔ 7.25beta3 | 33 |
+
+Stable and development classify the corpus **identically**; the long-term branch
+is the one that differs. The 33 files decompose the same way §7 did — 18 lost
+`error`, 17 gained `obj-inactive`, 7 gained `arg`, 2 lost `variable-undefined`,
+and one each gained `syntax-meta` / `escaped` / `variable-local` — i.e. names
+that 7.23.5 rejects outright resolve (or soften) on 7.24+ as the command tree
+grows. That continues the §7.1 trend rather than reversing it: 7.9.2 was harsher
+than 7.23.2, and 7.23.5 is in turn harsher than 7.24+. Each branch keeps getting
+more permissive, so a hard `error` is the class most likely to move under you.
+
+The practical consequence for consumers: **a highlight-grounded claim checked
+only on stable does not automatically hold on long-term**, which is the channel
+MikroTik treats as the recommended minimum. Score against a build from the
+channel you mean.
 
 ## 8. The LSP-side vocabulary — 8 reserved classes and where they came from
 

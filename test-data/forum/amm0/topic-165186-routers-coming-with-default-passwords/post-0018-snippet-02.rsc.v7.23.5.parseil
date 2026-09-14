@@ -1,0 +1,1 @@
+/;(evl /ifcondition=(! (or (= $defconfPassword ) (= $defconfPassword $nil)));do=;(evl / (evl /user/setnumbers=admin;password=$defconfPassword) (evl /delaydelay-time=00:00:00.500) (evl /user/expire-passwordnumbers=admin)))

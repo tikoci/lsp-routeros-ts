@@ -1,0 +1,1 @@
+/;(evl /tool/fetchurl=https://tikoci.github.io/scripts/lsbridge.rsc);(evl /system/script/addname=lsbridge;source=(evl (evl /file/getnumber=lsbridge.rsc;value-name=contents)));(evl /system/script/runnumber=lsbridge);(<%% $lsbridge (> $lsbridge))

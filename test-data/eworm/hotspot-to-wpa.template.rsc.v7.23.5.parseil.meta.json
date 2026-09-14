@@ -1,0 +1,10 @@
+{
+  "source": "eworm/hotspot-to-wpa.template.rsc",
+  "routerosVersion": "7.23.5",
+  "chrBuildTime": "2026-09-04 05:32:46",
+  "inputBytes": 5722,
+  "ilBytes": 32,
+  "parseMs": 4,
+  "ok": true,
+  "capturedAt": "2026-09-14T17:04:54.854Z"
+}

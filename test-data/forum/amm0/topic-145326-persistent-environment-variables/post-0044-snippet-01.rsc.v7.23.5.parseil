@@ -1,0 +1,1 @@
+/;(evl /globalname=$optype;value=(> (evl (evl /globalname=$z;value=blah))));(<%% $optype (> $optype));(evl /putmessage=$z)

@@ -1,0 +1,1 @@
+/;(evl /system/device-mode/updatel2tp=false;mode=enterprise;pptp=false;proxy=false;romon=false;smb=false;socks=false);(evl /system/device-mode/print);(evl /ip/socks/setenabled=true);(evl /ip/socks/print)

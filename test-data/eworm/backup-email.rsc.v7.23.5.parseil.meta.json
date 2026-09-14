@@ -1,0 +1,10 @@
+{
+  "source": "eworm/backup-email.rsc",
+  "routerosVersion": "7.23.5",
+  "chrBuildTime": "2026-09-04 05:32:46",
+  "inputBytes": 4644,
+  "ilBytes": 5294,
+  "parseMs": 6,
+  "ok": true,
+  "capturedAt": "2026-09-14T17:04:54.622Z"
+}
