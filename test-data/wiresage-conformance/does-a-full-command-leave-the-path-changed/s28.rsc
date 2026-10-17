@@ -1,0 +1,2 @@
+/ip address
+[print]

@@ -1,0 +1,1 @@
+/ip address print where interface=ether1 && !disabled

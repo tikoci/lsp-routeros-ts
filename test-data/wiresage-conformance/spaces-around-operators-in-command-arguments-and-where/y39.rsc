@@ -1,0 +1,1 @@
+/ip address print where interface in {"ether1";"ether2"}

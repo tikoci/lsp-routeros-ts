@@ -1,0 +1,2 @@
+:if (true) 
+do={ :put 1 }

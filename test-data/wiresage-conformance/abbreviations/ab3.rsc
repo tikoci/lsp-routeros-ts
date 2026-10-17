@@ -1,0 +1,1 @@
+/ip address add addr=1.1.1.1/32 inter=ether1

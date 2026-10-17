@@ -1,0 +1,1 @@
+:local a {1;2}; :foreach i in=$a do={ :put $i }

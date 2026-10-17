@@ -1,0 +1,1 @@
+:local a [:toarray "1,2"]; :put [:len $a]

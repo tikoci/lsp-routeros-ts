@@ -1,0 +1,1 @@
+:local A 1; :put $a

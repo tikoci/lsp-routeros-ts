@@ -1,0 +1,1 @@
+{ :local a true; :local b false; :put (a&&b); }

@@ -1,0 +1,1 @@
+:foreach v in={1;2} do={ :put $v }

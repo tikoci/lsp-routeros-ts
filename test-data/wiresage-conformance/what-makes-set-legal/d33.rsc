@@ -1,0 +1,1 @@
+:local a; /ip address set 0 comment=$a

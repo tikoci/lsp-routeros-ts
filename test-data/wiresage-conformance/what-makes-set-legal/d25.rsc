@@ -1,0 +1,1 @@
+:local a; :do { :set a 1 } on-error={ }

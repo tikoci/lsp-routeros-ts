@@ -1,0 +1,1 @@
+:global f do={ :put $a }; $f a=(1+2) b="x"

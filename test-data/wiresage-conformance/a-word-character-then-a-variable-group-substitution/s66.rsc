@@ -1,0 +1,1 @@
+:local v 1; :log info a&$v

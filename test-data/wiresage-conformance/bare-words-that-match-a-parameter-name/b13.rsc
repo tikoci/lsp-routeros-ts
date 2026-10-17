@@ -1,0 +1,1 @@
+/ip address print detail=yes

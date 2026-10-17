@@ -1,0 +1,1 @@
+{ :local myVar 'a'; :put $myVAr }

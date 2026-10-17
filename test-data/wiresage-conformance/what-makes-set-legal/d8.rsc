@@ -1,0 +1,1 @@
+:foreach i in={1;2} do={ :set i 5 }

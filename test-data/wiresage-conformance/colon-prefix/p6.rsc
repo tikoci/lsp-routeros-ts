@@ -1,0 +1,1 @@
+:do { :put 1 } on-error={ :put 2 }

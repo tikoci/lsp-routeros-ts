@@ -1,0 +1,1 @@
+/ip address remove [find address=1.1.1.1/32]

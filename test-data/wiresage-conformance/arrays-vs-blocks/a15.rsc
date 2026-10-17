@@ -1,0 +1,1 @@
+:local a {x=1}; :put ($a->x)

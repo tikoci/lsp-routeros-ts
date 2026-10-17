@@ -1,0 +1,7106 @@
+[
+ {
+  "id": "c1",
+  "section": "comments",
+  "note": "docs example",
+  "source": ":put 1 # trailing comment",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "c2",
+  "section": "comments",
+  "note": "docs example",
+  "source": ":put 1; # after semicolon",
+  "valid": true
+ },
+ {
+  "id": "c3",
+  "section": "comments",
+  "note": "docs silent",
+  "source": ":put 1# no space before hash",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "c4",
+  "section": "comments",
+  "note": "docs: not a comment inside a string",
+  "source": ":put \"a#b\"",
+  "valid": true
+ },
+ {
+  "id": "c5",
+  "section": "comments",
+  "note": "docs silent: # inside an unquoted word",
+  "source": ":put a#b",
+  "valid": true
+ },
+ {
+  "id": "c6",
+  "section": "comments",
+  "note": "docs silent: # inside an unquoted value",
+  "source": "/system identity set name=abc#def",
+  "valid": true
+ },
+ {
+  "id": "c7",
+  "section": "comments",
+  "note": "string",
+  "source": "/system script add name=x source=\":put 1 # in string\"",
+  "valid": true
+ },
+ {
+  "id": "c8",
+  "section": "comments",
+  "note": "comment inside a block",
+  "source": "{ :put 1 # c\n}",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "c9",
+  "section": "comments",
+  "note": "docs: a backslash does not continue a comment -> syntax error",
+  "source": "# comment \\\n  continued",
+  "valid": false,
+  "message": "bad command name continued",
+  "line": 2,
+  "column": 3
+ },
+ {
+  "id": "c10",
+  "section": "comments",
+  "note": "docs: a line ending in a backslash cannot carry a comment",
+  "source": ":put 1 \\ # bad comment\n  ",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "c11",
+  "section": "comments",
+  "note": "file with only a comment",
+  "source": "#only a comment",
+  "valid": true
+ },
+ {
+  "id": "c12",
+  "section": "comments",
+  "note": "empty file",
+  "source": "",
+  "valid": true
+ },
+ {
+  "id": "j1",
+  "section": "line joining",
+  "note": "docs example",
+  "source": ":if (true = true \\\n\tand false=false) do={ :put 1 }",
+  "valid": true
+ },
+ {
+  "id": "j2",
+  "section": "line joining",
+  "note": "plain join",
+  "source": ":put \\\n  1",
+  "valid": true
+ },
+ {
+  "id": "j3",
+  "section": "line joining",
+  "note": "backslash, SPACE, newline: docs silent",
+  "source": ":put \\ \n  1",
+  "valid": true
+ },
+ {
+  "id": "j4",
+  "section": "line joining",
+  "note": "docs: backslash illegal elsewhere",
+  "source": ":put \\ 1",
+  "valid": true
+ },
+ {
+  "id": "j7",
+  "section": "line joining",
+  "note": "raw newline inside a string literal",
+  "source": ":put \"multi\nline string\"",
+  "valid": true
+ },
+ {
+  "id": "j8",
+  "section": "line joining",
+  "note": "CR-only line ending (docs: mac)",
+  "source": ":put 1\r:put 2",
+  "valid": true
+ },
+ {
+  "id": "j9",
+  "section": "line joining",
+  "note": "CRLF",
+  "source": ":put 1\r\n:put 2",
+  "valid": true
+ },
+ {
+  "id": "j10",
+  "section": "line joining",
+  "note": "UTF-8 BOM at the start: docs silent",
+  "source": "﻿:put 1",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "j11",
+  "section": "line joining",
+  "note": "non-ASCII in string and comment",
+  "source": ":put \"é\" # é",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "w1",
+  "section": "whitespace around '='",
+  "note": "docs: INCORRECT",
+  "source": ":for i from = 1 to = 2 do = { :put $i }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "w2",
+  "section": "whitespace around '='",
+  "note": "docs: correct",
+  "source": ":for i from=1 to=2 do={ :put $i }",
+  "valid": true
+ },
+ {
+  "id": "w3",
+  "section": "whitespace around '='",
+  "note": "docs: listed as CORRECT (space after '=')",
+  "source": ":for i from= 1 to= 2 do={ :put $i }",
+  "valid": true
+ },
+ {
+  "id": "w4",
+  "section": "whitespace around '='",
+  "note": "docs: INCORRECT",
+  "source": "/ip route add gateway = 3.3.3.3",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 23
+ },
+ {
+  "id": "w5",
+  "section": "whitespace around '='",
+  "note": "docs: correct",
+  "source": "/ip route add gateway=3.3.3.3",
+  "valid": true
+ },
+ {
+  "id": "w6",
+  "section": "whitespace around '='",
+  "note": "space before '='",
+  "source": "/ip route add gateway =3.3.3.3",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 23
+ },
+ {
+  "id": "w7",
+  "section": "whitespace around '='",
+  "note": "space after '='",
+  "source": "/ip route add gateway= 3.3.3.3",
+  "valid": true
+ },
+ {
+  "id": "w8",
+  "section": "whitespace around '='",
+  "note": "docs example: bare a, b without $",
+  "source": "{ :local a true; :local b false; :put (a&&b); }",
+  "valid": true
+ },
+ {
+  "id": "w9",
+  "section": "whitespace around '='",
+  "note": "docs example: word operator",
+  "source": "{ :local a true; :local b false; :put (a and b); }",
+  "valid": true
+ },
+ {
+  "id": "w10",
+  "section": "whitespace around '='",
+  "note": "with $",
+  "source": "{ :local a true; :local b false; :put ($a&&$b); }",
+  "valid": true
+ },
+ {
+  "id": "w11",
+  "section": "whitespace around '='",
+  "note": "word operator without a space after it",
+  "source": "{ :local a true; :local b false; :put ($a and$b); }",
+  "valid": true
+ },
+ {
+  "id": "w12",
+  "section": "whitespace around '='",
+  "note": "name runs into 'and'",
+  "source": "{ :local a true; :put ($aand$b) }",
+  "valid": true
+ },
+ {
+  "id": "t1",
+  "section": "statement separation",
+  "note": "two commands on one line, no separator",
+  "source": ":put 1 :put 2",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "t2",
+  "section": "statement separation",
+  "note": "semicolon, no space",
+  "source": ":put 1;:put 2",
+  "valid": true
+ },
+ {
+  "id": "t3",
+  "section": "statement separation",
+  "note": "empty statement",
+  "source": ":put 1;;:put 2",
+  "valid": true
+ },
+ {
+  "id": "t4",
+  "section": "statement separation",
+  "note": "single command in a block, no terminator",
+  "source": "{ :put 1 }",
+  "valid": true
+ },
+ {
+  "id": "t5",
+  "section": "statement separation",
+  "note": "last command without terminator",
+  "source": "{ :put 1; :put 2 }",
+  "valid": true
+ },
+ {
+  "id": "t6",
+  "section": "statement separation",
+  "note": "empty block",
+  "source": "{ }",
+  "valid": true
+ },
+ {
+  "id": "t7",
+  "section": "statement separation",
+  "note": "block holding only a separator",
+  "source": "{ ; }",
+  "valid": true
+ },
+ {
+  "id": "t8",
+  "section": "statement separation",
+  "note": "docs example",
+  "source": ":if ( true ) do={ :put \"lala\" }",
+  "valid": true
+ },
+ {
+  "id": "t9",
+  "section": "statement separation",
+  "note": "docs example: trailing ';' inside []",
+  "source": ":put [:len \"x\"; ]",
+  "valid": true
+ },
+ {
+  "id": "t10",
+  "section": "statement separation",
+  "note": "docs: [] can contain only a single command line",
+  "source": ":put [:len \"a\"; :len \"b\"]",
+  "valid": true
+ },
+ {
+  "id": "t11",
+  "section": "statement separation",
+  "note": "empty substitution",
+  "source": ":put []",
+  "valid": true
+ },
+ {
+  "id": "t12",
+  "section": "statement separation",
+  "note": "';' inside ()",
+  "source": ":put (1; 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "u1",
+  "section": "non-ascii",
+  "note": "non-ASCII inside a string",
+  "source": ":put \"é\";",
+  "valid": true
+ },
+ {
+  "id": "u2",
+  "section": "non-ascii",
+  "note": "non-ASCII in a comment",
+  "source": "# é comment\n:put 1",
+  "valid": true
+ },
+ {
+  "id": "u3",
+  "section": "non-ascii",
+  "note": "non-ASCII identifier: docs say letters and digits",
+  "source": ":local é 1",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "v1",
+  "section": "undeclared variables",
+  "note": "dry-run: use without declaration",
+  "source": ":put $nope",
+  "valid": true
+ },
+ {
+  "id": "v5",
+  "section": "undeclared variables",
+  "note": "dry-run: :set on an undeclared name",
+  "source": ":set nope \"x\"",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 6
+ },
+ {
+  "id": "v9",
+  "section": "undeclared variables",
+  "note": "case sensitivity",
+  "source": "{ :local myVar 'a'; :put $myVAr }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 16
+ },
+ {
+  "id": "f3",
+  "section": "function and loop parameters",
+  "note": "dry-run: $a not declared inside the function body",
+  "source": "{ :local f do={ :put $a }; $f a=1 }",
+  "valid": true
+ },
+ {
+  "id": "f5",
+  "section": "function and loop parameters",
+  "note": "loop variable",
+  "source": ":foreach i in={1;2} do={ :put $i }",
+  "valid": true
+ },
+ {
+  "id": "f6",
+  "section": "function and loop parameters",
+  "note": "key and value variables",
+  "source": ":foreach k,v in={1;2} do={ :put $k }",
+  "valid": true
+ },
+ {
+  "id": "f7",
+  "section": "function and loop parameters",
+  "note": "for variable",
+  "source": ":for i from=1 to=3 do={ :put $i }",
+  "valid": true
+ },
+ {
+  "id": "f8",
+  "section": "function and loop parameters",
+  "note": "onerror variable with in=",
+  "source": ":onerror e in={ :error \"x\" } do={ :put $e }",
+  "valid": true
+ },
+ {
+  "id": "f9",
+  "section": "function and loop parameters",
+  "note": "docs example without in=",
+  "source": ":onerror e {:put 1} do={ :put $e }",
+  "valid": true
+ },
+ {
+  "id": "f10",
+  "section": "function and loop parameters",
+  "note": "docs: reserved name `type`",
+  "source": "{ :local type 1; /interface print where name=$type }",
+  "valid": true
+ },
+ {
+  "id": "i1",
+  "section": "identifiers",
+  "note": "mixed case + digit",
+  "source": ":local aB1 1",
+  "valid": true
+ },
+ {
+  "id": "i2",
+  "section": "identifiers",
+  "note": "underscore",
+  "source": ":local a_b 1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "i3",
+  "section": "identifiers",
+  "note": "hyphen: docs say needs quotes",
+  "source": ":local a-b 1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "i4",
+  "section": "identifiers",
+  "note": "quoted hyphen: docs say valid",
+  "source": ":local \"a-b\" 1",
+  "valid": true
+ },
+ {
+  "id": "i5",
+  "section": "identifiers",
+  "note": "leading digit",
+  "source": ":local 1a 1",
+  "valid": true
+ },
+ {
+  "id": "i6",
+  "section": "identifiers",
+  "note": "all digits",
+  "source": ":local 1 1",
+  "valid": true
+ },
+ {
+  "id": "i7",
+  "section": "identifiers",
+  "note": "quoted space",
+  "source": ":local \"a b\" 1",
+  "valid": true
+ },
+ {
+  "id": "i8",
+  "section": "identifiers",
+  "note": "empty quoted name",
+  "source": ":local \"\" 1",
+  "valid": true
+ },
+ {
+  "id": "i9",
+  "section": "identifiers",
+  "note": "keyword and",
+  "source": ":local and 1",
+  "valid": true
+ },
+ {
+  "id": "i10",
+  "section": "identifiers",
+  "note": "keyword or",
+  "source": ":local or 1",
+  "valid": true
+ },
+ {
+  "id": "i11",
+  "section": "identifiers",
+  "note": "keyword in",
+  "source": ":local in 1",
+  "valid": true
+ },
+ {
+  "id": "i12",
+  "section": "identifiers",
+  "note": "true",
+  "source": ":local true 1",
+  "valid": true
+ },
+ {
+  "id": "i13",
+  "section": "identifiers",
+  "note": "nil",
+  "source": ":local nil 1",
+  "valid": true
+ },
+ {
+  "id": "i14",
+  "section": "identifiers",
+  "note": "not",
+  "source": ":local not 1",
+  "valid": true
+ },
+ {
+  "id": "i15",
+  "section": "identifiers",
+  "note": "do",
+  "source": ":local do 1",
+  "valid": true
+ },
+ {
+  "id": "i16",
+  "section": "identifiers",
+  "note": "if",
+  "source": ":local if 1",
+  "valid": true
+ },
+ {
+  "id": "i17",
+  "section": "identifiers",
+  "note": "global",
+  "source": ":local global 1",
+  "valid": true
+ },
+ {
+  "id": "i18",
+  "section": "identifiers",
+  "note": "quoted reference to a plain name",
+  "source": ":local x; :put $\"x\"",
+  "valid": true
+ },
+ {
+  "id": "i19",
+  "section": "identifiers",
+  "note": "docs example",
+  "source": ":local \"my-Var\"; :set \"my-Var\" \"v\"; :put $\"my-Var\"",
+  "valid": true
+ },
+ {
+  "id": "i20",
+  "section": "identifiers",
+  "note": "two substitutions back to back",
+  "source": ":local x 1; :put $x$x",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 20
+ },
+ {
+  "id": "i21",
+  "section": "identifiers",
+  "note": "lone dollar",
+  "source": ":put $",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 7
+ },
+ {
+  "id": "i22",
+  "section": "identifiers",
+  "note": "lone dollar in a string",
+  "source": ":put \"a$\"",
+  "valid": false,
+  "message": "syntax error",
+  "line": 2,
+  "column": 10
+ },
+ {
+  "id": "i23",
+  "section": "identifiers",
+  "note": "interpolation followed by hyphen",
+  "source": ":local x 1; :put \"$x-$x\"",
+  "valid": true
+ },
+ {
+  "id": "a1",
+  "section": "arrays vs blocks",
+  "note": "array as a command argument",
+  "source": ":local a {a=1;b=2}",
+  "valid": true
+ },
+ {
+  "id": "a2",
+  "section": "arrays vs blocks",
+  "note": "parenthesised array",
+  "source": ":local a ({a=1})",
+  "valid": true
+ },
+ {
+  "id": "a3",
+  "section": "arrays vs blocks",
+  "note": "bare statement that looks like an array",
+  "source": "{ a=1 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 4
+ },
+ {
+  "id": "a4",
+  "section": "arrays vs blocks",
+  "note": "array literal as :put argument",
+  "source": ":put {1;2;3}",
+  "valid": true
+ },
+ {
+  "id": "a5",
+  "section": "arrays vs blocks",
+  "note": "docs example",
+  "source": ":local a { \"aX\"=1; ay=2 }; :put ($a->\"aX\")",
+  "valid": true
+ },
+ {
+  "id": "a6",
+  "section": "arrays vs blocks",
+  "note": "key with a digit",
+  "source": ":local a {a1=1}",
+  "valid": true
+ },
+ {
+  "id": "a7",
+  "section": "arrays vs blocks",
+  "note": "key with a hyphen: docs say quote it",
+  "source": ":local a {a-b=1}",
+  "valid": true
+ },
+ {
+  "id": "a8",
+  "section": "arrays vs blocks",
+  "note": "key with a capital: docs say quote it",
+  "source": ":local a {A=1}",
+  "valid": true
+ },
+ {
+  "id": "a9",
+  "section": "arrays vs blocks",
+  "note": "numeric key",
+  "source": ":local a {1=2}",
+  "valid": true
+ },
+ {
+  "id": "a10",
+  "section": "arrays vs blocks",
+  "note": "key with underscore",
+  "source": ":local a {a_b=1}",
+  "valid": true
+ },
+ {
+  "id": "a11",
+  "section": "arrays vs blocks",
+  "note": "trailing semicolon",
+  "source": ":local a {a=1;}",
+  "valid": true
+ },
+ {
+  "id": "a12",
+  "section": "arrays vs blocks",
+  "note": "nested keyed array",
+  "source": ":local a {a={b=1}}",
+  "valid": true
+ },
+ {
+  "id": "a13",
+  "section": "arrays vs blocks",
+  "note": "comma list then ->",
+  "source": ":local a (1,2,3); :put ($a->1)",
+  "valid": true
+ },
+ {
+  "id": "a14",
+  "section": "arrays vs blocks",
+  "note": "index",
+  "source": ":local a {1;2;3}; :put ($a->1)",
+  "valid": true
+ },
+ {
+  "id": "a15",
+  "section": "arrays vs blocks",
+  "note": "unquoted key after ->",
+  "source": ":local a {x=1}; :put ($a->x)",
+  "valid": true
+ },
+ {
+  "id": "a16",
+  "section": "arrays vs blocks",
+  "note": "docs example: set one element",
+  "source": ":local a {x=1}; :set ($a->\"x\") 5",
+  "valid": true
+ },
+ {
+  "id": "a17",
+  "section": "arrays vs blocks",
+  "note": "docs example",
+  "source": ":foreach k,v in={2; aX=1; y=2; 5} do={ :put $k }",
+  "valid": true
+ },
+ {
+  "id": "a18",
+  "section": "arrays vs blocks",
+  "note": "one variable",
+  "source": ":foreach v in={1;2} do={ :put $v }",
+  "valid": true
+ },
+ {
+  "id": "a19",
+  "section": "arrays vs blocks",
+  "note": "a block as an argument",
+  "source": ":local a {:put 1}",
+  "valid": true
+ },
+ {
+  "id": "a20",
+  "section": "arrays vs blocks",
+  "note": "function value",
+  "source": ":local f do={ :put 1 }",
+  "valid": true
+ },
+ {
+  "id": "a21",
+  "section": "arrays vs blocks",
+  "note": "empty braces as an argument",
+  "source": ":local a {}",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 12
+ },
+ {
+  "id": "p1",
+  "section": "colon prefix",
+  "note": "no colon (docs example inside a script source)",
+  "source": "put \"x\"",
+  "valid": true
+ },
+ {
+  "id": "p2",
+  "section": "colon prefix",
+  "note": "with colon",
+  "source": ":put \"x\"",
+  "valid": true
+ },
+ {
+  "id": "p3",
+  "section": "colon prefix",
+  "note": "docs example :put [typeof ...] without colon",
+  "source": ":put [typeof 1]",
+  "valid": true
+ },
+ {
+  "id": "p4",
+  "section": "colon prefix",
+  "note": "with colon",
+  "source": ":put [:typeof 1]",
+  "valid": true
+ },
+ {
+  "id": "p5",
+  "section": "colon prefix",
+  "note": "docs example for import (no colon)",
+  "source": "do { :put 1 } on-error={ :put 2 }",
+  "valid": true
+ },
+ {
+  "id": "p6",
+  "section": "colon prefix",
+  "note": "with colon",
+  "source": ":do { :put 1 } on-error={ :put 2 }",
+  "valid": true
+ },
+ {
+  "id": "p7",
+  "section": "colon prefix",
+  "note": "no colon",
+  "source": "if (true) do={ :put 1 }",
+  "valid": true
+ },
+ {
+  "id": "p8",
+  "section": "colon prefix",
+  "note": "with colon",
+  "source": ":if (true) do={ :put 1 }",
+  "valid": true
+ },
+ {
+  "id": "p9",
+  "section": "colon prefix",
+  "note": "no colon",
+  "source": "local x 1",
+  "valid": true
+ },
+ {
+  "id": "p10",
+  "section": "colon prefix",
+  "note": "no colon",
+  "source": "global y",
+  "valid": true
+ },
+ {
+  "id": "p11",
+  "section": "colon prefix",
+  "note": "set without colon on a declared variable",
+  "source": ":local x; set x 1",
+  "valid": true
+ },
+ {
+  "id": "p12",
+  "section": "colon prefix",
+  "note": "docs example without colon",
+  "source": ":put [convert transform=lc \"AAA\"]",
+  "valid": true
+ },
+ {
+  "id": "p13",
+  "section": "colon prefix",
+  "note": "else",
+  "source": ":if (true) do={:put 1} else={:put 2}",
+  "valid": true
+ },
+ {
+  "id": "p14",
+  "section": "colon prefix",
+  "note": "empty else",
+  "source": ":if (true) do={:put 1} else={}",
+  "valid": true
+ },
+ {
+  "id": "p15",
+  "section": "colon prefix",
+  "note": "while",
+  "source": ":while (false) do={}",
+  "valid": true
+ },
+ {
+  "id": "p16",
+  "section": "colon prefix",
+  "note": "do..while",
+  "source": ":do {} while=(false)",
+  "valid": true
+ },
+ {
+  "id": "p17",
+  "section": "colon prefix",
+  "note": ":do on-error",
+  "source": ":do {:put 1} on-error={:put 2}",
+  "valid": true
+ },
+ {
+  "id": "p18",
+  "section": "colon prefix",
+  "note": "return at top level",
+  "source": ":return 1",
+  "valid": true
+ },
+ {
+  "id": "p19",
+  "section": "colon prefix",
+  "note": "break outside a loop",
+  "source": ":break",
+  "valid": false,
+  "message": "bad command name break",
+  "line": 1,
+  "column": 2
+ },
+ {
+  "id": "p20",
+  "section": "colon prefix",
+  "note": "break inside a loop",
+  "source": ":foreach i in={1} do={ :break }",
+  "valid": true
+ },
+ {
+  "id": "p21",
+  "section": "colon prefix",
+  "note": "delay with a time",
+  "source": ":delay 1s",
+  "valid": true
+ },
+ {
+  "id": "p22",
+  "section": "colon prefix",
+  "note": "delay with a bare number",
+  "source": ":delay 1",
+  "valid": true
+ },
+ {
+  "id": "p23",
+  "section": "colon prefix",
+  "note": "log",
+  "source": ":log info \"x\"",
+  "valid": true
+ },
+ {
+  "id": "p24",
+  "section": "colon prefix",
+  "note": "two unnamed arguments",
+  "source": ":put \"a\" \"b\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "p25",
+  "section": "colon prefix",
+  "note": "missing argument",
+  "source": ":len",
+  "valid": false,
+  "message": "Script Error: missing value(s) of argument(s) value"
+ },
+ {
+  "id": "p26",
+  "section": "colon prefix",
+  "note": "no argument",
+  "source": ":put",
+  "valid": false,
+  "message": "Script Error: missing value(s) of argument(s) message"
+ },
+ {
+  "id": "p27",
+  "section": "colon prefix",
+  "note": "docs example",
+  "source": ":put [:convert 001 to=hex]",
+  "valid": true
+ },
+ {
+  "id": "p28",
+  "section": "colon prefix",
+  "note": "docs example uses port=",
+  "source": ":put [:resolve domain-name=\"x\" port=53]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 32
+ },
+ {
+  "id": "p29",
+  "section": "colon prefix",
+  "note": "docs text says server-port",
+  "source": ":put [:resolve \"x\" server-port=53]",
+  "valid": true
+ },
+ {
+  "id": "p30",
+  "section": "colon prefix",
+  "note": "value= naming the unnamed parameter",
+  "source": ":put [:tonum value=10]",
+  "valid": true
+ },
+ {
+  "id": "p31",
+  "section": "colon prefix",
+  "note": "docs example",
+  "source": ":put [:serialize value=a to=json]",
+  "valid": true
+ },
+ {
+  "id": "p32",
+  "section": "colon prefix",
+  "note": "docs example shape",
+  "source": ":onerror e in={:retry command={abc} delay=1 max=2} do={}",
+  "valid": true
+ },
+ {
+  "id": "p33",
+  "section": "colon prefix",
+  "note": "unknown global command",
+  "source": ":foo",
+  "valid": false,
+  "message": "bad command name foo",
+  "line": 1,
+  "column": 2
+ },
+ {
+  "id": "p34",
+  "section": "colon prefix",
+  "note": "unknown global command in []",
+  "source": ":put [:foo]",
+  "valid": false,
+  "message": "bad command name foo",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "p35",
+  "section": "colon prefix",
+  "note": "elseif does not exist",
+  "source": ":if (true) do={ :put 1 } elseif={ :put 2 }",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 26
+ },
+ {
+  "id": "p36",
+  "section": "colon prefix",
+  "note": "do= without a block",
+  "source": ":if (true) do=:put 1",
+  "valid": false,
+  "message": "invalid value for argument do"
+ },
+ {
+  "id": "p37",
+  "section": "colon prefix",
+  "note": "condition without parentheses",
+  "source": ":if true do={ :put 1 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 5
+ },
+ {
+  "id": "p38",
+  "section": "colon prefix",
+  "note": "for with step",
+  "source": ":for i from=1 to=3 step=1 do={}",
+  "valid": true
+ },
+ {
+  "id": "p39",
+  "section": "colon prefix",
+  "note": "for with else",
+  "source": ":for i from=1 to=3 do={ :put $i } else={}",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 35
+ },
+ {
+  "id": "p40",
+  "section": "colon prefix",
+  "note": "execute",
+  "source": ":execute {:put 1}",
+  "valid": true
+ },
+ {
+  "id": "p41",
+  "section": "colon prefix",
+  "note": "parse",
+  "source": ":parse \":put 1\"",
+  "valid": true
+ },
+ {
+  "id": "p42",
+  "section": "colon prefix",
+  "note": "call of an undeclared function",
+  "source": "$nofunc",
+  "valid": true
+ },
+ {
+  "id": "p43",
+  "section": "colon prefix",
+  "note": "call of a declared function",
+  "source": ":global f do={ :put 1 }; $f",
+  "valid": true
+ },
+ {
+  "id": "p44",
+  "section": "colon prefix",
+  "note": "bracketed call as a statement",
+  "source": ":global f do={ :put 1 }; [$f]",
+  "valid": true
+ },
+ {
+  "id": "m1",
+  "section": "menu paths",
+  "note": "space separated",
+  "source": "/ip address print",
+  "valid": true
+ },
+ {
+  "id": "m2",
+  "section": "menu paths",
+  "note": "slash separated",
+  "source": "/ip/address/print",
+  "valid": true
+ },
+ {
+  "id": "m3",
+  "section": "menu paths",
+  "note": "mixed",
+  "source": "/ip/address print",
+  "valid": true
+ },
+ {
+  "id": "m4",
+  "section": "menu paths",
+  "note": "mixed",
+  "source": "/ip address/print",
+  "valid": true
+ },
+ {
+  "id": "m5",
+  "section": "menu paths",
+  "note": "relative, no leading slash",
+  "source": "ip address print",
+  "valid": true
+ },
+ {
+  "id": "m6",
+  "section": "menu paths",
+  "note": "docs example, no leading slash",
+  "source": "system/script/run x",
+  "valid": true
+ },
+ {
+  "id": "m7",
+  "section": "menu paths",
+  "note": "path line then a relative command",
+  "source": "/ip address\nprint",
+  "valid": true
+ },
+ {
+  "id": "m8",
+  "section": "menu paths",
+  "note": "path then ; then command",
+  "source": "/ip address; print",
+  "valid": true
+ },
+ {
+  "id": "m9",
+  "section": "menu paths",
+  "note": "partial path then relative path",
+  "source": "/ip\naddress print",
+  "valid": true
+ },
+ {
+  "id": "m10",
+  "section": "menu paths",
+  "note": "two commands",
+  "source": "/ip address print; /ip route print",
+  "valid": true
+ },
+ {
+  "id": "m11",
+  "section": "menu paths",
+  "note": "global command then menu command",
+  "source": ":put 1; /ip address print",
+  "valid": true
+ },
+ {
+  "id": "m12",
+  "section": "menu paths",
+  "note": "unknown menu",
+  "source": "/foo bar",
+  "valid": false,
+  "message": "bad command name foo",
+  "line": 1,
+  "column": 2
+ },
+ {
+  "id": "m13",
+  "section": "menu paths",
+  "note": "unknown submenu",
+  "source": "/ip foo",
+  "valid": false,
+  "message": "bad command name foo",
+  "line": 1,
+  "column": 5
+ },
+ {
+  "id": "m14",
+  "section": "menu paths",
+  "note": "unknown command",
+  "source": "/ip address foo",
+  "valid": false,
+  "message": "bad command name foo",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "m15",
+  "section": "menu paths",
+  "note": "abbreviated menu",
+  "source": "/ip addr print",
+  "valid": true
+ },
+ {
+  "id": "m16",
+  "section": "menu paths",
+  "note": "abbreviated command",
+  "source": "/ip address pr",
+  "valid": true
+ },
+ {
+  "id": "m17",
+  "section": "menu paths",
+  "note": "capitals",
+  "source": "/IP ADDRESS print",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 2
+ },
+ {
+  "id": "m18",
+  "section": "menu paths",
+  "note": "capital command",
+  "source": "/ip address PRINT",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "m19",
+  "section": "menu paths",
+  "note": "space after the leading slash",
+  "source": "/ ip address print",
+  "valid": true
+ },
+ {
+  "id": "m20",
+  "section": "menu paths",
+  "note": "slash then space",
+  "source": "/ip/ address print",
+  "valid": true
+ },
+ {
+  "id": "m21",
+  "section": "menu paths",
+  "note": "go back one level",
+  "source": "/ip address .. print",
+  "valid": false,
+  "message": "bad command name print",
+  "line": 1,
+  "column": 16
+ },
+ {
+  "id": "m22",
+  "section": "menu paths",
+  "note": "slash in the middle starts a new absolute path?",
+  "source": "/ip address /ip route print",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "m23",
+  "section": "menu paths",
+  "note": "docs path",
+  "source": "/system script environment print",
+  "valid": true
+ },
+ {
+  "id": "m24",
+  "section": "menu paths",
+  "note": "docs path, slashes",
+  "source": "/system/script/environment/print",
+  "valid": true
+ },
+ {
+  "id": "m25",
+  "section": "menu paths",
+  "note": "three levels",
+  "source": "/ip firewall filter print",
+  "valid": true
+ },
+ {
+  "id": "m26",
+  "section": "menu paths",
+  "note": "mixed three levels",
+  "source": "/ip firewall/filter print",
+  "valid": true
+ },
+ {
+  "id": "m27",
+  "section": "menu paths",
+  "note": "docs example",
+  "source": "/interface/print where name~\"ether\"",
+  "valid": true
+ },
+ {
+  "id": "m28",
+  "section": "menu paths",
+  "note": "docs example",
+  "source": "/interface/print where (name~\"ether\")=false",
+  "valid": true
+ },
+ {
+  "id": "r1",
+  "section": "parameters and flags",
+  "note": "valid",
+  "source": "/ip address add address=1.1.1.1/32 interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "r2",
+  "section": "parameters and flags",
+  "note": "unknown parameter",
+  "source": "/ip address add address=1.1.1.1/32 interface=ether1 nope=1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 53
+ },
+ {
+  "id": "r3",
+  "section": "parameters and flags",
+  "note": "only an unknown parameter",
+  "source": "/ip address add nope=1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 17
+ },
+ {
+  "id": "r4",
+  "section": "parameters and flags",
+  "note": "bad value for a typed parameter",
+  "source": "/ip address add address=abc interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "r5",
+  "section": "parameters and flags",
+  "note": "required parameters missing",
+  "source": "/ip address add",
+  "valid": false,
+  "message": "Script Error: missing value(s) of argument(s) address interface"
+ },
+ {
+  "id": "r6",
+  "section": "parameters and flags",
+  "note": "set with an unknown parameter",
+  "source": "/ip address set 0 nope=1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 19
+ },
+ {
+  "id": "r7",
+  "section": "parameters and flags",
+  "note": "unset with !",
+  "source": "/ip address set 0 !comment",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 19
+ },
+ {
+  "id": "r8",
+  "section": "parameters and flags",
+  "note": "unset of an unknown parameter",
+  "source": "/ip address set 0 !nope",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 19
+ },
+ {
+  "id": "r9",
+  "section": "parameters and flags",
+  "note": "bare flag",
+  "source": "/ip address print count-only",
+  "valid": true
+ },
+ {
+  "id": "r10",
+  "section": "parameters and flags",
+  "note": "two bare flags",
+  "source": "/ip address print detail brief",
+  "valid": true
+ },
+ {
+  "id": "r11",
+  "section": "parameters and flags",
+  "note": "unknown bare flag",
+  "source": "/ip address print nope",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 19
+ },
+ {
+  "id": "r12",
+  "section": "parameters and flags",
+  "note": "unknown named parameter",
+  "source": "/ip address print nope=1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 19
+ },
+ {
+  "id": "r13",
+  "section": "parameters and flags",
+  "note": "docs print parameters",
+  "source": "/ip address print without-paging as-value",
+  "valid": true
+ },
+ {
+  "id": "r14",
+  "section": "parameters and flags",
+  "note": "docs: from=",
+  "source": "/ip address print from=0",
+  "valid": true
+ },
+ {
+  "id": "r15",
+  "section": "parameters and flags",
+  "note": "docs: interval=",
+  "source": "/ip address print interval=2",
+  "valid": true
+ },
+ {
+  "id": "r16",
+  "section": "parameters and flags",
+  "note": "unnamed id",
+  "source": "/ip address remove 0",
+  "valid": true
+ },
+ {
+  "id": "r17",
+  "section": "parameters and flags",
+  "note": "internal id",
+  "source": "/ip address remove *1",
+  "valid": true
+ },
+ {
+  "id": "r18",
+  "section": "parameters and flags",
+  "note": "find substitution",
+  "source": "/ip address remove [find]",
+  "valid": true
+ },
+ {
+  "id": "r19",
+  "section": "parameters and flags",
+  "note": "find with a condition",
+  "source": "/ip address remove [find address=1.1.1.1/32]",
+  "valid": true
+ },
+ {
+  "id": "r20",
+  "section": "parameters and flags",
+  "note": "unknown command in []",
+  "source": "/ip address remove [nope]",
+  "valid": false,
+  "message": "bad command name nope",
+  "line": 1,
+  "column": 21
+ },
+ {
+  "id": "r21",
+  "section": "parameters and flags",
+  "note": "parameter order",
+  "source": "/ip address add comment=\"x\" address=1.1.1.1/32 interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "r22",
+  "section": "parameters and flags",
+  "note": "duplicate parameter",
+  "source": "/ip address add address=1.1.1.1/32 address=2.2.2.2/32 interface=ether1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 36
+ },
+ {
+  "id": "r23",
+  "section": "parameters and flags",
+  "note": "unnamed value where a named one is expected",
+  "source": "/ip address add 1.1.1.1/32 interface=ether1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 17
+ },
+ {
+  "id": "r24",
+  "section": "parameters and flags",
+  "note": "named id parameter",
+  "source": "/ip address set numbers=0 comment=x",
+  "valid": true
+ },
+ {
+  "id": "r25",
+  "section": "parameters and flags",
+  "note": "find where",
+  "source": "/ip address set [find where comment=\"x\"] comment=y",
+  "valid": true
+ },
+ {
+  "id": "r26",
+  "section": "parameters and flags",
+  "note": "enable",
+  "source": "/ip address enable 0",
+  "valid": true
+ },
+ {
+  "id": "r27",
+  "section": "parameters and flags",
+  "note": "disable all",
+  "source": "/ip address disable [find]",
+  "valid": true
+ },
+ {
+  "id": "r28",
+  "section": "parameters and flags",
+  "note": "variable as a value (undeclared)",
+  "source": "/ip address add address=$ip interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "r29",
+  "section": "parameters and flags",
+  "note": "expression as a value",
+  "source": "/ip address add address=(\"1.1.1.\" . 1) interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "q1",
+  "section": "where clauses",
+  "note": "regex",
+  "source": "/ip address print where address~\"1\"",
+  "valid": true
+ },
+ {
+  "id": "q2",
+  "section": "where clauses",
+  "note": "bare boolean property",
+  "source": "/ip address print where disabled",
+  "valid": true
+ },
+ {
+  "id": "q3",
+  "section": "where clauses",
+  "note": "negated bare property",
+  "source": "/ip address print where !disabled",
+  "valid": true
+ },
+ {
+  "id": "q4",
+  "section": "where clauses",
+  "note": "and",
+  "source": "/ip address print where disabled=no and dynamic=no",
+  "valid": true
+ },
+ {
+  "id": "q5",
+  "section": "where clauses",
+  "note": "or",
+  "source": "/ip address print where disabled or dynamic",
+  "valid": true
+ },
+ {
+  "id": "q6",
+  "section": "where clauses",
+  "note": "unknown property",
+  "source": "/ip address print where nope=1",
+  "valid": true
+ },
+ {
+  "id": "q7",
+  "section": "where clauses",
+  "note": "unknown bare property",
+  "source": "/ip address print where nope",
+  "valid": true
+ },
+ {
+  "id": "q8",
+  "section": "where clauses",
+  "note": "docs example shape",
+  "source": "/ip address print where (address~\"1\")=false",
+  "valid": true
+ },
+ {
+  "id": "q9",
+  "section": "where clauses",
+  "note": "internal id property",
+  "source": "/ip address print where .id=*1",
+  "valid": true
+ },
+ {
+  "id": "q10",
+  "section": "where clauses",
+  "note": "ip-prefix value",
+  "source": "/ip address print where address=1.1.1.1/32",
+  "valid": true
+ },
+ {
+  "id": "q11",
+  "section": "where clauses",
+  "note": "&& in where",
+  "source": "/ip address print where interface=ether1 && !disabled",
+  "valid": true
+ },
+ {
+  "id": "q12",
+  "section": "where clauses",
+  "note": "docs: about",
+  "source": "/ip address print where about",
+  "valid": true
+ },
+ {
+  "id": "q13",
+  "section": "where clauses",
+  "note": "find where",
+  "source": "/ip address find where comment=\"x\"",
+  "valid": true
+ },
+ {
+  "id": "q14",
+  "section": "where clauses",
+  "note": "in",
+  "source": "/ip address print where address in 1.0.0.0/8",
+  "valid": true
+ },
+ {
+  "id": "d12",
+  "section": "$ forms outside strings",
+  "note": "a call statement of a numeric name",
+  "source": "$1",
+  "valid": true
+ },
+ {
+  "id": "k1",
+  "section": "control-flow layout pitfalls",
+  "note": "else on the next line",
+  "source": ":if (true) do={ :put 1 }\nelse={ :put 2 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 2,
+  "column": 5
+ },
+ {
+  "id": "k2",
+  "section": "control-flow layout pitfalls",
+  "note": "else after a line join",
+  "source": ":if (true) do={ :put 1 } \\\nelse={ :put 2 }",
+  "valid": true
+ },
+ {
+  "id": "k3",
+  "section": "control-flow layout pitfalls",
+  "note": "the usual brace layout",
+  "source": ":if (true) do={\n  :put 1\n} else={\n  :put 2\n}",
+  "valid": true
+ },
+ {
+  "id": "k4",
+  "section": "control-flow layout pitfalls",
+  "note": "semicolon before else",
+  "source": ":if (true) do={ :put 1 }; else={ :put 2 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 31
+ },
+ {
+  "id": "k5",
+  "section": "control-flow layout pitfalls",
+  "note": "multi-line do block",
+  "source": ":foreach i in={1;2} do={\n:put $i\n}",
+  "valid": true
+ },
+ {
+  "id": "k6",
+  "section": "control-flow layout pitfalls",
+  "note": "do= on the next line",
+  "source": ":if (true) \ndo={ :put 1 }",
+  "valid": false,
+  "message": "Script Error: missing value(s) of argument(s) do ; expected end of command",
+  "line": 2,
+  "column": 3
+ },
+ {
+  "id": "k7",
+  "section": "control-flow layout pitfalls",
+  "note": "while= on the next line",
+  "source": ":do { :put 1 }\nwhile=(false)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 2,
+  "column": 6
+ },
+ {
+  "id": "k8",
+  "section": "control-flow layout pitfalls",
+  "note": "empty block followed by a command",
+  "source": ":for i from=1 to=3 do={\n}\n:put 1",
+  "valid": true
+ },
+ {
+  "id": "k9",
+  "section": "control-flow layout pitfalls",
+  "note": "export-style continuation",
+  "source": "/ip address\nadd address=1.1.1.1/32 \\\n    interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "k10",
+  "section": "control-flow layout pitfalls",
+  "note": "backslash between = and the value (export style)",
+  "source": "/ip firewall filter add comment=\\\n    \"x y\" chain=input",
+  "valid": true
+ },
+ {
+  "id": "k11",
+  "section": "control-flow layout pitfalls",
+  "note": "space, backslash, newline after =",
+  "source": "/ip firewall filter add comment= \\\n    \"x\" chain=input",
+  "valid": true
+ },
+ {
+  "id": "g1",
+  "section": "strings and quoting in command arguments",
+  "note": "quoted value with a space",
+  "source": "/system identity set name=\"a b\"",
+  "valid": true
+ },
+ {
+  "id": "g2",
+  "section": "strings and quoting in command arguments",
+  "note": "unquoted value with a space",
+  "source": "/system identity set name=a b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 29
+ },
+ {
+  "id": "g3",
+  "section": "strings and quoting in command arguments",
+  "note": "quote in the middle of a bare word",
+  "source": "/system identity set name=a\"b\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 28
+ },
+ {
+  "id": "g4",
+  "section": "strings and quoting in command arguments",
+  "note": "two strings",
+  "source": "/system identity set name=\"a\" \"b\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 31
+ },
+ {
+  "id": "g5",
+  "section": "strings and quoting in command arguments",
+  "note": "single quotes",
+  "source": "/system identity set name='a'",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 27
+ },
+ {
+  "id": "g6",
+  "section": "strings and quoting in command arguments",
+  "note": "empty string",
+  "source": "/system identity set name=\"\"",
+  "valid": true
+ },
+ {
+  "id": "g7",
+  "section": "strings and quoting in command arguments",
+  "note": "unterminated string",
+  "source": "/system identity set name=\"unterminated",
+  "valid": false,
+  "message": "expected name value",
+  "line": 2,
+  "column": 40
+ },
+ {
+  "id": "g8",
+  "section": "strings and quoting in command arguments",
+  "note": "escaped quote inside a string",
+  "source": "/system identity set name=\"a\\\"b\"",
+  "valid": true
+ },
+ {
+  "id": "g9",
+  "section": "strings and quoting in command arguments",
+  "note": "comma in a bare value",
+  "source": "/system identity set name=a,b",
+  "valid": true
+ },
+ {
+  "id": "g10",
+  "section": "strings and quoting in command arguments",
+  "note": "semicolon in a bare value ends the command",
+  "source": "/system identity set name=a;b",
+  "valid": true
+ },
+ {
+  "id": "g11",
+  "section": "strings and quoting in command arguments",
+  "note": "expression value",
+  "source": "/system identity set name=(1+2)",
+  "valid": true
+ },
+ {
+  "id": "g12",
+  "section": "strings and quoting in command arguments",
+  "note": "substitution value",
+  "source": "/system identity set name=[/system identity get name]",
+  "valid": true
+ },
+ {
+  "id": "g13",
+  "section": "strings and quoting in command arguments",
+  "note": "variable value",
+  "source": "/system identity set name=$x",
+  "valid": true
+ },
+ {
+  "id": "g14",
+  "section": "strings and quoting in command arguments",
+  "note": "dollar inside a bare word",
+  "source": "/system identity set name=a$x",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 28
+ },
+ {
+  "id": "g15",
+  "section": "strings and quoting in command arguments",
+  "note": "hash inside a bare value",
+  "source": "/system identity set name=a#b",
+  "valid": true
+ },
+ {
+  "id": "g16",
+  "section": "strings and quoting in command arguments",
+  "note": "slash inside a bare value",
+  "source": "/system identity set name=a/b",
+  "valid": true
+ },
+ {
+  "id": "g17",
+  "section": "strings and quoting in command arguments",
+  "note": "colon inside a bare value",
+  "source": "/system identity set name=a:b",
+  "valid": true
+ },
+ {
+  "id": "g18",
+  "section": "strings and quoting in command arguments",
+  "note": "equals inside a bare value",
+  "source": "/system identity set name=a=b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 28
+ },
+ {
+  "id": "g19",
+  "section": "strings and quoting in command arguments",
+  "note": "unbalanced bracket in a bare value",
+  "source": "/system identity set name=a[b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 28
+ },
+ {
+  "id": "g20",
+  "section": "strings and quoting in command arguments",
+  "note": "stray closing brace",
+  "source": "/system identity set name=a}",
+  "valid": true
+ },
+ {
+  "id": "g21",
+  "section": "strings and quoting in command arguments",
+  "note": "stray closing paren",
+  "source": "/system identity set name=a)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 28
+ },
+ {
+  "id": "g22",
+  "section": "strings and quoting in command arguments",
+  "note": "stray closing brace at statement start",
+  "source": "}",
+  "valid": true
+ },
+ {
+  "id": "g23",
+  "section": "strings and quoting in command arguments",
+  "note": "unclosed block",
+  "source": "{",
+  "valid": false,
+  "message": "missing closing brace",
+  "line": 2,
+  "column": 2
+ },
+ {
+  "id": "g24",
+  "section": "strings and quoting in command arguments",
+  "note": "unclosed paren",
+  "source": ":put (",
+  "valid": false,
+  "message": "syntax error",
+  "line": 2,
+  "column": 7
+ },
+ {
+  "id": "g25",
+  "section": "strings and quoting in command arguments",
+  "note": "unclosed bracket",
+  "source": ":put [",
+  "valid": false,
+  "message": "syntax error",
+  "line": 2,
+  "column": 7
+ },
+ {
+  "id": "ab1",
+  "section": "abbreviations",
+  "note": "ambiguous menu prefix (address, arp, accounting...)",
+  "source": "/ip a print",
+  "valid": false,
+  "message": "bad command name a",
+  "line": 1,
+  "column": 5
+ },
+ {
+  "id": "ab2",
+  "section": "abbreviations",
+  "note": "unambiguous prefixes",
+  "source": "/ip ad pr",
+  "valid": true
+ },
+ {
+  "id": "ab3",
+  "section": "abbreviations",
+  "note": "abbreviated parameter names",
+  "source": "/ip address add addr=1.1.1.1/32 inter=ether1",
+  "valid": true
+ },
+ {
+  "id": "ab4",
+  "section": "abbreviations",
+  "note": "one-letter parameter prefix (address? arp?)",
+  "source": "/ip address add a=1.1.1.1/32 interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "ab5",
+  "section": "abbreviations",
+  "note": "abbreviated command",
+  "source": "/ip address pri",
+  "valid": true
+ },
+ {
+  "id": "ab6",
+  "section": "abbreviations",
+  "note": "one-letter command prefix",
+  "source": "/ip address p",
+  "valid": true
+ },
+ {
+  "id": "ab7",
+  "section": "abbreviations",
+  "note": "abbreviated global command",
+  "source": ":pu 1",
+  "valid": true
+ },
+ {
+  "id": "ab8",
+  "section": "abbreviations",
+  "note": "ambiguous global prefix (local, log, lock)",
+  "source": ":lo x",
+  "valid": false,
+  "message": "bad command name lo",
+  "line": 1,
+  "column": 2
+ },
+ {
+  "id": "ab9",
+  "section": "abbreviations",
+  "note": "abbreviated flag",
+  "source": "/ip address print det",
+  "valid": true
+ },
+ {
+  "id": "ab10",
+  "section": "abbreviations",
+  "note": "abbreviated count-only",
+  "source": "/ip address print cou",
+  "valid": true
+ },
+ {
+  "id": "ab11",
+  "section": "abbreviations",
+  "note": "abbreviated comment",
+  "source": "/ip addr add address=1.1.1.1/32 interface=ether1 comm=x",
+  "valid": true
+ },
+ {
+  "id": "z1",
+  "section": "newlines inside brackets",
+  "note": "newline inside ( )",
+  "source": ":put (1\n+ 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "z2",
+  "section": "newlines inside brackets",
+  "note": "newline inside [ ]",
+  "source": ":put [\n:len \"a\"\n]",
+  "valid": true
+ },
+ {
+  "id": "z3",
+  "section": "newlines inside brackets",
+  "note": "newline right after ( and before )",
+  "source": ":if (\ntrue\n) do={ :put 1 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 6
+ },
+ {
+  "id": "z4",
+  "section": "newlines inside brackets",
+  "note": "newline before 'and' inside ( )",
+  "source": ":if (true\nand true) do={ :put 1 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "z5",
+  "section": "newlines inside brackets",
+  "note": "array literal over several lines, with ;",
+  "source": ":local a {\na=1;\nb=2\n}",
+  "valid": true
+ },
+ {
+  "id": "z6",
+  "section": "newlines inside brackets",
+  "note": "array literal over several lines, newline separated",
+  "source": ":local a {\na=1\nb=2\n}",
+  "valid": true
+ },
+ {
+  "id": "z7",
+  "section": "newlines inside brackets",
+  "note": "array of bare values separated by newline",
+  "source": ":put {1\n2}",
+  "valid": true
+ },
+ {
+  "id": "z8",
+  "section": "newlines inside brackets",
+  "note": "newline after ; in an array argument",
+  "source": ":foreach i in={1;\n2} do={ :put $i }",
+  "valid": true
+ },
+ {
+  "id": "z9",
+  "section": "newlines inside brackets",
+  "note": "newline after an operator inside ( )",
+  "source": ":put (1 +\n2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "z10",
+  "section": "newlines inside brackets",
+  "note": "newline between command and argument inside [ ]",
+  "source": ":put [:len\n\"a\"]",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "z20",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment right after {",
+  "source": "{ # comment after brace\n:put 1\n}",
+  "valid": true
+ },
+ {
+  "id": "z21",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment line inside a block",
+  "source": "{\n# comment line\n:put 1\n}",
+  "valid": true
+ },
+ {
+  "id": "z22",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment after ; inside a block",
+  "source": "{ :put 1; # comment after ;\n}",
+  "valid": true
+ },
+ {
+  "id": "z23",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment after a closing brace",
+  "source": ":if (true) do={ :put 1 } # trailing",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 26
+ },
+ {
+  "id": "z24",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment after a closing brace of a plain block",
+  "source": "{ :put 1 } # trailing",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "z25",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment right after do={",
+  "source": ":if (true) do={ # c\n:put 1\n}",
+  "valid": true
+ },
+ {
+  "id": "z26",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment right after [",
+  "source": ":put [ # c\n:len \"a\"\n]",
+  "valid": true
+ },
+ {
+  "id": "z27",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment right after (",
+  "source": ":put ( # c\n1)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "z28",
+  "section": "comments inside brackets and after blocks",
+  "note": "two comments in a row",
+  "source": ":put 1; # c1\n# c2\n:put 2",
+  "valid": true
+ },
+ {
+  "id": "z29",
+  "section": "comments inside brackets and after blocks",
+  "note": "indented comment line",
+  "source": ":put 1\n  # indented comment\n:put 2",
+  "valid": true
+ },
+ {
+  "id": "z30",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment line after a backslash join",
+  "source": ":put 1 \\\n# comment line after a join\n:put 2",
+  "valid": true
+ },
+ {
+  "id": "z31",
+  "section": "comments inside brackets and after blocks",
+  "note": "joined line that starts a comment",
+  "source": ":put 1 \\\n   # comment\n",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 4
+ },
+ {
+  "id": "z32",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment on the line after a block",
+  "source": "{ :put 1 }\n# after block",
+  "valid": true
+ },
+ {
+  "id": "z33",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment after ; in an array literal",
+  "source": ":local a {a=1; # c\nb=2}",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 16
+ },
+ {
+  "id": "z34",
+  "section": "comments inside brackets and after blocks",
+  "note": "comment line inside an array literal",
+  "source": ":local a {\n# c\na=1}",
+  "valid": true
+ },
+ {
+  "id": "z40",
+  "section": "empty values and path blocks",
+  "note": "named parameter with no value at end of file",
+  "source": "/system identity set name=",
+  "valid": true
+ },
+ {
+  "id": "z41",
+  "section": "empty values and path blocks",
+  "note": "named parameter with no value before ;",
+  "source": "/system identity set name=;",
+  "valid": true
+ },
+ {
+  "id": "z42",
+  "section": "empty values and path blocks",
+  "note": "named parameter with no value before newline",
+  "source": "/system identity set name=\n/system identity print",
+  "valid": true
+ },
+ {
+  "id": "z43",
+  "section": "empty values and path blocks",
+  "note": "empty value, next parameter follows",
+  "source": "/ip address add comment= address=1.1.1.1/32 interface=ether1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 33
+ },
+ {
+  "id": "z44",
+  "section": "empty values and path blocks",
+  "note": "path followed by a block",
+  "source": "/ip { address print }",
+  "valid": true
+ },
+ {
+  "id": "z45",
+  "section": "empty values and path blocks",
+  "note": "longer path followed by a block",
+  "source": "/ip address { print }",
+  "valid": true
+ },
+ {
+  "id": "z46",
+  "section": "empty values and path blocks",
+  "note": "path block with two commands",
+  "source": "/ip address {\nprint\nprint\n}",
+  "valid": true
+ },
+ {
+  "id": "z47",
+  "section": "empty values and path blocks",
+  "note": "nested path blocks",
+  "source": "/ip { address { print } }",
+  "valid": true
+ },
+ {
+  "id": "z48",
+  "section": "empty values and path blocks",
+  "note": "slash alone",
+  "source": "/",
+  "valid": true
+ },
+ {
+  "id": "z49",
+  "section": "empty values and path blocks",
+  "note": "slash alone after a path",
+  "source": "/ip\n/",
+  "valid": true
+ },
+ {
+  "id": "z50",
+  "section": "empty values and path blocks",
+  "note": "double dot on its own line",
+  "source": "/ip address\n..\nroute print",
+  "valid": true
+ },
+ {
+  "id": "z51",
+  "section": "empty values and path blocks",
+  "note": "double dot between words",
+  "source": "/ip address .. route print",
+  "valid": true
+ },
+ {
+  "id": "z60",
+  "section": "operators and other characters in arguments",
+  "note": "hyphen in a bare word",
+  "source": ":put a-b",
+  "valid": true
+ },
+ {
+  "id": "z61",
+  "section": "operators and other characters in arguments",
+  "note": "negative number as argument",
+  "source": ":put -5",
+  "valid": true
+ },
+ {
+  "id": "z62",
+  "section": "operators and other characters in arguments",
+  "note": "negative number in parentheses",
+  "source": ":put (-5)",
+  "valid": true
+ },
+ {
+  "id": "z63",
+  "section": "operators and other characters in arguments",
+  "note": "5-3 as one word",
+  "source": ":put 5-3",
+  "valid": true
+ },
+ {
+  "id": "z64",
+  "section": "operators and other characters in arguments",
+  "note": "subtraction without spaces",
+  "source": ":put (5-3)",
+  "valid": true
+ },
+ {
+  "id": "z65",
+  "section": "operators and other characters in arguments",
+  "note": "subtraction with spaces",
+  "source": ":put (5 - 3)",
+  "valid": true
+ },
+ {
+  "id": "z66",
+  "section": "operators and other characters in arguments",
+  "note": "percent",
+  "source": ":put (5%2)",
+  "valid": true
+ },
+ {
+  "id": "z67",
+  "section": "operators and other characters in arguments",
+  "note": "less than without spaces",
+  "source": ":put (1<2)",
+  "valid": true
+ },
+ {
+  "id": "z68",
+  "section": "operators and other characters in arguments",
+  "note": "not equal without spaces",
+  "source": ":put (1!=2)",
+  "valid": true
+ },
+ {
+  "id": "z69",
+  "section": "operators and other characters in arguments",
+  "note": "logical not",
+  "source": ":put (!true)",
+  "valid": true
+ },
+ {
+  "id": "z70",
+  "section": "operators and other characters in arguments",
+  "note": "comma list",
+  "source": ":put (1,2)",
+  "valid": true
+ },
+ {
+  "id": "z71",
+  "section": "operators and other characters in arguments",
+  "note": "array literal then ->",
+  "source": ":put ({1;2}->1)",
+  "valid": true
+ },
+ {
+  "id": "z72",
+  "section": "operators and other characters in arguments",
+  "note": "-> outside parentheses",
+  "source": ":local a {1;2}; :put $a->1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 24
+ },
+ {
+  "id": "z73",
+  "section": "operators and other characters in arguments",
+  "note": "bare comma list",
+  "source": ":put 1,2",
+  "valid": true
+ },
+ {
+  "id": "z74",
+  "section": "operators and other characters in arguments",
+  "note": "dotted number",
+  "source": ":put 1.5",
+  "valid": true
+ },
+ {
+  "id": "z75",
+  "section": "operators and other characters in arguments",
+  "note": "hex",
+  "source": ":put 0xFF",
+  "valid": true
+ },
+ {
+  "id": "z76",
+  "section": "operators and other characters in arguments",
+  "note": "id literal",
+  "source": ":put *1A",
+  "valid": true
+ },
+ {
+  "id": "z77",
+  "section": "operators and other characters in arguments",
+  "note": "time literal",
+  "source": ":put 1d2h3m",
+  "valid": true
+ },
+ {
+  "id": "z78",
+  "section": "operators and other characters in arguments",
+  "note": "ipv6",
+  "source": ":put ::1",
+  "valid": true
+ },
+ {
+  "id": "z79",
+  "section": "operators and other characters in arguments",
+  "note": "ipv6 prefix",
+  "source": ":put 2001:db8::/32",
+  "valid": true
+ },
+ {
+  "id": "z80",
+  "section": "operators and other characters in arguments",
+  "note": "tilde in a bare word",
+  "source": ":put a~b",
+  "valid": true
+ },
+ {
+  "id": "z81",
+  "section": "operators and other characters in arguments",
+  "note": "bang in a bare word",
+  "source": ":put a!b",
+  "valid": true
+ },
+ {
+  "id": "z82",
+  "section": "operators and other characters in arguments",
+  "note": "less-than in a bare word",
+  "source": ":put a<b",
+  "valid": true
+ },
+ {
+  "id": "z83",
+  "section": "operators and other characters in arguments",
+  "note": "pipe in a bare word",
+  "source": ":put a|b",
+  "valid": true
+ },
+ {
+  "id": "z84",
+  "section": "operators and other characters in arguments",
+  "note": "ampersand in a bare word",
+  "source": ":put a&b",
+  "valid": true
+ },
+ {
+  "id": "z85",
+  "section": "operators and other characters in arguments",
+  "note": "plus in a bare word",
+  "source": ":put a+b",
+  "valid": true
+ },
+ {
+  "id": "z86",
+  "section": "operators and other characters in arguments",
+  "note": "star in a bare word",
+  "source": ":put a*b",
+  "valid": true
+ },
+ {
+  "id": "z87",
+  "section": "operators and other characters in arguments",
+  "note": "percent in a bare word",
+  "source": ":put a%b",
+  "valid": true
+ },
+ {
+  "id": "z88",
+  "section": "operators and other characters in arguments",
+  "note": "caret in a bare word",
+  "source": ":put a^b",
+  "valid": true
+ },
+ {
+  "id": "z89",
+  "section": "operators and other characters in arguments",
+  "note": "at in a bare word",
+  "source": ":put a@b",
+  "valid": true
+ },
+ {
+  "id": "z90",
+  "section": "operators and other characters in arguments",
+  "note": "question mark in a bare word",
+  "source": ":put a?b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 7
+ },
+ {
+  "id": "z91",
+  "section": "operators and other characters in arguments",
+  "note": "apostrophe in a bare word",
+  "source": ":put a'b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 7
+ },
+ {
+  "id": "z92",
+  "section": "operators and other characters in arguments",
+  "note": "backtick in a bare word",
+  "source": ":put a`b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 7
+ },
+ {
+  "id": "z93",
+  "section": "operators and other characters in arguments",
+  "note": "dot in a bare word",
+  "source": ":put a.b",
+  "valid": true
+ },
+ {
+  "id": "z94",
+  "section": "operators and other characters in arguments",
+  "note": "angle brackets",
+  "source": ":put a<b>c",
+  "valid": true
+ },
+ {
+  "id": "z100",
+  "section": "trailing comment forms in real exports",
+  "note": "trailing comment after arguments",
+  "source": "/ip address add address=1.1.1.1/32 interface=ether1 comment=\"x\" # c",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 65
+ },
+ {
+  "id": "z101",
+  "section": "trailing comment forms in real exports",
+  "note": "comment right after ; with no space",
+  "source": "/ip address add address=1.1.1.1/32 interface=ether1;# c",
+  "valid": true
+ },
+ {
+  "id": "z102",
+  "section": "trailing comment forms in real exports",
+  "note": "space then ;#",
+  "source": "/ip address add address=1.1.1.1/32 interface=ether1 ;# c",
+  "valid": true
+ },
+ {
+  "id": "z103",
+  "section": "trailing comment forms in real exports",
+  "note": "trailing ; on every line",
+  "source": ":put 1;\n:put 2;",
+  "valid": true
+ },
+ {
+  "id": "z104",
+  "section": "trailing comment forms in real exports",
+  "note": "leading whitespace",
+  "source": "  :put 1",
+  "valid": true
+ },
+ {
+  "id": "z105",
+  "section": "trailing comment forms in real exports",
+  "note": "leading tab",
+  "source": "\t:put 1",
+  "valid": true
+ },
+ {
+  "id": "z106",
+  "section": "trailing comment forms in real exports",
+  "note": "trailing space then newline",
+  "source": ":put 1 \n",
+  "valid": true
+ },
+ {
+  "id": "z107",
+  "section": "trailing comment forms in real exports",
+  "note": "blank lines",
+  "source": ":put 1\n\n\n:put 2",
+  "valid": true
+ },
+ {
+  "id": "z108",
+  "section": "trailing comment forms in real exports",
+  "note": "space after the colon",
+  "source": ": put 1",
+  "valid": true
+ },
+ {
+  "id": "z109",
+  "section": "trailing comment forms in real exports",
+  "note": "space after the slash",
+  "source": "/ ip address print",
+  "valid": true
+ },
+ {
+  "id": "z110",
+  "section": "trailing comment forms in real exports",
+  "note": "escaped quote inside a string",
+  "source": ":put \"a\\\"b\"",
+  "valid": true
+ },
+ {
+  "id": "z111",
+  "section": "trailing comment forms in real exports",
+  "note": "hex escape",
+  "source": ":put \"\\41\"",
+  "valid": true
+ },
+ {
+  "id": "z112",
+  "section": "trailing comment forms in real exports",
+  "note": "expression substitution inside a string",
+  "source": ":put \"a$(1+2)b\"",
+  "valid": true
+ },
+ {
+  "id": "z113",
+  "section": "trailing comment forms in real exports",
+  "note": "command substitution with nested quotes inside a string",
+  "source": ":local x 1; :put \"a$[:len \"xyz\"]b\"",
+  "valid": true
+ },
+ {
+  "id": "z114",
+  "section": "trailing comment forms in real exports",
+  "note": "expression with a nested string inside a string",
+  "source": ":put \"a$(\"b\")c\"",
+  "valid": true
+ },
+ {
+  "id": "z115",
+  "section": "trailing comment forms in real exports",
+  "note": "dollar at the end of a string",
+  "source": ":put \"a$\"",
+  "valid": false,
+  "message": "syntax error",
+  "line": 2,
+  "column": 10
+ },
+ {
+  "id": "z116",
+  "section": "trailing comment forms in real exports",
+  "note": "dollar followed by a space inside a string",
+  "source": ":put \"a$ b\"",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "z117",
+  "section": "trailing comment forms in real exports",
+  "note": "dollar then a digit inside a string",
+  "source": ":put \"a$1\"",
+  "valid": true
+ },
+ {
+  "id": "z118",
+  "section": "trailing comment forms in real exports",
+  "note": "unterminated $( inside a string",
+  "source": ":put \"a$(\"",
+  "valid": false,
+  "message": "syntax error",
+  "line": 2,
+  "column": 11
+ },
+ {
+  "id": "y0",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "baseline: topic and message as bare words",
+  "source": ":log info x",
+  "valid": true
+ },
+ {
+  "id": "y1",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "word then string, no space",
+  "source": ":log info a\"b\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 12
+ },
+ {
+  "id": "y2",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "string then word, no space",
+  "source": ":log info \"a\"b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "y3",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "string then string, no space",
+  "source": ":log info \"a\"\"b\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "y4",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "variable then variable, no space",
+  "source": ":local a 1; :local b 2; :log info $a$b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 37
+ },
+ {
+  "id": "y5",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "word then variable, no space",
+  "source": ":local a 1; :log info a$a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 24
+ },
+ {
+  "id": "y6",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "string then variable, no space",
+  "source": ":local a 1; :log info \"a\"$a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 26
+ },
+ {
+  "id": "y7",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "group then group, no space",
+  "source": ":log info (1)(2)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "y8",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "substitution then substitution, no space",
+  "source": ":log info [:len \"a\"][:len \"b\"]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 21
+ },
+ {
+  "id": "y9",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "word then group, no space",
+  "source": ":log info a(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 12
+ },
+ {
+  "id": "y10",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "block then block, no space",
+  "source": ":log info {1}{2}",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "y11",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "group then string, no space",
+  "source": ":log info (1)\"a\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "y12",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "three unnamed arguments (one too many)",
+  "source": ":log info \"a\" \"b\" \"c\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 15
+ },
+ {
+  "id": "y13",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "trailing comment after the two arguments",
+  "source": ":log info x # trailing",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "y14",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "trailing comment after two arguments and one more",
+  "source": ":log info x y # trailing",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "y15",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "comment after ; with no space",
+  "source": ":log info x;# ok",
+  "valid": true
+ },
+ {
+  "id": "y16",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "comment-looking second argument",
+  "source": ":log info #x",
+  "valid": true
+ },
+ {
+  "id": "y17",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "# inside the second argument",
+  "source": ":log info x#y",
+  "valid": true
+ },
+ {
+  "id": "y18",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "# after a digit",
+  "source": ":log info 1#y",
+  "valid": true
+ },
+ {
+  "id": "y19",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "# after digit-letter",
+  "source": ":log info 1a#y",
+  "valid": true
+ },
+ {
+  "id": "y20",
+  "section": "adjacent tokens in a command with two unnamed arguments",
+  "note": "# at the end of a word",
+  "source": ":log info a#",
+  "valid": true
+ },
+ {
+  "id": "y30",
+  "section": "spaces around operators in command arguments and where",
+  "note": "spaced = after where",
+  "source": "/ip address print where disabled = no",
+  "valid": false,
+  "message": "expected yes or no",
+  "line": 1,
+  "column": 35
+ },
+ {
+  "id": "y31",
+  "section": "spaces around operators in command arguments and where",
+  "note": "space before = only",
+  "source": "/ip address print where disabled =no",
+  "valid": true
+ },
+ {
+  "id": "y32",
+  "section": "spaces around operators in command arguments and where",
+  "note": "space after = only",
+  "source": "/ip address print where disabled= no",
+  "valid": false,
+  "message": "expected yes or no",
+  "line": 1,
+  "column": 34
+ },
+ {
+  "id": "y33",
+  "section": "spaces around operators in command arguments and where",
+  "note": "spaced = with an address",
+  "source": "/ip address print where address = 1.1.1.1/32",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 34
+ },
+ {
+  "id": "y34",
+  "section": "spaces around operators in command arguments and where",
+  "note": "spaced = inside parentheses",
+  "source": "/ip address print where (address = \"x\")",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 35
+ },
+ {
+  "id": "y35",
+  "section": "spaces around operators in command arguments and where",
+  "note": "spaced ~",
+  "source": "/ip address print where address ~ \"x\"",
+  "valid": true
+ },
+ {
+  "id": "y36",
+  "section": "spaces around operators in command arguments and where",
+  "note": "&& without a number",
+  "source": "/ip address print where !disabled && dynamic",
+  "valid": true
+ },
+ {
+  "id": "y37",
+  "section": "spaces around operators in command arguments and where",
+  "note": "&& without spaces",
+  "source": "/ip address print where disabled=no&&dynamic=no",
+  "valid": false,
+  "message": "expected yes or no",
+  "line": 1,
+  "column": 34
+ },
+ {
+  "id": "y38",
+  "section": "spaces around operators in command arguments and where",
+  "note": "and/or chain",
+  "source": "/ip address print where disabled=no and dynamic=no or invalid",
+  "valid": true
+ },
+ {
+  "id": "y39",
+  "section": "spaces around operators in command arguments and where",
+  "note": "in with an array",
+  "source": "/ip address print where interface in {\"ether1\";\"ether2\"}",
+  "valid": true
+ },
+ {
+  "id": "y40",
+  "section": "spaces around operators in command arguments and where",
+  "note": "spaced = in parentheses",
+  "source": ":put (1 = 1)",
+  "valid": true
+ },
+ {
+  "id": "y41",
+  "section": "spaces around operators in command arguments and where",
+  "note": "spaced = in :if",
+  "source": ":if ($a = 1) do={ }",
+  "valid": true
+ },
+ {
+  "id": "y42",
+  "section": "spaces around operators in command arguments and where",
+  "note": "= without spaces in :if",
+  "source": ":if ($a=1) do={ }",
+  "valid": true
+ },
+ {
+  "id": "y43",
+  "section": "spaces around operators in command arguments and where",
+  "note": "spaced > in :if",
+  "source": ":local a 1; :if ($a > 0) do={ }",
+  "valid": true
+ },
+ {
+  "id": "y44",
+  "section": "spaces around operators in command arguments and where",
+  "note": "> without spaces in :if",
+  "source": ":local a 1; :if ($a>0) do={ }",
+  "valid": true
+ },
+ {
+  "id": "y45",
+  "section": "spaces around operators in command arguments and where",
+  "note": "plus without spaces",
+  "source": ":local a 1; :put ($a+1)",
+  "valid": true
+ },
+ {
+  "id": "y46",
+  "section": "spaces around operators in command arguments and where",
+  "note": "plus, space before only",
+  "source": ":local a 1; :put ($a +1)",
+  "valid": true
+ },
+ {
+  "id": "y47",
+  "section": "spaces around operators in command arguments and where",
+  "note": "plus, space after only",
+  "source": ":local a 1; :put ($a+ 1)",
+  "valid": true
+ },
+ {
+  "id": "y50",
+  "section": "function calls and mixed forms",
+  "note": "call with two unnamed arguments",
+  "source": ":global f do={ :put $1 }; $f 1 2",
+  "valid": true
+ },
+ {
+  "id": "y51",
+  "section": "function calls and mixed forms",
+  "note": "call with named arguments",
+  "source": ":global f do={ :put $a }; $f a=1 b=2",
+  "valid": true
+ },
+ {
+  "id": "y52",
+  "section": "function calls and mixed forms",
+  "note": "call as a substitution",
+  "source": ":global f do={ :put $a }; [$f a=1]",
+  "valid": true
+ },
+ {
+  "id": "y53",
+  "section": "function calls and mixed forms",
+  "note": "call inside :put",
+  "source": ":global f do={ :put $a }; :put [$f a=1]",
+  "valid": true
+ },
+ {
+  "id": "y54",
+  "section": "function calls and mixed forms",
+  "note": "call with expression argument",
+  "source": ":global f do={ :put $a }; $f a=(1+2) b=\"x\"",
+  "valid": true
+ },
+ {
+  "id": "y55",
+  "section": "function calls and mixed forms",
+  "note": "foreach over a variable",
+  "source": ":local a {1;2}; :foreach i in=$a do={ :put $i }",
+  "valid": true
+ },
+ {
+  "id": "y56",
+  "section": "function calls and mixed forms",
+  "note": "toarray and len",
+  "source": ":local a [:toarray \"1,2\"]; :put [:len $a]",
+  "valid": true
+ },
+ {
+  "id": "y57",
+  "section": "function calls and mixed forms",
+  "note": "do while",
+  "source": ":do { :put 1 } while=(false)",
+  "valid": true
+ },
+ {
+  "id": "y58",
+  "section": "function calls and mixed forms",
+  "note": "while loop",
+  "source": ":local i 0; :while ($i < 3) do={ :set i ($i + 1) }",
+  "valid": true
+ },
+ {
+  "id": "y59",
+  "section": "function calls and mixed forms",
+  "note": "while loop, no spaces",
+  "source": ":local i 0; :while ($i<3) do={ :set i ($i+1) }",
+  "valid": true
+ },
+ {
+  "id": "y60",
+  "section": "function calls and mixed forms",
+  "note": "string concatenation",
+  "source": ":local s \"a\"; :set s ($s . \"b\")",
+  "valid": true
+ },
+ {
+  "id": "y61",
+  "section": "function calls and mixed forms",
+  "note": "string concatenation without spaces",
+  "source": ":local s \"a\"; :set s ($s.\"b\")",
+  "valid": true
+ },
+ {
+  "id": "y62",
+  "section": "function calls and mixed forms",
+  "note": "concatenation with a number",
+  "source": ":local a 1; :local b ($a . 2)",
+  "valid": true
+ },
+ {
+  "id": "y63",
+  "section": "function calls and mixed forms",
+  "note": "concatenation outside parentheses",
+  "source": ":put \"a\" . \"b\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "y64",
+  "section": "function calls and mixed forms",
+  "note": "global then read",
+  "source": ":global g 1; :put $g",
+  "valid": true
+ },
+ {
+  "id": "y65",
+  "section": "function calls and mixed forms",
+  "note": "declare, set, read",
+  "source": ":local a; :set a 1; :put $a",
+  "valid": true
+ },
+ {
+  "id": "y66",
+  "section": "function calls and mixed forms",
+  "note": "set with a $ name",
+  "source": ":local a; :set $a 1",
+  "valid": true
+ },
+ {
+  "id": "y67",
+  "section": "function calls and mixed forms",
+  "note": "bare name in an expression",
+  "source": ":local a 1; :set a (a + 1)",
+  "valid": true
+ },
+ {
+  "id": "y68",
+  "section": "function calls and mixed forms",
+  "note": "substitution inside a comparison",
+  "source": ":if ([:len \"a\"] > 0) do={ }",
+  "valid": true
+ },
+ {
+  "id": "y69",
+  "section": "function calls and mixed forms",
+  "note": "menu command inside a comparison",
+  "source": ":if ([/ip address print count-only] > 0) do={ }",
+  "valid": true
+ },
+ {
+  "id": "y70",
+  "section": "function calls and mixed forms",
+  "note": "substitution comparison without spaces",
+  "source": ":if ([:len \"a\"]>0) do={ }",
+  "valid": true
+ },
+ {
+  "id": "s1",
+  "section": "a word character then a string",
+  "note": "char ~ then string",
+  "source": ":log info a~\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s2",
+  "section": "a word character then a string",
+  "note": "char ! then string",
+  "source": ":log info a!\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s3",
+  "section": "a word character then a string",
+  "note": "char < then string",
+  "source": ":log info a<\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s4",
+  "section": "a word character then a string",
+  "note": "char > then string",
+  "source": ":log info a>\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s5",
+  "section": "a word character then a string",
+  "note": "char & then string",
+  "source": ":log info a&\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s6",
+  "section": "a word character then a string",
+  "note": "char | then string",
+  "source": ":log info a|\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s7",
+  "section": "a word character then a string",
+  "note": "char ^ then string",
+  "source": ":log info a^\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s8",
+  "section": "a word character then a string",
+  "note": "char + then string",
+  "source": ":log info a+\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s9",
+  "section": "a word character then a string",
+  "note": "char % then string",
+  "source": ":log info a%\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s10",
+  "section": "a word character then a string",
+  "note": "char * then string",
+  "source": ":log info a*\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s11",
+  "section": "a word character then a string",
+  "note": "char - then string",
+  "source": ":log info a-\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s12",
+  "section": "a word character then a string",
+  "note": "char . then string",
+  "source": ":log info a.\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s13",
+  "section": "a word character then a string",
+  "note": "char , then string",
+  "source": ":log info a,\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s14",
+  "section": "a word character then a string",
+  "note": "char / then string",
+  "source": ":log info a/\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s15",
+  "section": "a word character then a string",
+  "note": "char : then string",
+  "source": ":log info a:\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s16",
+  "section": "a word character then a string",
+  "note": "char # then string",
+  "source": ":log info a#\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s17",
+  "section": "a word character then a string",
+  "note": "char = then string",
+  "source": ":log info a=\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 12
+ },
+ {
+  "id": "s18",
+  "section": "a word character then a string",
+  "note": "char @ then string",
+  "source": ":log info a@\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s19",
+  "section": "a word character then a string",
+  "note": "char _ then string",
+  "source": ":log info a_\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s20",
+  "section": "a word character then a string",
+  "note": "char && then string",
+  "source": ":log info a&&\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s21",
+  "section": "a word character then a string",
+  "note": "char || then string",
+  "source": ":log info a||\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s22",
+  "section": "a word character then a string",
+  "note": "char != then string",
+  "source": ":log info a!=\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s23",
+  "section": "a word character then a string",
+  "note": "char <= then string",
+  "source": ":log info a<=\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s24",
+  "section": "a word character then a string",
+  "note": "char >= then string",
+  "source": ":log info a>=\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "s25",
+  "section": "a word character then a string",
+  "note": "char << then string",
+  "source": ":log info a<<\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s26",
+  "section": "a word character then a string",
+  "note": "char >> then string",
+  "source": ":log info a>>\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s27",
+  "section": "a word character then a string",
+  "note": "char -> then string",
+  "source": ":log info a->\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s28",
+  "section": "a word character then a string",
+  "note": "char ~~ then string",
+  "source": ":log info a~~\"x\"",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s29",
+  "section": "a string then a word character",
+  "note": "string then char ~",
+  "source": ":log info \"x\"~a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s30",
+  "section": "a string then a word character",
+  "note": "string then char !",
+  "source": ":log info \"x\"!a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s31",
+  "section": "a string then a word character",
+  "note": "string then char <",
+  "source": ":log info \"x\"<a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s32",
+  "section": "a string then a word character",
+  "note": "string then char >",
+  "source": ":log info \"x\">a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s33",
+  "section": "a string then a word character",
+  "note": "string then char &",
+  "source": ":log info \"x\"&a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s34",
+  "section": "a string then a word character",
+  "note": "string then char |",
+  "source": ":log info \"x\"|a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s35",
+  "section": "a string then a word character",
+  "note": "string then char ^",
+  "source": ":log info \"x\"^a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s36",
+  "section": "a string then a word character",
+  "note": "string then char +",
+  "source": ":log info \"x\"+a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s37",
+  "section": "a string then a word character",
+  "note": "string then char %",
+  "source": ":log info \"x\"%a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s38",
+  "section": "a string then a word character",
+  "note": "string then char *",
+  "source": ":log info \"x\"*a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s39",
+  "section": "a string then a word character",
+  "note": "string then char -",
+  "source": ":log info \"x\"-a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s40",
+  "section": "a string then a word character",
+  "note": "string then char .",
+  "source": ":log info \"x\".a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s41",
+  "section": "a string then a word character",
+  "note": "string then char ,",
+  "source": ":log info \"x\",a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s42",
+  "section": "a string then a word character",
+  "note": "string then char /",
+  "source": ":log info \"x\"/a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s43",
+  "section": "a string then a word character",
+  "note": "string then char :",
+  "source": ":log info \"x\":a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s44",
+  "section": "a string then a word character",
+  "note": "string then char #",
+  "source": ":log info \"x\"#a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s45",
+  "section": "a string then a word character",
+  "note": "string then char =",
+  "source": ":log info \"x\"=a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s46",
+  "section": "a string then a word character",
+  "note": "string then char @",
+  "source": ":log info \"x\"@a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s47",
+  "section": "a string then a word character",
+  "note": "string then char _",
+  "source": ":log info \"x\"_a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s48",
+  "section": "a string then a word character",
+  "note": "string then char &&",
+  "source": ":log info \"x\"&&a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s49",
+  "section": "a string then a word character",
+  "note": "string then char ||",
+  "source": ":log info \"x\"||a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s50",
+  "section": "a string then a word character",
+  "note": "string then char !=",
+  "source": ":log info \"x\"!=a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s51",
+  "section": "a string then a word character",
+  "note": "string then char <=",
+  "source": ":log info \"x\"<=a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s52",
+  "section": "a string then a word character",
+  "note": "string then char >=",
+  "source": ":log info \"x\">=a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s53",
+  "section": "a string then a word character",
+  "note": "string then char <<",
+  "source": ":log info \"x\"<<a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s54",
+  "section": "a string then a word character",
+  "note": "string then char >>",
+  "source": ":log info \"x\">>a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s55",
+  "section": "a string then a word character",
+  "note": "string then char ->",
+  "source": ":log info \"x\"->a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s56",
+  "section": "a string then a word character",
+  "note": "string then char ~~",
+  "source": ":log info \"x\"~~a",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "s57",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char ~ then var",
+  "source": ":local v 1; :log info a~$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s58",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char ~ then group",
+  "source": ":local v 1; :log info a~(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s59",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char ~ then subst",
+  "source": ":local v 1; :log info a~[:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s60",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char ! then var",
+  "source": ":local v 1; :log info a!$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s61",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char ! then group",
+  "source": ":local v 1; :log info a!(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s62",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char ! then subst",
+  "source": ":local v 1; :log info a![:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s63",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char < then var",
+  "source": ":local v 1; :log info a<$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s64",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char < then group",
+  "source": ":local v 1; :log info a<(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s65",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char < then subst",
+  "source": ":local v 1; :log info a<[:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s66",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char & then var",
+  "source": ":local v 1; :log info a&$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s67",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char & then group",
+  "source": ":local v 1; :log info a&(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s68",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char & then subst",
+  "source": ":local v 1; :log info a&[:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s69",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char + then var",
+  "source": ":local v 1; :log info a+$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s70",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char + then group",
+  "source": ":local v 1; :log info a+(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s71",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char + then subst",
+  "source": ":local v 1; :log info a+[:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s72",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char - then var",
+  "source": ":local v 1; :log info a-$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s73",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char - then group",
+  "source": ":local v 1; :log info a-(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s74",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char - then subst",
+  "source": ":local v 1; :log info a-[:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s75",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char . then var",
+  "source": ":local v 1; :log info a.$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s76",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char . then group",
+  "source": ":local v 1; :log info a.(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s77",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char . then subst",
+  "source": ":local v 1; :log info a.[:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s78",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char , then var",
+  "source": ":local v 1; :log info a,$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s79",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char , then group",
+  "source": ":local v 1; :log info a,(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s80",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char , then subst",
+  "source": ":local v 1; :log info a,[:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s81",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char = then var",
+  "source": ":local v 1; :log info a=$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 24
+ },
+ {
+  "id": "s82",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char = then group",
+  "source": ":local v 1; :log info a=(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 24
+ },
+ {
+  "id": "s83",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char = then subst",
+  "source": ":local v 1; :log info a=[:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 24
+ },
+ {
+  "id": "s84",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char / then var",
+  "source": ":local v 1; :log info a/$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s85",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char / then group",
+  "source": ":local v 1; :log info a/(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s86",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char / then subst",
+  "source": ":local v 1; :log info a/[:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s87",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char : then var",
+  "source": ":local v 1; :log info a:$v",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s88",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char : then group",
+  "source": ":local v 1; :log info a:(1)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "s89",
+  "section": "a word character then a variable, group, substitution",
+  "note": "char : then subst",
+  "source": ":local v 1; :log info a:[:len x]",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "e1",
+  "section": "operands next to each other",
+  "note": "variable, space, variable",
+  "source": ":local a 1; :local b 2; :put ($a $b)",
+  "valid": true
+ },
+ {
+  "id": "e2",
+  "section": "operands next to each other",
+  "note": "number, space, number",
+  "source": ":put (1 2)",
+  "valid": true
+ },
+ {
+  "id": "e3",
+  "section": "operands next to each other",
+  "note": "string, space, string",
+  "source": ":put (\"a\" \"b\")",
+  "valid": true
+ },
+ {
+  "id": "e4",
+  "section": "operands next to each other",
+  "note": "variable then string, no space",
+  "source": ":local a 1; :put ($a\"b\")",
+  "valid": true
+ },
+ {
+  "id": "e5",
+  "section": "operands next to each other",
+  "note": "group then group",
+  "source": ":put ((1)(2))",
+  "valid": true
+ },
+ {
+  "id": "e6",
+  "section": "operands next to each other",
+  "note": "variable then variable, no space",
+  "source": ":local a 1; :local b 2; :put ($a$b)",
+  "valid": true
+ },
+ {
+  "id": "e7",
+  "section": "operands next to each other",
+  "note": "bare names with a space",
+  "source": ":put (a b)",
+  "valid": true
+ },
+ {
+  "id": "e8",
+  "section": "operands next to each other",
+  "note": "number then substitution",
+  "source": ":put (1 [:len \"a\"])",
+  "valid": true
+ },
+ {
+  "id": "e10",
+  "section": "unary and binary forms",
+  "note": "minus, space, number",
+  "source": ":put (- 5)",
+  "valid": true
+ },
+ {
+  "id": "e11",
+  "section": "unary and binary forms",
+  "note": "minus variable",
+  "source": ":local a 1; :put (-$a)",
+  "valid": true
+ },
+ {
+  "id": "e12",
+  "section": "unary and binary forms",
+  "note": "not, space, variable",
+  "source": ":local a true; :put (! $a)",
+  "valid": true
+ },
+ {
+  "id": "e13",
+  "section": "unary and binary forms",
+  "note": "trailing operator",
+  "source": ":put (5 -)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "e14",
+  "section": "unary and binary forms",
+  "note": "empty group",
+  "source": ":put ()",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "e15",
+  "section": "unary and binary forms",
+  "note": "plus with no right operand",
+  "source": ":put (1 +)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "e16",
+  "section": "unary and binary forms",
+  "note": "double parentheses",
+  "source": ":put ((1))",
+  "valid": true
+ },
+ {
+  "id": "e17",
+  "section": "unary and binary forms",
+  "note": "two plus signs",
+  "source": ":put (1 + + 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "e18",
+  "section": "unary and binary forms",
+  "note": "trailing comma",
+  "source": ":put (1,)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "e19",
+  "section": "unary and binary forms",
+  "note": "leading dot",
+  "source": ":put (.5)",
+  "valid": true
+ },
+ {
+  "id": "e20",
+  "section": "unary and binary forms",
+  "note": "concat with no right operand",
+  "source": ":put (\"a\" .)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "e21",
+  "section": "unary and binary forms",
+  "note": "leading star",
+  "source": ":put (* 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 7
+ },
+ {
+  "id": "e22",
+  "section": "unary and binary forms",
+  "note": "two stars",
+  "source": ":put (1 * * 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "e23",
+  "section": "unary and binary forms",
+  "note": "minus minus",
+  "source": ":put (1 - - 2)",
+  "valid": true
+ },
+ {
+  "id": "e24",
+  "section": "unary and binary forms",
+  "note": "double minus joined",
+  "source": ":put (1 -- 2)",
+  "valid": true
+ },
+ {
+  "id": "e25",
+  "section": "unary and binary forms",
+  "note": "double not",
+  "source": ":put (!!true)",
+  "valid": true
+ },
+ {
+  "id": "e26",
+  "section": "unary and binary forms",
+  "note": "bitwise not",
+  "source": ":put (~1)",
+  "valid": false,
+  "message": "Script Error: cannot invert time interval"
+ },
+ {
+  "id": "e27",
+  "section": "unary and binary forms",
+  "note": "<> operator",
+  "source": ":put (1 <> 2)",
+  "valid": true
+ },
+ {
+  "id": "e28",
+  "section": "unary and binary forms",
+  "note": "== operator",
+  "source": ":put (1 == 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "e29",
+  "section": "unary and binary forms",
+  "note": "=== operator",
+  "source": ":put (1 === 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "e30",
+  "section": "unary and binary forms",
+  "note": "=< operator",
+  "source": ":put (1 =< 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "e31",
+  "section": "unary and binary forms",
+  "note": "bitwise and",
+  "source": ":put (1 & 2)",
+  "valid": true
+ },
+ {
+  "id": "e32",
+  "section": "unary and binary forms",
+  "note": "triple ampersand",
+  "source": ":put (1 &&& 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "e33",
+  "section": "unary and binary forms",
+  "note": "question mark operator",
+  "source": ":put (1 ? 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "e34",
+  "section": "unary and binary forms",
+  "note": "semicolon inside a group",
+  "source": ":put (1 ; 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "e35",
+  "section": "unary and binary forms",
+  "note": "stray brace inside a group",
+  "source": ":put (1 } 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "e36",
+  "section": "unary and binary forms",
+  "note": "stray bracket inside a group",
+  "source": ":put (1 ] 2)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "e37",
+  "section": "unary and binary forms",
+  "note": "equals with no right operand",
+  "source": ":put (1 =)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "e38",
+  "section": "unary and binary forms",
+  "note": "equals with no left operand",
+  "source": ":put (= 1)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 7
+ },
+ {
+  "id": "e40",
+  "section": "operand kinds inside a group",
+  "note": "address literal",
+  "source": ":put (1.1.1.1)",
+  "valid": true
+ },
+ {
+  "id": "e41",
+  "section": "operand kinds inside a group",
+  "note": "prefix literal",
+  "source": ":put (1.1.1.1/24)",
+  "valid": true
+ },
+ {
+  "id": "e42",
+  "section": "operand kinds inside a group",
+  "note": "time literal",
+  "source": ":put (10s)",
+  "valid": true
+ },
+ {
+  "id": "e43",
+  "section": "operand kinds inside a group",
+  "note": "compound time",
+  "source": ":put (1d2h)",
+  "valid": true
+ },
+ {
+  "id": "e44",
+  "section": "operand kinds inside a group",
+  "note": "clock time",
+  "source": ":put (00:10:00)",
+  "valid": true
+ },
+ {
+  "id": "e45",
+  "section": "operand kinds inside a group",
+  "note": "hex",
+  "source": ":put (0xFF)",
+  "valid": true
+ },
+ {
+  "id": "e46",
+  "section": "operand kinds inside a group",
+  "note": "id literal",
+  "source": ":put (*1A)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 7
+ },
+ {
+  "id": "e47",
+  "section": "operand kinds inside a group",
+  "note": "ipv6",
+  "source": ":put (::1)",
+  "valid": true
+ },
+ {
+  "id": "e48",
+  "section": "operand kinds inside a group",
+  "note": "true",
+  "source": ":put (true)",
+  "valid": true
+ },
+ {
+  "id": "e49",
+  "section": "operand kinds inside a group",
+  "note": "yes",
+  "source": ":put (yes)",
+  "valid": true
+ },
+ {
+  "id": "e50",
+  "section": "operand kinds inside a group",
+  "note": "nil",
+  "source": ":put (nil)",
+  "valid": true
+ },
+ {
+  "id": "e51",
+  "section": "operand kinds inside a group",
+  "note": "nothing",
+  "source": ":put (nothing)",
+  "valid": true
+ },
+ {
+  "id": "e52",
+  "section": "operand kinds inside a group",
+  "note": "bare name with hyphen",
+  "source": ":put (a-b)",
+  "valid": true
+ },
+ {
+  "id": "e53",
+  "section": "operand kinds inside a group",
+  "note": "bare name with underscore",
+  "source": ":put (a_b)",
+  "valid": true
+ },
+ {
+  "id": "e54",
+  "section": "operand kinds inside a group",
+  "note": "bare name with dot",
+  "source": ":put (a.b)",
+  "valid": true
+ },
+ {
+  "id": "e55",
+  "section": "operand kinds inside a group",
+  "note": "quoted variable name",
+  "source": ":put ($\"a b\")",
+  "valid": true
+ },
+ {
+  "id": "e56",
+  "section": "operand kinds inside a group",
+  "note": "array literal inside a group",
+  "source": ":put ({1;2})",
+  "valid": true
+ },
+ {
+  "id": "e57",
+  "section": "operand kinds inside a group",
+  "note": "empty array inside a group",
+  "source": ":put ({})",
+  "valid": true
+ },
+ {
+  "id": "e58",
+  "section": "operand kinds inside a group",
+  "note": "substitution plus number",
+  "source": ":put ([:len \"a\"] + 1)",
+  "valid": true
+ },
+ {
+  "id": "e59",
+  "section": "operand kinds inside a group",
+  "note": "number plus substitution",
+  "source": ":put (1 + [:len \"a\"])",
+  "valid": true
+ },
+ {
+  "id": "e60",
+  "section": "operand kinds inside a group",
+  "note": "-> on a string",
+  "source": ":put (\"a\"->0)",
+  "valid": true
+ },
+ {
+  "id": "e61",
+  "section": "operand kinds inside a group",
+  "note": "-> on an array literal",
+  "source": ":put ({1;2}->0)",
+  "valid": true
+ },
+ {
+  "id": "e62",
+  "section": "operand kinds inside a group",
+  "note": "-> on a variable",
+  "source": ":local a {1;2}; :put ($a->0)",
+  "valid": true
+ },
+ {
+  "id": "e63",
+  "section": "operand kinds inside a group",
+  "note": "spaced ->",
+  "source": ":local a {1;2}; :put ($a -> 0)",
+  "valid": true
+ },
+ {
+  "id": "e64",
+  "section": "operand kinds inside a group",
+  "note": "-> then group",
+  "source": ":local a {1;2}; :put ($a->(0))",
+  "valid": true
+ },
+ {
+  "id": "e65",
+  "section": "operand kinds inside a group",
+  "note": "-> then variable",
+  "source": ":local a {1;2}; :put ($a->$b)",
+  "valid": true
+ },
+ {
+  "id": "e70",
+  "section": "comments and layout inside a group",
+  "note": "comment inside a group",
+  "source": ":put (1 # c\n)",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "e71",
+  "section": "comments and layout inside a group",
+  "note": "joined line inside a group",
+  "source": ":put (1 \\\n+ 2)",
+  "valid": true
+ },
+ {
+  "id": "e72",
+  "section": "comments and layout inside a group",
+  "note": "join glued to the operand",
+  "source": ":put (1\\\n+ 2)",
+  "valid": true
+ },
+ {
+  "id": "e73",
+  "section": "comments and layout inside a group",
+  "note": "join right after (",
+  "source": ":put (\\\n1)",
+  "valid": true
+ },
+ {
+  "id": "e74",
+  "section": "comments and layout inside a group",
+  "note": "join before 'and'",
+  "source": ":if (true \\\n  and false) do={ }",
+  "valid": true
+ },
+ {
+  "id": "e75",
+  "section": "comments and layout inside a group",
+  "note": "spaces just inside",
+  "source": ":put ( 1 )",
+  "valid": true
+ },
+ {
+  "id": "e76",
+  "section": "comments and layout inside a group",
+  "note": "tabs just inside",
+  "source": ":put (\t1\t)",
+  "valid": true
+ },
+ {
+  "id": "e80",
+  "section": "statement forms",
+  "note": "set with a bare-name expression",
+  "source": ":local a 1; :set a (a+1)",
+  "valid": true
+ },
+ {
+  "id": "e81",
+  "section": "statement forms",
+  "note": "set from variable",
+  "source": ":local a 1; :set a $a",
+  "valid": true
+ },
+ {
+  "id": "e82",
+  "section": "statement forms",
+  "note": "set from bare name",
+  "source": ":local a 1; :set a a",
+  "valid": true
+ },
+ {
+  "id": "e83",
+  "section": "statement forms",
+  "note": "two reads",
+  "source": ":local a 1; :put $a; :put $a",
+  "valid": true
+ },
+ {
+  "id": "e84",
+  "section": "statement forms",
+  "note": "local initialised by expression",
+  "source": ":local a (1 + 2); :put $a",
+  "valid": true
+ },
+ {
+  "id": "e85",
+  "section": "statement forms",
+  "note": "expression without parentheses as local value",
+  "source": ":local a 1 + 2",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 12
+ },
+ {
+  "id": "e86",
+  "section": "statement forms",
+  "note": "local initialised by a command",
+  "source": ":local a [:len \"x\"] ; :put $a",
+  "valid": true
+ },
+ {
+  "id": "e87",
+  "section": "statement forms",
+  "note": "if with else",
+  "source": ":if (1 = 1) do={ :put 1 } else={ :put 2 }",
+  "valid": true
+ },
+ {
+  "id": "e88",
+  "section": "statement forms",
+  "note": "else with nested if",
+  "source": ":if (1 = 1) do={ :put 1 } else={ :if (2 = 2) do={ :put 2 } }",
+  "valid": true
+ },
+ {
+  "id": "e89",
+  "section": "statement forms",
+  "note": "command right after else block on the same line",
+  "source": ":if (1 = 1) do={ :put 1 } else={ :put 2 } :put 3",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 43
+ },
+ {
+  "id": "e90",
+  "section": "statement forms",
+  "note": "command after ; following a block",
+  "source": ":if (1 = 1) do={ :put 1 }; :put 3",
+  "valid": true
+ },
+ {
+  "id": "e91",
+  "section": "statement forms",
+  "note": "do on-error then command",
+  "source": ":do { :put 1 } on-error={ :put 2 }; :put 3",
+  "valid": true
+ },
+ {
+  "id": "k20",
+  "section": "no space after a closing bracket",
+  "note": "}else= with no space",
+  "source": ":if (true) do={:put 1}else={:put 2}",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 23
+ },
+ {
+  "id": "k21",
+  "section": "no space after a closing bracket",
+  "note": ")do= with no space",
+  "source": ":if (true)do={:put 1}",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "k22",
+  "section": "no space after a closing bracket",
+  "note": "}do= with no space",
+  "source": ":foreach i in={1;2}do={:put $i}",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 20
+ },
+ {
+  "id": "k23",
+  "section": "no space after a closing bracket",
+  "note": "baseline substitution",
+  "source": ":put [:len \"a\"]",
+  "valid": true
+ },
+ {
+  "id": "k24",
+  "section": "no space after a closing bracket",
+  "note": "]) then do=",
+  "source": ":if ([:len \"a\"]>0)do={}",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 19
+ },
+ {
+  "id": "k25",
+  "section": "no space after a closing bracket",
+  "note": "}while= with no space",
+  "source": ":do {:put 1}while=(false)",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "k26",
+  "section": "no space after a closing bracket",
+  "note": "}on-error= with no space",
+  "source": ":do {:put 1}on-error={}",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "k27",
+  "section": "no space after a closing bracket",
+  "note": "baseline group",
+  "source": ":put (1)",
+  "valid": true
+ },
+ {
+  "id": "k28",
+  "section": "no space after a closing bracket",
+  "note": "baseline",
+  "source": ":local a {1;2}; :put ($a)",
+  "valid": true
+ },
+ {
+  "id": "k29",
+  "section": "no space after a closing bracket",
+  "note": "path block with no spaces inside",
+  "source": "/ip address {print}",
+  "valid": true
+ },
+ {
+  "id": "k30",
+  "section": "no space after a closing bracket",
+  "note": "two spaces before else",
+  "source": ":if (true) do={:put 1}  else={:put 2}",
+  "valid": true
+ },
+ {
+  "id": "k31",
+  "section": "no space after a closing bracket",
+  "note": "]do= with no space",
+  "source": ":foreach i in=[:toarray \"1,2\"]do={:put $i}",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 31
+ },
+ {
+  "id": "k32",
+  "section": "no space after a closing bracket",
+  "note": "command glued after the else block",
+  "source": ":if (true) do={:put 1} else={:put 2}:put 3",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 37
+ },
+ {
+  "id": "u10",
+  "section": "non-ascii outside strings",
+  "note": "accented letter as a bare word",
+  "source": ":put é",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 6
+ },
+ {
+  "id": "u11",
+  "section": "non-ascii outside strings",
+  "note": "accented letter inside a bare word",
+  "source": ":put aé",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 7
+ },
+ {
+  "id": "u12",
+  "section": "non-ascii outside strings",
+  "note": "accented letter as a parameter value",
+  "source": "/system identity set name=é",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 27
+ },
+ {
+  "id": "u13",
+  "section": "non-ascii outside strings",
+  "note": "accented letter as a variable name",
+  "source": ":local é 1",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "u14",
+  "section": "non-ascii outside strings",
+  "note": "accented letter as the message",
+  "source": ":log info é",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "u15",
+  "section": "non-ascii outside strings",
+  "note": "CJK as a bare word",
+  "source": ":put 日本",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 6
+ },
+ {
+  "id": "u16",
+  "section": "non-ascii outside strings",
+  "note": "accented letter in a variable read",
+  "source": ":put $é",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 7
+ },
+ {
+  "id": "u17",
+  "section": "non-ascii outside strings",
+  "note": "accented letter in a comment after ;",
+  "source": ":put \"é\" ; # é",
+  "valid": true
+ },
+ {
+  "id": "u18",
+  "section": "non-ascii outside strings",
+  "note": "quoted accented value",
+  "source": "/system identity set name=\"é\"",
+  "valid": true
+ },
+ {
+  "id": "u20",
+  "section": "statements that start with a literal",
+  "note": "a string as the whole statement",
+  "source": "\"abc\"",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "u21",
+  "section": "statements that start with a literal",
+  "note": "a string as a statement in a block",
+  "source": "{ \"abc\" }",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 3
+ },
+ {
+  "id": "u22",
+  "section": "statements that start with a literal",
+  "note": "a number as the whole statement",
+  "source": "42",
+  "valid": false,
+  "message": "bad command name 42",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "u23",
+  "section": "statements that start with a literal",
+  "note": "a group as the whole statement",
+  "source": "(1+2)",
+  "valid": true
+ },
+ {
+  "id": "u24",
+  "section": "statements that start with a literal",
+  "note": "a substitution as the whole statement",
+  "source": "[:len \"a\"]",
+  "valid": true
+ },
+ {
+  "id": "u25",
+  "section": "statements that start with a literal",
+  "note": "a variable as the whole statement",
+  "source": "$x",
+  "valid": true
+ },
+ {
+  "id": "u26",
+  "section": "statements that start with a literal",
+  "note": "numbers as statements in a block",
+  "source": "{ 1; 2 }",
+  "valid": false,
+  "message": "bad command name 1",
+  "line": 1,
+  "column": 3
+ },
+ {
+  "id": "u27",
+  "section": "statements that start with a literal",
+  "note": "a lone equals",
+  "source": "=",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "u28",
+  "section": "statements that start with a literal",
+  "note": "equals then word",
+  "source": "=x",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "u29",
+  "section": "statements that start with a literal",
+  "note": "bang word as a statement",
+  "source": "!x",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "u30",
+  "section": "statements that start with a literal",
+  "note": "a lone hyphen",
+  "source": "-",
+  "valid": false,
+  "message": "bad command name -",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "u31",
+  "section": "statements that start with a literal",
+  "note": "a lone dot",
+  "source": ".",
+  "valid": false,
+  "message": "bad command name .",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "u32",
+  "section": "statements that start with a literal",
+  "note": "a lone comma",
+  "source": ",",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "u33",
+  "section": "statements that start with a literal",
+  "note": "a lone tilde",
+  "source": "~",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "u34",
+  "section": "statements that start with a literal",
+  "note": "an id as a statement",
+  "source": "*1",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 1
+ },
+ {
+  "id": "u35",
+  "section": "statements that start with a literal",
+  "note": "a lone colon",
+  "source": ":",
+  "valid": true
+ },
+ {
+  "id": "u36",
+  "section": "statements that start with a literal",
+  "note": "colon and space",
+  "source": ": ",
+  "valid": true
+ },
+ {
+  "id": "u37",
+  "section": "statements that start with a literal",
+  "note": "double colon",
+  "source": "::",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 2
+ },
+ {
+  "id": "u38",
+  "section": "statements that start with a literal",
+  "note": "colon and semicolon",
+  "source": ":;",
+  "valid": true
+ },
+ {
+  "id": "u39",
+  "section": "statements that start with a literal",
+  "note": "slash and semicolon",
+  "source": "/;",
+  "valid": true
+ },
+ {
+  "id": "u40",
+  "section": "statements that start with a literal",
+  "note": "a lone semicolon",
+  "source": ";",
+  "valid": true
+ },
+ {
+  "id": "u41",
+  "section": "statements that start with a literal",
+  "note": "semicolon in a block",
+  "source": "{;}",
+  "valid": true
+ },
+ {
+  "id": "u42",
+  "section": "statements that start with a literal",
+  "note": "semicolon in a substitution",
+  "source": "[;]",
+  "valid": true
+ },
+ {
+  "id": "u43",
+  "section": "statements that start with a literal",
+  "note": "unclosed substitution",
+  "source": ":put [",
+  "valid": false,
+  "message": "syntax error",
+  "line": 2,
+  "column": 7
+ },
+ {
+  "id": "u44",
+  "section": "statements that start with a literal",
+  "note": "stray ]",
+  "source": ":put ]",
+  "valid": false,
+  "message": "Script Error: missing value(s) of argument(s) message"
+ },
+ {
+  "id": "u45",
+  "section": "statements that start with a literal",
+  "note": "stray )",
+  "source": ":put )",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 6
+ },
+ {
+  "id": "u46",
+  "section": "statements that start with a literal",
+  "note": "mismatched closer",
+  "source": "{ :put 1 ]",
+  "valid": false,
+  "message": "missing closing brace",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "u47",
+  "section": "statements that start with a literal",
+  "note": "mismatched closer in a group",
+  "source": ":put [:len (1]",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 14
+ },
+ {
+  "id": "u48",
+  "section": "statements that start with a literal",
+  "note": "unclosed group before another command",
+  "source": ":put (\"a\"\n:put 2",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "u50",
+  "section": "case and spelling of keywords",
+  "note": "uppercase command",
+  "source": ":PUT 1",
+  "valid": false,
+  "message": "expected command name",
+  "line": 1,
+  "column": 2
+ },
+ {
+  "id": "u51",
+  "section": "case and spelling of keywords",
+  "note": "uppercase true",
+  "source": ":put TRUE",
+  "valid": true
+ },
+ {
+  "id": "u52",
+  "section": "case and spelling of keywords",
+  "note": "uppercase word operators",
+  "source": ":put (TRUE and FALSE)",
+  "valid": true
+ },
+ {
+  "id": "u53",
+  "section": "case and spelling of keywords",
+  "note": "uppercase AND",
+  "source": ":put (1 AND 2)",
+  "valid": true
+ },
+ {
+  "id": "u54",
+  "section": "case and spelling of keywords",
+  "note": "mixed case And",
+  "source": ":put (1 And 2)",
+  "valid": true
+ },
+ {
+  "id": "u55",
+  "section": "case and spelling of keywords",
+  "note": "different case variable",
+  "source": ":local A 1; :put $a",
+  "valid": true
+ },
+ {
+  "id": "h1",
+  "section": "reading an undeclared variable",
+  "note": "bare argument",
+  "source": ":put $nope",
+  "valid": true
+ },
+ {
+  "id": "h2",
+  "section": "reading an undeclared variable",
+  "note": "alone in a group",
+  "source": ":put ($nope)",
+  "valid": true
+ },
+ {
+  "id": "h3",
+  "section": "reading an undeclared variable",
+  "note": "in arithmetic",
+  "source": ":put ($nope + 1)",
+  "valid": true
+ },
+ {
+  "id": "h4",
+  "section": "reading an undeclared variable",
+  "note": "in a condition",
+  "source": ":if ($nope = 1) do={ :put 1 }",
+  "valid": true
+ },
+ {
+  "id": "h5",
+  "section": "reading an undeclared variable",
+  "note": "alone in a condition",
+  "source": ":if ($nope) do={ :put 1 }",
+  "valid": true
+ },
+ {
+  "id": "h6",
+  "section": "reading an undeclared variable",
+  "note": "second argument",
+  "source": ":log info $nope",
+  "valid": true
+ },
+ {
+  "id": "h7",
+  "section": "reading an undeclared variable",
+  "note": "named parameter value",
+  "source": "/system identity set name=$nope",
+  "valid": true
+ },
+ {
+  "id": "h8",
+  "section": "reading an undeclared variable",
+  "note": "interpolated in a string",
+  "source": ":put \"a $nope b\"",
+  "valid": true
+ },
+ {
+  "id": "h9",
+  "section": "reading an undeclared variable",
+  "note": "expression in a string",
+  "source": ":put \"a $(1 + 2) b\"",
+  "valid": true
+ },
+ {
+  "id": "h10",
+  "section": "reading an undeclared variable",
+  "note": "undeclared inside an expression in a string",
+  "source": ":put \"$($nope + 1)\"",
+  "valid": true
+ },
+ {
+  "id": "h11",
+  "section": "reading an undeclared variable",
+  "note": "call of an undeclared function",
+  "source": "$nope 1",
+  "valid": true
+ },
+ {
+  "id": "h12",
+  "section": "reading an undeclared variable",
+  "note": "call inside a substitution",
+  "source": ":put [$nope 1]",
+  "valid": true
+ },
+ {
+  "id": "h13",
+  "section": "reading an undeclared variable",
+  "note": "undeclared in a while condition",
+  "source": ":while ($nope < 5) do={ }",
+  "valid": true
+ },
+ {
+  "id": "h14",
+  "section": "reading an undeclared variable",
+  "note": "undeclared in do-while",
+  "source": ":do { } while=($nope < 3)",
+  "valid": true
+ },
+ {
+  "id": "h15",
+  "section": "reading an undeclared variable",
+  "note": "undeclared as a loop bound",
+  "source": ":for i from=1 to=$nope do={ }",
+  "valid": true
+ },
+ {
+  "id": "h16",
+  "section": "reading an undeclared variable",
+  "note": "undeclared as the iterated value",
+  "source": ":foreach i in=$nope do={ }",
+  "valid": true
+ },
+ {
+  "id": "h17",
+  "section": "reading an undeclared variable",
+  "note": "undeclared array access",
+  "source": ":put ($nope->0)",
+  "valid": true
+ },
+ {
+  "id": "h18",
+  "section": "reading an undeclared variable",
+  "note": "initialiser",
+  "source": ":local a $nope",
+  "valid": true
+ },
+ {
+  "id": "h19",
+  "section": "reading an undeclared variable",
+  "note": "initialiser in a group",
+  "source": ":local a ($nope)",
+  "valid": true
+ },
+ {
+  "id": "h20",
+  "section": "reading an undeclared variable",
+  "note": "declared plus undeclared",
+  "source": ":local x 1; :put ($x + $nope)",
+  "valid": true
+ },
+ {
+  "id": "h21",
+  "section": "reading an undeclared variable",
+  "note": "variable declared in a block that ended",
+  "source": "{ :local x 1 }; :put ($x)",
+  "valid": true
+ },
+ {
+  "id": "h22",
+  "section": "reading an undeclared variable",
+  "note": "local on an earlier top-level line",
+  "source": ":local x 1\n:put ($x)",
+  "valid": true
+ },
+ {
+  "id": "h23",
+  "section": "reading an undeclared variable",
+  "note": "local on an earlier line, plain read",
+  "source": ":local x 1\n:put $x",
+  "valid": true
+ },
+ {
+  "id": "h24",
+  "section": "reading an undeclared variable",
+  "note": "global on an earlier line, group read",
+  "source": ":global g 1\n:put ($g)",
+  "valid": true
+ },
+ {
+  "id": "h25",
+  "section": "reading an undeclared variable",
+  "note": "set of a global declared on an earlier line",
+  "source": ":global g 1\n:set g 2",
+  "valid": false,
+  "message": "syntax error",
+  "line": 2,
+  "column": 6
+ },
+ {
+  "id": "h26",
+  "section": "reading an undeclared variable",
+  "note": "global declared without a value, then set",
+  "source": ":global g\n:set g 2",
+  "valid": false,
+  "message": "syntax error",
+  "line": 2,
+  "column": 6
+ },
+ {
+  "id": "h27",
+  "section": "reading an undeclared variable",
+  "note": "positional name in a group at top level",
+  "source": ":put ($1)",
+  "valid": true
+ },
+ {
+  "id": "h28",
+  "section": "reading an undeclared variable",
+  "note": "named function argument name at top level",
+  "source": ":put ($a)",
+  "valid": true
+ },
+ {
+  "id": "h29",
+  "section": "reading an undeclared variable",
+  "note": "function argument inside a group",
+  "source": ":global f do={ :put ($a + 1) }",
+  "valid": true
+ },
+ {
+  "id": "h30",
+  "section": "reading an undeclared variable",
+  "note": "positional argument inside a group",
+  "source": ":global f do={ :put ($1) }",
+  "valid": true
+ },
+ {
+  "id": "h31",
+  "section": "reading an undeclared variable",
+  "note": "function argument as an initialiser",
+  "source": ":global f do={ :local y ($a) }",
+  "valid": true
+ },
+ {
+  "id": "h32",
+  "section": "reading an undeclared variable",
+  "note": "lease script variable, undeclared here",
+  "source": ":put ($leaseBound)",
+  "valid": true
+ },
+ {
+  "id": "h33",
+  "section": "reading an undeclared variable",
+  "note": "bare name in a group",
+  "source": ":put (nope)",
+  "valid": true
+ },
+ {
+  "id": "h34",
+  "section": "reading an undeclared variable",
+  "note": "bare name in arithmetic",
+  "source": ":put (nope + 1)",
+  "valid": true
+ },
+ {
+  "id": "h35",
+  "section": "reading an undeclared variable",
+  "note": "compare with nil",
+  "source": ":put ($nope = nil)",
+  "valid": true
+ },
+ {
+  "id": "h36",
+  "section": "reading an undeclared variable",
+  "note": "typeof an undeclared name",
+  "source": ":put ([:typeof $nope])",
+  "valid": true
+ },
+ {
+  "id": "h37",
+  "section": "reading an undeclared variable",
+  "note": "any is not an operator",
+  "source": ":if (!any $nope) do={ }",
+  "valid": true
+ },
+ {
+  "id": "h38",
+  "section": "reading an undeclared variable",
+  "note": "typeof comparison",
+  "source": ":if ([:typeof $nope] = \"nothing\") do={ }",
+  "valid": true
+ },
+ {
+  "id": "h50",
+  "section": "crlf and line joins",
+  "note": "backslash CRLF as a join",
+  "source": ":put 1 \\\r\n  + 2",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 3
+ },
+ {
+  "id": "h51",
+  "section": "crlf and line joins",
+  "note": "CRLF file with a join",
+  "source": "/ip address\r\nadd address=1.1.1.1/32 \\\r\n    interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "h52",
+  "section": "crlf and line joins",
+  "note": "CRLF join inside a string",
+  "source": ":put \"a\\\r\nb\"",
+  "valid": true
+ },
+ {
+  "id": "h53",
+  "section": "crlf and line joins",
+  "note": "plain CRLF",
+  "source": ":put 1\r\n:put 2\r\n",
+  "valid": true
+ },
+ {
+  "id": "h54",
+  "section": "crlf and line joins",
+  "note": "LF join then a second command (missing ;)",
+  "source": ":put 1 \\\n  :put 2",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 3
+ },
+ {
+  "id": "h55",
+  "section": "crlf and line joins",
+  "note": "CRLF join, no indent",
+  "source": "/ip address add address=1.1.1.1/32 \\\r\ninterface=ether1",
+  "valid": true
+ },
+ {
+  "id": "h56",
+  "section": "crlf and line joins",
+  "note": "CR-only join",
+  "source": "/ip address add address=1.1.1.1/32 \\\rinterface=ether1",
+  "valid": true
+ },
+ {
+  "id": "h60",
+  "section": "expressions from real scripts",
+  "note": "time divided",
+  "source": ":put (24h / 4)",
+  "valid": true
+ },
+ {
+  "id": "h61",
+  "section": "expressions from real scripts",
+  "note": "time minus compound time",
+  "source": ":local u 1d; :put ($u - 1w2d)",
+  "valid": false,
+  "message": "Script Error: cannot arithmetically negate ip address"
+ },
+ {
+  "id": "h62",
+  "section": "expressions from real scripts",
+  "note": "compound week time",
+  "source": ":put (1w2d)",
+  "valid": true
+ },
+ {
+  "id": "h63",
+  "section": "expressions from real scripts",
+  "note": "day divided",
+  "source": ":put (1d / 2)",
+  "valid": true
+ },
+ {
+  "id": "h64",
+  "section": "expressions from real scripts",
+  "note": "address mask",
+  "source": ":put (192.168.1.1 & 255.255.255.0)",
+  "valid": true
+ },
+ {
+  "id": "h65",
+  "section": "expressions from real scripts",
+  "note": "prefix concatenated",
+  "source": ":put (10.0.0.0/8 . \"\")",
+  "valid": true
+ },
+ {
+  "id": "h66",
+  "section": "expressions from real scripts",
+  "note": "negated undeclared",
+  "source": ":put (-$nope)",
+  "valid": true
+ },
+ {
+  "id": "h67",
+  "section": "expressions from real scripts",
+  "note": "negated declared",
+  "source": ":local a 1; :put (-$a)",
+  "valid": true
+ },
+ {
+  "id": "h68",
+  "section": "expressions from real scripts",
+  "note": "no such command",
+  "source": ":put [:toupper abc]",
+  "valid": false,
+  "message": "bad command name toupper",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "h69",
+  "section": "expressions from real scripts",
+  "note": "tolower",
+  "source": ":put [:tolower \"ABC\"]",
+  "valid": false,
+  "message": "bad command name tolower",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "h70",
+  "section": "expressions from real scripts",
+  "note": "convert transform",
+  "source": ":put [:convert transform=uc \"abc\"]",
+  "valid": true
+ },
+ {
+  "id": "d1",
+  "section": "what makes :set legal",
+  "note": "local in the same statement",
+  "source": ":local a; :set a 1",
+  "valid": true
+ },
+ {
+  "id": "d2",
+  "section": "what makes :set legal",
+  "note": "global in the same statement",
+  "source": ":global a; :set a 1",
+  "valid": true
+ },
+ {
+  "id": "d3",
+  "section": "what makes :set legal",
+  "note": "set before the declaration",
+  "source": ":set a 1; :local a",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 6
+ },
+ {
+  "id": "d4",
+  "section": "what makes :set legal",
+  "note": "set in a block inside the declaring block",
+  "source": "{ :local a; { :set a 1 } }",
+  "valid": true
+ },
+ {
+  "id": "d5",
+  "section": "what makes :set legal",
+  "note": "set after the declaring inner block ended",
+  "source": "{ { :local a }; :set a 1 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 22
+ },
+ {
+  "id": "d6",
+  "section": "what makes :set legal",
+  "note": "set inside do={} of the declaring block",
+  "source": ":local a; :if (true) do={ :set a 1 }",
+  "valid": true
+ },
+ {
+  "id": "d7",
+  "section": "what makes :set legal",
+  "note": "set of the loop variable of :for",
+  "source": ":for i from=1 to=2 do={ :set i 5 }",
+  "valid": true
+ },
+ {
+  "id": "d8",
+  "section": "what makes :set legal",
+  "note": "set of the loop variable of :foreach",
+  "source": ":foreach i in={1;2} do={ :set i 5 }",
+  "valid": true
+ },
+ {
+  "id": "d9",
+  "section": "what makes :set legal",
+  "note": "set of the value variable of :foreach k,v",
+  "source": ":foreach k,v in={1;2} do={ :set v 5 }",
+  "valid": true
+ },
+ {
+  "id": "d10",
+  "section": "what makes :set legal",
+  "note": "set of a function argument name",
+  "source": ":global f do={ :set a 5 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 21
+ },
+ {
+  "id": "d11",
+  "section": "what makes :set legal",
+  "note": "set of a positional argument",
+  "source": ":global f do={ :set 1 5 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 21
+ },
+ {
+  "id": "d12",
+  "section": "what makes :set legal",
+  "note": "local inside a function",
+  "source": ":global f do={ :local a; :set a 1 }",
+  "valid": true
+ },
+ {
+  "id": "d13",
+  "section": "what makes :set legal",
+  "note": "global from the outer statement used in a function",
+  "source": ":global g; :global f do={ :set g 1 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 32
+ },
+ {
+  "id": "d14",
+  "section": "what makes :set legal",
+  "note": "global redeclared in the function",
+  "source": ":global f do={ :global g; :set g 1 }",
+  "valid": true
+ },
+ {
+  "id": "d15",
+  "section": "what makes :set legal",
+  "note": "outer local used in a function",
+  "source": ":local a; :global f do={ :set a 1 }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 31
+ },
+ {
+  "id": "d16",
+  "section": "what makes :set legal",
+  "note": "set through $a",
+  "source": ":local a; :set $a 1",
+  "valid": true
+ },
+ {
+  "id": "d17",
+  "section": "what makes :set legal",
+  "note": "set of an array element, base declared",
+  "source": ":local a {1;2}; :set ($a->0) 5",
+  "valid": true
+ },
+ {
+  "id": "d18",
+  "section": "what makes :set legal",
+  "note": "set of an array element, base not declared",
+  "source": ":set ($nope->0) 5",
+  "valid": true
+ },
+ {
+  "id": "d19",
+  "section": "what makes :set legal",
+  "note": "quoted name, declared",
+  "source": ":local \"a b\"; :set \"a b\" 1",
+  "valid": true
+ },
+ {
+  "id": "d20",
+  "section": "what makes :set legal",
+  "note": "quoted name, not declared",
+  "source": ":set \"a b\" 1",
+  "valid": true
+ },
+ {
+  "id": "d21",
+  "section": "what makes :set legal",
+  "note": "set inside a substitution",
+  "source": ":local a; [:set a 1]",
+  "valid": true
+ },
+ {
+  "id": "d22",
+  "section": "what makes :set legal",
+  "note": "set inside :put substitution",
+  "source": ":local a; :put [:set a 1]",
+  "valid": true
+ },
+ {
+  "id": "d23",
+  "section": "what makes :set legal",
+  "note": "set of the :onerror variable",
+  "source": ":onerror e in={ } do={ :set e 1 }",
+  "valid": true
+ },
+ {
+  "id": "d24",
+  "section": "what makes :set legal",
+  "note": "local inside :do",
+  "source": ":do { :local a; :set a 1 } on-error={ }",
+  "valid": true
+ },
+ {
+  "id": "d25",
+  "section": "what makes :set legal",
+  "note": "outer local inside :do",
+  "source": ":local a; :do { :set a 1 } on-error={ }",
+  "valid": true
+ },
+ {
+  "id": "d26",
+  "section": "what makes :set legal",
+  "note": "set with no value (removes the variable)",
+  "source": ":local a; :set a",
+  "valid": true
+ },
+ {
+  "id": "d27",
+  "section": "what makes :set legal",
+  "note": "unset is not a command",
+  "source": ":local a; :unset a",
+  "valid": false,
+  "message": "bad command name unset",
+  "line": 1,
+  "column": 12
+ },
+ {
+  "id": "d28",
+  "section": "what makes :set legal",
+  "note": "declared twice",
+  "source": ":local a 1; :local a 2",
+  "valid": true
+ },
+ {
+  "id": "d29",
+  "section": "what makes :set legal",
+  "note": "global then local of one name",
+  "source": ":global a; :local a; :set a 1",
+  "valid": true
+ },
+ {
+  "id": "d30",
+  "section": "what makes :set legal",
+  "note": "contextual variable name",
+  "source": ":set leaseBound 1",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 6
+ },
+ {
+  "id": "d31",
+  "section": "what makes :set legal",
+  "note": "positional name at top level",
+  "source": ":set 1 5",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 6
+ },
+ {
+  "id": "d32",
+  "section": "what makes :set legal",
+  "note": "undeclared set inside a declaration value",
+  "source": ":local a [:set b 1]",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 16
+ },
+ {
+  "id": "d33",
+  "section": "what makes :set legal",
+  "note": "menu set is a different command",
+  "source": ":local a; /ip address set 0 comment=$a",
+  "valid": true
+ },
+ {
+  "id": "d34",
+  "section": "what makes :set legal",
+  "note": "local of the outer function used in a nested function",
+  "source": ":global f do={ :local x; :local g do={ :set x 1 } }",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 45
+ },
+ {
+  "id": "d35",
+  "section": "what makes :set legal",
+  "note": "local inside while",
+  "source": ":while (false) do={ :local t; :set t 1 }",
+  "valid": true
+ },
+ {
+  "id": "d36",
+  "section": "what makes :set legal",
+  "note": "outer local inside while",
+  "source": ":local t; :while (false) do={ :set t 1 }",
+  "valid": true
+ },
+ {
+  "id": "d37",
+  "section": "what makes :set legal",
+  "note": "outer loop variable in an inner loop",
+  "source": ":for i from=1 to=2 do={ :for j from=1 to=2 do={ :set i 1 } }",
+  "valid": true
+ },
+ {
+  "id": "d38",
+  "section": "what makes :set legal",
+  "note": "undeclared inside :retry",
+  "source": ":retry command={ :set q 1 } delay=1 max=1",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 23
+ },
+ {
+  "id": "n1",
+  "section": "characters in a declared name",
+  "note": "underscore",
+  "source": ":local a_b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "n2",
+  "section": "characters in a declared name",
+  "note": "hyphen",
+  "source": ":local a-b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "n3",
+  "section": "characters in a declared name",
+  "note": "dot",
+  "source": ":local a.b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "n4",
+  "section": "characters in a declared name",
+  "note": "colon",
+  "source": ":local a:b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "n5",
+  "section": "characters in a declared name",
+  "note": "slash",
+  "source": ":local a/b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "n6",
+  "section": "characters in a declared name",
+  "note": "digit first",
+  "source": ":local 1a",
+  "valid": true
+ },
+ {
+  "id": "n7",
+  "section": "characters in a declared name",
+  "note": "capitals",
+  "source": ":local A1",
+  "valid": true
+ },
+ {
+  "id": "n8",
+  "section": "characters in a declared name",
+  "note": "underscore in :global",
+  "source": ":global a_b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "n9",
+  "section": "characters in a declared name",
+  "note": "hyphen in :global",
+  "source": ":global a-b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "n10",
+  "section": "characters in a declared name",
+  "note": "underscore name then set",
+  "source": ":local a_b; :set a_b 1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "n11",
+  "section": "characters in a declared name",
+  "note": "underscore loop variable",
+  "source": ":for a_b from=1 to=2 do={ }",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 7
+ },
+ {
+  "id": "n12",
+  "section": "characters in a declared name",
+  "note": "underscore foreach variable",
+  "source": ":foreach a_b in={1} do={ }",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "n13",
+  "section": "characters in a declared name",
+  "note": "hyphen foreach variable",
+  "source": ":foreach a-b in={1} do={ }",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 11
+ },
+ {
+  "id": "n14",
+  "section": "characters in a declared name",
+  "note": "underscore in the second foreach variable",
+  "source": ":foreach a,b_c in={1} do={ }",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 13
+ },
+ {
+  "id": "n15",
+  "section": "characters in a declared name",
+  "note": "quoted underscore",
+  "source": ":local \"a_b\"",
+  "valid": true
+ },
+ {
+  "id": "n16",
+  "section": "characters in a declared name",
+  "note": "comma",
+  "source": ":local a,b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "n17",
+  "section": "characters in a declared name",
+  "note": "name then value word",
+  "source": ":local a b",
+  "valid": true
+ },
+ {
+  "id": "n18",
+  "section": "characters in a declared name",
+  "note": "named form",
+  "source": ":local a=1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "n19",
+  "section": "characters in a declared name",
+  "note": "dollar name",
+  "source": ":local $a",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 8
+ },
+ {
+  "id": "n20",
+  "section": "characters in a declared name",
+  "note": "no name",
+  "source": ":local",
+  "valid": false,
+  "message": "Script Error: missing value of argument name"
+ },
+ {
+  "id": "n21",
+  "section": "characters in a declared name",
+  "note": "global with no name",
+  "source": ":global",
+  "valid": false,
+  "message": "Script Error: missing value of argument name"
+ },
+ {
+  "id": "n22",
+  "section": "characters in a declared name",
+  "note": "underscore with value",
+  "source": ":local a_b 1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 9
+ },
+ {
+  "id": "n23",
+  "section": "characters in a declared name",
+  "note": "underscore in :set",
+  "source": ":set a_b 1",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 6
+ },
+ {
+  "id": "n24",
+  "section": "characters in a declared name",
+  "note": "underscore in a read",
+  "source": ":local a; :put $a_b",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 18
+ },
+ {
+  "id": "n25",
+  "section": "characters in a declared name",
+  "note": "quoted name of a plain declared name",
+  "source": ":local a; :set \"a\" 1",
+  "valid": true
+ },
+ {
+  "id": "n26",
+  "section": "characters in a declared name",
+  "note": "case differs",
+  "source": ":local \"A\"; :set a 1",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 18
+ },
+ {
+  "id": "s1",
+  "section": "does a full command leave the path changed?",
+  "note": "after a full command, a relative add",
+  "source": "/ip address print\nadd address=1.1.1.1/32 interface=ether1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "s2",
+  "section": "does a full command leave the path changed?",
+  "note": "after a full command, a relative print",
+  "source": "/ip address print\nprint",
+  "valid": false,
+  "message": "bad command name print",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "s3",
+  "section": "does a full command leave the path changed?",
+  "note": "after a path-only line, a relative print",
+  "source": "/ip address\nprint",
+  "valid": true
+ },
+ {
+  "id": "s4",
+  "section": "does a full command leave the path changed?",
+  "note": "path-only line, then a full command, then a relative add",
+  "source": "/ip address\n/ip route print\nadd address=1.1.1.1/32 interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "s5",
+  "section": "does a full command leave the path changed?",
+  "note": "same, but an add that only /ip route accepts",
+  "source": "/ip address\n/ip route print\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 3,
+  "column": 5
+ },
+ {
+  "id": "s6",
+  "section": "does a full command leave the path changed?",
+  "note": "a path change inside a block, then a relative add",
+  "source": "/ip address\n{ /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": true
+ },
+ {
+  "id": "s7",
+  "section": "does a full command leave the path changed?",
+  "note": "same, with the add of the first path",
+  "source": "/ip address\n{ /ip route }\nadd address=1.1.1.1/32 interface=ether1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 3,
+  "column": 5
+ },
+ {
+  "id": "s8",
+  "section": "does a full command leave the path changed?",
+  "note": "path changes on one line",
+  "source": "/ip address; /ip route; add dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": true
+ },
+ {
+  "id": "s9",
+  "section": "does a full command leave the path changed?",
+  "note": "a full command inside a substitution",
+  "source": "/ip address\n:put [/ip route print]\nadd address=1.1.1.1/32 interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "s10",
+  "section": "does a full command leave the path changed?",
+  "note": "go up, then a relative path",
+  "source": "/ip address\n..\nroute print",
+  "valid": true
+ },
+ {
+  "id": "s11",
+  "section": "does a full command leave the path changed?",
+  "note": "relative word that is not a child of the current path",
+  "source": "/ip address\nroute print",
+  "valid": false,
+  "message": "bad command name route",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "s12",
+  "section": "does a full command leave the path changed?",
+  "note": "relative word that is a root menu",
+  "source": "/ip address\nsystem identity print",
+  "valid": false,
+  "message": "bad command name system",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "s13",
+  "section": "does a full command leave the path changed?",
+  "note": "reset to root, then a root menu",
+  "source": "/ip address\n/\nsystem identity print",
+  "valid": true
+ },
+ {
+  "id": "s14",
+  "section": "does a full command leave the path changed?",
+  "note": "global command without a colon inside a menu",
+  "source": "/ip address\nput \"x\"",
+  "valid": false,
+  "message": "bad command name put",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "s15",
+  "section": "does a full command leave the path changed?",
+  "note": "global command with a colon inside a menu",
+  "source": "/ip address\n:put \"x\"",
+  "valid": true
+ },
+ {
+  "id": "s16",
+  "section": "does a full command leave the path changed?",
+  "note": "local without a colon inside a menu",
+  "source": "/ip address\nlocal x 1",
+  "valid": false,
+  "message": "bad command name local",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "s17",
+  "section": "does a full command leave the path changed?",
+  "note": "local with a colon inside a menu",
+  "source": "/ip address\n:local x 1",
+  "valid": true
+ },
+ {
+  "id": "s18",
+  "section": "does a full command leave the path changed?",
+  "note": "several commands in a path",
+  "source": "/ip address\nadd address=1.1.1.1/32 interface=ether1\nset 0 comment=x",
+  "valid": true
+ },
+ {
+  "id": "s19",
+  "section": "does a full command leave the path changed?",
+  "note": "dot dot glued to a word",
+  "source": "/ip address\n..add",
+  "valid": true
+ },
+ {
+  "id": "s20",
+  "section": "does a full command leave the path changed?",
+  "note": "absolute add while another path is current",
+  "source": "/ip address\n/ip route\n/ip address add address=1.1.1.1/32 interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "s21",
+  "section": "does a full command leave the path changed?",
+  "note": "two-level relative path with a command",
+  "source": "/ip\naddress print",
+  "valid": true
+ },
+ {
+  "id": "s22",
+  "section": "does a full command leave the path changed?",
+  "note": "relative path set over two lines",
+  "source": "/ip\naddress\nprint",
+  "valid": true
+ },
+ {
+  "id": "s23",
+  "section": "does a full command leave the path changed?",
+  "note": "relative path, absolute full command, print",
+  "source": "/ip\naddress\n/ip route print\nprint",
+  "valid": true
+ },
+ {
+  "id": "s24",
+  "section": "does a full command leave the path changed?",
+  "note": "print at the root",
+  "source": ":put 1\nprint",
+  "valid": false,
+  "message": "bad command name print",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "s25",
+  "section": "does a full command leave the path changed?",
+  "note": "relative add inside a function body",
+  "source": "/ip address\n:global f do={ add address=1.1.1.1/32 interface=ether1 }",
+  "valid": true
+ },
+ {
+  "id": "s26",
+  "section": "does a full command leave the path changed?",
+  "note": "relative print inside do=",
+  "source": "/ip address\n:if (true) do={ print }",
+  "valid": true
+ },
+ {
+  "id": "s27",
+  "section": "does a full command leave the path changed?",
+  "note": "path set inside do=, then a relative print",
+  "source": ":if (true) do={ /ip address }\nprint",
+  "valid": false,
+  "message": "bad command name print",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "s28",
+  "section": "does a full command leave the path changed?",
+  "note": "relative command in a substitution as a statement",
+  "source": "/ip address\n[print]",
+  "valid": true
+ },
+ {
+  "id": "s29",
+  "section": "does a full command leave the path changed?",
+  "note": "relative command in a substitution argument",
+  "source": "/ip address\n:put [print count-only]",
+  "valid": true
+ },
+ {
+  "id": "s30",
+  "section": "does a full command leave the path changed?",
+  "note": "relative find in a substitution",
+  "source": "/ip address\n:foreach i in=[find] do={ :put $i }",
+  "valid": true
+ },
+ {
+  "id": "l1",
+  "section": "does the path change leak out?",
+  "note": "bare block",
+  "source": "{ /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": true
+ },
+ {
+  "id": "l2",
+  "section": "does the path change leak out?",
+  "note": ":do body",
+  "source": ":do { /ip route } on-error={ }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l3",
+  "section": "does the path change leak out?",
+  "note": ":foreach body",
+  "source": ":foreach i in={1} do={ /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l4",
+  "section": "does the path change leak out?",
+  "note": ":while body",
+  "source": ":while (false) do={ /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l5",
+  "section": "does the path change leak out?",
+  "note": ":if body",
+  "source": ":if (true) do={ /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l6",
+  "section": "does the path change leak out?",
+  "note": "else body",
+  "source": ":if (true) do={ } else={ /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l7",
+  "section": "does the path change leak out?",
+  "note": ":for body",
+  "source": ":for i from=1 to=1 do={ /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l8",
+  "section": "does the path change leak out?",
+  "note": "path-only command in a substitution",
+  "source": ":put [/ip route]\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l9",
+  "section": "does the path change leak out?",
+  "note": "substitution as a statement",
+  "source": "[/ip route]\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": true
+ },
+ {
+  "id": "l10",
+  "section": "does the path change leak out?",
+  "note": "function body",
+  "source": ":global f do={ /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l11",
+  "section": "does the path change leak out?",
+  "note": "brace argument",
+  "source": ":local a { /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l12",
+  "section": "does the path change leak out?",
+  "note": "path block",
+  "source": "/ip { route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": true
+ },
+ {
+  "id": "l13",
+  "section": "does the path change leak out?",
+  "note": "nested path block",
+  "source": "/ip { route { } }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": true
+ },
+ {
+  "id": "l14",
+  "section": "does the path change leak out?",
+  "note": ":onerror in= body",
+  "source": ":onerror e in={ /ip route } do={ }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l15",
+  "section": "does the path change leak out?",
+  "note": ":onerror do= body",
+  "source": ":onerror e in={ } do={ /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l16",
+  "section": "does the path change leak out?",
+  "note": ":execute body",
+  "source": ":execute { /ip route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l17",
+  "section": "does the path change leak out?",
+  "note": ":retry body",
+  "source": ":retry command={ /ip route } delay=1 max=1\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": false,
+  "message": "bad command name add",
+  "line": 2,
+  "column": 1
+ },
+ {
+  "id": "l18",
+  "section": "does the path change leak out?",
+  "note": "leak back to a different path",
+  "source": "/ip route\n{ /ip address }\nadd address=1.1.1.1/32 interface=ether1",
+  "valid": true
+ },
+ {
+  "id": "l19",
+  "section": "does the path change leak out?",
+  "note": "relative path change inside a bare block",
+  "source": "/ip\n{ route }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": true
+ },
+ {
+  "id": "l20",
+  "section": "does the path change leak out?",
+  "note": "path block with a semicolon",
+  "source": "/ip { route; }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": true
+ },
+ {
+  "id": "l21",
+  "section": "does the path change leak out?",
+  "note": "path block that is empty",
+  "source": "/ip route { }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": true
+ },
+ {
+  "id": "l22",
+  "section": "does the path change leak out?",
+  "note": "add inside the block after the change",
+  "source": "{ /ip route; add dst-address=0.0.0.0/0 gateway=1.1.1.1 }",
+  "valid": true
+ },
+ {
+  "id": "l23",
+  "section": "does the path change leak out?",
+  "note": "add inside if after the change",
+  "source": ":if (true) do={ /ip route; add dst-address=0.0.0.0/0 gateway=1.1.1.1 }",
+  "valid": true
+ },
+ {
+  "id": "l24",
+  "section": "does the path change leak out?",
+  "note": "path restored after if",
+  "source": "/ip route\n:if (true) do={ /ip address; add address=1.1.1.1/32 interface=ether1 }\nadd dst-address=0.0.0.0/0 gateway=1.1.1.1",
+  "valid": true
+ },
+ {
+  "id": "b1",
+  "section": "bare words that match a parameter name",
+  "note": "the word is the name of put's only parameter",
+  "source": ":put message",
+  "valid": true
+ },
+ {
+  "id": "b2",
+  "section": "bare words that match a parameter name",
+  "note": "a prefix of that name",
+  "source": ":put m",
+  "valid": true
+ },
+ {
+  "id": "b3",
+  "section": "bare words that match a parameter name",
+  "note": "same for :log info",
+  "source": ":log info message",
+  "valid": true
+ },
+ {
+  "id": "b4",
+  "section": "bare words that match a parameter name",
+  "note": "not a prefix: a plain value",
+  "source": ":put msg",
+  "valid": true
+ },
+ {
+  "id": "b5",
+  "section": "bare words that match a parameter name",
+  "note": "a valued parameter used as a flag",
+  "source": "/ip address add comment",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 17
+ },
+ {
+  "id": "b6",
+  "section": "bare words that match a parameter name",
+  "note": "its prefix",
+  "source": "/ip address add comm",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 17
+ },
+ {
+  "id": "b7",
+  "section": "bare words that match a parameter name",
+  "note": "the name of the unnamed parameter",
+  "source": "/ip address remove numbers",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 20
+ },
+ {
+  "id": "b8",
+  "section": "bare words that match a parameter name",
+  "note": "its prefix",
+  "source": "/ip address remove n",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 20
+ },
+ {
+  "id": "b9",
+  "section": "bare words that match a parameter name",
+  "note": "a number",
+  "source": "/ip address remove 0",
+  "valid": true
+ },
+ {
+  "id": "b10",
+  "section": "bare words that match a parameter name",
+  "note": "a name that matches no parameter",
+  "source": "/ip address remove ether1",
+  "valid": false,
+  "message": "syntax error",
+  "line": 1,
+  "column": 20
+ },
+ {
+  "id": "b11",
+  "section": "bare words that match a parameter name",
+  "note": "enable with an interface name",
+  "source": "/interface enable ether1",
+  "valid": true
+ },
+ {
+  "id": "b12",
+  "section": "bare words that match a parameter name",
+  "note": "a valued parameter after a positional value",
+  "source": "/interface set ether1 name",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 23
+ },
+ {
+  "id": "b13",
+  "section": "bare words that match a parameter name",
+  "note": "a flag with a value",
+  "source": "/ip address print detail=yes",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 25
+ },
+ {
+  "id": "b14",
+  "section": "bare words that match a parameter name",
+  "note": "another flag with a value",
+  "source": "/ip address print as-value=no",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 27
+ },
+ {
+  "id": "b15",
+  "section": "bare words that match a parameter name",
+  "note": "where with nothing after it",
+  "source": "/ip address print where",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 19
+ },
+ {
+  "id": "b16",
+  "section": "bare words that match a parameter name",
+  "note": "where with a property",
+  "source": "/ip address print where disabled",
+  "valid": true
+ },
+ {
+  "id": "b17",
+  "section": "bare words that match a parameter name",
+  "note": "from as a bare word",
+  "source": "/ip address print from",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 19
+ },
+ {
+  "id": "b18",
+  "section": "bare words that match a parameter name",
+  "note": "from with a value",
+  "source": "/ip address print from=0",
+  "valid": true
+ },
+ {
+  "id": "b19",
+  "section": "bare words that match a parameter name",
+  "note": "named value",
+  "source": ":put message=x",
+  "valid": true
+ },
+ {
+  "id": "b20",
+  "section": "bare words that match a parameter name",
+  "note": "positional and named for the same parameter",
+  "source": ":put \"a\" message=x",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 10
+ },
+ {
+  "id": "b21",
+  "section": "bare words that match a parameter name",
+  "note": "positional and named for the same parameter",
+  "source": "/ip address set 0 numbers=1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 19
+ },
+ {
+  "id": "b22",
+  "section": "bare words that match a parameter name",
+  "note": "named then positional",
+  "source": "/ip address set numbers=0 1",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 27
+ },
+ {
+  "id": "b23",
+  "section": "bare words that match a parameter name",
+  "note": "three unnamed arguments",
+  "source": ":local x y z",
+  "valid": false,
+  "message": "expected end of command",
+  "line": 1,
+  "column": 12
+ },
+ {
+  "id": "b24",
+  "section": "bare words that match a parameter name",
+  "note": "a function definition",
+  "source": ":global x do={ }",
+  "valid": true
+ },
+ {
+  "id": "b25",
+  "section": "bare words that match a parameter name",
+  "note": "function definition then a value",
+  "source": ":local x do={ } 1",
+  "valid": true
+ },
+ {
+  "id": "b26",
+  "section": "bare words that match a parameter name",
+  "note": "foreach with counter, in and do",
+  "source": ":foreach i in={1} do={ }",
+  "valid": true
+ },
+ {
+  "id": "b27",
+  "section": "bare words that match a parameter name",
+  "note": "foreach with two counters",
+  "source": ":foreach k,v in={1} do={ }",
+  "valid": true
+ },
+ {
+  "id": "b28",
+  "section": "bare words that match a parameter name",
+  "note": "for",
+  "source": ":for i from=1 to=2 do={ }",
+  "valid": true
+ },
+ {
+  "id": "b29",
+  "section": "bare words that match a parameter name",
+  "note": "while",
+  "source": ":while (true) do={ }",
+  "valid": true
+ },
+ {
+  "id": "b30",
+  "section": "bare words that match a parameter name",
+  "note": "if",
+  "source": ":if (true) do={ } else={ }",
+  "valid": true
+ },
+ {
+  "id": "b31",
+  "section": "bare words that match a parameter name",
+  "note": "do while",
+  "source": ":do { } while=(true)",
+  "valid": true
+ },
+ {
+  "id": "b32",
+  "section": "bare words that match a parameter name",
+  "note": "do on-error",
+  "source": ":do { } on-error={ }",
+  "valid": true
+ },
+ {
+  "id": "b33",
+  "section": "bare words that match a parameter name",
+  "note": "onerror",
+  "source": ":onerror e in={ } do={ }",
+  "valid": true
+ },
+ {
+  "id": "b34",
+  "section": "bare words that match a parameter name",
+  "note": "retry",
+  "source": ":retry command={ } delay=1 max=1",
+  "valid": true
+ },
+ {
+  "id": "b35",
+  "section": "bare words that match a parameter name",
+  "note": "execute with a block",
+  "source": ":execute { }",
+  "valid": true
+ },
+ {
+  "id": "b36",
+  "section": "bare words that match a parameter name",
+  "note": "execute with a named script",
+  "source": ":execute script={ }",
+  "valid": true
+ },
+ {
+  "id": "b37",
+  "section": "bare words that match a parameter name",
+  "note": "execute with a flag",
+  "source": ":execute script=\":put 1\" as-string",
+  "valid": true
+ },
+ {
+  "id": "b38",
+  "section": "bare words that match a parameter name",
+  "note": "return",
+  "source": ":return 1",
+  "valid": true
+ },
+ {
+  "id": "b39",
+  "section": "bare words that match a parameter name",
+  "note": "return with nothing",
+  "source": ":return",
+  "valid": false,
+  "message": "Script Error: missing value(s) of argument(s) value"
+ },
+ {
+  "id": "b40",
+  "section": "bare words that match a parameter name",
+  "note": "error",
+  "source": ":error \"x\"",
+  "valid": true
+ },
+ {
+  "id": "b41",
+  "section": "bare words that match a parameter name",
+  "note": "delay",
+  "source": ":delay 1s",
+  "valid": true
+ },
+ {
+  "id": "b42",
+  "section": "bare words that match a parameter name",
+  "note": "time",
+  "source": ":time { }",
+  "valid": true
+ },
+ {
+  "id": "b43",
+  "section": "bare words that match a parameter name",
+  "note": "pick",
+  "source": ":pick \"abc\" 1 2",
+  "valid": true
+ },
+ {
+  "id": "b44",
+  "section": "bare words that match a parameter name",
+  "note": "tostr",
+  "source": ":tostr 1",
+  "valid": true
+ },
+ {
+  "id": "b45",
+  "section": "bare words that match a parameter name",
+  "note": "convert",
+  "source": ":convert 1 to=hex",
+  "valid": true
+ },
+ {
+  "id": "b46",
+  "section": "bare words that match a parameter name",
+  "note": "resolve",
+  "source": ":resolve google.com",
+  "valid": true
+ },
+ {
+  "id": "b47",
+  "section": "bare words that match a parameter name",
+  "note": "find",
+  "source": ":find \"abc\" \"b\"",
+  "valid": true
+ },
+ {
+  "id": "b48",
+  "section": "bare words that match a parameter name",
+  "note": "parse",
+  "source": ":parse \":put 1\"",
+  "valid": true
+ },
+ {
+  "id": "b49",
+  "section": "bare words that match a parameter name",
+  "note": "len",
+  "source": ":len \"abc\"",
+  "valid": true
+ },
+ {
+  "id": "b50",
+  "section": "bare words that match a parameter name",
+  "note": "typeof",
+  "source": ":typeof 1",
+  "valid": true
+ },
+ {
+  "id": "b51",
+  "section": "bare words that match a parameter name",
+  "note": "script run",
+  "source": "/system script run x",
+  "valid": true
+ },
+ {
+  "id": "b52",
+  "section": "bare words that match a parameter name",
+  "note": "fetch",
+  "source": "/tool fetch url=\"http://x\" mode=http",
+  "valid": true
+ },
+ {
+  "id": "b53",
+  "section": "bare words that match a parameter name",
+  "note": "fetch with a positional url",
+  "source": "/tool fetch \"http://x\"",
+  "valid": true
+ },
+ {
+  "id": "b54",
+  "section": "bare words that match a parameter name",
+  "note": "remove with a name",
+  "source": "/file remove x",
+  "valid": true
+ },
+ {
+  "id": "b55",
+  "section": "bare words that match a parameter name",
+  "note": "reboot",
+  "source": "/system reboot",
+  "valid": true
+ },
+ {
+  "id": "b56",
+  "section": "bare words that match a parameter name",
+  "note": "log print",
+  "source": "/log print",
+  "valid": true
+ },
+ {
+  "id": "b57",
+  "section": "bare words that match a parameter name",
+  "note": "log print where",
+  "source": "/log print where topics~\"info\"",
+  "valid": true
+ }
+]

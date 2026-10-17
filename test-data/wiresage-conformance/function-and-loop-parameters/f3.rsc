@@ -1,0 +1,1 @@
+{ :local f do={ :put $a }; $f a=1 }

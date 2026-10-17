@@ -1,0 +1,1 @@
+/ip address print without-paging as-value

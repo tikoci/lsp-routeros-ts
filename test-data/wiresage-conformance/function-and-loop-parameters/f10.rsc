@@ -1,0 +1,1 @@
+{ :local type 1; /interface print where name=$type }

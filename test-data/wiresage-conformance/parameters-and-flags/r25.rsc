@@ -1,0 +1,1 @@
+/ip address set [find where comment="x"] comment=y

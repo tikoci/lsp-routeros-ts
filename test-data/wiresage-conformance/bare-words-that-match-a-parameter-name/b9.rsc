@@ -1,0 +1,1 @@
+/ip address remove 0

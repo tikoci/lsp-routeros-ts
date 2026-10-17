@@ -1,0 +1,1 @@
+:local a { "aX"=1; ay=2 }; :put ($a->"aX")

@@ -1,0 +1,1 @@
+/ip address add address=$ip interface=ether1

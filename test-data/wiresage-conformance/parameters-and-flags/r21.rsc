@@ -1,0 +1,1 @@
+/ip address add comment="x" address=1.1.1.1/32 interface=ether1

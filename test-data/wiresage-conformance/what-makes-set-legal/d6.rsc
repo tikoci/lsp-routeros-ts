@@ -1,0 +1,1 @@
+:local a; :if (true) do={ :set a 1 }

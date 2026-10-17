@@ -108,6 +108,14 @@ before editing capture tools, rebuilding the DB, or scoring a checker.
   stale joins, transformations, environment pairing and summary aggregation.
   Tooling tests live in `tests/scripts/`; runtime code stays in `server/src/`
   and `client/src/`.
+- `wiresage-conformance` is an auxiliary synthetic genre, excluded alongside
+  controls from `v_corpus_population` and default outcome/pair views. Its 875
+  source values are byte-exact, including BOM, CRLF and end-of-input; do not add
+  comments or trailing newlines. Regenerate with `bun run corpus:import:wiresage`.
+  Preserve the pinned upstream JSON, MIT license, section/ID identities and
+  third-party oracle metadata. Upstream `valid` is an import-verbose dry-run
+  observation, never the local parse/highlight oracle. Use collection-specific
+  views to opt in, and require complete captures of all tracked inputs.
 - Pin DB bytes and schema/classifier versions with all downstream counts; state
   input variants, environment IDs, denominators and exclusions. No blended
   syntax-recall score from unknown provenance or menu/genre failures.

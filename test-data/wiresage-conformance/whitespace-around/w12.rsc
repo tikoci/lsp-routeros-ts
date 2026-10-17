@@ -1,0 +1,1 @@
+{ :local a true; :put ($aand$b) }

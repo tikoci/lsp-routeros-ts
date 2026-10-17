@@ -1,0 +1,1 @@
+/interface set ether1 name
