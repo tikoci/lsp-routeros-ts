@@ -80,6 +80,14 @@ When changing build scripts, lint config, the test runner, or the smoke harness,
 - **`client/src/` and `server/src/` hold runtime code only** — what ships in `dist/`. Tests live in `tests/server/` and `tests/client/`; tooling scripts live in `scripts/`; ad-hoc experiments go in `.scratch/` (gitignored). Do not add tests, scripts, or experiments to `server/src/` or `client/src/`.
 - **Pre-release quality gate** — before `vsix:package:prerelease` or an npm publish can be trusted, the six deployment contexts above all need at least a smoke check green. See [`deployment.instructions.md`](instructions/deployment.instructions.md#pre-release-checklist).
 
+## Corpus evidence
+
+Read [`docs/corpus.md`](../docs/corpus.md) before changing capture tools or using
+corpus scores. Schema 5 separates acquisition, response form and root cause,
+retains unknown historical provenance, and binds new observations to exact
+inputs and immutable environment/session identities. A row-complete firmware
+or legacy `ok=1` is not a syntax-acceptance gate.
+
 ## Key Files
 
 | Purpose | Path |

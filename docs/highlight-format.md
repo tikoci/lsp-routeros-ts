@@ -1,5 +1,12 @@
 # RouterOS highlight — Format Reference
 
+> Capture/provenance correction: historical version summaries retain response
+> statistics, not exact per-row submitted identities or shared environments with
+> parseIL. New captures preserve raw streams in immutable session manifests.
+> Highlight truncates/normalizes inputs; row coverage and token alignment never
+> establish whole-source or runtime acceptance. See [the corpus contract](corpus.md).
+
+
 > Reference for the per-character token stream returned by
 > `/console/inspect request=highlight` — the data behind this LSP's semantic
 > tokens and diagnostics. Grounded on a 913-script full-corpus sweep against
@@ -9,10 +16,10 @@
 > **7.25beta3** (development) and **7.23.5** (long-term) — all three observe the
 > same 19 token classes with identical vocabulary; 7.24.2 and 7.25beta3 are
 > per-script identical, while long-term 7.23.5 differs on 33 files (§7.2). Those
-> three builds also carry parseIL, so the two oracles are directly
-> cross-checkable there. Capture artifacts:
-> `test-data/highlight-summary.v<version>.json` (from
-> `scripts/collect-highlight.ts`); the six committed `.rsc.highlight` fixtures
+> three builds also carry parseIL, but those historical rows do not establish
+> identical submitted inputs or attributable shared environments. Capture artifacts:
+> `test-data/highlight-summary.v<version>.json` (from the historical
+> `scripts/collect-highlight.ts` harness); the six committed `.rsc.highlight` fixtures
 > (pre-7.23, unversioned) remain the offline snapshot-test inputs.
 >
 > Companion doc: [`parseil-format.md`](parseil-format.md) covers `:parse` IL —

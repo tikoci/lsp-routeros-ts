@@ -26,10 +26,10 @@ do not duplicate their findings back into this backlog.
 
 | Topic | Source of truth | Notes |
 | --- | --- | --- |
-| Highlight wire format and live lexical behavior | [`docs/highlight-format.md`](docs/highlight-format.md) | Captured against RouterOS 7.9.2, 7.23.2, 7.24rc2, and the current channels 7.23.5 / 7.24.2 / 7.25beta3. |
-| parseIL format and `:parse` behavior | [`docs/parseil-format.md`](docs/parseil-format.md) | Captured against RouterOS 7.20.8, 7.22.1, 7.23rc1, and the current channels 7.23.5 / 7.24.2 / 7.25beta3. |
+| Highlight wire format and live lexical behavior | [`docs/highlight-format.md`](docs/highlight-format.md) | Captured against RouterOS 7.9.2, 7.23.2, 7.24rc2, and historical channel snapshots 7.23.5 / 7.24.2 / 7.25beta3; current sessions follow [`corpus-policy.json`](test-data/corpus-policy.json). |
+| parseIL format and `:parse` behavior | [`docs/parseil-format.md`](docs/parseil-format.md) | Captured against RouterOS 7.20.8, 7.22.1, 7.23rc1, and historical channel snapshots 7.23.5 / 7.24.2 / 7.25beta3; current sessions follow [`corpus-policy.json`](test-data/corpus-policy.json). |
 | Syntax-inspection probe selection | [`docs/syntax-inspection-map.md`](docs/syntax-inspection-map.md) | Cross-probe decision and provenance layer for future skills/consumers. |
-| `completion`/`syntax`/`child` response shapes | [`docs/inspect-shapes.md`](docs/inspect-shapes.md) | Curated-context captures on RouterOS 7.9.2, 7.23.2, 7.24rc2, 7.23.5, 7.24.2, and 7.25beta3; normalized into `inspect_responses`. |
+| `completion`/`syntax`/`child` response shapes | [`docs/inspect-shapes.md`](docs/inspect-shapes.md) | Curated-context captures on RouterOS 7.9.2, 7.23.2, 7.24rc2, 7.23.5, 7.24.2, and 7.25beta3; archived as raw sidecars; policy-selected versions enter `inspect_responses`. |
 | Required-argument probe | [`docs/required-args.md`](docs/required-args.md) | Version-tagged execute-time signal and unresolved edge cases. |
 | rosetta/LSP docs enrichment | [`docs/rosetta-alignment.md`](docs/rosetta-alignment.md) | No runtime rosetta dependency; static JSON first. |
 | canonicalize audit | [`docs/canonicalize-audit.md`](docs/canonicalize-audit.md) | Upstream rosetta parser alignment and remaining hardening. |
@@ -43,7 +43,7 @@ Features touching `controller.ts`, `model.ts`, `tokens.ts`, or RouterOS command
 semantics should be grounded in measured RouterOS behavior first. The usual path is:
 
 1. Add a reusable harness under `scripts/` or a throwaway probe in `.scratch/`.
-2. Store normalized results in `test-data/corpus.sqlite` when the data is durable.
+2. Preserve reproducible public capture manifests, then rebuild `test-data/corpus.sqlite`; follow [`docs/corpus.md`](docs/corpus.md).
 3. Write conclusions in `docs/` or `DESIGN.md`.
 4. Implement the LSP feature after the response shape and edge cases are known.
 
@@ -72,8 +72,8 @@ semantics should be grounded in measured RouterOS behavior first. The usual path
   schemas are documented: `highlight` in [`docs/highlight-format.md`](docs/highlight-format.md),
   `completion`/`syntax`/`child` in [`docs/inspect-shapes.md`](docs/inspect-shapes.md)
   (curated-context captures on 7.9.2/7.23.2/7.24rc2/7.23.5/7.24.2/7.25beta3 via
-  `scripts/collect-inspect-shapes.ts`, now normalized into `inspect_responses`
-  in `test-data/corpus.sqlite` — 37 probes x 6 versions). Remaining: the
+  `scripts/collect-inspect-shapes.ts`, archived as 37 probes x 6 versions; only policy-selected versions are
+  normalized into `inspect_responses` in `test-data/corpus.sqlite`). Remaining: the
   representative corpus-position sweep, which is what would fill that table's
   `script_id` / `cursor_offset` columns.
 - 📋 **`[research: completion-tricks]` Validate fake-space / fake-equals

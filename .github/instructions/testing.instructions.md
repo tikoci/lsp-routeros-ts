@@ -67,63 +67,50 @@ The user's expectation is that `client/src/` and `server/src/` hold **runtime co
 - Usage: `bun run scripts/assess-dataset.ts [--json] [--concurrency=N]`
 - JSON output: `test-data/assessment-results.json` (gitignored)
 
-### Corpus datastore (`build-corpus-db.ts`)
-- Rebuilds the checked-in SQLite corpus database at `test-data/corpus.sqlite` from committed `.rsc` files and sidecars
-- Imports script metadata, FTS text, `.rsc.highlight` snapshots, versioned highlight summaries, parseIL `.parseil`/`.parseil.meta.json` captures, artifact provenance, and forward-compatible tables for inspect-shapes/completion-tricks research
-- Usage: `bun run corpus:db` or `bun run scripts/build-corpus-db.ts [--db test-data/corpus.sqlite]`
-- Because `corpus.sqlite` is checked in, rebuilds must be deterministic from committed inputs; prefer corpus fingerprints and source capture timestamps over wall-clock import timestamps
-- Future research harnesses should write normalized rows to this DB first; export JSON/Markdown only when a reviewer needs a textual diff or docs need a curated excerpt
+### Corpus datastore and captures
 
-### Capture shape: both oracles, full corpus, one build
+The contract, capture workflow, schema, coordinate conventions and consumer
+migration rules live in **[`docs/corpus.md`](../../docs/corpus.md)**. Read it
+before editing capture tools, rebuilding the DB, or scoring a checker.
 
-**Standing rule for every new version capture: run parseIL *and* highlight over
-the whole corpus against a single CHR build.** Run `collect-inspect-shapes.ts`
-and `collect-required-args.ts` on that same build too.
-
-This is a rule because the corpus violated it for its first six versions by
-accident. parseIL was captured on 7.20.8 / 7.22.1 / 7.23rc1 and highlight on
-7.9.2 / 7.23.2 / 7.24rc2 — **disjoint sets, no version had both**. Consumers
-that cross-check the two oracles (tikoci/centrs scores its token partition
-against highlight and grounds its operator axis on `:parse` IL) could not make
-both claims about the same firmware, so any disagreement between them was
-confounded with a version difference. Those six versions also predate the
-`tangentsoft/` import, so they cover 913 scripts rather than 948 — which is why
-a metric averaged across all versions is not comparable cell-to-cell.
-
-Practical consequences:
-
-- **Pick versions by channel, not by convenience.** Cover what MikroTik
-  currently ships — stable, long-term, testing, development — one build each.
-  Long-term especially: it is the channel MikroTik treats as the recommended
-  minimum, so it is the one most consumers actually run. An rc or an early patch
-  of a branch (`7.23rc1`, `7.23.2`) is **not** a substitute for that branch's
-  maintained release (`7.23.5`).
-- **Don't backfill EOL firmware.** Historical partial captures keep archival and
-  drift value; re-capturing them does not earn its cost. They are marked instead
-  — see `v_version_coverage` below.
-- **Check the result before committing.** `SELECT * FROM v_version_coverage`
-  should show `coverage_class = 'complete'` for the version you just captured.
-
-Booting the CHR: use [`tikoci/quickchr`](https://github.com/tikoci/quickchr),
-e.g. `quickchr start --name corpus7235 --version 7.23.5 --mem 2048 --cpu 2
---boot-size 2G`, then point the harnesses at it with `ROUTEROS_TEST_URL`.
-`collect-required-args.ts` additionally needs
-`restraml/docs/<version>/deep-inspect.json` as its input schema (that artifact
-belongs to tikoci/restraml; pass it with `--schema`).
-
-### Reading coverage out of the DB
-
-`v_version_coverage` derives per-version coverage from the rows actually
-present, so it never goes stale by hand:
-
-```sql
--- versions safe to compare cell-to-cell
-SELECT routeros_version FROM v_version_coverage WHERE coverage_class = 'complete';
-```
-
-`coverage_class` is `'complete'` when both oracles cover every `source_scripts`
-row on that build, and `'partial'` otherwise. Consumers pinning this corpus
-should filter on it rather than assuming the version axis is uniform.
+- `bun run corpus:capture` captures parseIL and raw highlight from the same
+  frozen tracked inputs on one disposable CHR session. Stage new public `.rsc`
+  fixtures first. Use `ROUTEROS_TEST_URL`, `ROUTEROS_TEST_USER`, and
+  `ROUTEROS_TEST_PASS`; `--target`/`--limit` are explicit research slices.
+- New manifests are immutable `test-data/captures/<session>-<probe>.json` files.
+  Never overwrite historical sidecars or attach fresh hashes to old evidence.
+  Follow `corpus-policy.json` when retaining current sessions and older-minor
+  representatives; record bridge results before retiring session manifests.
+- Retain original/submitted texts and hashes, transformations, spans, coordinate
+  mapping, root context, raw responses, environment/package/device-mode data and
+  scoped menu inventory. Preserve unknown state as unknown.
+- Acquisition, response class and root cause are separate. `ok=1`, an IL-shaped
+  response, or a full row census is never a runtime-validity oracle. Match
+  diagnostic structure with operator and echoed-literal controls.
+- Maintain paired recorded sessions on all four current channels. Update the
+  dated endpoint observations and session IDs in `corpus-policy.json`, retain
+  one representative per older minor, and prune superseded evidence before the
+  single committed DB reaches its 80 MB budget. Use `v_corpus_population` to
+  exclude controls, and decode `response_encoding` for compact DB responses.
+- Provision current-channel CHRs with quickchr `--install-all-packages` on
+  first boot, verify enabled packages, and retain the actual package/device-mode
+  snapshot. Missing hardware can still affect resolution. Error wording and
+  diagnostic `family` never establish cause: 7.23.x can report command/parameter
+  resolution failures as `expected end of command` or `syntax error`.
+- Capture maintained releases by channel when doing a channel study. Don't
+  backfill EOL versions merely to fill a grid. Inspect-shapes and required-args
+  research are separate scopes; required-args executes commands.
+- Stage reviewed capture manifests, then `bun run corpus:db`. Only tracked
+  public inputs enter the artifact. Verify `v_capture_run_coverage`, raw outcomes
+  and `v_comparable_capture_pairs` for **explicit run IDs**. Version-level
+  `rows-complete` measures legacy row presence only.
+- `tests/scripts/corpus-evidence.test.ts` covers provenance, response controls,
+  stale joins, transformations, environment pairing and summary aggregation.
+  Tooling tests live in `tests/scripts/`; runtime code stays in `server/src/`
+  and `client/src/`.
+- Pin DB bytes and schema/classifier versions with all downstream counts; state
+  input variants, environment IDs, denominators and exclusions. No blended
+  syntax-recall score from unknown provenance or menu/genre failures.
 
 ### Performance profiling (`profile-timing.ts`)
 - Tests size→time relationship by truncating scripts at progressive sizes (128B → 32KB)
@@ -147,7 +134,7 @@ should filter on it rather than assuming the version axis is uniform.
 - `corpus.sqlite` — checked-in SQLite datastore rebuilt by `scripts/build-corpus-db.ts`; excluded from VSIX because `.vscodeignore` excludes all `test-data/`
 
 ## Adding New Tests
-- Place tests in `tests/server/` (for server code) or `tests/client/` (for client code), mirroring the source tree
+- Place runtime tests in `tests/server/` or `tests/client/`; tooling tests go in `tests/scripts/`, mirroring the source tree
 - For new `.rsc` test scripts: add to `test-data/`, run `scripts/capture-snapshots.ts` to generate `.highlight`
 - After adding scripts or research sidecars, run `bun run corpus:db` so `test-data/corpus.sqlite` reflects the corpus.
 - For mocking `RouterRestClient`: patch the singleton instance property, not the prototype (arrow-function methods are instance-level)

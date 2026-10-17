@@ -1,0 +1,18 @@
+{
+  "format": 1,
+  "kind": "legacy-recorded-readout-bridge",
+  "version": "7.24.2",
+  "producerCommit": "bafe12fe6d57cac148969f79748763f92ca3cbf2",
+  "databaseSha256": "2acdcf35a40793e11b56e577795e35216f80e91ed1b91a0583d4cf0a9fb62493",
+  "recordedParseRunId": "277bdf1f-50c6-46f6-9380-c5a28ec39a59-parseil",
+  "population": "948 source paths present in both the legacy 7.24.2 parse capture and the recorded session; capture-controls excluded",
+  "joinedSourceCount": 948,
+  "identicalReadouts": 947,
+  "differentReadouts": 0,
+  "failedAcquisitions": [
+    "edge-cases/oversize-32k.rsc"
+  ],
+  "method": "Join source_scripts.path to parseil_results.script_id at 7.24.2 and capture_observations.source_path at the recorded run id; compare acquired il_text and response_text byte-for-byte",
+  "limitation": "Readout agreement does not establish unknown legacy submitted-input or environment identity, syntax acceptance, or runtime validity",
+  "consumerCrossCheck": "https://github.com/tikoci/lsp-routeros-ts/pull/40#pullrequestreview-5555509914"
+}

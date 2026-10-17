@@ -1,5 +1,10 @@
 # RouterOS `/console/inspect` — completion, syntax, child response shapes
 
+> This is an archived research reference. Raw versioned sidecars remain in git;
+> the current SQLite index retains only versions selected by
+> [the corpus retention policy](corpus.md#retention-and-capture-workflow).
+
+
 > Reference for the three non-highlight request types of `/console/inspect`,
 > grounded on a curated 37-context probe catalog captured verbatim against CHR
 > **7.23.2** (stable), **7.24rc2** (testing), and **7.9.2** (plain-HTTP floor).

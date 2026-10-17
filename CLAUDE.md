@@ -258,6 +258,15 @@ If you change build/lint/test scripts or the smoke harness, **update both workfl
 - Backed by LSP `connection.console.*`
 - HTTP request/response logging in Axios interceptors
 
+## Corpus research
+
+Before changing capture tools or scoring parser results, read
+[`docs/corpus.md`](docs/corpus.md). Use immutable capture sessions, retain exact
+source/submitted hashes and transformations, and keep acquisition, response
+class and evidence-qualified root cause separate. Legacy `ok` and
+`v_version_coverage` row counts do not establish syntax or runtime acceptance.
+Never reconstruct unknown historical capture identities from current sources.
+
 ## Testing
 
 Tests live in `tests/server/` and `tests/client/` (mirroring the source tree). Run with `bun run test` or `bun test tests/`.
