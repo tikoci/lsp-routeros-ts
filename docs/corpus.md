@@ -8,7 +8,7 @@ Schema 5 addresses [#37](https://github.com/tikoci/lsp-routeros-ts/issues/37)
 and fixes the independent summary aggregation defect in
 [#39](https://github.com/tikoci/lsp-routeros-ts/issues/39).
 
-## Capture and storage
+## Retention and capture workflow
 
 Use a disposable CHR, managed by [quickchr](https://github.com/tikoci/quickchr).
 Parse capture writes a uniquely named temporary file, verifies its contents,
@@ -33,6 +33,32 @@ current channel. Do not overwrite historical captures or recapture EOL builds
 just to fill a coverage grid. `--target <substring>` and `--limit <count>` select
 explicit slices. Only git-tracked `.rsc` files enter a capture or rebuild: stage
 new public fixtures first. Do not stage private inputs.
+
+The committed `test-data/corpus-policy.json` selects exactly one recorded session
+pair for each current channel, plus released historical representatives. The
+four endpoint responses and their observation timestamps are retained with the
+selection; these are dated labels, not a promise that a channel never moves.
+Recapture a channel when its version or the source population changes, then
+replace its session IDs in the policy. The builder rejects missing pairs,
+version/environment mismatches, slices, and stale or incomplete populations.
+
+Keep one representative per older minor: currently 7.9.2, 7.20.8 and 7.22.1.
+Drop prereleases once that minor has a release, and retire legacy runs when a
+recorded session covers the same minor. Historical version sidecars can remain
+in git for archival research, but only selected evidence enters the DB and its
+fingerprint. Remove superseded session manifests after recording any required
+bridge result; their original revisions remain accessible in git history.
+Pruning evidence never filters or reorders source files. Required-argument
+results remain path-oriented archived research; only sidecars from selected
+older-minor versions enter those tables, including the 7.9.2 inspect-shapes
+representative. A new parse/highlight session does not establish those other
+probes’ behavior.
+
+Keep one committed DB, fetched with a plain raw GET. The policy imposes an
+80,000,000-byte budget before atomic replacement; prune older representatives
+if the artifact approaches that budget rather than introducing another hosting
+scheme. Git compresses objects, so raw file size is not an estimate of history
+growth; measure compressed artifacts and repository packs separately.
 
 `corpus:capture` freezes the selected source texts and runs parseIL and highlight
 against the same target in one session. The existing `collect-parseil.ts` and
@@ -73,7 +99,49 @@ Inputs and environment hashes are checked during import. Captured source hashes
 are compared with current `source_scripts.sha256`: `matched`, `stale`, or
 `source-missing`. Equal-length edits are stale too. Historical captures have
 `input_status='unknown'`; current sources cannot establish historical submitted
-hashes. A corrupt manifest fails the build rather than silently disappearing.
+hashes. A corrupt retained manifest fails the build rather than silently disappearing.
+Unselected archived captures are not indexed.
+
+## Compact database representation
+
+Manifests preserve full original/submitted texts and raw responses. The DB
+stores the same evidence without repeated large values:
+
+- `capture_inputs.input_json` keeps each distinct input descriptor once, keyed
+  by its hash; observations reference it through `input_id`. This shares the
+  same inputs across channel sessions. Its
+  `sourceText` is resolved by captured `source_sha256` from `source_scripts`.
+  If that hash no longer exists in current sources, `capture_source_history`
+  stores the captured text once. Stale and removed sources therefore remain
+  reconstructible. `submittedText` is stored only when its bytes differ from
+  that captured source. `v_capture_inputs` resolves `source_text` and
+  `submitted_text` for either case; unknown legacy inputs remain NULL.
+- `response_encoding='parse-ret-v1'` stores the parser readout once in
+  `response_text`. `response_json` keeps other response fields; add `ret` back
+  to reconstruct the original object.
+- `response_encoding='highlight-rle-v1'` stores each `highlight` field as
+  run-length `[class, count]` pairs in `response_json`. All other fields are
+  preserved. Expand runs and join with commas to reconstruct the raw CSV.
+  Empty streams are `[]`; unexpected or oversized responses can use the
+  lossless `raw-json-v1` fallback. The manifest always retains the raw reply.
+- `analysis_runs.summary_json` retains run-level metadata, not per-file
+  `results` or targeted `probes` arrays already available in raw sidecars and
+  normalized tables.
+
+The `encodeResponse`/`decodeResponse` helpers in `scripts/corpus-evidence.ts`
+define these encodings. Tests roundtrip retained manifests through the compact
+DB, including raw replies, source/submitted hashes and stale/missing inputs.
+Consumers must read `response_encoding` rather than assuming that every
+`response_json` contains a CSV string. For SQL aggregation:
+
+```sql
+SELECT json_extract(run.value, '$[0]') AS class,
+       SUM(json_extract(run.value, '$[1]')) AS token_count
+FROM capture_observations o, json_each(o.response_json, '$[0].highlight') run
+WHERE o.run_id = :highlight_run_id AND o.response_encoding = 'highlight-rle-v1'
+  AND o.source_path NOT LIKE 'capture-controls/%'
+GROUP BY class;
+```
 
 ## Coordinates and transformations
 
@@ -130,10 +198,22 @@ before turning a whole-script observation into a language rule.
 
 ## Queries and downstream migration
 
-The old result tables remain archival imports of version-named artifacts. New
+The old result tables remain imports of policy-selected archival artifacts. New
 manifests enter `capture_environments`, `capture_runs`, and
 `capture_observations`; use these for new studies. Multiple sessions with the
-same firmware coexist. Firmware alone is never a comparison key.
+same firmware coexist. Recorded UUID run IDs remain stable across pruning; generated `legacy:*` IDs
+are local to the pinned DB. Firmware alone is never a comparison key. `capture_channels` binds each dated
+channel label to explicit parse/highlight run IDs and a shared environment.
+
+The seven challenge scripts have collection `capture-controls`.
+`source_scripts` includes all 955 inputs; use `v_corpus_population` for the
+948-source study population. `v_capture_outcomes` and
+`v_comparable_capture_pairs` exclude controls by default. Run coverage reports
+all `observation_count` rows and `control_count` separately; its remaining
+population counts exclude controls. Inspect controls directly in
+`capture_observations` when testing the classifier. Generated source IDs are
+local row references only: path and captured SHA-256 are the portable identity.
+Version retention never changes source membership or ordering.
 
 `v_version_coverage` is a **legacy row census**, now labelled `rows-complete` or
 `rows-partial`. It can combine runs of the same firmware and includes failures.
@@ -141,6 +221,7 @@ It cannot establish input identity, successful acquisition, full-input coverage,
 or shared environment. Use `v_capture_run_coverage` to see those axes separately.
 
 ```sql
+SELECT * FROM capture_channels ORDER BY channel;
 SELECT * FROM v_capture_run_coverage ORDER BY run_id;
 
 -- One response partition for a selected run, including failures and exclusions.
@@ -167,7 +248,7 @@ Downstream consumers such as centrs must deliberately update their DB pin and
 queries; replacing only the checksum is insufficient. Script row IDs can shift
 when sources are added; identify sources by path and hash, not a historical row ID.
 
-The legacy 7.24.2 partition is 330 plain diagnostics, 84 embedded-diagnostic
+The archived legacy 7.24.2 partition was 330 plain diagnostics, 84 embedded-diagnostic
 responses, 533 IL responses without recognized diagnostics, and one HTTP 413
 acquisition failure over 948 rows. Those are recorded response forms with unknown
 input provenance, not acceptance counts. Neither the old “618 accepted” bucket
@@ -177,22 +258,51 @@ nor 533 is a runtime-validity denominator.
 or highlight snapshot cannot multiply parse capture counts. Rebuilds are
 restricted to tracked public inputs and use capture timestamps, not import time.
 
-## Checked-in schema-5 baseline
+## Historical 7.24.2 bridge
 
-Session `277bdf1f-50c6-46f6-9380-c5a28ec39a59` captured RouterOS 7.24.2
-against all 955 tracked sources (948 archival sources plus seven new controls).
-Both runs share environment hash
-`8a376a72151bdd8a2c422af33543a731549c99179044bf66f16e13805b3d93ef`.
-Parse acquisition succeeded for 954 sources; the 126 KiB upload failed with
-HTTP 413. All 955 highlight responses aligned with their submitted inputs;
-three inputs were truncated. The pair view contains 841 exact full-input pairs,
-with non-ASCII transformations/truncation/failure excluded. This is a comparison
-set, not a count of accepted scripts. Inspect raw highlight through
-`json_extract(response_json, '$[0].highlight')`; `response_text` holds parse
-readouts without duplicating the large highlight stream.
+Before retiring the recorded 7.24.2 session, the producer rechecked Claude’s
+consumer-side result against DB SHA-256
+`2acdcf35a40793e11b56e577795e35216f80e91ed1b91a0583d4cf0a9fb62493`
+at commit `bafe12fe6d57cac148969f79748763f92ca3cbf2`: joining the 948
+legacy source paths to recorded run
+`277bdf1f-50c6-46f6-9380-c5a28ec39a59-parseil` gives 947 identical acquired
+readouts and one HTTP 413 (`edge-cases/oversize-32k.rsc`), with no differing
+acquired readout. The result and method are retained in
+[`corpus-bridge.v7.24.2.json`](../test-data/corpus-bridge.v7.24.2.json).
+The raw manifests and database remain accessible at that immutable git revision.
+Readout agreement does not supply unknown legacy input/environment provenance,
+prove syntax acceptance, or establish runtime validity.
 
-The parse response partition for the new 955-source run is 331 plain
-diagnostics, 87 embedded-diagnostic responses, 535 IL responses without recognized
-diagnostics, one ambiguous echoed node, and one failed acquisition. Root-cause
-annotations remain unknown. These are a frozen baseline, not channel-current
-results or evidence that runtime execution succeeded.
+Cause attribution remains evidence-qualified follow-up work. In particular, a
+missing root menu cannot attribute a nested command failure without matching
+scope and controls. The oversize source still has an explicit acquisition
+failure; chunked/SFTP upload is a separate transport improvement.
+
+## Dated current-channel snapshot
+
+The selected builds, session IDs and endpoint observation timestamps are in
+[`corpus-policy.json`](../test-data/corpus-policy.json). Each pair captures all
+955 inputs on a disposable CHR. Population coverage and exact-input pair counts
+are queried per channel/run below; response classes remain observations rather
+than runtime-acceptance labels.
+
+| Channel (checked 2026-10-17 UTC) | Build | Session UUID | Population parse acquired | Population highlight acquired | Exact full-input pairs |
+| --- | --- | --- | ---: | ---: | ---: |
+| long-term | 7.23.8 | `a3ceda61-7db5-4da3-ae11-f5d505e7ac08` | 947/948 | 948/948 | 834 |
+| stable | 7.24.5 | `f32666d8-5e51-4e76-821f-5478ad132f00` | 947/948 | 948/948 | 834 |
+| testing | 7.25rc2 | `e55fcde5-4dc0-4064-94a1-ce613abcc28d` | 947/948 | 948/948 | 834 |
+| development | 7.26beta1 | `2b4e5f61-8de3-4a0a-b94b-1c8377ead33d` | 947/948 | 948/948 | 834 |
+
+Each row additionally records seven controls in both probes. All highlight
+responses align with their submitted inputs; three source prefixes are truncated.
+The oversized source fails parse acquisition with HTTP 413 on all four builds.
+The 834 pairs exclude controls, transformed inputs, truncation and failed
+acquisition; they include diagnostic responses and are not an acceptance count.
+All 955 generated source IDs stayed unchanged when superseded evidence was
+pruned, although paths/hashes remain the required portable identity.
+
+The compact index is 35,188,736 bytes (33.56 MiB), versus 52,760,576 bytes
+(50.32 MiB) for the prior single-session-pair index. It contains 1,910 shared
+input descriptors for 7,640 recorded observations. Gzip size measured with
+zeroed timestamp is 4,591,842 bytes; git pack growth depends on its own delta
+compression. The plain committed SQLite file remains the distribution artifact.

@@ -1,5 +1,10 @@
 # RouterOS required arguments — execute-time probe
 
+> This is an archived research reference. Raw versioned sidecars remain in git;
+> the current SQLite index retains only versions selected by
+> [the corpus retention policy](corpus.md#retention-and-capture-workflow).
+
+
 > Reference for the `[research: required-args]` spike. Artifacts live in
 > `test-data/required-args.v<version>.json` and
 > `test-data/required-args.v<version>.meta.json`; normalized rows are imported

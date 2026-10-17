@@ -122,7 +122,7 @@ Do not collapse these distinctions:
 | Required arguments | [`required-args.md`](required-args.md) | Versioned execute-error dataset with explicit unresolved cases. Path-oriented, so it does not join to corpus scripts. |
 | Live versus rosetta ownership | [`rosetta-alignment.md`](rosetta-alignment.md) | Decision matrix and join rules exist. |
 | Static path slicing/canonicalization | [`canonicalize-audit.md`](canonicalize-audit.md) | Reusable package exists; deep block/scope parsing is not solved by it. |
-| `completion`, `syntax`, and `child` response shapes | [`inspect-shapes.md`](inspect-shapes.md) | Curated-context catalog captured on 7.9.2/7.23.2/7.24rc2, plus 7.23.5/7.24.2/7.25beta3 corpus re-runs (all six now normalized into `inspect_responses`): field semantics, enum discovery, validity sentinels, `self`/`child` rows, `symbol-type` help structure. The representative corpus-position sweep into `inspect_responses` remains open. |
+| `completion`, `syntax`, and `child` response shapes | [`inspect-shapes.md`](inspect-shapes.md) | Curated-context catalog captured on 7.9.2/7.23.2/7.24rc2, plus 7.23.5/7.24.2/7.25beta3 corpus re-runs (raw sidecars retain all six; only policy-selected versions enter `inspect_responses`): field semantics, enum discovery, validity sentinels, `self`/`child` rows, `symbol-type` help structure. The representative corpus-position sweep into `inspect_responses` remains open. |
 | Synthetic trailing-space / trailing-`=` completion probes | [`BACKLOG.md`](../BACKLOG.md) `[research: completion-tricks]` | Still a blocker. Do not encode as a skill recipe yet. |
 | CLI-to-REST/API conversion | rosetta/restraml command schema | Keep separate from source parsing; validate mappings per command family and version. |
 

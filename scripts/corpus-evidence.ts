@@ -179,6 +179,66 @@ export function capturedResponseText(probe: Probe, response: unknown): string | 
 	return response[0].highlight
 }
 
+export type ResponseEncoding = 'parse-ret-v1' | 'highlight-rle-v1' | 'raw-json-v1'
+export interface StoredResponse {
+	responseText: string | null
+	responseJson: string
+	encoding: ResponseEncoding
+}
+
+/** Keep one parse readout, or losslessly encode adjacent highlight classes. */
+export function encodeResponse(probe: Probe, response: unknown): StoredResponse {
+	if (probe === 'parseil') {
+		if (response === null || typeof response !== 'object' || Array.isArray(response))
+			return { responseText: null, responseJson: JSON.stringify(response), encoding: 'raw-json-v1' }
+		const fields = { ...(response as Record<string, unknown>) }
+		const text = typeof fields.ret === 'string' ? fields.ret : null
+		if (text !== null) delete fields.ret
+		return { responseText: text, responseJson: JSON.stringify(response === null ? null : fields), encoding: 'parse-ret-v1' }
+	}
+	if (
+		!Array.isArray(response) ||
+		response.some(
+			(row) =>
+				row === null || typeof row !== 'object' || Array.isArray(row) || typeof row.highlight !== 'string' || row.highlight.split(',').length > HIGHLIGHT_LIMIT,
+		)
+	) {
+		return { responseText: null, responseJson: JSON.stringify(response), encoding: 'raw-json-v1' }
+	}
+	const rows = structuredClone(response) as Array<Record<string, unknown>>
+	for (const row of rows) {
+		const highlight = row.highlight as string
+		const runs: Array<[string, number]> = []
+		for (const token of highlight ? highlight.split(',') : []) {
+			const previous = runs[runs.length - 1]
+			if (previous?.[0] === token) previous[1]++
+			else runs.push([token, 1])
+		}
+		row.highlight = runs
+	}
+	return { responseText: null, responseJson: JSON.stringify(rows), encoding: 'highlight-rle-v1' }
+}
+
+/** Reconstruct the original raw response shape, including empty readouts. */
+export function decodeResponse(stored: StoredResponse): unknown {
+	const response = JSON.parse(stored.responseJson)
+	if (stored.encoding === 'raw-json-v1') return response
+	if (stored.encoding === 'parse-ret-v1') return stored.responseText === null ? response : { ...response, ret: stored.responseText }
+	if (stored.encoding !== 'highlight-rle-v1') throw new Error('Unknown response encoding')
+	if (Array.isArray(response))
+		for (const row of response) {
+			if (!Array.isArray(row.highlight)) continue
+			const tokens: string[] = []
+			for (const [token, count] of row.highlight) {
+				if (typeof token !== 'string' || !Number.isSafeInteger(count) || count <= 0 || tokens.length + count > HIGHLIGHT_LIMIT)
+					throw new Error('Invalid highlight run')
+				for (let i = 0; i < count; i++) tokens.push(token)
+			}
+			row.highlight = tokens.join(',')
+		}
+	return response
+}
+
 /** Reject corrupted identities; report equal-length source changes as stale. */
 export function validateObservation(observation: CaptureObservation, currentSourceHash: string | null): 'matched' | 'stale' | 'source-missing' {
 	const input = observation.input

@@ -79,12 +79,19 @@ before editing capture tools, rebuilding the DB, or scoring a checker.
   `ROUTEROS_TEST_PASS`; `--target`/`--limit` are explicit research slices.
 - New manifests are immutable `test-data/captures/<session>-<probe>.json` files.
   Never overwrite historical sidecars or attach fresh hashes to old evidence.
+  Follow `corpus-policy.json` when retaining current sessions and older-minor
+  representatives; record bridge results before retiring session manifests.
 - Retain original/submitted texts and hashes, transformations, spans, coordinate
   mapping, root context, raw responses, environment/package/device-mode data and
   scoped menu inventory. Preserve unknown state as unknown.
 - Acquisition, response class and root cause are separate. `ok=1`, an IL-shaped
   response, or a full row census is never a runtime-validity oracle. Match
   diagnostic structure with operator and echoed-literal controls.
+- Maintain paired recorded sessions on all four current channels. Update the
+  dated endpoint observations and session IDs in `corpus-policy.json`, retain
+  one representative per older minor, and prune superseded evidence before the
+  single committed DB reaches its 80 MB budget. Use `v_corpus_population` to
+  exclude controls, and decode `response_encoding` for compact DB responses.
 - Capture maintained releases by channel when doing a channel study. Don't
   backfill EOL versions merely to fill a grid. Inspect-shapes and required-args
   research are separate scopes; required-args executes commands.

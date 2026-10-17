@@ -193,7 +193,7 @@ Decisions captured from the sweep:
 **Why SQLite:** corpus spikes were starting to produce many Markdown/JSON sidecars. SQLite gives us one durable, queryable place for script metadata, FTS search, raw artifact provenance, and normalized result tables while still allowing export files when a human-reviewable diff is needed.
 
 **Schema 5 and its consumer contract:** [`docs/corpus.md`](docs/corpus.md).
-The source/FTS, artifact and legacy analysis tables remain queryable. New
+The source/FTS, artifact and policy-selected legacy analysis tables remain queryable. New
 `capture_environments`, `capture_runs`, and `capture_observations` bind evidence
 to immutable sessions, exact source/submitted inputs, transformations and
 coverage. Acquisition and response classification are independent; root causes
@@ -205,6 +205,11 @@ unknown. `v_script_summary` uses independent aggregates to avoid join fan-out.
 `v_capture_run_coverage` exposes acquisition, matched/stale/unknown identities and
 full submitted spans. `v_comparable_capture_pairs` filters exact current inputs
 within a shared recorded environment/session; it does not imply acceptance.
+Current channels are bound to explicit paired runs in `capture_channels`;
+`corpus-policy.json` retains four current sessions plus older-minor representatives
+within one bounded DB. `v_corpus_population` and comparison views exclude
+`capture-controls`. Hash-addressed input reconstruction and run-length highlight
+encoding remove large duplicates while raw manifests remain authoritative.
 Required-argument results remain path-oriented, while parse/highlight observations
 are source-oriented. Inspect-shapes are curated contexts, not corpus sweeps.
 `completion_trick_results` is still reserved and empty.

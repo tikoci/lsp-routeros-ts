@@ -11,9 +11,10 @@
  */
 import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import { Database } from 'bun:sqlite'
+import { readCorpusPolicy, retainedCorpusFiles, insertCaptureChannels } from './corpus-policy'
 import { CLASSIFIER_VERSION, EVIDENCE_FORMAT } from './corpus-evidence'
 import { createEvidenceSchema, importLegacyEvidence, importCaptureRuns } from './corpus-db-evidence'
 import { ROUTEROS_API_MAX_BYTES, ConnectionLogger } from '../server/src/shared'
@@ -204,6 +205,7 @@ function readJson<T>(filePath: string): { value: T | null; valid: boolean } {
 }
 
 function classifyCollection(relPath: string): string {
+	if (relPath.startsWith('capture-controls/')) return 'capture-controls'
 	if (relPath.startsWith('forum/amm0/')) return 'amm0'
 	if (relPath.startsWith('forum/rextended/')) return 'rextended'
 	if (relPath.startsWith('eworm/')) return 'eworm'
@@ -550,6 +552,7 @@ captured_at TEXT,
 PRIMARY KEY (run_id, path)
 );
 
+CREATE INDEX idx_source_scripts_sha256 ON source_scripts(sha256);
 CREATE INDEX idx_source_scripts_collection ON source_scripts(collection);
 CREATE INDEX idx_artifact_files_script ON artifact_files(script_id);
 CREATE INDEX idx_artifact_files_kind ON artifact_files(artifact_kind);
@@ -681,7 +684,7 @@ END AS coverage_class
 FROM (
 SELECT
 v.routeros_version AS routeros_version,
-(SELECT COUNT(*) FROM source_scripts) AS corpus_script_count,
+(SELECT COUNT(*) FROM source_scripts WHERE collection!='capture-controls') AS corpus_script_count,
 (SELECT COUNT(DISTINCT p.script_id) FROM parseil_results p WHERE p.routeros_version = v.routeros_version) AS parseil_script_count,
 (SELECT COUNT(DISTINCT h.script_id) FROM highlight_results h WHERE h.routeros_version = v.routeros_version) AS highlight_script_count,
 (SELECT COUNT(*) FROM required_arg_results r WHERE r.routeros_version = v.routeros_version) AS required_arg_path_count,
@@ -714,6 +717,8 @@ function insertMetadata(db: Database, dbPath: string, files: string[]): void {
 	const values: [string, string][] = [
 		['schema_version', SCHEMA_VERSION],
 		['evidence_format', String(EVIDENCE_FORMAT)],
+		['capture_response_encodings', JSON.stringify(['parse-ret-v1', 'highlight-rle-v1', 'raw-json-v1'])],
+		['capture_input_storage', 'hash-reference-v1'],
 		['response_classifier', CLASSIFIER_VERSION],
 		['generator', 'scripts/build-corpus-db.ts'],
 		['corpus_sha256', corpusInputSha256(files)],
@@ -800,6 +805,11 @@ content_type, json_valid, captured_at
 	return byPath
 }
 
+function runSummaryJson(path: string): string {
+	const { results, probes, ...summary } = JSON.parse(readFileSync(path, 'utf8'))
+	return JSON.stringify(summary)
+}
+
 function insertAnalysisRuns(db: Database, files: string[]): Map<string, number> {
 	const insert = db.prepare(`
 INSERT INTO analysis_runs (
@@ -814,7 +824,7 @@ analysis_name, routeros_version, chr_build_time, source_path, captured_at, summa
 		const { value } = readJson<ParseIlSummary>(filePath)
 		const fallbackVersion = parseSummaryVersion(relPath)
 		const version = value?.routerosVersion ?? fallbackVersion ?? 'unknown'
-		const summaryJson = readFileSync(filePath, 'utf-8')
+		const summaryJson = runSummaryJson(filePath)
 		const result = insert.run('parseil', version, value?.chrBuildTime ?? null, relPath, value?.capturedAt ?? null, summaryJson)
 		byKey.set(analysisRunKey('parseil', version), Number(result.lastInsertRowid))
 	}
@@ -825,7 +835,7 @@ analysis_name, routeros_version, chr_build_time, source_path, captured_at, summa
 		const { value } = readJson<HighlightSummary>(filePath)
 		const fallbackVersion = parseHighlightSummaryVersion(relPath)
 		const version = value?.routerosVersion ?? fallbackVersion ?? 'unknown'
-		const summaryJson = readFileSync(filePath, 'utf-8')
+		const summaryJson = runSummaryJson(filePath)
 		const result = insert.run('highlight', version, value?.chrBuildTime ?? null, relPath, value?.capturedAt ?? null, summaryJson)
 		byKey.set(analysisRunKey('highlight', version), Number(result.lastInsertRowid))
 	}
@@ -836,7 +846,7 @@ analysis_name, routeros_version, chr_build_time, source_path, captured_at, summa
 		const { value } = readJson<InspectShapesSummary>(filePath)
 		const fallbackVersion = parseInspectShapesVersion(relPath)
 		const version = value?.routerosVersion ?? fallbackVersion ?? 'unknown'
-		const summaryJson = readFileSync(filePath, 'utf-8')
+		const summaryJson = runSummaryJson(filePath)
 		const result = insert.run('inspect-shapes', version, value?.chrBuildTime ?? null, relPath, value?.capturedAt ?? null, summaryJson)
 		byKey.set(analysisRunKey('inspect-shapes', version), Number(result.lastInsertRowid))
 	}
@@ -863,7 +873,7 @@ analysis_name, routeros_version, chr_build_time, source_path, captured_at, summa
 
 		const summaryPath = `required-args.v${version}.json`
 		const sourcePath = files.some((candidate) => rel(candidate) === summaryPath) ? summaryPath : relPath
-		const result = insert.run('required-args', version, value?.chrBuildTime ?? null, sourcePath, value?.capturedAt ?? null, readFileSync(filePath, 'utf-8'))
+		const result = insert.run('required-args', version, value?.chrBuildTime ?? null, sourcePath, value?.capturedAt ?? null, runSummaryJson(filePath))
 		byKey.set(key, Number(result.lastInsertRowid))
 	}
 
@@ -1115,6 +1125,10 @@ function printSummary(db: Database, dbPath: string): void {
 			`
 SELECT
 (SELECT COUNT(*) FROM source_scripts) AS source_scripts,
+(SELECT COUNT(*) FROM v_corpus_population) AS population_scripts,
+(SELECT COUNT(*) FROM source_scripts WHERE collection='capture-controls') AS controls,
+(SELECT COUNT(*) FROM capture_runs) AS capture_runs,
+(SELECT COUNT(*) FROM capture_observations) AS capture_observations,
 (SELECT COUNT(*) FROM artifact_files) AS artifacts,
 (SELECT COUNT(*) FROM analysis_runs) AS analysis_runs,
 (SELECT COUNT(*) FROM parseil_results) AS parseil_results,
@@ -1131,6 +1145,10 @@ SELECT
 	console.log(
 		[
 			`scripts=${row.source_scripts}`,
+			`population=${row.population_scripts}`,
+			`controls=${row.controls}`,
+			`capture_runs=${row.capture_runs}`,
+			`observations=${row.capture_observations}`,
 			`artifacts=${row.artifacts}`,
 			`analysis_runs=${row.analysis_runs}`,
 			`parseil=${row.parseil_results}`,
@@ -1150,7 +1168,11 @@ function main(): void {
 	mkdirSync(dirname(dbPath), { recursive: true })
 	const temporaryPath = `${dbPath}.tmp-${process.pid}`
 	if (existsSync(temporaryPath)) throw new Error(`Temporary output already exists: ${temporaryPath}`)
-	const files = allFiles(TEST_DATA_DIR).filter((filePath) => resolve(filePath) !== dbPath && !rel(filePath).startsWith('corpus.sqlite'))
+	const policyPath = join(TEST_DATA_DIR, 'corpus-policy.json')
+	const tracked = allFiles(TEST_DATA_DIR).filter((filePath) => resolve(filePath) !== dbPath && !rel(filePath).startsWith('corpus.sqlite'))
+	if (!tracked.includes(policyPath)) throw new Error('Stage corpus-policy.json before building')
+	const policy = readCorpusPolicy(policyPath)
+	const files = retainedCorpusFiles(tracked, TEST_DATA_DIR, policy)
 	const db = new Database(temporaryPath)
 	db.exec('PRAGMA journal_mode = DELETE')
 	db.exec('PRAGMA foreign_keys = ON')
@@ -1169,11 +1191,14 @@ function main(): void {
 		insertInspectResponses(db, files, runIds)
 		importLegacyEvidence(db)
 		importCaptureRuns(db, files, TEST_DATA_DIR)
+		insertCaptureChannels(db, policy)
+		db.prepare('INSERT INTO corpus_metadata VALUES (?,?)').run('retention_policy', JSON.stringify(policy))
 	})
 
 	try {
 		tx()
 		db.close()
+		if (statSync(temporaryPath).size > policy.maxDatabaseBytes) throw new Error('Corpus exceeds retention size budget; prune representatives before rebuilding')
 		renameSync(temporaryPath, dbPath)
 	} finally {
 		db.close()
