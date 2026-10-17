@@ -92,6 +92,11 @@ before editing capture tools, rebuilding the DB, or scoring a checker.
   one representative per older minor, and prune superseded evidence before the
   single committed DB reaches its 80 MB budget. Use `v_corpus_population` to
   exclude controls, and decode `response_encoding` for compact DB responses.
+- Provision current-channel CHRs with quickchr `--install-all-packages` on
+  first boot, verify enabled packages, and retain the actual package/device-mode
+  snapshot. Missing hardware can still affect resolution. Error wording and
+  diagnostic `family` never establish cause: 7.23.x can report command/parameter
+  resolution failures as `expected end of command` or `syntax error`.
 - Capture maintained releases by channel when doing a channel study. Don't
   backfill EOL versions merely to fill a grid. Inspect-shapes and required-args
   research are separate scopes; required-args executes commands.

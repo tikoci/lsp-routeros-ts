@@ -356,6 +356,17 @@ test('controls remain inspectable but are excluded from default study views', ()
 	db.close()
 })
 
+test.each(['long-term', 'stable', 'testing', 'development'])('%s selected environment retains enabled optional packages', (channel) => {
+	const db = new Database(resolve(import.meta.dir, '../../test-data/corpus.sqlite'), { readonly: true })
+	const row = db
+		.query('SELECT e.environment_json FROM capture_channels c JOIN capture_environments e ON e.sha256=c.environment_sha256 WHERE c.channel=?')
+		.get(channel) as { environment_json: string }
+	const { packages } = JSON.parse(row.environment_json) as { packages: Array<{ name: string; disabled: string | boolean | null }> }
+	const enabled = packages.filter((pkg) => pkg.disabled === false || pkg.disabled === 'false').map((pkg) => pkg.name)
+	for (const name of ['routeros', 'wireless', 'container', 'user-manager', 'iot', 'gps', 'ups']) expect(enabled).toContain(name)
+	db.close()
+})
+
 test.each(
 	['long-term', 'stable', 'testing', 'development'].flatMap((channel) => ['parseil', 'highlight'].map((probe) => [channel, probe] as const)),
 )('%s %s manifest roundtrips compact inputs and raw responses', (channel, probe) => {

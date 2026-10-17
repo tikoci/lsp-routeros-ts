@@ -16,8 +16,9 @@ parses it, and removes it. Corpus scripts are never executed. The upload and
 readback limits are acquisition limits, not syntax results.
 
 ```sh
-quickchr add --name corpus --version 7.24.2 --arch x86 --add-network user
-quickchr start corpus --bg
+quickchr add --name corpus --version 7.24.5 --arch x86 --add-network user
+quickchr start corpus --bg --install-all-packages
+centrs retrieve --quickchr corpus /system/package --json
 # Use the REST endpoint printed by quickchr (the port below is an example).
 ROUTEROS_TEST_URL=http://127.0.0.1:9170 bun run corpus:capture \
   --menus 'ip,address;container;zerotier'
@@ -41,6 +42,14 @@ selection; these are dated labels, not a promise that a channel never moves.
 Recapture a channel when its version or the source population changes, then
 replace its session IDs in the policy. The builder rejects missing pairs,
 version/environment mismatches, slices, and stale or incomplete populations.
+
+Provision current-channel CHRs with `--install-all-packages` on their first
+boot, and verify the installed, enabled package list before capturing. This
+reduces package-availability failures in the script population; a base-only
+CHR is a different environment and must not replace these selected sessions.
+The environment snapshot remains authoritative about the packages and
+device-mode actually present. Optional packages do not supply physical hardware
+or prove that every command, parameter, or runtime requirement is available.
 
 Keep one representative per older minor: currently 7.9.2, 7.20.8 and 7.22.1.
 Drop prereleases once that minor has a release, and retire legacy runs when a
@@ -196,6 +205,14 @@ an offline catalog miss is insufficient. Removing a menu-related first failure
 does not establish the rest of a script as valid. Minimize and capture controls
 before turning a whole-script observation into a language rule.
 
+Never read a diagnostic's `family` or error wording as its cause. On 7.23.x,
+command or parameter resolution failures can surface as `expected end of
+command` or `syntax error`, while later builds report `bad command name` or
+`bad parameter name` for the same input. The
+[base-package cross-channel captures](https://github.com/tikoci/lsp-routeros-ts/tree/2b588d1b5aeb45c213db9892aea52daee8037523/test-data/captures)
+preserve examples of that difference; they are superseded by the
+package-complete sessions below.
+
 ## Queries and downstream migration
 
 The old result tables remain imports of policy-selected archival artifacts. New
@@ -286,12 +303,18 @@ The selected builds, session IDs and endpoint observation timestamps are in
 are queried per channel/run below; response classes remain observations rather
 than runtime-acceptance labels.
 
+All packages from each build's x86 `all_packages` archive are installed and
+enabled. Including `routeros`, the environments contain 12 packages on
+long-term, 13 on stable and testing, and 14 on development. Package versions
+match the selected firmware; the development environment additionally includes
+CMR. Installed packages and device-mode remain recorded per environment.
+
 | Channel (checked 2026-10-17 UTC) | Build | Session UUID | Population parse acquired | Population highlight acquired | Exact full-input pairs |
 | --- | --- | --- | ---: | ---: | ---: |
-| long-term | 7.23.8 | `a3ceda61-7db5-4da3-ae11-f5d505e7ac08` | 947/948 | 948/948 | 834 |
-| stable | 7.24.5 | `f32666d8-5e51-4e76-821f-5478ad132f00` | 947/948 | 948/948 | 834 |
-| testing | 7.25rc2 | `e55fcde5-4dc0-4064-94a1-ce613abcc28d` | 947/948 | 948/948 | 834 |
-| development | 7.26beta1 | `2b4e5f61-8de3-4a0a-b94b-1c8377ead33d` | 947/948 | 948/948 | 834 |
+| long-term | 7.23.8 | `6f313fad-20d3-48f7-b1ac-68906acbd95c` | 947/948 | 948/948 | 834 |
+| stable | 7.24.5 | `b4ecf5e8-711e-4e81-aea3-72ccf850240a` | 947/948 | 948/948 | 834 |
+| testing | 7.25rc2 | `b5a9755e-fd18-47e4-8756-e9ed39e64a9a` | 947/948 | 948/948 | 834 |
+| development | 7.26beta1 | `c4cd2a11-d944-4f5d-80d1-99d4d686ae2a` | 947/948 | 948/948 | 834 |
 
 Each row additionally records seven controls in both probes. All highlight
 responses align with their submitted inputs; three source prefixes are truncated.
@@ -301,8 +324,21 @@ acquisition; they include diagnostic responses and are not an acceptance count.
 All 955 generated source IDs stayed unchanged when superseded evidence was
 pruned, although paths/hashes remain the required portable identity.
 
-The compact index is 35,188,736 bytes (33.56 MiB), versus 52,760,576 bytes
+Compared with the base-package 7.24.5 session at `2b588d1`, the selected
+package-complete session removes the `bad command name` diagnostic for
+`wireless`, `caps-man`, `container`, `veth`, `user-manager` or `iot` from 22 of
+the 24 affected population sources. Two historical snippets using
+`/tool user-manager` retain that diagnostic with the package enabled. Other
+diagnostics can remain or become visible; these counts are not syntax or
+runtime acceptance counts.
+
+For centrs's reviewed 7.24.2 70-script highlight slice, submitted inputs still match
+exactly, but 11 streams change in the package-complete 7.24.5 environment
+(59 remain identical). The consumer migration must regenerate those expected
+streams, rather than only changing the fixture's version label.
+
+The compact index is 36,286,464 bytes (34.61 MiB), versus 52,760,576 bytes
 (50.32 MiB) for the prior single-session-pair index. It contains 1,910 shared
 input descriptors for 7,640 recorded observations. Gzip size measured with
-zeroed timestamp is 4,591,842 bytes; git pack growth depends on its own delta
+zeroed timestamp is 4,682,883 bytes; git pack growth depends on its own delta
 compression. The plain committed SQLite file remains the distribution artifact.
