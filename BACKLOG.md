@@ -43,7 +43,7 @@ Features touching `controller.ts`, `model.ts`, `tokens.ts`, or RouterOS command
 semantics should be grounded in measured RouterOS behavior first. The usual path is:
 
 1. Add a reusable harness under `scripts/` or a throwaway probe in `.scratch/`.
-2. Store normalized results in `test-data/corpus.sqlite` when the data is durable.
+2. Preserve reproducible public capture manifests, then rebuild `test-data/corpus.sqlite`; follow [`docs/corpus.md`](docs/corpus.md).
 3. Write conclusions in `docs/` or `DESIGN.md`.
 4. Implement the LSP feature after the response shape and edge cases are known.
 

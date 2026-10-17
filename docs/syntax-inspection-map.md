@@ -14,7 +14,7 @@ syntax parsing:
 | Question | Primary source | What it cannot establish |
 |---|---|---|
 | Which source span is a command, argument, variable, comment, or live-state marker? | Live `/console/inspect` `request=highlight` | Nested structure, value validity, required arguments, or errors after the first hard stop. |
-| Is the whole script structurally valid, and what blocks/expressions did RouterOS build? | Live `:parse` IL | Source ranges, partial IL on error, required arguments, or an unambiguous path/argument split without command-schema data. |
+| Is the whole script structurally valid, and what blocks/expressions did RouterOS build? | Live `:parse` response classification | Runtime validity, source ranges, required arguments, or an unambiguous path/argument split without command-schema data. |
 | What is valid at this cursor or synthetic input boundary? | Live `/console/inspect` `request=completion` | Requiredness; all arguments currently have equivalent completion priority. Synthetic space/`=` tricks remain research, not a stable contract. |
 | What paths, commands, and arguments exist on this device? | Live `/console/inspect` `request=child`; `request=syntax` for structured help (value-type definitions, per-arg explanations) | Runtime preconditions, required arguments, enum values (those live in `completion`), historical availability. |
 | Which arguments are required by an `add` command? | Versioned execute-error probe | Conditional requirements beyond the first discriminator and menus with custom/erroring behavior. This probe can mutate state unless its add/remove wrapper is proven safe. |
@@ -36,10 +36,10 @@ requested question:
 2. **Ask the target for lexical spans.** Send ASCII-normalized input to
    `request=highlight`. Keep the RouterOS version, package manifest, current
    menu `path`, and truncation state with the result.
-3. **Ask `:parse` only when structure or a parser message is needed.** For valid
-   input it supplies nested IL; for invalid input it supplies the first-error
-   message and line/column. Align that error with highlight's exact error byte
-   when possible.
+3. **Ask `:parse` only when structure or a parser message is needed.** It can
+   return a plain diagnostic, diagnostic-bearing IL, or IL without recognized
+   diagnostics. Keep acquisition and classification separate. Align positions
+   only after establishing exact submitted inputs and coordinate conventions.
 4. **Resolve the command schema.** Use `child`/`syntax` or a same-version
    restraml snapshot to split parseIL's fused path/argument forms and to
    enumerate commands and arguments.
@@ -96,9 +96,11 @@ Do not collapse these distinctions:
 - `$undeclared` commonly becomes `variable-parameter`, not an error, because it
   may be supplied at function invocation. `variable-undefined` is a different
   bare-expression signal.
-- Both highlight and `:parse` stop analysis at the first hard error. Highlight
+- Plain fatal `:parse` diagnostics and highlight hard errors stop that probe. IL
+  can also embed command/parameter diagnostics. Highlight
   retains exact spans and soft markers before that point; `:parse` retains an
-  error message but no partial IL.
+  error message but no partial IL for that fatal form. IL-shaped responses must
+  still be checked for embedded diagnostics and ambiguous echoed literals.
 - The 32,767-byte highlight window and JavaScript source offsets align only
   after one-byte ASCII substitution. Record truncation rather than implying the
   unchecked tail passed.
@@ -148,3 +150,7 @@ should not yet promise a generic completion-based validator. Label
 `completion-tricks`, the corpus-position `inspect_responses` sweep, early-v7
 highlight compatibility, enum exhaustiveness, and CLI-to-REST conversion as
 open evidence rather than filling those gaps with inference.
+
+Capture identity, unknown historical provenance, response/cause separation and
+comparison rules are defined by the [schema-5 corpus contract](corpus.md).
+A corpus checksum or firmware string alone cannot establish comparable inputs.

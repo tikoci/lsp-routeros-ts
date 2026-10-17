@@ -168,16 +168,16 @@ portable language intelligence without taking a hard dependency on either.
 
 Decisions captured from the spike:
 
-- **Use parseIL as a *supplemental* signal, not a replacement for `highlight`.** `:parse` is a hard parser (stops at the first error, no partial IL). Highlight also stops classifying at its first hard error, but keeps everything before it fully tokenized — including the soft markers (`obj-*`, `variable-undefined`, `syntax-obsolete`) — so diagnostics still flow through `highlight` (see `docs/highlight-format.md` §4). parseIL earns its place for structure-driven features (folding, function symbols, scope-aware references) and for canonicalisation hints (`200ms` → `00:00:00.200`, `yes` → `true`) where the IL shows what RouterOS actually saw.
+- **Use parseIL as a *supplemental* signal, not a replacement for `highlight`.** `:parse` may return a plain first-error diagnostic or IL containing embedded command/parameter diagnostics; a successful acquisition is not syntax acceptance. Highlight also stops classifying at its first hard error, but keeps everything before it fully tokenized — including the soft markers (`obj-*`, `variable-undefined`, `syntax-obsolete`) — so diagnostics still flow through `highlight` (see `docs/highlight-format.md` §4). parseIL earns its place for structure-driven features (folding, function symbols, scope-aware references) and for canonicalisation hints (`200ms` → `00:00:00.200`, `yes` → `true`) where the IL shows what RouterOS actually saw.
 - **Don't ship the IL parser in the runtime LSP yet.** The IL/path/args boundary is implicit in the grammar and depends on `/console/inspect` schema knowledge to split deterministically. Wait until `[research: inspect-shapes]` lands so we have one well-defined dependency rather than two coupled ones.
-- **Use `:parse` as a cheap pre-check.** Parse time is roughly flat in the corpus and exhibits no analogue of `highlight`'s 28 KB cliff, so a `:parse` probe before a costly highlight request is a safe optimisation once we wire it in.
+- **Use `:parse` as a cheap pre-check.** Parse time is roughly flat in the corpus and exhibits no analogue of `highlight`'s 28 KB cliff, but a pre-check must classify plain and embedded diagnostics independently of acquisition and preserve exact input/environment identity before it can justify skipping highlight.
 - **Treat `>` / `<%%` as real RouterOS operators.** RouterOS 7.22.1 `/console/inspect request=completion` labels `>` as `quote` and `<%%` as `activate in environment`; source-level scripts use both directly, and quoted expressions have runtime type `op`. They are not parseIL-private markers.
-- **Snapshot files are version-tagged on disk.** `<file>.rsc.v<routeros-version>.parseil` lets multiple RouterOS versions coexist in the corpus and keeps IL grammar drift visible as plain diffs across releases.
+- **Historical sidecars are version-tagged; new captures are session-tagged.** See [the schema-5 evidence contract](docs/corpus.md). Multiple environments on the same firmware must coexist without overwriting prior evidence.
 - **Keep parseIL comparisons version-aware.** The core IL forms held steady across 7.20.8/7.22.1/7.23rc1, but 74/912 successful captures still drifted because RouterOS leaks live command schema into the IL (`findwhere=` field dumps, command-path canonicalisation like `/ping` → `/tool/ping`, and version-specific `bad parameter` / `bad command name` annotations).
 
 ### `request=highlight` Wire Format — highlight-format.md
 
-**Status:** Full-corpus sweeps landed against RouterOS 7.23.2 (stable), 7.24rc2 (testing), and 7.9.2 (the earliest plain-HTTP REST branch tested here; REST itself began at 7.1beta4 over HTTPS). The wire format, complete observed token vocabulary (19 classes), error model (one hard-error char, then unclassified), statefulness gotchas, and cross-version drift are documented in **[`docs/highlight-format.md`](docs/highlight-format.md)**. The corpus harness is `scripts/collect-highlight.ts`; summaries live at `test-data/highlight-summary.v<version>.json` (no per-file sidecars — a highlight response is ~6× source size; the six committed `.rsc.highlight` fixtures remain the offline test inputs).
+**Status:** Full-corpus sweeps landed against RouterOS 7.23.2 (stable), 7.24rc2 (testing), and 7.9.2 (the earliest plain-HTTP REST branch tested here; REST itself began at 7.1beta4 over HTTPS). The wire format, complete observed token vocabulary (19 classes), error model (one hard-error char, then unclassified), statefulness gotchas, and cross-version drift are documented in **[`docs/highlight-format.md`](docs/highlight-format.md)**. The corpus harness is `scripts/collect-highlight.ts`; historical summaries live at `test-data/highlight-summary.v<version>.json`. New immutable session manifests preserve raw highlight streams and exact submitted inputs; see [the corpus contract](docs/corpus.md).
 
 Decisions captured from the sweep:
 
@@ -192,22 +192,29 @@ Decisions captured from the sweep:
 
 **Why SQLite:** corpus spikes were starting to produce many Markdown/JSON sidecars. SQLite gives us one durable, queryable place for script metadata, FTS search, raw artifact provenance, and normalized result tables while still allowing export files when a human-reviewable diff is needed.
 
-**Schema shape:**
+**Schema 5 and its consumer contract:** [`docs/corpus.md`](docs/corpus.md).
+The source/FTS, artifact and legacy analysis tables remain queryable. New
+`capture_environments`, `capture_runs`, and `capture_observations` bind evidence
+to immutable sessions, exact source/submitted inputs, transformations and
+coverage. Acquisition and response classification are independent; root causes
+require scoped evidence in `cause_attributions`. Legacy input identities remain
+unknown. `v_script_summary` uses independent aggregates to avoid join fan-out.
 
-- `corpus_metadata` — schema version, generator, corpus input fingerprint, and constants used during import.
-- `source_scripts` + `source_scripts_fts` — one row per `.rsc`, collection classification, size/line/hash flags, text, and BM25/FTS search.
-- `artifact_files` — raw sidecar provenance (`.rsc.highlight`, `.parseil`, `.parseil.meta.json`, summaries, notebooks, manifests), linked to a script when possible.
-- `analysis_runs` — versioned runs: `parseil`, `highlight`, `required-args`, `inspect-shapes`, and future `completion-tricks`.
-- `parseil_results`, `highlight_snapshots`, `highlight_results`, and `required_arg_results` — normalized imports of the current sidecars and versioned highlight sweeps.
-- `inspect_responses` — the curated `/console/inspect` shape probes from `inspect-shapes.v*.json`. These probes are context-curated rather than corpus-swept, so `script_id` and `cursor_offset` are NULL and `input_variant` carries the probe name (`child-root`, `completion-arg-name`, …). The corpus-position sweep that would populate the script/offset columns is still open.
-- `completion_trick_results` — **reserved, intentionally empty.** There is no `completion-tricks` harness yet (see `[research: completion-tricks]` in BACKLOG); the table and its `v_analysis_overview` arm exist so the spike lands as an insert rather than a migration. `corpus_metadata.reserved_tables` lists it, so an empty table is not mistaken for a failed capture.
-- Views: `v_script_summary`, `v_parseil_by_version`, `v_parseil_drift`, `v_highlight_by_version`, `v_highlight_drift`, `v_required_args_by_version`, `v_required_arg_drift`, `v_version_coverage`, and `v_analysis_overview`.
+**Coverage has several axes.** `v_version_coverage` is only a legacy row census
+(`rows-complete`/`rows-partial`), not a comparison or validity gate.
+`v_capture_run_coverage` exposes acquisition, matched/stale/unknown identities and
+full submitted spans. `v_comparable_capture_pairs` filters exact current inputs
+within a shared recorded environment/session; it does not imply acceptance.
+Required-argument results remain path-oriented, while parse/highlight observations
+are source-oriented. Inspect-shapes are curated contexts, not corpus sweeps.
+`completion_trick_results` is still reserved and empty.
 
-**Grain differs by probe, and coverage does too.** `parseil_results` and `highlight_results` are script-oriented — one row per corpus script per version, joinable to `source_scripts`. `required_arg_results` is **path-oriented**: it probes `{menu} add` against the live command tree, so its rows key on `(run_id, path)` with no `script_id`, and "coverage" there means menus reached, not scripts analyzed. It cannot be grouped by corpus stratum the way the other probes can; that is the intended shape, not a gap.
-
-**Version coverage is not uniform, and `v_version_coverage` says so.** The corpus' first six versions were captured with parseIL and highlight on *disjoint* version sets and before the `tangentsoft/` import, so they cover one oracle over 913 scripts. Versions captured under the current standing rule cover both oracles over the full corpus. `v_version_coverage` derives this per version from the rows present — `coverage_class = 'complete'` is the filter a version-comparable query wants — rather than recording it by hand where it could go stale. Historical partials stay queryable for archival and drift work; re-capturing EOL firmware does not earn its cost. The capture rule itself lives in [`testing.instructions.md`](.github/instructions/testing.instructions.md#capture-shape-both-oracles-full-corpus-one-build).
-
-**Future spike pattern:** write the reusable harness in `scripts/`, insert normalized rows into `corpus.sqlite`, and add/update an `analysis_runs` row with RouterOS version/build metadata. Keep the checked-in DB reproducible from committed inputs: use corpus fingerprints plus source-side `capturedAt` metadata, not fresh import timestamps. Keep large raw responses in `artifact_files` or the purpose-built result table. Export JSON/Markdown only when reviewers need a stable textual diff or a doc page needs a curated excerpt.
+**Future spike pattern:** capture reproducible public manifests first, then
+rebuild the normalized SQLite index. Do not write DB-only facts that disappear
+on rebuild. Preserve unknown historical provenance, raw outcomes and limitations;
+see the contract for hashes, coordinate mapping, environment identity and
+explicit downstream pin migration. New captures use `bun run corpus:capture` on
+a disposable CHR, followed by staging reviewed artifacts and `bun run corpus:db`.
 
 Example queries:
 

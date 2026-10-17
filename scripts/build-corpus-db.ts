@@ -11,9 +11,11 @@
  */
 import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import { Database } from 'bun:sqlite'
+import { CLASSIFIER_VERSION, EVIDENCE_FORMAT } from './corpus-evidence'
+import { createEvidenceSchema, importLegacyEvidence, importCaptureRuns } from './corpus-db-evidence'
 import { ROUTEROS_API_MAX_BYTES, ConnectionLogger } from '../server/src/shared'
 import { HighlightTokens } from '../server/src/tokens'
 
@@ -22,7 +24,7 @@ ConnectionLogger.console = { log: noop, info: noop, warn: noop, error: noop, deb
 
 const TEST_DATA_DIR = resolve(import.meta.dir, '../test-data')
 const REPO_ROOT = resolve(import.meta.dir, '..')
-const SCHEMA_VERSION = '4'
+const SCHEMA_VERSION = '5'
 const DEFAULT_DB = join(TEST_DATA_DIR, 'corpus.sqlite')
 
 interface ParseIlMeta {
@@ -401,7 +403,7 @@ function sourceScriptPathForMeta(metaPath: string, meta: ParseIlMeta | null): st
 	return parseVersionedParseIlPath(rel(metaPath))?.scriptPath ?? null
 }
 
-function createSchema(db: Database): void {
+export function createSchema(db: Database): void {
 	db.exec(`
 CREATE TABLE corpus_metadata (
 key TEXT PRIMARY KEY,
@@ -570,16 +572,12 @@ s.is_empty,
 s.is_oversize_32k,
 s.has_cli_prompt,
 s.has_comment_header,
-COUNT(DISTINCT a.id) AS artifact_count,
-COUNT(DISTINCT h.artifact_id) AS highlight_snapshot_count,
-COUNT(DISTINCT p.routeros_version) AS parseil_version_count,
-SUM(CASE WHEN p.ok = 1 THEN 1 ELSE 0 END) AS parseil_ok_count,
-SUM(CASE WHEN p.ok = 0 THEN 1 ELSE 0 END) AS parseil_error_count
-FROM source_scripts s
-LEFT JOIN artifact_files a ON a.script_id = s.id
-LEFT JOIN highlight_snapshots h ON h.script_id = s.id
-LEFT JOIN parseil_results p ON p.script_id = s.id
-GROUP BY s.id;
+(SELECT COUNT(*) FROM artifact_files a WHERE a.script_id=s.id) AS artifact_count,
+(SELECT COUNT(*) FROM highlight_snapshots h WHERE h.script_id=s.id) AS highlight_snapshot_count,
+(SELECT COUNT(DISTINCT p.routeros_version) FROM parseil_results p WHERE p.script_id=s.id) AS parseil_version_count,
+(SELECT COUNT(*) FROM parseil_results p WHERE p.script_id=s.id AND p.ok=1) AS parseil_ok_count,
+(SELECT COUNT(*) FROM parseil_results p WHERE p.script_id=s.id AND p.ok=0) AS parseil_error_count
+FROM source_scripts s;
 
 CREATE VIEW v_parseil_by_version AS
 SELECT
@@ -676,8 +674,8 @@ CASE WHEN highlight_script_count > 0 THEN 1 ELSE 0 END AS has_highlight,
 CASE WHEN parseil_script_count > 0 AND highlight_script_count > 0 THEN 1 ELSE 0 END AS has_both_oracles,
 CASE WHEN parseil_script_count = corpus_script_count AND highlight_script_count = corpus_script_count THEN 1 ELSE 0 END AS is_full_corpus,
 CASE
-WHEN parseil_script_count = corpus_script_count AND highlight_script_count = corpus_script_count THEN 'complete'
-ELSE 'partial'
+WHEN parseil_script_count = corpus_script_count AND highlight_script_count = corpus_script_count THEN 'rows-complete'
+ELSE 'rows-partial'
 END AS coverage_class
 FROM (
 SELECT
@@ -714,6 +712,8 @@ function insertMetadata(db: Database, dbPath: string, files: string[]): void {
 	const insert = db.prepare('INSERT INTO corpus_metadata (key, value) VALUES (?, ?)')
 	const values: [string, string][] = [
 		['schema_version', SCHEMA_VERSION],
+		['evidence_format', String(EVIDENCE_FORMAT)],
+		['response_classifier', CLASSIFIER_VERSION],
 		['generator', 'scripts/build-corpus-db.ts'],
 		['corpus_sha256', corpusInputSha256(files)],
 		['db_path', relative(REPO_ROOT, dbPath)],
@@ -723,7 +723,7 @@ function insertMetadata(db: Database, dbPath: string, files: string[]): void {
 		['version_coverage_view', 'v_version_coverage'],
 		[
 			'version_coverage_complete_rule',
-			"both oracles (parseil_results + highlight_results) cover every source_scripts row on one build; filter v_version_coverage on coverage_class = 'complete' for version-comparable queries",
+			'legacy row census only, grouped by firmware; rows-complete does not establish successful acquisition, exact inputs, or shared environment; use v_capture_run_coverage and v_comparable_capture_pairs',
 		],
 		['reserved_tables', JSON.stringify(['completion_trick_results'])],
 	]
@@ -911,7 +911,7 @@ error, il_path, il_sha256, meta_path, captured_at, il_text
 
 		const ilRelPath = parsedPath ? `${parsedPath.scriptPath}.v${version}.parseil` : relMetaPath.replace(/\.meta\.json$/, '')
 		const ilFullPath = join(TEST_DATA_DIR, ilRelPath)
-		const ilText = existsSync(ilFullPath) ? readFileSync(ilFullPath, 'utf-8') : null
+		const ilText = files.includes(ilFullPath) ? readFileSync(ilFullPath, 'utf-8') : null
 		const ok = typeof meta?.ok === 'boolean' ? meta.ok : !meta?.error
 		const status = ok ? (ilText === null ? 'missing-il' : 'ok') : 'error'
 		insert.run(
@@ -955,7 +955,17 @@ token_count_match, unique_token_types_json, error_token_count, captured_at
 		const tokens = raw.length ? raw.split(',') : []
 		const uniqueTokenTypes = [...new Set(tokens)].sort()
 		const errorTokenCount = tokens.filter((token) => errorTokenTypes.has(token)).length
-		insert.run(scriptId, artifactId, null, tokens.length, scriptText.length, tokens.length === scriptText.length ? 1 : 0, JSON.stringify(uniqueTokenTypes), errorTokenCount, null)
+		insert.run(
+			scriptId,
+			artifactId,
+			null,
+			tokens.length,
+			scriptText.length,
+			tokens.length === scriptText.length ? 1 : 0,
+			JSON.stringify(uniqueTokenTypes),
+			errorTokenCount,
+			null,
+		)
 	}
 }
 
@@ -1020,7 +1030,7 @@ run_id, routeros_version, path, has_add, required_json, required_count, raw_erro
 		if (!runId) continue
 
 		const metaPath = join(TEST_DATA_DIR, `required-args.v${version}.meta.json`)
-		const metaRead = existsSync(metaPath) ? readJson<RequiredArgMeta>(metaPath) : { value: null }
+		const metaRead = files.includes(metaPath) ? readJson<RequiredArgMeta>(metaPath) : { value: null }
 		const meta = metaRead.value
 		const { value, valid } = readJson<RequiredArgSummaryEntry[]>(filePath)
 		if (!valid || !Array.isArray(value)) continue
@@ -1137,15 +1147,16 @@ function main(): void {
 	const { dbPath } = parseArgs()
 	if (!dbPath.startsWith(`${REPO_ROOT}/`)) throw new Error(`Refusing to write outside repository: ${dbPath}`)
 	mkdirSync(dirname(dbPath), { recursive: true })
-	if (existsSync(dbPath)) rmSync(dbPath)
-
-	const files = allFiles(TEST_DATA_DIR).filter((filePath) => resolve(filePath) !== dbPath)
-	const db = new Database(dbPath)
+	const temporaryPath = `${dbPath}.tmp-${process.pid}`
+	if (existsSync(temporaryPath)) throw new Error(`Temporary output already exists: ${temporaryPath}`)
+	const files = allFiles(TEST_DATA_DIR).filter((filePath) => resolve(filePath) !== dbPath && !rel(filePath).startsWith('corpus.sqlite'))
+	const db = new Database(temporaryPath)
 	db.exec('PRAGMA journal_mode = DELETE')
 	db.exec('PRAGMA foreign_keys = ON')
 
 	const tx = db.transaction(() => {
 		createSchema(db)
+		createEvidenceSchema(db)
 		insertMetadata(db, dbPath, files)
 		const scriptIds = insertSourceScripts(db, files)
 		const artifactIds = insertArtifacts(db, files, scriptIds)
@@ -1155,12 +1166,20 @@ function main(): void {
 		insertHighlightResults(db, files, scriptIds, runIds)
 		insertRequiredArgResults(db, files, runIds)
 		insertInspectResponses(db, files, runIds)
+		importLegacyEvidence(db)
+		importCaptureRuns(db, files, TEST_DATA_DIR)
 	})
 
-	tx()
-	db.close()
+	try {
+		tx()
+		db.close()
+		renameSync(temporaryPath, dbPath)
+	} finally {
+		db.close()
+		rmSync(temporaryPath, { force: true })
+	}
 
 	printSummary(new Database(dbPath, { readonly: true }), dbPath)
 }
 
-main()
+if (import.meta.main) main()

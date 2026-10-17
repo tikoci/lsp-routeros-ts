@@ -342,3 +342,9 @@ For build instructions, project structure, and implementation details, see [CONT
 > MikroTik is a trademark of Mikrotikls SIA.
 > Apple and macOS are trademarks of Apple Inc., registered in the U.S. and other countries and regions. UNIX is a registered trademark of The Open Group.
 > **No liability can be accepted.** No representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability, or completeness of any information is offered.  Use the concepts, code, examples, and other content at your own risk. There may be errors and inaccuracies, that may of course be damaging to your system. Although this is highly unlikely, you should proceed with caution. The author(s) do not accept any responsibility for any damage incurred.
+
+## Corpus research
+
+The checked-in SQLite corpus and RouterOS capture workflow are documented in
+[the corpus evidence contract](docs/corpus.md). It explains exact input and
+environment identities, response classes, coverage limits, and downstream pins.
