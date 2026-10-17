@@ -52,6 +52,7 @@ export function retainedCorpusFiles(files: string[], dataDir: string, policy: Co
 
 /** Bind labels to the exact retained run pair, never to firmware alone. */
 export function insertCaptureChannels(db: Database, policy: CorpusPolicy): void {
+	const sourceCount = (db.query('SELECT COUNT(*) n FROM source_scripts').get() as { n: number }).n
 	for (const channel of CHANNELS) {
 		const entry = policy.channels[channel]
 		const parseId = `${entry.sessionId}-parseil`
@@ -71,7 +72,12 @@ export function insertCaptureChannels(db: Database, policy: CorpusPolicy): void 
 			.query('SELECT current_source_count,matched_count,corpus_script_count FROM v_capture_run_coverage WHERE run_id IN (?,?)')
 			.all(parseId, highlightId) as Array<{ current_source_count: number; matched_count: number; corpus_script_count: number }>
 		const selected = db.query('SELECT selection_json FROM capture_runs WHERE id IN (?,?)').all(parseId, highlightId) as Array<{ selection_json: string }>
+		const allSources = db
+			.query(`SELECT COUNT(DISTINCT CASE WHEN o.input_status='matched' THEN o.script_id END) AS matched_count
+		 FROM capture_runs r LEFT JOIN capture_observations o ON o.run_id=r.id WHERE r.id IN (?,?) GROUP BY r.id`)
+			.all(parseId, highlightId) as Array<{ matched_count: number }>
 		if (
+			allSources.some((row) => row.matched_count !== sourceCount) ||
 			coverage.some((row) => row.current_source_count !== row.corpus_script_count || row.matched_count !== row.corpus_script_count) ||
 			selected.some((row) => {
 				const selection = JSON.parse(row.selection_json)

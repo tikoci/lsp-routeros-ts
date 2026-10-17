@@ -1,0 +1,1 @@
+:local u 1d; :put ($u - 1w2d)

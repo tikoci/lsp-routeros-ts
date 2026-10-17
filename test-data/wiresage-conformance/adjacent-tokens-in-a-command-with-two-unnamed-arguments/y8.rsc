@@ -1,0 +1,1 @@
+:log info [:len "a"][:len "b"]

@@ -1,0 +1,1 @@
+:put [typeof 1]

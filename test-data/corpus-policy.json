@@ -9,31 +9,31 @@
   "channels": {
     "long-term": {
       "version": "7.23.8",
-      "sessionId": "6f313fad-20d3-48f7-b1ac-68906acbd95c",
+      "sessionId": "187fa073-8e5b-4bce-9444-bd77f1aff8a6",
       "source": "https://upgrade.mikrotik.com/routeros/NEWESTa7.long-term",
       "response": "7.23.8 1791452776",
-      "resolvedAt": "2026-10-17T02:48:15.778594+00:00"
+      "resolvedAt": "2026-10-17T19:43:56.916371+00:00"
     },
     "stable": {
       "version": "7.24.5",
-      "sessionId": "b4ecf5e8-711e-4e81-aea3-72ccf850240a",
+      "sessionId": "673b2b91-ca6a-45b1-a55e-4c0cd4d7ca0d",
       "source": "https://upgrade.mikrotik.com/routeros/NEWESTa7.stable",
       "response": "7.24.5 1790691687",
-      "resolvedAt": "2026-10-17T02:48:16.619815+00:00"
+      "resolvedAt": "2026-10-17T19:43:56.933572+00:00"
     },
     "testing": {
       "version": "7.25rc2",
-      "sessionId": "b5a9755e-fd18-47e4-8756-e9ed39e64a9a",
+      "sessionId": "93ce4df0-ceb9-4d8b-83fc-cf465efc9a3a",
       "source": "https://upgrade.mikrotik.com/routeros/NEWESTa7.testing",
       "response": "7.25rc2 1791556027",
-      "resolvedAt": "2026-10-17T02:48:17.424324+00:00"
+      "resolvedAt": "2026-10-17T19:43:56.916020+00:00"
     },
     "development": {
       "version": "7.26beta1",
-      "sessionId": "c4cd2a11-d944-4f5d-80d1-99d4d686ae2a",
+      "sessionId": "8b297c32-00d6-46e5-a389-5d68173cf4ed",
       "source": "https://upgrade.mikrotik.com/routeros/NEWESTa7.development",
       "response": "7.26beta1 1790861387",
-      "resolvedAt": "2026-10-17T02:48:18.282947+00:00"
+      "resolvedAt": "2026-10-17T19:43:56.808194+00:00"
     }
   }
 }

@@ -128,3 +128,18 @@ test('channel labels require complete matched pairs and reject slices or mismatc
 		incomplete.close()
 	}
 })
+
+test('channel selection requires auxiliary collections and controls as well as the study population', () => {
+	const selected = policy()
+	const db = capturedDatabase(selected)
+	for (const collection of ['capture-controls', 'wiresage-conformance'])
+		db.prepare(`INSERT INTO source_scripts(path,collection,bytes,chars,line_count,sha256,is_empty,is_oversize_32k,has_cli_prompt,has_comment_header,first_line,text)
+		VALUES (?,?,0,0,0,'fixture',1,0,0,0,'','')`).run(`${collection}/case.rsc`, collection)
+	expect(() => insertCaptureChannels(db, selected)).toThrow('full-population')
+	for (const entry of Object.values(selected.channels)) for (const probe of ['parseil', 'highlight'])
+		db.prepare(`INSERT INTO capture_observations(run_id,script_id,source_path,input_status,acquisition_status,response_class,classifier_version,diagnostics_json)
+		SELECT ?,id,path,'matched','ok','fixture','fixture','[]' FROM source_scripts WHERE collection IN ('capture-controls','wiresage-conformance')`).run(`${entry.sessionId}-${probe}`)
+	insertCaptureChannels(db, selected)
+	expect(db.query('SELECT COUNT(*) n FROM capture_channels').get()).toEqual({ n: 4 })
+	db.close()
+})

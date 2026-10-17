@@ -1,0 +1,1 @@
+:onerror e in={:retry command={abc} delay=1 max=2} do={}

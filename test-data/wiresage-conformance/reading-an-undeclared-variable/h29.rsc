@@ -1,0 +1,1 @@
+:global f do={ :put ($a + 1) }

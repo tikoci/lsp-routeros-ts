@@ -1,0 +1,1 @@
+:put [:serialize value=a to=json]

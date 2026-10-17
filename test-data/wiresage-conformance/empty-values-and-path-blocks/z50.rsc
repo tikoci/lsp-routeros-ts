@@ -1,0 +1,3 @@
+/ip address
+..
+route print

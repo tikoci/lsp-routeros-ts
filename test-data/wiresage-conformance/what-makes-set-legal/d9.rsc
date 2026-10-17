@@ -1,0 +1,1 @@
+:foreach k,v in={1;2} do={ :set v 5 }

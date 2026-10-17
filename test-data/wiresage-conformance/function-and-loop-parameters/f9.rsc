@@ -1,0 +1,1 @@
+:onerror e {:put 1} do={ :put $e }

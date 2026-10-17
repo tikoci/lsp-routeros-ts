@@ -1,0 +1,1 @@
+/ip address set 0 nope=1

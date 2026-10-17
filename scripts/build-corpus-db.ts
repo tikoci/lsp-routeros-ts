@@ -17,6 +17,7 @@ import { Database } from 'bun:sqlite'
 import { readCorpusPolicy, retainedCorpusFiles, insertCaptureChannels } from './corpus-policy'
 import { CLASSIFIER_VERSION, EVIDENCE_FORMAT } from './corpus-evidence'
 import { createEvidenceSchema, importLegacyEvidence, importCaptureRuns } from './corpus-db-evidence'
+import { importConformanceCases } from './wiresage-conformance'
 import { ROUTEROS_API_MAX_BYTES, ConnectionLogger } from '../server/src/shared'
 import { HighlightTokens } from '../server/src/tokens'
 
@@ -206,6 +207,7 @@ function readJson<T>(filePath: string): { value: T | null; valid: boolean } {
 
 function classifyCollection(relPath: string): string {
 	if (relPath.startsWith('capture-controls/')) return 'capture-controls'
+	if (relPath.startsWith('wiresage-conformance/')) return 'wiresage-conformance'
 	if (relPath.startsWith('forum/amm0/')) return 'amm0'
 	if (relPath.startsWith('forum/rextended/')) return 'rextended'
 	if (relPath.startsWith('eworm/')) return 'eworm'
@@ -658,13 +660,8 @@ SUM(CASE WHEN error_kind = 'routeros-bug' THEN 1 ELSE 0 END) AS routeros_bug_cou
 FROM required_arg_results
 GROUP BY routeros_version;
 
--- Per-version capture coverage, derived from the rows actually present rather
--- than hand-maintained. coverage_class = 'complete' is the filter a
--- version-comparable query wants: both oracles (parseIL + highlight) captured
--- over the whole current corpus on one build. Everything else is 'partial' —
--- historical captures taken when the corpus was smaller or only one oracle ran,
--- which stay queryable for archival/drift work but are not cell-to-cell
--- comparable with complete versions. See lsp-routeros-ts#35.
+-- A legacy row census over the default study population only. Row presence
+-- cannot prove acquisition, exact inputs, shared environment or acceptance.
 CREATE VIEW v_version_coverage AS
 SELECT
 routeros_version,
@@ -684,9 +681,9 @@ END AS coverage_class
 FROM (
 SELECT
 v.routeros_version AS routeros_version,
-(SELECT COUNT(*) FROM source_scripts WHERE collection!='capture-controls') AS corpus_script_count,
-(SELECT COUNT(DISTINCT p.script_id) FROM parseil_results p WHERE p.routeros_version = v.routeros_version) AS parseil_script_count,
-(SELECT COUNT(DISTINCT h.script_id) FROM highlight_results h WHERE h.routeros_version = v.routeros_version) AS highlight_script_count,
+(SELECT COUNT(*) FROM v_corpus_population) AS corpus_script_count,
+(SELECT COUNT(DISTINCT p.script_id) FROM parseil_results p JOIN v_corpus_population s ON s.id=p.script_id WHERE p.routeros_version = v.routeros_version) AS parseil_script_count,
+(SELECT COUNT(DISTINCT h.script_id) FROM highlight_results h JOIN v_corpus_population s ON s.id=h.script_id WHERE h.routeros_version = v.routeros_version) AS highlight_script_count,
 (SELECT COUNT(*) FROM required_arg_results r WHERE r.routeros_version = v.routeros_version) AS required_arg_path_count,
 (SELECT COUNT(*) FROM inspect_responses i WHERE i.routeros_version = v.routeros_version) AS inspect_response_count
 FROM (
@@ -719,6 +716,8 @@ function insertMetadata(db: Database, dbPath: string, files: string[]): void {
 		['evidence_format', String(EVIDENCE_FORMAT)],
 		['capture_response_encodings', JSON.stringify(['parse-ret-v1', 'highlight-rle-v1', 'raw-json-v1'])],
 		['capture_input_storage', 'hash-reference-v1'],
+		['auxiliary_collections', JSON.stringify(['capture-controls', 'wiresage-conformance'])],
+		['third_party_cases_format', '1'],
 		['response_classifier', CLASSIFIER_VERSION],
 		['generator', 'scripts/build-corpus-db.ts'],
 		['corpus_sha256', corpusInputSha256(files)],
@@ -741,14 +740,17 @@ function insertSourceScripts(db: Database, files: string[]): Map<string, number>
 INSERT INTO source_scripts (
 path, collection, bytes, chars, line_count, sha256, is_empty, is_oversize_32k,
 has_cli_prompt, has_comment_header, first_line, text
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS TEXT), CAST(? AS TEXT))
 `)
-	const insertFts = db.prepare('INSERT INTO source_scripts_fts (rowid, path, collection, text) VALUES (?, ?, ?, ?)')
+	const insertFts = db.prepare('INSERT INTO source_scripts_fts (rowid, path, collection, text) VALUES (?, ?, ?, CAST(? AS TEXT))')
 	const byPath = new Map<string, number>()
 
 	for (const filePath of files.filter((f) => f.endsWith('.rsc'))) {
 		const relPath = rel(filePath)
 		const text = readFileSync(filePath, 'utf-8')
+		// A plain Bun string bind can consume a leading BOM as a UTF-16 marker.
+		// Bind UTF-8 bytes and cast in SQL to retain byte-exact TEXT and FTS data.
+		const textBytes = new TextEncoder().encode(text)
 		const bytes = Buffer.byteLength(text, 'utf-8')
 		const collection = classifyCollection(relPath)
 		const info = insertScript.run(
@@ -762,12 +764,12 @@ has_cli_prompt, has_comment_header, first_line, text
 			bytes > ROUTEROS_API_MAX_BYTES ? 1 : 0,
 			hasCliPromptPattern(text) ? 1 : 0,
 			firstLine(text).trimStart().startsWith('#') ? 1 : 0,
-			firstLine(text),
-			text,
+			new TextEncoder().encode(firstLine(text)),
+			textBytes,
 		)
 		const id = Number(info.lastInsertRowid)
 		byPath.set(relPath, id)
-		insertFts.run(id, relPath, collection, text)
+		insertFts.run(id, relPath, collection, textBytes)
 	}
 
 	return byPath
@@ -1127,6 +1129,7 @@ SELECT
 (SELECT COUNT(*) FROM source_scripts) AS source_scripts,
 (SELECT COUNT(*) FROM v_corpus_population) AS population_scripts,
 (SELECT COUNT(*) FROM source_scripts WHERE collection='capture-controls') AS controls,
+(SELECT COUNT(*) FROM third_party_cases) AS third_party_cases,
 (SELECT COUNT(*) FROM capture_runs) AS capture_runs,
 (SELECT COUNT(*) FROM capture_observations) AS capture_observations,
 (SELECT COUNT(*) FROM artifact_files) AS artifacts,
@@ -1147,6 +1150,7 @@ SELECT
 			`scripts=${row.source_scripts}`,
 			`population=${row.population_scripts}`,
 			`controls=${row.controls}`,
+			`third_party_cases=${row.third_party_cases}`,
 			`capture_runs=${row.capture_runs}`,
 			`observations=${row.capture_observations}`,
 			`artifacts=${row.artifacts}`,
@@ -1182,6 +1186,7 @@ function main(): void {
 		createEvidenceSchema(db)
 		insertMetadata(db, dbPath, files)
 		const scriptIds = insertSourceScripts(db, files)
+		importConformanceCases(db, files, TEST_DATA_DIR)
 		const artifactIds = insertArtifacts(db, files, scriptIds)
 		const runIds = insertAnalysisRuns(db, files)
 		insertParseIlResults(db, files, scriptIds, runIds)

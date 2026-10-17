@@ -1,0 +1,1 @@
+:local "A"; :set a 1

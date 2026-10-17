@@ -1,0 +1,1 @@
+:local s "a"; :set s ($s . "b")

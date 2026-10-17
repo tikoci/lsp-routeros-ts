@@ -1,0 +1,1 @@
+:foreach i in=[:toarray "1,2"]do={:put $i}

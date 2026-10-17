@@ -1,0 +1,1 @@
+:put [:resolve domain-name="x" port=53]

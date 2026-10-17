@@ -8,6 +8,12 @@ Schema 5 addresses [#37](https://github.com/tikoci/lsp-routeros-ts/issues/37)
 and fixes the independent summary aggregation defect in
 [#39](https://github.com/tikoci/lsp-routeros-ts/issues/39).
 
+The additive collection evidence in [#41](https://github.com/tikoci/lsp-routeros-ts/issues/41)
+retains the schema-5 input/response encodings and existing view columns. It adds
+`third_party_cases` (format 1) and collection-specific views without expanding
+the default 948-script study population. The `third_party_cases_format=1`
+metadata key identifies this extension.
+
 ## Retention and capture workflow
 
 Use a disposable CHR, managed by [quickchr](https://github.com/tikoci/quickchr).
@@ -41,7 +47,8 @@ four endpoint responses and their observation timestamps are retained with the
 selection; these are dated labels, not a promise that a channel never moves.
 Recapture a channel when its version or the source population changes, then
 replace its session IDs in the policy. The builder rejects missing pairs,
-version/environment mismatches, slices, and stale or incomplete populations.
+version/environment mismatches, slices, and stale or incomplete source sets,
+including missing auxiliary collections or controls.
 
 Provision current-channel CHRs with `--install-all-packages` on their first
 boot, and verify the installed, enabled package list before capturing. This
@@ -137,6 +144,14 @@ stores the same evidence without repeated large values:
   `results` or targeted `probes` arrays already available in raw sidecars and
   normalized tables.
 
+Source text, captured source history and recorded parse readouts are bound as UTF-8
+bytes and cast to SQLite `TEXT`. This preserves leading BOMs: a plain Bun
+string bind consumed the BOM in `wiresage-conformance/line-joining/j10.rsc`
+(reproduced on Bun 1.4.2). SQLite's
+[UTF-16 binding semantics](https://www.sqlite.org/c3ref/bind_blob.html)
+allow a leading BOM to be consumed as an encoding marker. Regression checks
+cover current, stale and missing BOM-bearing sources and raw readouts.
+
 The `encodeResponse`/`decodeResponse` helpers in `scripts/corpus-evidence.ts`
 define these encodings. Tests roundtrip retained manifests through the compact
 DB, including raw replies, source/submitted hashes and stale/missing inputs.
@@ -222,12 +237,17 @@ same firmware coexist. Recorded UUID run IDs remain stable across pruning; gener
 are local to the pinned DB. Firmware alone is never a comparison key. `capture_channels` binds each dated
 channel label to explicit parse/highlight run IDs and a shared environment.
 
-The seven challenge scripts have collection `capture-controls`.
-`source_scripts` includes all 955 inputs; use `v_corpus_population` for the
+The seven challenge scripts have collection `capture-controls`, and the 875
+synthetic conformance inputs have collection `wiresage-conformance`.
+`source_scripts` includes all 1,830 inputs; use `v_corpus_population` for the
 948-source study population. `v_capture_outcomes` and
-`v_comparable_capture_pairs` exclude controls by default. Run coverage reports
-all `observation_count` rows and `control_count` separately; its remaining
-population counts exclude controls. Inspect controls directly in
+`v_comparable_capture_pairs` exclude both auxiliary collections by default.
+Default outcomes retain source-missing study observations for diagnosis;
+those observations never enter exact current-input pairs.
+Run coverage reports all `observation_count` rows and `control_count` separately;
+its remaining population counts use `v_corpus_population`. Use
+`v_collection_capture_coverage` to inspect each collection's size, matched,
+acquired and fully submitted counts per run. Inspect controls directly in
 `capture_observations` when testing the classifier. Generated source IDs are
 local row references only: path and captured SHA-256 are the portable identity.
 Version retention never changes source membership or ordering.
@@ -275,6 +295,67 @@ nor 533 is a runtime-validity denominator.
 or highlight snapshot cannot multiply parse capture counts. Rebuilds are
 restricted to tracked public inputs and use capture timestamps, not import time.
 
+## WireSage conformance collection
+
+[`wiresage-conformance/README.md`](../test-data/wiresage-conformance/README.md)
+documents the pinned MIT import, byte-exact regeneration and license. The raw
+875-case JSON is retained with all metadata. There are only 844 distinct
+upstream IDs: 31 are reused across sections. Files therefore use
+`<section-slug>/<id>.rsc`; the manifest retains the original section, ID and
+zero-based row index. Section plus ID is unique at the pinned revision.
+No comments, newline, BOM stripping or line-ending conversion is applied to
+the `.rsc` inputs. Derived/minimized variants must use separate paths.
+
+`third_party_cases` joins each original case to `source_scripts` by `script_id`
+and recorded source hash. It retains `upstream_id`, `upstream_section`,
+`upstream_index`, `upstream_revision`, `upstream_source`, `upstream_oracle`,
+`upstream_valid` and the remaining upstream metadata. `upstream_valid` is a
+third-party observation for RouterOS 7.21.4 `/import ... verbose=yes dry-run`,
+reported upstream and not reproduced here. Its per-line compilation differs
+from whole-script `:parse` and plain import. Never substitute this label for
+our response classes, syntax acceptance or runtime validity. No import probe
+or upstream schema/code is included; see
+[centrs#507](https://github.com/tikoci/centrs/issues/507) for context research.
+
+All selected channel sessions include the auxiliary inputs alongside the
+study population and controls. `v_collection_comparable_capture_pairs` applies
+the same exact-input/session/full-coverage requirements as the default pair
+view, while exposing `collection` and allowing explicit auxiliary selection.
+Neither pair view excludes diagnostic responses. For example:
+
+```sql
+SELECT * FROM v_collection_capture_coverage
+WHERE collection = 'wiresage-conformance';
+
+SELECT p.* FROM capture_channels c
+JOIN v_collection_comparable_capture_pairs p
+  ON p.parse_run_id = c.parse_run_id AND p.highlight_run_id = c.highlight_run_id
+WHERE c.channel = 'stable' AND p.collection = 'wiresage-conformance';
+
+SELECT s.path,t.upstream_id,t.upstream_section,t.upstream_valid,o.response_class
+FROM capture_channels c
+JOIN capture_observations o ON o.run_id = c.parse_run_id
+JOIN third_party_cases t ON t.script_id = o.script_id
+JOIN source_scripts s ON s.id = t.script_id
+WHERE c.channel = 'stable';
+```
+
+Version-level legacy coverage remains a row census over the 948-source study
+population. Conformance cases cannot increase its denominator or its capture
+counts. Consumers must choose this genre explicitly, and pin the new DB bytes
+and channel run IDs when adopting it.
+
+Before retiring #40's package-complete session manifests, we compared the
+original 955 inputs with the DB at merged commit
+`1cc0dff31db62d8487d3c3e492b39d327a0a0f81` (SHA-256
+`da632dc8e85da065d3092347234bfdc8e0bea34a5b6d08d348205eacce079253`).
+Source/submitted hashes and acquisition states agree for every original
+observation on all four builds. All acquired responses also agree exactly:
+954 parse readouts and 955 highlight streams per build, including controls.
+The oversized source retains its acquisition failure. This readout comparison
+does not equate the different session identities or establish runtime validity.
+The earlier manifests remain available at that immutable revision.
+
 ## Historical 7.24.2 bridge
 
 Before retiring the recorded 7.24.2 session, the producer rechecked Claude’s
@@ -299,7 +380,7 @@ failure; chunked/SFTP upload is a separate transport improvement.
 
 The selected builds, session IDs and endpoint observation timestamps are in
 [`corpus-policy.json`](../test-data/corpus-policy.json). Each pair captures all
-955 inputs on a disposable CHR. Population coverage and exact-input pair counts
+1,830 inputs on a disposable CHR. Population coverage and exact-input pair counts
 are queried per channel/run below; response classes remain observations rather
 than runtime-acceptance labels.
 
@@ -311,18 +392,26 @@ CMR. Installed packages and device-mode remain recorded per environment.
 
 | Channel (checked 2026-10-17 UTC) | Build | Session UUID | Population parse acquired | Population highlight acquired | Exact full-input pairs |
 | --- | --- | --- | ---: | ---: | ---: |
-| long-term | 7.23.8 | `6f313fad-20d3-48f7-b1ac-68906acbd95c` | 947/948 | 948/948 | 834 |
-| stable | 7.24.5 | `b4ecf5e8-711e-4e81-aea3-72ccf850240a` | 947/948 | 948/948 | 834 |
-| testing | 7.25rc2 | `b5a9755e-fd18-47e4-8756-e9ed39e64a9a` | 947/948 | 948/948 | 834 |
-| development | 7.26beta1 | `c4cd2a11-d944-4f5d-80d1-99d4d686ae2a` | 947/948 | 948/948 | 834 |
+| long-term | 7.23.8 | `187fa073-8e5b-4bce-9444-bd77f1aff8a6` | 947/948 | 948/948 | 834 |
+| stable | 7.24.5 | `673b2b91-ca6a-45b1-a55e-4c0cd4d7ca0d` | 947/948 | 948/948 | 834 |
+| testing | 7.25rc2 | `93ce4df0-ceb9-4d8b-83fc-cf465efc9a3a` | 947/948 | 948/948 | 834 |
+| development | 7.26beta1 | `8b297c32-00d6-46e5-a389-5d68173cf4ed` | 947/948 | 948/948 | 834 |
 
-Each row additionally records seven controls in both probes. All highlight
+Each row additionally records seven controls and 875 conformance inputs in
+both probes. All highlight
 responses align with their submitted inputs; three source prefixes are truncated.
 The oversized source fails parse acquisition with HTTP 413 on all four builds.
-The 834 pairs exclude controls, transformed inputs, truncation and failed
+The default 834 pairs exclude both auxiliary collections, transformed inputs,
+truncation and failed
 acquisition; they include diagnostic responses and are not an acceptance count.
-All 955 generated source IDs stayed unchanged when superseded evidence was
-pruned, although paths/hashes remain the required portable identity.
+Each channel additionally has 875/875 acquired conformance observations per
+probe and 861 exact full-input conformance pairs in the collection-specific
+view. Fourteen conformance sources require the existing ASCII normalization
+for highlight; they are retained with transformations and excluded from exact
+full-input pairs.
+All 955 pre-existing source IDs stayed unchanged when this collection was
+added and superseded evidence was pruned. Paths/hashes remain the required
+portable identity.
 
 Compared with the base-package 7.24.5 session at `2b588d1`, the selected
 package-complete session removes the `bad command name` diagnostic for
@@ -337,8 +426,8 @@ exactly, but 11 streams change in the package-complete 7.24.5 environment
 (59 remain identical). The consumer migration must regenerate those expected
 streams, rather than only changing the fixture's version label.
 
-The compact index is 36,286,464 bytes (34.61 MiB), versus 52,760,576 bytes
-(50.32 MiB) for the prior single-session-pair index. It contains 1,910 shared
-input descriptors for 7,640 recorded observations. Gzip size measured with
-zeroed timestamp is 4,682,883 bytes; git pack growth depends on its own delta
+The compact index is 44,425,216 bytes (42.37 MiB), versus 52,760,576 bytes
+(50.32 MiB) for the prior single-session-pair index. It contains 3,660 shared
+input descriptors for 14,640 recorded observations. Gzip size measured with
+zeroed timestamp is 6,026,880 bytes; git pack growth depends on its own delta
 compression. The plain committed SQLite file remains the distribution artifact.

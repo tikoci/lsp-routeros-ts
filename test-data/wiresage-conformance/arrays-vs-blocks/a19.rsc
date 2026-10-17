@@ -1,0 +1,1 @@
+:local a {:put 1}

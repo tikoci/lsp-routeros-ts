@@ -1,0 +1,1 @@
+:global a; :local a; :set a 1

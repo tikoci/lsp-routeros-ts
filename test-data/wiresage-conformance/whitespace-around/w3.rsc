@@ -1,0 +1,1 @@
+:for i from= 1 to= 2 do={ :put $i }

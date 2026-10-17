@@ -1,0 +1,1 @@
+:if ([:typeof $nope] = "nothing") do={ }

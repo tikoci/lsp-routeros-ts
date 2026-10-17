@@ -1,0 +1,1 @@
+:local a; :put [:set a 1]

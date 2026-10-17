@@ -1,0 +1,1 @@
+/ip address add address=abc interface=ether1

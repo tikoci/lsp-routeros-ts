@@ -1,0 +1,1 @@
+:global f do={ :set a 5 }

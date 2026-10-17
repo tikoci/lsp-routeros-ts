@@ -1,0 +1,1 @@
+:global f do={ :local y ($a) }

@@ -55,8 +55,18 @@ CREATE TABLE cause_attributions (
  scope TEXT NOT NULL, evidence_json TEXT NOT NULL,
  PRIMARY KEY(observation_id, cause, scope)
 );
+-- Third-party labels describe their own oracle, never local acceptance.
+CREATE TABLE third_party_cases (
+ script_id INTEGER PRIMARY KEY REFERENCES source_scripts(id),
+ upstream_id TEXT NOT NULL, upstream_section TEXT NOT NULL, upstream_index INTEGER NOT NULL,
+ upstream_revision TEXT NOT NULL, upstream_source TEXT NOT NULL, upstream_oracle TEXT NOT NULL,
+ upstream_valid INTEGER NOT NULL CHECK(upstream_valid IN (0,1)), source_sha256 TEXT NOT NULL,
+ upstream_metadata_json TEXT NOT NULL,
+ UNIQUE(upstream_source,upstream_revision,upstream_section,upstream_id)
+);
 CREATE INDEX idx_capture_observations_script ON capture_observations(script_id);
-CREATE VIEW v_corpus_population AS SELECT * FROM source_scripts WHERE collection!='capture-controls';
+CREATE VIEW v_corpus_population AS
+ SELECT * FROM source_scripts WHERE collection NOT IN ('capture-controls','wiresage-conformance');
 -- Join by the captured hash. A stale source uses history, never current text.
 CREATE VIEW v_capture_inputs AS
  SELECT o.id AS observation_id,i.input_json,
@@ -69,44 +79,63 @@ CREATE VIEW v_capture_outcomes AS
  SELECT r.id AS run_id, r.probe, r.routeros_version, r.environment_sha256,
  r.provenance, o.input_status, o.acquisition_status, o.response_class, COUNT(*) AS observation_count
  FROM capture_runs r JOIN capture_observations o ON o.run_id=r.id
- WHERE o.source_path NOT LIKE 'capture-controls/%'
+ WHERE o.script_id IN (SELECT id FROM v_corpus_population)
+ OR (o.script_id IS NULL AND o.source_path NOT LIKE 'capture-controls/%'
+ AND o.source_path NOT LIKE 'wiresage-conformance/%')
  GROUP BY r.id,o.input_status,o.acquisition_status,o.response_class;
 -- Version-level coverage is a census. This run-level view exposes failures,
 -- unknown identities and submitted suffixes separately.
 CREATE VIEW v_capture_run_coverage AS
  SELECT r.id AS run_id,r.probe,r.routeros_version,r.environment_sha256,r.provenance,
  COUNT(o.id) AS observation_count,
- COUNT(DISTINCT CASE WHEN o.source_path NOT LIKE 'capture-controls/%' THEN o.script_id END) AS current_source_count,
+ COUNT(DISTINCT study.id) AS current_source_count,
  SUM(CASE WHEN o.source_path LIKE 'capture-controls/%' THEN 1 ELSE 0 END) AS control_count,
  (SELECT COUNT(*) FROM v_corpus_population) AS corpus_script_count,
- SUM(CASE WHEN o.source_path NOT LIKE 'capture-controls/%' AND o.acquisition_status='ok' THEN 1 ELSE 0 END) AS acquired_count,
- SUM(CASE WHEN o.source_path NOT LIKE 'capture-controls/%' AND o.input_status='matched' THEN 1 ELSE 0 END) AS matched_count,
- SUM(CASE WHEN o.source_path NOT LIKE 'capture-controls/%' AND o.input_status='stale' THEN 1 ELSE 0 END) AS stale_count,
- SUM(CASE WHEN o.source_path NOT LIKE 'capture-controls/%' AND o.input_status='unknown' THEN 1 ELSE 0 END) AS unknown_input_count,
- SUM(CASE WHEN o.source_path NOT LIKE 'capture-controls/%' AND o.input_status='matched' AND o.acquisition_status='ok'
+ SUM(CASE WHEN study.id IS NOT NULL AND o.acquisition_status='ok' THEN 1 ELSE 0 END) AS acquired_count,
+ SUM(CASE WHEN study.id IS NOT NULL AND o.input_status='matched' THEN 1 ELSE 0 END) AS matched_count,
+ SUM(CASE WHEN study.id IS NOT NULL AND o.input_status='stale' THEN 1 ELSE 0 END) AS stale_count,
+ SUM(CASE WHEN study.id IS NOT NULL AND o.input_status='unknown' THEN 1 ELSE 0 END) AS unknown_input_count,
+ SUM(CASE WHEN study.id IS NOT NULL AND o.input_status='matched' AND o.acquisition_status='ok'
  AND json_extract(i.input_json,'$.truncated')=0 THEN 1 ELSE 0 END) AS full_submitted_count
  FROM capture_runs r LEFT JOIN capture_observations o ON o.run_id=r.id
+ LEFT JOIN v_corpus_population study ON study.id=o.script_id
  LEFT JOIN capture_inputs i ON i.id=o.input_id GROUP BY r.id;
+-- Opt into auxiliary genres explicitly, without changing study denominators.
+CREATE VIEW v_collection_capture_coverage AS
+ SELECT r.id AS run_id,r.probe,r.routeros_version,r.environment_sha256,s.collection,
+ COUNT(o.id) AS observation_count,
+ (SELECT COUNT(*) FROM source_scripts current WHERE current.collection=s.collection) AS collection_script_count,
+ SUM(CASE WHEN o.input_status='matched' THEN 1 ELSE 0 END) AS matched_count,
+ SUM(CASE WHEN o.acquisition_status='ok' THEN 1 ELSE 0 END) AS acquired_count,
+ SUM(CASE WHEN o.input_status='matched' AND o.acquisition_status='ok'
+ AND json_extract(i.input_json,'$.truncated')=0 THEN 1 ELSE 0 END) AS full_submitted_count
+ FROM capture_runs r JOIN capture_observations o ON o.run_id=r.id
+ JOIN source_scripts s ON s.id=o.script_id
+ LEFT JOIN capture_inputs i ON i.id=o.input_id GROUP BY r.id,s.collection;
 -- Only exact, current, full inputs within a shared capture session can pair.
 -- Both response forms remain visible: this is never an acceptance denominator.
-CREATE VIEW v_comparable_capture_pairs AS
- SELECT p.id AS parse_observation_id,h.id AS highlight_observation_id,p.script_id,
+CREATE VIEW v_collection_comparable_capture_pairs AS
+ SELECT p.id AS parse_observation_id,h.id AS highlight_observation_id,p.script_id,s.collection,
  pr.id AS parse_run_id,hr.id AS highlight_run_id,pr.routeros_version,
  pr.environment_sha256,p.submitted_sha256,p.response_class AS parse_response_class,
  h.response_class AS highlight_response_class
  FROM capture_observations p JOIN capture_runs pr ON pr.id=p.run_id AND pr.probe='parseil'
+ JOIN source_scripts s ON s.id=p.script_id
  JOIN capture_observations h ON h.script_id=p.script_id
  JOIN capture_runs hr ON hr.id=h.run_id AND hr.probe='highlight'
  JOIN capture_inputs pi ON pi.id=p.input_id
  JOIN capture_inputs hi ON hi.id=h.input_id
- WHERE p.source_path NOT LIKE 'capture-controls/%'
- AND pr.environment_sha256=hr.environment_sha256
+ WHERE pr.environment_sha256=hr.environment_sha256
  AND p.input_status='matched' AND h.input_status='matched'
  AND p.acquisition_status='ok' AND h.acquisition_status='ok'
  AND p.source_sha256=h.source_sha256 AND p.submitted_sha256=h.submitted_sha256
  AND json_extract(pi.input_json,'$.rootMenu')=json_extract(hi.input_json,'$.rootMenu')
  AND json_extract(pi.input_json,'$.truncated')=0 AND json_extract(hi.input_json,'$.truncated')=0
  AND json_extract(h.highlight_json,'$.aligned')=1;
+CREATE VIEW v_comparable_capture_pairs AS
+ SELECT parse_observation_id,highlight_observation_id,script_id,parse_run_id,highlight_run_id,
+ routeros_version,environment_sha256,submitted_sha256,parse_response_class,highlight_response_class
+ FROM v_collection_comparable_capture_pairs WHERE script_id IN (SELECT id FROM v_corpus_population);
 `)
 }
 
@@ -196,7 +225,7 @@ export function importCaptureRuns(db: Database, files: string[], dataDir: string
 	const insert = db.prepare(`INSERT INTO capture_observations
  (run_id,script_id,source_path,source_sha256,submitted_sha256,input_id,input_status,acquisition_status,response_class,classifier_version,
  response_text,response_json,response_encoding,diagnostics_json,error,submission,elapsed_ms,highlight_json)
- VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+ VALUES (?,?,?,?,?,?,?,?,?,?,CAST(? AS TEXT),?,?,?,?,?,?,?)`)
 	for (const path of files.filter((file) => /^captures\/[^/]+\.json$/.test(relative(dataDir, file))).sort()) {
 		const run = JSON.parse(readFileSync(path, 'utf8')) as CaptureRun
 		if (run.format !== EVIDENCE_FORMAT || !['parseil', 'highlight'].includes(run.probe)) throw new Error(`Unsupported capture format: ${path}`)
@@ -244,7 +273,9 @@ export function importCaptureRuns(db: Database, files: string[], dataDir: string
 						}
 			const { sourceText, submittedText, ...compactInput } = input
 			const existingText = db.query('SELECT 1 FROM source_scripts WHERE sha256=? LIMIT 1').get(input.sourceSha256)
-			if (!existingText) db.prepare('INSERT OR IGNORE INTO capture_source_history VALUES (?,?)').run(input.sourceSha256, sourceText)
+			// Preserve leading BOMs here too; plain string binding can consume them.
+			if (!existingText)
+				db.prepare('INSERT OR IGNORE INTO capture_source_history VALUES (?,CAST(? AS TEXT))').run(input.sourceSha256, new TextEncoder().encode(sourceText))
 			const storedInput = input.sourceSha256 === input.submittedSha256 ? compactInput : { ...compactInput, submittedText }
 			const descriptor = JSON.stringify(Object.fromEntries(Object.entries(storedInput).sort(([a], [b]) => a.localeCompare(b))))
 			const inputId = hash(descriptor)
@@ -261,7 +292,7 @@ export function importCaptureRuns(db: Database, files: string[], dataDir: string
 				observation.acquisition,
 				classification.responseClass,
 				CLASSIFIER_VERSION,
-				storedResponse.responseText,
+				storedResponse.responseText === null ? null : new TextEncoder().encode(storedResponse.responseText),
 				storedResponse.responseJson,
 				storedResponse.encoding,
 				JSON.stringify(classification.diagnostics),

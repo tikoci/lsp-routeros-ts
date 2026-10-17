@@ -1,0 +1,1 @@
+:global f do={ :local x; :local g do={ :set x 1 } }

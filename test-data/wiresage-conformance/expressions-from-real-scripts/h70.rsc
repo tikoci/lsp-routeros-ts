@@ -1,0 +1,1 @@
+:put [:convert transform=uc "abc"]

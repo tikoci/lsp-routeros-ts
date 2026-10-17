@@ -1,0 +1,1 @@
+/ip address add a=1.1.1.1/32 interface=ether1

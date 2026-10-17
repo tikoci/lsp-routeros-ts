@@ -1,0 +1,1 @@
+:local t; :while (false) do={ :set t 1 }

@@ -1,0 +1,1 @@
+:local i 0; :while ($i<3) do={ :set i ($i+1) }

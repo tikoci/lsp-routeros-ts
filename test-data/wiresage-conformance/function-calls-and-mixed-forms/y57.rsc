@@ -1,0 +1,1 @@
+:do { :put 1 } while=(false)

@@ -1,0 +1,1 @@
+/ip address print where (address~"1")=false

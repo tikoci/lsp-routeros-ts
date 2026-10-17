@@ -1,0 +1,1 @@
+/system script add name=x source=":put 1 # in string"

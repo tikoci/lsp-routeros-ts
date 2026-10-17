@@ -1,0 +1,1 @@
+:local a; :global f do={ :set a 1 }

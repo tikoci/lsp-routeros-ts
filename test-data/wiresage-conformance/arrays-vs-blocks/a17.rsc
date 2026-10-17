@@ -1,0 +1,1 @@
+:foreach k,v in={2; aX=1; y=2; 5} do={ :put $k }

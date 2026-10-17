@@ -106,7 +106,7 @@ function database(text = ':put 1'): Database {
 	createEvidenceSchema(db)
 	db.prepare(`INSERT INTO source_scripts
 	(path,collection,bytes,chars,line_count,sha256,is_empty,is_oversize_32k,has_cli_prompt,has_comment_header,first_line,text)
-	VALUES ('sample.rsc','synthetic',?,?,1,?,0,0,0,0,?,?)`).run(Buffer.byteLength(text), text.length, hash(text), text, text)
+	VALUES ('sample.rsc','synthetic',?,?,1,?,0,0,0,0,?,CAST(? AS TEXT))`).run(Buffer.byteLength(text), text.length, hash(text), text, new TextEncoder().encode(text))
 	return db
 }
 
@@ -309,9 +309,12 @@ test('compact responses roundtrip raw readouts and highlight classes losslessly'
 	)
 })
 
-test('compact input joins retain stale and missing source text without manufacturing current text', () => {
-	const text = ':put "é"'
-	const files = [capture('parseil', 'stale-snapshot', text), capture('highlight', 'stale-snapshot', text)]
+test.each([
+	[':put "é"', ':put "?"'],
+	['\ufeff:put 1', '?:put 1'],
+])('compact input joins retain %s through matched, stale and missing source states', (text, highlighted) => {
+	const session = `stale-${hash(text).slice(0, 8)}`
+	const files = [capture('parseil', session, text), capture('highlight', session, text)]
 	for (const mode of ['matched', 'stale', 'missing']) {
 		const db = database(mode === 'matched' ? text : ':put "z"')
 		if (mode === 'missing') db.exec('DELETE FROM source_scripts_fts; DELETE FROM source_scripts')
@@ -322,7 +325,7 @@ test('compact input joins retain stale and missing source text without manufactu
 			)
 			.all() as Array<{ input_status: string; source_sha256: string; input_json: string; source_text: string; submitted_text: string }>
 		expect(rows.map((row) => row.source_text)).toEqual([text, text])
-		expect(rows.map((row) => row.submitted_text)).toEqual([text, ':put "?"'])
+		expect(rows.map((row) => row.submitted_text)).toEqual([text, highlighted])
 		expect(rows.map((row) => row.input_status)).toEqual(Array(2).fill(mode === 'missing' ? 'source-missing' : mode))
 		expect(rows.every((row) => !Object.prototype.hasOwnProperty.call(JSON.parse(row.input_json), 'sourceText'))).toBe(true)
 		expect(Object.prototype.hasOwnProperty.call(JSON.parse(rows[0].input_json), 'submittedText')).toBe(false)
@@ -331,12 +334,41 @@ test('compact input joins retain stale and missing source text without manufactu
 	}
 })
 
-test('controls remain inspectable but are excluded from default study views', () => {
+test('a leading BOM in a captured readout survives SQLite text storage', () => {
+	const db = database()
+	const file = capture('parseil', 'bom-response')
+	const run = JSON.parse(readFileSync(file, 'utf8')) as CaptureRun
+	run.observations[0].response = { ret: '\ufeffunexpected parser readout' }
+	writeFileSync(file, JSON.stringify(run))
+	importCaptureRuns(db, [file], temp)
+	const row = db.query('SELECT response_text,response_json,response_encoding FROM capture_observations').get() as {
+		response_text: string
+		response_json: string
+		response_encoding: StoredResponse['encoding']
+	}
+	expect(row.response_text).toBe('\ufeffunexpected parser readout')
+	expect(decodeResponse({ responseText: row.response_text, responseJson: row.response_json, encoding: row.response_encoding })).toEqual(run.observations[0].response)
+	db.close()
+})
+
+test('default outcomes keep source-missing study observations visible', () => {
+	const db = database()
+	db.exec('DELETE FROM source_scripts_fts; DELETE FROM source_scripts')
+	importCaptureRuns(db, [capture('parseil', 'source-missing-outcome')], temp)
+	expect(db.query('SELECT input_status,observation_count FROM v_capture_outcomes').all()).toEqual([
+		{ input_status: 'source-missing', observation_count: 1 },
+	])
+	expect(db.query('SELECT COUNT(*) n FROM v_comparable_capture_pairs').get()).toEqual({ n: 0 })
+	db.close()
+})
+
+test('controls and conformance inputs remain inspectable but excluded from default study views', () => {
 	const db = new Database(resolve(import.meta.dir, '../../test-data/corpus.sqlite'), { readonly: true })
 	expect(db.query('SELECT COUNT(*) n FROM v_corpus_population').get()).toEqual({ n: 948 })
 	expect(db.query("SELECT COUNT(*) n FROM source_scripts WHERE collection='capture-controls'").get()).toEqual({ n: 7 })
+	expect(db.query("SELECT COUNT(*) n FROM source_scripts WHERE collection='wiresage-conformance'").get()).toEqual({ n: 875 })
 	expect(
-		db.query("SELECT COUNT(*) n FROM v_comparable_capture_pairs p JOIN source_scripts s ON s.id=p.script_id WHERE s.collection='capture-controls'").get(),
+		db.query("SELECT COUNT(*) n FROM v_comparable_capture_pairs p JOIN source_scripts s ON s.id=p.script_id WHERE s.collection IN ('capture-controls','wiresage-conformance')").get(),
 	).toEqual({ n: 0 })
 	const rows = db
 		.query(
@@ -345,9 +377,9 @@ test('controls remain inspectable but are excluded from default study views', ()
 		.all()
 	expect(rows.length).toBe(8)
 	for (const row of rows)
-		expect(row).toEqual({ observation_count: 955, current_source_count: 948, control_count: 7, corpus_script_count: 948, matched_count: 948 })
+		expect(row).toEqual({ observation_count: 1830, current_source_count: 948, control_count: 7, corpus_script_count: 948, matched_count: 948 })
 	expect(db.query('SELECT COUNT(*) n FROM capture_channels').get()).toEqual({ n: 4 })
-	expect(db.query('SELECT COUNT(*) n FROM capture_inputs').get()).toEqual({ n: 1910 })
+	expect(db.query('SELECT COUNT(*) n FROM capture_inputs').get()).toEqual({ n: 3660 })
 	expect(
 		db
 			.query("SELECT COUNT(*) n FROM analysis_runs WHERE json_type(summary_json,'$.results') IS NOT NULL OR json_type(summary_json,'$.probes') IS NOT NULL")
@@ -398,6 +430,6 @@ test.each(
 		expect(hash(row.submitted_text)).toBe(row.submitted_sha256)
 		expect(decodeResponse({ responseText: row.response_text, responseJson: row.response_json, encoding: row.response_encoding })).toEqual(original.response)
 	}
-	expect(manifest.observations.length).toBe(955)
+	expect(manifest.observations.length).toBe(1830)
 	db.close()
 })

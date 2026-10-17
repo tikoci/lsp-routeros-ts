@@ -1,0 +1,1 @@
+:if ([/ip address print count-only] > 0) do={ }

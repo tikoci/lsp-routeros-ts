@@ -4,3 +4,9 @@ test-data/corpus.sqlite binary linguist-generated
 
 # Immutable machine captures; expand in GitHub when inspecting raw evidence.
 test-data/captures/*.json linguist-generated=true
+
+# Conformance probes include BOM, CRLF and exact end-of-input cases.
+test-data/wiresage-conformance/** -text
+# Trailing spaces and blank EOF lines are intentional syntax-probe inputs.
+test-data/wiresage-conformance/**/*.rsc -whitespace linguist-generated=true
+test-data/wiresage-conformance/manifest.json linguist-generated=true

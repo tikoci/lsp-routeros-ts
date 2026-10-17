@@ -1,0 +1,1 @@
+:if (1 = 1) do={ :put 1 } else={ :put 2 }

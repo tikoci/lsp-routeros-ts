@@ -1,0 +1,1 @@
+/log print where topics~"info"

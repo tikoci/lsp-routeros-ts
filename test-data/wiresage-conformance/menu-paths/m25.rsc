@@ -1,0 +1,1 @@
+/ip firewall filter print

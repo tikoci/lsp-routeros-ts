@@ -1,0 +1,1 @@
+:local a [:len "x"] ; :put $a

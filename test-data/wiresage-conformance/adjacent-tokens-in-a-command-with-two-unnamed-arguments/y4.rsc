@@ -1,0 +1,1 @@
+:local a 1; :local b 2; :log info $a$b

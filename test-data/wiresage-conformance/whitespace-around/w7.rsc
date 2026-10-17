@@ -1,0 +1,1 @@
+/ip route add gateway= 3.3.3.3
