@@ -7,6 +7,7 @@ import { createSchema } from '../../scripts/build-corpus-db'
 import { createEvidenceSchema, importCaptureRuns, importLegacyEvidence } from '../../scripts/corpus-db-evidence'
 import {
 	classifyParseResponse,
+	decodeSource,
 	trackedSourcePaths,
 	hash,
 	prepareInput,
@@ -261,4 +262,10 @@ test('fresh device controls preserve operator, literal and diagnostic distinctio
 		{ source_path: 'capture-controls/missing-brace.rsc', response_class: 'plain-diagnostic' },
 	])
 	db.close()
+})
+
+test('source decoding preserves a UTF-8 BOM and rejects invalid bytes', () => {
+	const text = '\ufeff:put 1\r\n'
+	expect(decodeSource(Buffer.from(text, 'utf8'))).toBe(text)
+	expect(() => decodeSource(Buffer.from([0xc3, 0x28]))).toThrow()
 })

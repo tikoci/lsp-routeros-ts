@@ -4,6 +4,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import {
 	EVIDENCE_FORMAT,
+	decodeSource,
 	hash,
 	prepareInput,
 	trackedSourcePaths,
@@ -80,7 +81,7 @@ export async function collectCorpus(probes: Probe[] = ['parseil', 'highlight']):
 	// Freeze sources before either probe so concurrent source edits cannot mix inputs.
 	const selected = sources.map((path) => ({
 		path: path.slice('test-data/'.length),
-		text: new TextDecoder('utf-8', { fatal: true }).decode(readFileSync(join(ROOT, path))),
+		text: decodeSource(readFileSync(join(ROOT, path))),
 	}))
 	const sourceSetSha256 = hash(JSON.stringify(selected.map(({ path, text }) => [path, hash(text)])))
 	const output = join(DATA, 'captures')

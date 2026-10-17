@@ -6,6 +6,11 @@ export const EVIDENCE_FORMAT = 1
 export const CLASSIFIER_VERSION = 'parse-response-v1'
 export const HIGHLIGHT_LIMIT = 32767
 
+/** Preserve BOM and reject invalid UTF-8 rather than hashing replacement text. */
+export function decodeSource(bytes: ArrayLike<number>): string {
+	return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(Uint8Array.from(bytes))
+}
+
 export function hash(text: string): string {
 	return createHash('sha256').update(text, 'utf8').digest('hex')
 }
