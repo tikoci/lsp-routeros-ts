@@ -553,6 +553,7 @@ PRIMARY KEY (run_id, path)
 CREATE INDEX idx_source_scripts_collection ON source_scripts(collection);
 CREATE INDEX idx_artifact_files_script ON artifact_files(script_id);
 CREATE INDEX idx_artifact_files_kind ON artifact_files(artifact_kind);
+CREATE INDEX idx_parseil_results_script ON parseil_results(script_id);
 CREATE INDEX idx_parseil_results_version ON parseil_results(routeros_version);
 CREATE INDEX idx_highlight_snapshots_script ON highlight_snapshots(script_id);
 CREATE INDEX idx_highlight_results_version ON highlight_results(routeros_version);
