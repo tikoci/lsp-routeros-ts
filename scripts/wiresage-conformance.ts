@@ -1,6 +1,6 @@
 /** Import only the pinned, MIT-licensed conformance inputs and observations. */
 import { mkdirSync, readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs'
-import { dirname, join, relative } from 'node:path'
+import { dirname, join, relative, sep } from 'node:path'
 import { createHash } from 'node:crypto'
 import type { Database } from 'bun:sqlite'
 import { hash } from './corpus-evidence'
@@ -89,7 +89,7 @@ export function writeConformanceCollection(destination: string, files: Map<strin
 		for (const entry of readdirSync(directory, { withFileTypes: true })) {
 			const path = join(directory, entry.name)
 			if (entry.isDirectory()) check(path)
-			else if (entry.name.endsWith('.rsc') && !files.has(relative(destination, path))) throw new Error(`Unexpected case: ${path}`)
+			else if (entry.name.endsWith('.rsc') && !files.has(relative(destination, path).split(sep).join('/'))) throw new Error(`Unexpected case: ${path}`)
 		}
 	}
 	check(destination)
@@ -106,13 +106,17 @@ export function importConformanceCases(db: Database, files: string[], dataDir: s
 	const tracked = new Set(files)
 	const casesPath = join(directory, 'upstream-cases.json')
 	if (!tracked.has(casesPath)) {
-		if (files.some((path) => path.startsWith(`${directory}/`))) throw new Error('Stage the raw upstream conformance cases')
+		if (files.some((path) => path.startsWith(`${directory}${sep}`))) throw new Error('Stage the raw upstream conformance cases')
 		return
 	}
 	const casesBytes = readFileSync(casesPath)
 	const licensePath = join(directory, 'LICENSE')
 	if (!tracked.has(licensePath)) throw new Error('Stage the conformance license')
 	const expected = conformanceFiles(casesBytes, readFileSync(licensePath))
+	const expectedPaths = new Set([...expected.keys()].map((path) => join(directory, path)))
+	for (const file of files) {
+		if (file.startsWith(`${directory}${sep}`) && file.endsWith('.rsc') && !expectedPaths.has(file)) throw new Error(`Unexpected conformance case: ${file}`)
+	}
 	for (const [path, bytes] of expected) {
 		const file = join(directory, path)
 		if (!tracked.has(file) || !readFileSync(file).equals(Uint8Array.from(bytes))) throw new Error(`Untracked or modified conformance input: ${path}`)

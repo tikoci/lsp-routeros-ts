@@ -27,6 +27,7 @@ test('source bytes survive BOM, CRLF, empty input and missing final newline', ()
 	const files = new Map(['\ufeff:put 1', ':put 1\r\n:put 2', '', ':put 1'].map((text, index) => [`layout/${index}.rsc`, Buffer.from(text)]))
 	writeConformanceCollection(temporary, files)
 	for (const [path, bytes] of files) expect(readFileSync(join(temporary, path))).toEqual(bytes)
+	writeConformanceCollection(temporary, files)
 	expect(() => writeConformanceCollection(temporary, new Map())).toThrow('Unexpected case')
 })
 
@@ -57,25 +58,29 @@ test('third-party observations are indexed separately and verified before import
 	expect(() =>
 		importConformanceCases(
 			db,
-			files.filter((file) => !file.endsWith('/LICENSE')),
+			files.filter((file) => file !== join(collection, 'LICENSE')),
 			root,
 		),
 	).toThrow('license')
 	expect(() =>
 		importConformanceCases(
 			db,
-			files.filter((file) => !file.endsWith('/upstream-cases.json')),
+			files.filter((file) => file !== join(collection, 'upstream-cases.json')),
 			root,
 		),
 	).toThrow('raw upstream')
 	expect(() =>
 		importConformanceCases(
 			db,
-			files.filter((file) => !file.endsWith('/comments/c1.rsc')),
+			files.filter((file) => file !== join(collection, 'comments/c1.rsc')),
 			root,
 		),
 	).toThrow('Untracked')
-	importConformanceCases(db, files, root)
+	for (const path of ['derived.rsc', 'comments/minimized.rsc']) {
+		expect(() => importConformanceCases(db, [...files, join(collection, path)], root)).toThrow('Unexpected conformance case')
+		expect(db.query('SELECT COUNT(*) n FROM third_party_cases').get()).toEqual({ n: 0 })
+	}
+	importConformanceCases(db, [...files, join(root, 'wiresage-conformance-derived/case.rsc')], root)
 	expect(db.query('SELECT COUNT(*) n,SUM(upstream_valid) labelled_true FROM third_party_cases').get()).toEqual({ n: 875, labelled_true: 542 })
 	expect(db.query('SELECT DISTINCT upstream_revision,upstream_oracle FROM third_party_cases').all()).toEqual([{ upstream_revision: WIRESAGE_REVISION, upstream_oracle: WIRESAGE_ORACLE }])
 	expect(db.query('SELECT COUNT(*) n FROM capture_observations').get()).toEqual({ n: 0 })

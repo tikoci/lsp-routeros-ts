@@ -240,7 +240,9 @@ channel label to explicit parse/highlight run IDs and a shared environment.
 The seven challenge scripts have collection `capture-controls`, and the 875
 synthetic conformance inputs have collection `wiresage-conformance`.
 `source_scripts` includes all 1,830 inputs; use `v_corpus_population` for the
-948-source study population. `v_capture_outcomes` and
+948-source study population. Reading raw `capture_observations` for one current
+run returns 1,830 rows; consumers must join `v_corpus_population` rather than
+exclude auxiliary inputs by path prefix. `v_capture_outcomes` and
 `v_comparable_capture_pairs` exclude both auxiliary collections by default.
 Default outcomes retain source-missing study observations for diagnosis;
 those observations never enter exact current-input pairs.
@@ -260,6 +262,11 @@ or shared environment. Use `v_capture_run_coverage` to see those axes separately
 ```sql
 SELECT * FROM capture_channels ORDER BY channel;
 SELECT * FROM v_capture_run_coverage ORDER BY run_id;
+
+-- Raw observations restricted to the 948-source study population.
+SELECT o.* FROM capture_observations o
+JOIN v_corpus_population p ON p.id = o.script_id
+WHERE o.run_id = :run_id;
 
 -- One response partition for a selected run, including failures and exclusions.
 SELECT * FROM v_capture_outcomes WHERE run_id = :run_id;
@@ -304,7 +311,9 @@ upstream IDs: 31 are reused across sections. Files therefore use
 `<section-slug>/<id>.rsc`; the manifest retains the original section, ID and
 zero-based row index. Section plus ID is unique at the pinned revision.
 No comments, newline, BOM stripping or line-ending conversion is applied to
-the `.rsc` inputs. Derived/minimized variants must use separate paths.
+the `.rsc` inputs. Derived/minimized variants must use separate paths outside
+`wiresage-conformance/`; regeneration and DB builds reject `.rsc` files in that
+collection that are absent from the pinned manifest.
 
 `third_party_cases` joins each original case to `source_scripts` by `script_id`
 and recorded source hash. It retains `upstream_id`, `upstream_section`,
