@@ -194,7 +194,7 @@ export function encodeResponse(probe: Probe, response: unknown): StoredResponse 
 		const fields = { ...(response as Record<string, unknown>) }
 		const text = typeof fields.ret === 'string' ? fields.ret : null
 		if (text !== null) delete fields.ret
-		return { responseText: text, responseJson: JSON.stringify(response === null ? null : fields), encoding: 'parse-ret-v1' }
+		return { responseText: text, responseJson: JSON.stringify(fields), encoding: 'parse-ret-v1' }
 	}
 	if (
 		!Array.isArray(response) ||
