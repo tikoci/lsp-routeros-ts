@@ -164,7 +164,7 @@ portable language intelligence without taking a hard dependency on either.
 
 ### `[:parse <script>]` as a Signal Source — parseIL
 
-**Status:** Phases 1–4 of the spike landed against RouterOS 7.20.8, 7.22.1, and 7.23rc1. Full grammar reference, readout paths, error semantics, cross-version drift notes, and feature implications are documented in **[`docs/parseil-format.md`](docs/parseil-format.md)**. The corpus harness is `scripts/collect-parseil.ts`; per-script IL snapshots live alongside their `.rsc` files as `*.v<routeros-version>.parseil`.
+**Status:** Phases 1–4 of the spike landed against RouterOS 7.20.8, 7.22.1, and 7.23rc1. Full grammar reference, readout paths, error semantics, cross-version drift notes, and feature implications are documented in **[`docs/parseil-format.md`](docs/parseil-format.md)**. Use `bun run corpus:capture` for paired parseIL/highlight captures in immutable session manifests; `scripts/collect-parseil.ts` is an individual-investigation tool. Per-script `*.v<routeros-version>.parseil` sidecars are historical artifacts; see [the corpus contract](docs/corpus.md).
 
 Decisions captured from the spike:
 
@@ -177,7 +177,7 @@ Decisions captured from the spike:
 
 ### `request=highlight` Wire Format — highlight-format.md
 
-**Status:** Full-corpus sweeps landed against RouterOS 7.23.2 (stable), 7.24rc2 (testing), and 7.9.2 (the earliest plain-HTTP REST branch tested here; REST itself began at 7.1beta4 over HTTPS). The wire format, complete observed token vocabulary (19 classes), error model (one hard-error char, then unclassified), statefulness gotchas, and cross-version drift are documented in **[`docs/highlight-format.md`](docs/highlight-format.md)**. The corpus harness is `scripts/collect-highlight.ts`; historical summaries live at `test-data/highlight-summary.v<version>.json`. New immutable session manifests preserve raw highlight streams and exact submitted inputs; see [the corpus contract](docs/corpus.md).
+**Status:** Full-corpus sweeps landed against RouterOS 7.23.2 (stable), 7.24rc2 (testing), and 7.9.2 (the earliest plain-HTTP REST branch tested here; REST itself began at 7.1beta4 over HTTPS). The wire format, complete observed token vocabulary (19 classes), error model (one hard-error char, then unclassified), statefulness gotchas, and cross-version drift are documented in **[`docs/highlight-format.md`](docs/highlight-format.md)**. Use `bun run corpus:capture` for paired captures; `scripts/collect-highlight.ts` is an individual-investigation tool. Historical summaries live at `test-data/highlight-summary.v<version>.json`. New immutable session manifests preserve raw highlight streams and exact submitted inputs; see [the corpus contract](docs/corpus.md).
 
 Decisions captured from the sweep:
 

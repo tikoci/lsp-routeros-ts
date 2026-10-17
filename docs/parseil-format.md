@@ -300,8 +300,8 @@ an environment so dynamic dispatch resolves at the right scope."
 
 ## 4. Errors
 
-`:parse` is a hard parser: at the **first** error it stops, produces no IL,
-and returns only an error string with a line/column indicator:
+For a fatal plain diagnostic, `:parse` stops at the **first** error, produces
+no IL, and returns only an error string with a line/column indicator:
 
 ```text
 syntax error (line 6 column 3)
@@ -320,9 +320,11 @@ probes and recorded responses contain these fatal parse-error stems:
 | `missing closing brace`  | Unterminated block or array literal. |
 | `missing value for where` | Incomplete `where` filter expression. |
 
-There is **no partial IL** alongside an error message. This confirms parseIL
-cannot back multi-error diagnostics. Highlight is only partially better: it
-marks the *first* hard-error character and stops classifying after it (see
+There is **no partial IL** alongside a fatal plain diagnostic. That response
+form cannot provide multiple errors, while diagnostic-bearing IL can contain
+multiple command/parameter annotations, as described below. Neither form
+establishes exhaustive multi-error diagnostics. Highlight marks the *first*
+hard-error character and stops classifying after it (see
 [`highlight-format.md`](highlight-format.md) §4) — but everything before the
 error stays fully tokenized, including soft markers (`obj-*`,
 `variable-undefined`, `syntax-obsolete`), so it remains the richer diagnostics
